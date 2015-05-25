@@ -1,0 +1,187 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>ECRM - Equipment Classroom Management</title>
+        <link rel="stylesheet" href="css/font-awesome.css"/>
+        <link rel="stylesheet" href="css/layout.css"/>
+        <link rel="stylesheet" href="css/general.css"/>
+        <link rel="stylesheet" href="css/management.css"/>
+    </head>
+    <body>
+        <div class="contain-layout">
+            <div class="header-bar">
+                <div class="logo">Equipment Classroom Management</div>
+                <div class="account-notify">
+                    <div class="account-control">
+                        <!--<img src="img/user.png" />-->
+                        <p>DOAN NGUYEN</p>
+                        <img src="img/gears.png"/>
+                        <div class="clear"></div>
+                        <div class="account-setting">
+                            <img src="img/pointer.png" />
+                            <ul>
+                                <li>Thiết lập</li>
+                                <li>Cài đặt tài khoản</li>
+                                <li>Đăng xuất</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-category">
+                <ul class="main-item">
+                    <li>
+                        <img src="" />
+                        <p>Trang Chủ</p>
+                    </li>
+                    <li>
+                        <a href="/HTML/Notify.html">
+                            <img src="" />
+                            <p>Thông Báo</p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/HTML/Equipment.html">
+                            <img src="" />
+                            <p>Thiết Bị</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Classroom.html">
+                            <img src="" />
+                            <p>Phòng Học</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Account.html">
+                            <img src="" />
+                            <p>Tài Khoản</p>
+                        </a>
+                    </li>
+                    <li>
+                        <img src="" />
+                        <p>Thống Kê</p>
+                    </li>
+                    <li>
+                        <a href="/HTML/Schedule.html">
+                            <img src="" />
+                            <p>Xếp Lịch</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="title page-title right-button">
+                <p>Quản lý thiết bị</p>
+                <input type="button" class="btn btn-orange" value="Thêm thiết bị" />
+                <div class="clear"></div>
+            </div>
+            <div class="body-content">
+                <div class="tab">
+                    <div class="tab-medium">
+                        <ul>
+                            <li class="active" onclick="changeTab('tab1', this)">Đang sử dụng</li>
+                            <li onclick="changeTab('tab2', this)">Trong kho</li>
+                        </ul>
+                    </div>
+                    <div class="content-tab">
+                        <div id="tab1" class="body-tab active">
+                            <div class="group-control search" style="margin: 0 0 15px">
+                                <div class="name">Thiết bị</div>
+                                <div class="control">
+                                    <select>
+                                        <option>Máy chiếu</option>
+                                        <option>Đèn</option>
+                                        <option>Máy quạt</option>
+                                        <option>Máy lạnh</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="table equipment-table">
+                                <div class="header-table">
+                                    <div class="equip-type"><div>Loại</div></div>
+                                    <div class="equip-name"><div>Tên</div></div>
+                                    <div class="quantity"><div>Số lượng</div></div>
+                                    <div class="warranty"><div>Hết hạn bảo hành</div></div>
+                                    <p class="clear"></p>
+                                </div>
+                                <div class="body-table">
+                                    <div class="row">
+                                        <div class="equip-type"><div>PFG533</div></div>
+                                        <div class="equip-name"><div>Projector Perfect Gold</div></div>
+                                        <div class="quantity"><div>12</div></div>
+                                        <div class="warranty"><div>25/12/2015</div></div>
+                                        <p class="clear"></p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="equip-type"><div>RP6698</div></div>
+                                        <div class="equip-name"><div>Red Projector</div></div>
+                                        <div class="quantity"><div>20</div></div>
+                                        <div class="warranty"><div>1/5/2016</div></div>
+                                        <p class="clear"></p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="equip-type"><div>SPM522</div></div>
+                                        <div class="equip-name"><div>Super Dragon Projector</div></div>
+                                        <div class="quantity"><div>5</div></div>
+                                        <div class="warranty"><div>2/4/2016</div></div>
+                                        <p class="clear"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab2" class="body-tab">
+                            <div class="group-control search" style="margin: 0 0 15px">
+                                <div class="name">Thiết bị</div>
+                                <div class="control">
+                                    <select>
+                                        <option>Máy chiếu</option>
+                                        <option>Đèn</option>
+                                        <option>Máy quạt</option>
+                                        <option>Máy lạnh</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="table equipment-table">
+                                <div class="header-table">
+                                    <div class="equip-type"><div>Loại</div></div>
+                                    <div class="equip-name"><div>Tên</div></div>
+                                    <div class="quantity"><div>Số lượng</div></div>
+                                    <div class="warranty"><div>Hết hạn bảo hành</div></div>
+                                    <p class="clear"></p>
+                                </div>
+                                <div class="body-table">
+                                    <div class="row">
+                                        <div class="equip-type"><div>PFG533</div></div>
+                                        <div class="equip-name"><div>Projector Perfect Gold</div></div>
+                                        <div class="quantity"><div>1</div></div>
+                                        <div class="warranty"><div>25/12/2015</div></div>
+                                        <p class="clear"></p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="equip-type"><div>RP6698</div></div>
+                                        <div class="equip-name"><div>Red Projector</div></div>
+                                        <div class="quantity"><div>4</div></div>
+                                        <div class="warranty"><div>1/5/2016</div></div>
+                                        <p class="clear"></p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="equip-type"><div>SPM522</div></div>
+                                        <div class="equip-name"><div>Super Dragon Projector</div></div>
+                                        <div class="quantity"><div>2</div></div>
+                                        <div class="warranty"><div>2/4/2016</div></div>
+                                        <p class="clear"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="js/script.js"></script>
+    </body>
+</html>

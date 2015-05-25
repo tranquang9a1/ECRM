@@ -1,0 +1,195 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>ECRM - Equipment Classroom Management</title>
+        <link rel="stylesheet" href="css/font-awesome.css"/>
+        <link rel="stylesheet" href="css/layout.css"/>
+        <link rel="stylesheet" href="css/general.css"/>
+        <link rel="stylesheet" href="css/management.css"/>
+    </head>
+    <body>
+        <div class="contain-layout">
+            <div class="header-bar">
+                <div class="logo">Equipment Classroom Management</div>
+                <div class="account-notify">
+                    <div class="account-control">
+                        <!--<img src="img/user.png" />-->
+                        <p>DOAN NGUYEN</p>
+                        <img src="img/gears.png"/>
+                        <div class="clear"></div>
+                        <div class="account-setting">
+                            <img src="img/pointer.png" />
+                            <ul>
+                                <li>Thiết lập</li>
+                                <li>Cài đặt tài khoản</li>
+                                <li>Đăng xuất</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-category">
+                <ul class="main-item">
+                    <li>
+                        <img src="" />
+                        <p>Trang Chủ</p>
+                    </li>
+                    <li>
+                        <a href="/HTML/Notify.html">
+                            <img src="" />
+                            <p>Thông Báo</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Equipment.html">
+                            <img src="" />
+                            <p>Thiết Bị</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Classroom.html">
+                            <img src="" />
+                            <p>Phòng Học</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Account.html">
+                            <img src="" />
+                            <p>Tài Khoản</p>
+                        </a>
+                    </li>
+                    <li>
+                        <img src="" />
+                        <p>Thống Kê</p>
+                    </li>
+                    <li class="active">
+                        <a href="/HTML/Schedule.html">
+                            <img src="" />
+                            <p>Xếp Lịch</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="title page-title right-button">
+                <p>Xếp lịch</p>
+                <input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Nhập excel file" />
+                <div class="clear"></div>
+            </div>
+            <div class="body-content">
+                <div class="search">
+                    <input type="text" placeholder="............."/>
+                    <select>
+                        <option>Giảng viên</option>
+                        <option>Nguyễn Văn Học</option>
+                        <option>Trần Thái Bình</option>
+                        <option>Lê Quang Liêm</option>
+                    </select>
+                    <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
+                </div>
+                <div class="clear"></div>
+                <div class="table">
+                    <div class="header-table">
+                        <div class="teacher"><div>Giảng viên</div></div>
+                        <div class="room"><div>Phòng</div></div>
+                        <div class="slot"><div>Ca dạy</div></div>
+                        <div class="time"><div>Thời gian</div></div>
+                        <div class="number"><div>Sinh viên</div></div>
+                        <div class="control"><div>Quản lý</div></div>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="body-table">
+                        <div class="row">
+                            <div class="teacher"><div>Nguyễn Văn Học</div></div>
+                            <div class="room"><div>208</div></div>
+                            <div class="slot"><div>3, 4</div></div>
+                            <div class="time"><div>25/2 - 8/6</div></div>
+                            <div class="number"><div>25</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div onclick="" class="btn btn-detail"><i class="fa fa-pencil"></i></div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="teacher"><div>Trần Thái Bình</div></div>
+                            <div class="room"><div>113</div></div>
+                            <div class="slot"><div>2</div></div>
+                            <div class="time"><div>10/2 - 5/5</div></div>
+                            <div class="number"><div>30</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div onclick="" class="btn btn-detail"><i class="fa fa-pencil"></i></div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="teacher"><div>Trần Thái Bình</div></div>
+                            <div class="room"><div>501</div></div>
+                            <div class="slot"><div>6</div></div>
+                            <div class="time"><div>25/2 - 8/6</div></div>
+                            <div class="number"><div>23</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div onclick="" class="btn btn-detail"><i class="fa fa-pencil"></i></div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="teacher"><div>Nguyễn Văn Học</div></div>
+                            <div class="room"><div>313</div></div>
+                            <div class="slot"><div>3, 4</div></div>
+                            <div class="time"><div>9/1 - 15/4</div></div>
+                            <div class="number"><div>21</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div onclick="" class="btn btn-detail"><i class="fa fa-pencil"></i></div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="teacher"><div>Lê Quang Liêm</div></div>
+                            <div class="room"><div>304</div></div>
+                            <div class="slot"><div>1, 2</div></div>
+                            <div class="time"><div>20/2 - 7/4</div></div>
+                            <div class="number"><div>27</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div onclick="" class="btn btn-detail"><i class="fa fa-pencil"></i></div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal modal-small" id="modal-1">
+            <div class="content-modal">
+                <div class="header-modal title">
+                    <p>Nhập từ file excel</p>
+                    <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+                </div>
+                <div class="body-modal">
+                    <div class="group-control" style="margin: 30px 0 0">
+                        <div class="name">File excel</div>
+                        <div class="control">
+                            <input style="margin: 5px 0 0" type="file" />
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-modal">
+                    <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát" />
+                    <input type="button" class="btn btn-orange" value="Thêm" />
+                </div>
+            </div>
+            <div class="black-background"></div>
+        </div>
+        <script src="js/script.js"></script>
+    </body>
+</html>

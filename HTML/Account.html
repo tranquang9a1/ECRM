@@ -1,0 +1,222 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>ECRM - Equipment Classroom Management</title>
+        <link rel="stylesheet" href="css/font-awesome.css"/>
+        <link rel="stylesheet" href="css/layout.css"/>
+        <link rel="stylesheet" href="css/general.css"/>
+        <link rel="stylesheet" href="css/management.css"/>
+    </head>
+    <body>
+        <div class="contain-layout">
+            <div class="header-bar">
+                <div class="logo">Equipment Classroom Management</div>
+                <div class="account-notify">
+                    <div class="account-control">
+                        <!--<img src="img/user.png" />-->
+                        <p>DOAN NGUYEN</p>
+                        <img src="img/gears.png"/>
+                        <div class="clear"></div>
+                        <div class="account-setting">
+                            <img src="img/pointer.png" />
+                            <ul>
+                                <li>Thiết lập</li>
+                                <li>Cài đặt tài khoản</li>
+                                <li>Đăng xuất</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-category">
+                <ul class="main-item">
+                    <li>
+                        <img src="" />
+                        <p>Trang Chủ</p>
+                    </li>
+                    <li>
+                        <a href="/HTML/Notify.html">
+                            <img src="" />
+                            <p>Thông Báo</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Equipment.html">
+                            <img src="" />
+                            <p>Thiết Bị</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/HTML/Classroom.html">
+                            <img src="" />
+                            <p>Phòng Học</p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/HTML/Account.html">
+                            <img src="" />
+                            <p>Tài Khoản</p>
+                        </a>
+                    </li>
+                    <li>
+                        <img src="" />
+                        <p>Thống Kê</p>
+                    </li>
+                    <li>
+                        <a href="/HTML/Schedule.html">
+                            <img src="" />
+                            <p>Xếp Lịch</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="title page-title right-button">
+                <p>Quản lý tài khoản</p>
+                <input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo tài khoản" />
+                <div class="clear"></div>
+            </div>
+            <div class="body-content">
+                <div class="search">
+                    <input type="text" placeholder="............."/>
+                    <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
+                </div>
+                <div class="clear"></div>
+                <div class="table medium-table">
+                    <div class="header-table">
+                        <div class="name"><div>Tên</div></div>
+                        <div class="phone"><div>Số điện thoạt</div></div>
+                        <div class="email"><div>Email</div></div>
+                        <div class="rooms"><div>Phụ trách</div></div>
+                        <div class="control"><div>Quản lý</div></div>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="body-table">
+                        <div class="row">
+                            <div class="name"><div>Trương Bá Hoành</div></div>
+                            <div class="phone"><div>0983 596 678</div></div>
+                            <div class="email"><div>hoanhtb@ecrm.vn</div></div>
+                            <div class="rooms"><div>201, 503</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
+                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="name"><div>Trần Phụng Tiên</div></div>
+                            <div class="phone"><div>01666 815 518</div></div>
+                            <div class="email"><div>tientp@ecrm.vn</div></div>
+                            <div class="rooms"><div>201, 113</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
+                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="name"><div>Trương Văn Lương</div></div>
+                            <div class="phone"><div>0983 596 623</div></div>
+                            <div class="email"><div>luongtv@ecrm.vn</div></div>
+                            <div class="rooms"><div>310, 401, 211</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
+                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="row">
+                            <div class="name"><div>Lê Anh Tuấn</div></div>
+                            <div class="phone"><div>0984 225 566</div></div>
+                            <div class="email"><div>tuanla@ecrm.vn</div></div>
+                            <div class="rooms"><div>213, 303</div></div>
+                            <div class="control">
+                                <div class="group-button">
+                                    <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
+                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal modal-medium" id="modal-1">
+            <div class="content-modal">
+                <div class="header-modal title">
+                    <p>Tạo tài khoản</p>
+                    <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+                </div>
+                <div class="body-modal">
+                    <div class="group-control" style="margin: 15px 0 0">
+                        <div class="name">Họ và Tên</div>
+                        <div class="control">
+                            <input type="text" placeholder=".........................."/>
+                        </div>
+                    </div>
+                    <div class="group-control">
+                        <div class="name">Mã số</div>
+                        <div class="control">
+                            <input type="text" placeholder=".........................."/>
+                        </div>
+                    </div>
+                    <div class="group-control">
+                        <div class="name">Giới tính</div>
+                        <div class="control">
+                            <select>
+                                <option>Nam</option>
+                                <option>Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="group-control">
+                        <div class="name">Ngày sinh</div>
+                        <div class="control">
+                            <input type="text" placeholder=".........................."/>
+                        </div>
+                    </div>
+                    <div class="group-control line">
+                        <div class="name">Email</div>
+                        <div class="value">........................................</div>
+                    </div>
+                    <div class="group-control">
+                        <div class="name">Đi động</div>
+                        <div class="control">
+                            <input type="text" placeholder=".........................."/>
+                        </div>
+                    </div>
+                    <div class="group-control">
+                        <div class="name">Địa chỉ</div>
+                        <div class="control">
+                            <input type="text" placeholder=".........................."/>
+                        </div>
+                    </div>
+                    <div class="group-control line">
+                        <div class="name">Vai trò</div>
+                        <div class="control">
+                            <select>
+                                <option>Teacher</option>
+                                <option>Manager</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-modal">
+                    <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát" />
+                    <input type="button" class="btn btn-orange" value="Lưu tài khoản" />
+                </div>
+            </div>
+            <div class="black-background"></div>
+        </div>
+
+        <script src="js/script.js"></script>
+    </body>
+</html>

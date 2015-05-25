@@ -1,0 +1,105 @@
+.table .teacher{
+    width: 25%;
+}
+
+.table .room{
+    width: 12%;
+}
+
+.table .slot{
+    width: 13%;
+}
+
+.table .time{
+    width: 20%;
+}
+
+.table .number{
+    width: 15%;
+}
+
+.table .control{
+    width: 15%;
+}
+
+.medium-table .name{
+    width: 23%;
+}
+
+.medium-table .phone{
+    width: 17%;
+}
+
+.medium-table .email{
+    width: 20%;
+}
+
+.medium-table .rooms{
+    width: 20%;
+}
+
+.medium-table .control{
+    width: 20%;
+}
+
+.search {
+    float: left;
+    background-color: #fff;
+    margin: 15px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+.search input[type='text']{
+     margin: 0 30px 0 0;
+ }
+
+.search select{
+     margin: 0 30px 0 0;
+ }
+
+.modal.modal-small .content-modal{
+    height: 240px;
+    margin-top: -120px;
+}
+
+.modal.modal-small .content-modal .body-modal{
+    padding-top: 15px;
+}
+
+.small-table{
+    width: 400px;
+}
+
+.small-table .room-number{
+    width: 100px;
+}
+
+.small-table .room-type{
+    width: 150px;
+}
+
+.small-table .control{
+    width: 150px;
+}
+
+.classroom-map{
+    background-color: #f1f1f1;
+    height: 340px;
+}
+
+.equipment-table .equip-type{
+    width: 20%;
+}
+
+.equipment-table .equip-name{
+    width: 40%;
+}
+
+.equipment-table .quantity{
+    width: 15%;
+}
+
+.equipment-table .warranty{
+    width: 25%;
+}

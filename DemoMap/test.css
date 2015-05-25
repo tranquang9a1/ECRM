@@ -1,0 +1,164 @@
+.container{
+    text-align: center;
+}
+.map {
+    width: 700px;
+    height: 500px;
+    text-align: center;
+    overflow: scroll;
+    display: inline-block;
+    border: 0.5px solid cyan;
+}
+
+.day {
+    margin-right: 15px;
+    float: left;
+}
+
+.divDayGhe {
+    height: 35px;
+}
+
+.subDIv {
+    display: inline-block;
+}
+
+.ghe {
+    margin-right: 4px;
+    margin-top: 2px;
+    padding-bottom: 5px;
+    width: 30px;
+    height: 30px;
+    float: left;
+    background-image: url("Images/chair_office-512.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.ghe:hover {
+    -webkit-transition-delay: 0.1s;
+    -moz-transition-delay: 0.1s;
+    -ms-transition-delay: 0.1s;
+    -o-transition-delay: 0.1s;
+    transition-delay: 0.1s;
+    /*    border: 1px solid;
+        border-color: cyan;
+        box-shadow: 2px 2px 2px 2px cyan;*/
+    -webkit-transform: scale(1.1); /* Safari and Chrome */
+    -moz-transform: scale(1.1); /* Firefox */
+    -ms-transform: scale(1.1); /* IE 9 */
+    -o-transform: scale(1.1); /* Opera */
+    transform: scale(1.1);
+    background-color: dodgerblue;
+    border-radius: 5px;
+}
+
+.ban {
+    height: 30px;
+    background-color: brown;
+    border-radius: 5px;
+}
+
+.ban:hover {
+    -webkit-transition-delay: 0.1s;
+    -moz-transition-delay: 0.1s;
+    -ms-transition-delay: 0.1s;
+    -o-transition-delay: 0.1s;
+    transition-delay: 0.1s;
+    -webkit-transform: scale(1.1); /* Safari and Chrome */
+    -moz-transform: scale(1.1); /* Firefox */
+    -ms-transform: scale(1.1); /* IE 9 */
+    -o-transform: scale(1.1); /* Opera */
+    transform: scale(1.1);
+    border: 1px solid;
+    border-color: dodgerblue;
+}
+.banGV{
+    height: 30px;
+    margin-bottom: 4px;
+    width: 30px;
+    background-color: saddlebrown;
+    border-radius: 5px;
+}
+.banGV:hover {
+    -webkit-transition-delay: 0.1s;
+    -moz-transition-delay: 0.1s;
+    -ms-transition-delay: 0.1s;
+    -o-transition-delay: 0.1s;
+    transition-delay: 0.1s;
+    -webkit-transform: scale(1.1); /* Safari and Chrome */
+    -moz-transform: scale(1.1); /* Firefox */
+    -ms-transform: scale(1.1); /* IE 9 */
+    -o-transform: scale(1.1); /* Opera */
+    transform: scale(1.1);
+    border: 1px solid;
+    border-color: dodgerblue;
+}
+.bang{
+    margin-bottom: 10px;
+}
+.board {
+    height: 20px;
+    background-color: #f0f0f0;
+    color: #666;
+    text-align: center;
+    padding: 3px;
+    border-radius: 5px;
+    width: 50%;
+    margin: 0 auto;
+}
+.thietBi{
+    width: 700px;
+    height: 40px;
+    display: inline-block;
+    border: 0.5px solid cyan;
+    text-align: center;
+}
+.subThietBi{
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-right: 10px;
+}
+.subThietBi:hover {
+    -webkit-transition-delay: 0.1s;
+    -moz-transition-delay: 0.1s;
+    -ms-transition-delay: 0.1s;
+    -o-transition-delay: 0.1s;
+    transition-delay: 0.1s;
+    -webkit-transform: scale(1.1); /* Safari and Chrome */
+    -moz-transform: scale(1.1); /* Firefox */
+    -ms-transform: scale(1.1); /* IE 9 */
+    -o-transform: scale(1.1); /* Opera */
+    transform: scale(1.1);
+    background-color: dodgerblue;
+    border-radius: 5px;
+}
+#idProjector{
+
+    background-image: url("Images/projector.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+}
+#idTivi{
+    background-image: url("Images/widescreen_tv.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+}
+#idMayLanh{
+    background-image: url("Images/air-512.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+#idQuat{
+    background-image: url("Images/fan-512.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+#idLoa{
+    background-image: url("Images/003386-glossy-black-icon-media-music-speaker.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}

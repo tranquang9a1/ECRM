@@ -25,6 +25,7 @@ function myFunction() {
             soChoNgoi[k] = "SoChoNgoi" + j;
         }
 
+
     }
     document.getElementById("view").onclick = function () {
         var chieuDaiBan = 0;
@@ -135,10 +136,10 @@ function myFunction() {
         document.getElementById('idSubDiv').style.width = chieuDaiSubDiv + "px";
         var objDiv = document.getElementById("idMap");
         objDiv.scrollLeft= chieuDaiSubDiv*1/2;
-        if(chieuDaiSubDiv>500){
+        if(chieuDaiSubDiv>400){
             document.getElementById('idBang').style.width = chieuDaiSubDiv + "px";
         }else{
-            document.getElementById('idBang').style.width = "700px";
+            document.getElementById('idBang').style.width = "400px";
         }
         //projector
         if(document.getElementById('projector').checked){

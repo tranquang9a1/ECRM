@@ -1,8 +1,9 @@
 .container{
     text-align: center;
+    width: 400px;
 }
 .map {
-    width: 700px;
+    width: 400px;
     height: 500px;
     text-align: center;
     overflow: scroll;
@@ -108,7 +109,7 @@
     margin: 0 auto;
 }
 .thietBi{
-    width: 700px;
+    width: 400px;
     height: 40px;
     display: inline-block;
     border: 0.5px solid cyan;

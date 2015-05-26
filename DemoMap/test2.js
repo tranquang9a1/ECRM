@@ -1,10 +1,10 @@
 /**
  * Created by Htang on 5/26/2015.
  */
-function myFunction() {
-    var vrows = 2;
+function myFunction(vrows, soDayNgang, soChoNgoi) {
+    /*var vrows = 2;
     var soDayNgang = [5, 5];
-    var soChoNgoi = [3, 3];
+    var soChoNgoi = [3, 3];*/
     var array = [];
     var o = new Object();
     var chieuDaiBan = 0;
@@ -145,4 +145,5 @@ function myFunction() {
     divLoa.id = 'idLoa';
     divLoa.className = 'subThietBi';
     document.getElementsByTagName('div')[1].appendChild(divLoa);
+
 }

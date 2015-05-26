@@ -9,6 +9,7 @@ body{
     clear: both!important;
     border: 0!important;
     padding: 0!important;
+    margin: 0!important;
 }
 
 .row{
@@ -166,8 +167,13 @@ body{
     background-color: #1B4057;
 }
 
-.list-category > ul > li > p{
+.list-category > ul > li a{
+    text-decoration: none;
+}
+
+.list-category > ul > li p{
     margin: 0;
+    color: #ffffff!important;
 }
 
 .container {

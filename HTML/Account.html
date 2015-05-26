@@ -35,25 +35,25 @@
                         <p>Trang Chủ</p>
                     </li>
                     <li>
-                        <a href="/HTML/Notify.html">
+                        <a href="../HTML/Notify.html">
                             <img src="" />
                             <p>Thông Báo</p>
                         </a>
                     </li>
                     <li>
-                        <a href="/HTML/Equipment.html">
+                        <a href="../HTML/Equipment.html">
                             <img src="" />
                             <p>Thiết Bị</p>
                         </a>
                     </li>
                     <li>
-                        <a href="/HTML/Classroom.html">
+                        <a href="../HTML/Classroom.html">
                             <img src="" />
                             <p>Phòng Học</p>
                         </a>
                     </li>
                     <li class="active">
-                        <a href="/HTML/Account.html">
+                        <a href="../HTML/Account.html">
                             <img src="" />
                             <p>Tài Khoản</p>
                         </a>
@@ -63,7 +63,7 @@
                         <p>Thống Kê</p>
                     </li>
                     <li>
-                        <a href="/HTML/Schedule.html">
+                        <a href="../HTML/Schedule.html">
                             <img src="" />
                             <p>Xếp Lịch</p>
                         </a>
@@ -101,7 +101,7 @@
                             <div class="control">
                                 <div class="group-button">
                                     <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                    <div class="btn btn-remove btn-text" onclick="conform(2, {name: 'Trương Bá Hoành'})" title="">Khóa</div>
                                 </div>
                             </div>
                             <p class="clear"></p>
@@ -114,7 +114,7 @@
                             <div class="control">
                                 <div class="group-button">
                                     <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                    <div class="btn btn-remove btn-text" onclick="conform(2, {name: 'Trần Phụng Tiên'})" title="">Khóa</div>
                                 </div>
                             </div>
                             <p class="clear"></p>
@@ -127,7 +127,7 @@
                             <div class="control">
                                 <div class="group-button">
                                     <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                    <div class="btn btn-remove btn-text" onclick="conform(2, {name: 'Trương Văn Lương'})" title="">Khóa</div>
                                 </div>
                             </div>
                             <p class="clear"></p>
@@ -140,7 +140,7 @@
                             <div class="control">
                                 <div class="group-button">
                                     <div class="btn btn-view" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                    <div class="btn btn-remove btn-text" title="">Deactive</div>
+                                    <div class="btn btn-remove btn-text" onclick="conform(2, {name: 'Lê Anh Tuấn'})" title="">Khóa</div>
                                 </div>
                             </div>
                             <p class="clear"></p>
@@ -211,12 +211,27 @@
                 </div>
                 <div class="footer-modal">
                     <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát" />
-                    <input type="button" class="btn btn-orange" value="Lưu tài khoản" />
+                    <input type="button" class="btn btn-orange" onclick="conform(1)" value="Lưu tài khoản" />
                 </div>
             </div>
             <div class="black-background"></div>
         </div>
 
+        <script>
+            function doAction(choose, object) {
+                closeConform();
+                switch (choose) {
+                    case 1:
+                        showModal(0, 'modal-1');
+                        alert("Lưu tài khoản thành công!");
+                        break;
+
+                    case 2:
+                        alert(object.name + " đã được khóa thành công!");
+                        break;
+                }
+            }
+        </script>
         <script src="js/script.js"></script>
     </body>
 </html>

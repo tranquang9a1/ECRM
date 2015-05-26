@@ -1,27 +1,3 @@
-.table .teacher{
-    width: 25%;
-}
-
-.table .room{
-    width: 12%;
-}
-
-.table .slot{
-    width: 13%;
-}
-
-.table .time{
-    width: 20%;
-}
-
-.table .number{
-    width: 15%;
-}
-
-.table .control{
-    width: 15%;
-}
-
 .medium-table .name{
     width: 23%;
 }
@@ -102,4 +78,56 @@
 
 .equipment-table .warranty{
     width: 25%;
+}
+
+.room-map{
+    margin: 15px 0 0;
+}
+
+.room-map #detail{
+    width: 365px;
+    float: left;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.room-map .row{
+    margin: 0 0 10px;
+}
+
+.room-map .row#row-1{
+    font-weight: bold;
+}
+
+.room-map .row .item {
+    float: left;
+    width: 100px;
+    line-height: 35px;
+    height: 35px;
+    margin: 0 15px 15px 0;
+}
+
+.room-map .row .item select{
+    width: 100px;
+}
+
+.room-map .title-map{
+    float: left;
+    font-weight: bold;
+    width: 100px;
+    margin: 0 15px 0 0;
+}
+
+.room-map .title-map div{
+    float: left;
+    width: 100px;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 0 15px;
+}
+
+.map-container {
+    width: 100%;
+    height: 470px;
+    margin: 15px 0 0;
 }

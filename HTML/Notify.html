@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="css/layout.css"/>
         <link rel="stylesheet" href="css/general.css"/>
         <link rel="stylesheet" href="css/notify.css"/>
+        <link rel="stylesheet" href="css/roomtype.css"/>
     </head>
     <body>
         <div class="contain-layout">
@@ -35,28 +36,38 @@
                         <p>Trang Chủ</p>
                     </li>
                     <li class="active">
-                        <img src="" />
-                        <p>Thông Báo</p>
+                        <a href="../HTML/Notify.html">
+                            <img src="" />
+                            <p>Thông Báo</p>
+                        </a>
                     </li>
                     <li>
-                        <img src="" />
-                        <p>Thiết Bị</p>
+                        <a href="../HTML/Equipment.html">
+                            <img src="" />
+                            <p>Thiết Bị</p>
+                        </a>
                     </li>
                     <li>
-                        <img src="" />
-                        <p>Phòng Học</p>
+                        <a href="../HTML/Classroom.html">
+                            <img src="" />
+                            <p>Phòng Học</p>
+                        </a>
                     </li>
                     <li>
-                        <img src="" />
-                        <p>Tài Khoản</p>
+                        <a href="../HTML/Account.html">
+                            <img src="" />
+                            <p>Tài Khoản</p>
+                        </a>
                     </li>
                     <li>
                         <img src="" />
                         <p>Thống Kê</p>
                     </li>
                     <li>
-                        <img src="" />
-                        <p>Xếp Lịch</p>
+                        <a href="../HTML/Schedule.html">
+                            <img src="" />
+                            <p>Xếp Lịch</p>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -445,7 +456,7 @@
                                 <div class="group-control">
                                     <div class="name">Thiết bị hư hại</div>
                                     <div class="value">Máy chiếu - ECRM0251</div>
-                                    <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-2')" value="Vị trí" />
+                                    <input type="button" class="btn btn-normal" onclick="showMap(2, [5,5], [3,2], 'idContainer');showModal(2, 'modal-1','modal-2')" value="Vị trí" />
                                 </div>
                                 <div class="group-control">
                                     <div class="name">Chi tiết hư hại</div>
@@ -482,29 +493,29 @@
                                 </div>
                                 <div class="table">
                                     <div class="header-table">
-                                        <div class="date-report">Ngày báo cáo</div>
-                                        <div class="reporter">Người báo cáo</div>
-                                        <div class="staff">Nhân viên</div>
-                                        <div class="clear"></div>
+                                        <div class="date-report"><div>Ngày báo cáo</div></div>
+                                        <div class="reporter"><div>Người báo cáo</div></div>
+                                        <div class="staff"><div>Nhân viên</div></div>
+                                        <p class="clear"></p>
                                     </div>
                                     <div class="body-table">
                                         <div class="row">
-                                            <div class="date-report">10h20 20/3/2015</div>
-                                            <div class="reporter">Phạm Thế Vinh</div>
-                                            <div class="staff">Trương Hồng Thái</div>
-                                            <div class="clear"></div>
+                                            <div class="date-report"><div>10h20 20/3/2015</div></div>
+                                            <div class="reporter"><div>Phạm Thế Vinh</div></div>
+                                            <div class="staff"><div>Trương Hồng Thái</div></div>
+                                            <p class="clear"></p>
                                         </div>
                                         <div class="row">
-                                            <div class="date-report">7h01 15/3/2015</div>
-                                            <div class="reporter">Trương Thế Hiển</div>
-                                            <div class="staff">Trương Hồng Thái</div>
-                                            <div class="clear"></div>
+                                            <div class="date-report"><div>7h01 15/3/2015</div></div>
+                                            <div class="reporter"><div>Trương Thế Hiển</div></div>
+                                            <div class="staff"><div>Trương Hồng Thái</div></div>
+                                            <p class="clear"></p>
                                         </div>
                                         <div class="row">
-                                            <div class="date-report">8h37 21/2/2015</div>
-                                            <div class="reporter">Trương Thế Hiển</div>
-                                            <div class="staff">Lê Quang Hạnh</div>
-                                            <div class="clear"></div>
+                                            <div class="date-report"><div>8h37 21/2/2015</div></div>
+                                            <div class="reporter"><div>Trương Thế Hiển</div></div>
+                                            <div class="staff"><div>Lê Quang Hạnh</div></div>
+                                            <p class="clear"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -514,24 +525,20 @@
                 </div>
                 <div class="footer-modal">
                     <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát" />
-                    <input type="button" class="btn btn-orange" value="Khắc phục" />
+                    <input type="button" class="btn btn-orange" onclick="conform(1)" value="Khắc phục" />
                     <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-1', 'modal-4')" value="Xem tất cả" />
                 </div>
             </div>
             <div class="black-background"></div>
         </div>
-        <div class="modal modal-large" id="modal-2">
+        <div class="modal modal-medium" id="modal-2">
             <div class="content-modal">
                 <div class="header-modal title">
                     <p>Sơ đồ phòng học</p>
                     <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1')"></i>
                 </div>
                 <div class="body-modal">
-                    <div class="group-control">
-                        <div class="name">Thiết bị</div>
-                        <div class="value">Máy chiếu</div>
-                    </div>
-                    <div class="classroom-map">
+                    <div class="map-container" id="idContainer" style="margin: 15px 0 0">
 
                     </div>
                 </div>
@@ -567,7 +574,7 @@
                 </div>
                 <div class="footer-modal">
                     <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-3','modal-1')" value="Thoát" />
-                    <input type="button" class="btn btn-orange" value="Đổi phòng" />
+                    <input type="button" class="btn btn-orange" onclick="conform(3)" value="Đổi phòng" />
                 </div>
             </div>
             <div class="black-background"></div>
@@ -610,7 +617,7 @@
                 </div>
                 <div class="footer-modal">
                     <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-4','modal-1')" value="Thoát" />
-                    <input type="button" class="btn btn-orange" value="Khắc phục" />
+                    <input type="button" class="btn btn-orange" onclick="conform(2)"  value="Khắc phục" />
                 </div>
             </div>
             <div class="black-background"></div>
@@ -654,7 +661,7 @@
                                 <div class="group-control">
                                     <div class="name">Sơ đồ phòng</div>
                                 </div>
-                                <div style="width: 100%; height: 145px; background-color: #f1f1f1"></div>
+                                <div style="width: 100%; height: 145px;" id="history-map"></div>
                             </div>
                             <div id="tab7" class="body-tab">
                                 <div class="group-control">
@@ -686,6 +693,28 @@
             </div>
             <div class="black-background"></div>
         </div>
+
         <script src="js/script.js"></script>
+        <script src="js/roomtype.js"></script>
+        <script>
+            window.onload = showMap(2, [5,5], [3,2], "history-map");
+            function doAction(choose, object) {
+                closeConform();
+                switch (choose) {
+                    case 1:
+                        showModal(0, 'modal-1');
+                        alert("Khắc phục thành công!");
+                        break;
+                    case 2:
+                        showModal(0, 'modal-4');
+                        alert("Khắc phục thành công!");
+                        break;
+                    case 3:
+                        showModal(2, 'modal-3','modal-1');
+                        alert("Đổi phòng thành công!");
+                        break;
+                }
+            }
+        </script>
     </body>
 </html>

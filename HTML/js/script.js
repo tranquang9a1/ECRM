@@ -42,3 +42,48 @@ function showModal(show, modal1, modal2) {
         modalB.className += " active";
     }
 }
+
+function conform(choose, object){
+    var body = document.getElementsByTagName("body").item(0);
+    var conformDiv = document.createElement("div");
+    conformDiv.className = "conform";
+    var contentDiv = document.createElement("div");
+    contentDiv.className = "content-conform small";
+
+    var titleDiv = document.createElement("div");
+    titleDiv.className = "title-conform";
+    titleDiv.innerHTML = "ARE YOU SURE?";
+    var controlDiv = document.createElement("div");
+    controlDiv.className = "control-button";
+
+    var btnYes = document.createElement("input");
+    btnYes.className = "btn btn-orange";
+    btnYes.type = "button";
+    btnYes.value = "Yes! I sure";
+    btnYes.addEventListener("click", function() { doAction(choose, object)}, false);
+    var btnNo = document.createElement("input");
+    btnNo.className = "btn btn-normal";
+    btnNo.type = "button";
+    btnNo.value = "No";
+    btnNo.addEventListener("click", closeConform, false);
+    controlDiv.appendChild(btnYes);
+    controlDiv.appendChild(btnNo);
+
+    contentDiv.appendChild(titleDiv);
+    contentDiv.appendChild(controlDiv);
+
+    var bgDiv = document.createElement("div");
+    bgDiv.className = "white-background";
+    conformDiv.appendChild(contentDiv);
+    conformDiv.appendChild(bgDiv);
+    body.appendChild(conformDiv);
+
+    setTimeout(function(){
+        contentDiv.className += " active";
+    }, 10);
+}
+
+function closeConform(){
+    var conformDiv = document.getElementsByClassName("conform")[0];
+    conformDiv.parentNode.removeChild(conformDiv);
+}

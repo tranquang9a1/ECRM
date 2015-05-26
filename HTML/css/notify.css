@@ -36,15 +36,15 @@
 }
 
 .modal .table .date-report{
-    width: 120px;
+    width: 150px;
 }
 
 .modal .table .reporter{
-    width: 150px;
+    width: 164px;
 }
 
 .modal .table .staff{
-    width: 150px;
+    width: 164px;
 }
 
 .top-control {
@@ -107,39 +107,6 @@
     width: 140px;
 }
 
-.body-content .table {
-    border: 1px solid #ccc;
-}
-
-.body-content .table .header-table > div{
-    text-align: left;
-}
-
-.body-content .table .header-table div, .body-content .table .body-table .row > div{
-    padding: 0;
-    border: 0;
-}
-
-.body-content .table .header-table > div > div, .body-content .table .body-table .row > div > div{
-    padding: 0 9px;
-    border: 0;
-}
-
-.body-content .table .body-table .row{
-    border-bottom: 1px solid #ccc;
-}
-
-.body-content .table .body-table .row:nth-child(2n){
-    background-color: #ffffff;
-}
-
-.body-content .table .body-table .row:hover{
-    background-color: rgba(107, 154, 255, 0.19);
-}
-
-.body-content .table .body-table .row:last-child{
-    border: 0;
-}
 
 .body-content .table .room{
     width: 10%;
@@ -161,15 +128,6 @@
     width: 20%;
 }
 
-.page-title.right-button{
-    padding: 15px 20px 15px;
-}
-
-.page-title.right-button p{
-    float: left;
-    padding: 10px 0 0;
-}
-
-.page-title.right-button input{
-    float: right;
-}
+#history-map .map{
+    height: 100px;
+ }

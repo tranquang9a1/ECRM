@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface UserDAO {
-
+    public User login(String username, String password);
 }

@@ -5,6 +5,8 @@ import com.ecrm.DAO.UserDAO;
 import com.ecrm.Entity.User;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,5 +16,15 @@ import java.util.List;
 public class UserDAOImpl extends BaseDAO<User, Integer> implements UserDAO {
     public UserDAOImpl() {
         super(User.class);
+    }
+
+
+    public User login(String username, String password) {
+        User user = new User();
+        Query query = entityManager.createQuery("Select u from tblUser u where u.username= :username and u.password = :password");
+        query.setParameter("Username", username);
+        query.setParameter("Password", password);
+        user = (User) query.getSingleResult();
+        return user;
     }
 }

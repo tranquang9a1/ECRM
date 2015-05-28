@@ -13,7 +13,7 @@ public class Classroom {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name="RoomTypeId", nullable = false)
+    @JoinColumn(name="RoomTypeId", nullable = true)
     private
     RoomType roomType;
 

@@ -1,8 +1,8 @@
 package com.ecrm.Entity;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by Htang on 5/27/2015.
@@ -33,17 +33,20 @@ public class Report {
     private String status;
 
     @Basic
-    @Column(name = "CreateTime", nullable = false, insertable = true, updatable = true)
-    private Timestamp createTime;
+    @Column(name = "CreateTime", nullable = true, insertable = true, updatable = true, columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createTime;
 
     @Basic
-    @Column(name = "ResolveTime", nullable = true, insertable = true, updatable = true, length = 50)
-    private String resolveTime;
+    @Column(name = "ResolveTime", nullable = true, insertable = true, updatable = true, columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date resolveTime;
+
 
     public Report() {
     }
 
-    public Report(Equipment equipment, User user, String description, String status, Timestamp createTime, String resolveTime) {
+    public Report(Equipment equipment, User user, String description, String status, Date createTime, Date resolveTime) {
         this.equipment = equipment;
         this.user = user;
         this.description = description;
@@ -92,19 +95,19 @@ public class Report {
         this.status = status;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public String getResolveTime() {
+    public Date getResolveTime() {
         return resolveTime;
     }
 
-    public void setResolveTime(String resolveTime) {
+    public void setResolveTime(Date resolveTime) {
         this.resolveTime = resolveTime;
     }
 }

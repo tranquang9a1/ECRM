@@ -258,7 +258,7 @@
                     <select id="vrow" onchange="createDetailMap()">
                         <option value="1">1</option>
                         <option value="2">2</option>
-                        <option value="3" selected="selected">3</option>
+                        <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
                         <option value="6">6</option>
@@ -294,28 +294,40 @@
             <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-3')" value="Thoát"/>
             <input type="button" class="btn btn-orange" onclick="viewMap(); showModal(2, 'modal-3','modal-4')"
                    value="Xem trước"/>
-            <input type="button" class="btn btn-orange" onclick="conform(1)" value="Tạo mẫu"/>
         </div>
     </div>
     <div class="black-background"></div>
 </div>
-<div class="modal modal-medium" id="modal-4">
-    <div class="content-modal">
-        <div class="header-modal title">
-            <p>Tạo loại phòng </p>
-            <i class="fa fa-times" onclick="showModal(2, 'modal-4', 'modal-3')"></i>
-        </div>
-        <div class="body-modal">
-            <div class="map-container" id="idContainer">
+<form action="createRoomType">
+    <div class="modal modal-medium" id="modal-4">
+        <input type="hidden" id="Slots" name="Slots" value="">
+        <input type="hidden" id="VerticalRows" name="VerticalRows" value="">
+        <input type="hidden" id="HorizontalRows" name="HorizontalRows" value="">
+        <input type="hidden" id="NoSlotsEachHRows" name="NoSlotsEachHRows" value="">
+        <input type="hidden" id="AirConditioning" name="AirConditioning" value="">
+        <input type="hidden" id="Fan" name="Fan" value="">
+        <input type="hidden" id="Projectors" name="Projector" value="">
+        <input type="hidden" id="Speaker" name="Speaker" value="">
+        <input type="hidden" id="Television" name="Television" value="">
+
+        <div class="content-modal">
+            <div class="header-modal title">
+                <p>Tạo loại phòng </p>
+                <i class="fa fa-times" onclick="showModal(2, 'modal-4', 'modal-3')"></i>
+            </div>
+            <div class="body-modal">
+                <div class="map-container" id="idContainer">
+                </div>
+            </div>
+            <div class="footer-modal">
+                <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-4', 'modal-3')"
+                       value="Quay lại"/>
+                <input type="submit" class="btn btn-orange" onclick="conform(2)" value="Tạo mẫu"/>
             </div>
         </div>
-        <div class="footer-modal">
-            <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-4', 'modal-3')" value="Quay lại"/>
-            <input type="button" class="btn btn-orange" onclick="conform(2)" value="Tạo mẫu"/>
-        </div>
+        <div class="black-background"></div>
     </div>
-    <div class="black-background"></div>
-</div>
+</form>
 <script src="../../resource/js/script.js"></script>
 <script src="../../resource/js/roomtype.js"></script>
 <script>

@@ -6,6 +6,7 @@ var soDayNgang = [];
 var soChoNgoi = [];
 var o = new Object();
 var array = [];
+var slots = 0;
 
 function createDetailMap() {
     var colElement = document.getElementById("vrow");
@@ -96,7 +97,9 @@ function viewMap() {
             soChoNgoi: soCho
         }
         array[i] = o;
+        slots += soDay*soCho;
     }
+
     //tao div con chua map
     var subDiv = document.createElement('div');
     subDiv.className = 'subDiv';
@@ -184,6 +187,9 @@ function viewMap() {
         divProjector.id = 'idProjector';
         divProjector.className='subThietBi';
         document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
+        document.getElementById("Projectors").value = true;
+    }else{
+        document.getElementById("Projectors").value = false;
     }
     //tivi
     if(document.getElementById('tivi').checked){
@@ -191,6 +197,9 @@ function viewMap() {
         divTivi.id = 'idTivi';
         divTivi.className='subThietBi';
         document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
+        document.getElementById("Television").value = true;
+    }else{
+        document.getElementById("Television").value = false;
     }
     //may lanh
     if(document.getElementById('mayLanh').checked){
@@ -198,6 +207,9 @@ function viewMap() {
         divMayLanh.id = 'idMayLanh';
         divMayLanh.className='subThietBi';
         document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
+        document.getElementById("AirConditioning").value = true;
+    }else{
+        document.getElementById("AirConditioning").value = false;
     }
     //quat
     if(document.getElementById('quat').checked){
@@ -205,6 +217,9 @@ function viewMap() {
         divQuat.id = 'idQuat';
         divQuat.className='subThietBi';
         document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
+        document.getElementById("Fan").value = true;
+    }else{
+        document.getElementById("Fan").value = false;
     }
     //loa
     if(document.getElementById('loa').checked){
@@ -212,7 +227,23 @@ function viewMap() {
         divLoa.id = 'idLoa';
         divLoa.className='subThietBi';
         document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
+        document.getElementById("Speaker").value = true;
+    }else{
+        document.getElementById("Speaker").value = false;
     }
+    var temp1 = "";
+    var temp2 = "";
+    document.getElementById("Slots").value = slots;
+    document.getElementById("VerticalRows").value = vrows;
+    for(i = 0; i<vrows; i++){
+        temp1+= document.getElementById(soDayNgang[i]).value+',';
+    }
+    document.getElementById("HorizontalRows").value = temp1;
+    for(i = 0; i<vrows; i++){
+        temp2+= document.getElementById(soChoNgoi[i]).value+',';
+    }
+    document.getElementById("NoSlotsEachHRows").value = temp2;
+
 }
 
 function showMap(vrows, soDayNgang, soChoNgoi, mapId) {

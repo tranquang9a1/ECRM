@@ -1,7 +1,7 @@
 package com.ecrm.Entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 
 /**
@@ -16,50 +16,51 @@ public class RoomType {
 
     @Basic
     @Column(name = "Slots", nullable = false, insertable = true, updatable = true, length = 45)
-    private String slots;
+    private Integer slots;
 
     @Basic
-    @Column(name = "VerticalRows", nullable = true, insertable = true, updatable = true)
+    @Column(name = "VerticalRows", nullable = false, insertable = true, updatable = true)
     private Integer verticalRows;
 
     @Basic
-    @Column(name = "HorizontalRows", nullable = true, insertable = true, updatable = true, length = 45)
+    @Column(name = "HorizontalRows", nullable = false, insertable = true, updatable = true, length = 45)
     private String horizontalRows;
 
     @Basic
-    @Column(name = "NoSlotsEachHRows", nullable = true, insertable = true, updatable = true, length = 45)
+    @Column(name = "NoSlotsEachHRows", nullable = false, insertable = true, updatable = true, length = 45)
     private String noSlotsEachHRows;
 
     @Basic
-    @Column(name = "AirConditioning", nullable = true, insertable = true, updatable = true)
+    @Column(name = "AirConditioning", nullable = false, insertable = true, updatable = true)
     private boolean airConditioning;
 
     @Basic
-    @Column(name = "Fan", nullable = true, insertable = true, updatable = true)
+    @Column(name = "Fan", nullable = false, insertable = true, updatable = true)
     private boolean fan;
 
     @Basic
-    @Column(name = "Projector", nullable = true, insertable = true, updatable = true)
+    @Column(name = "Projector", nullable = false, insertable = true, updatable = true)
     private boolean projector;
 
     @Basic
-    @Column(name = "speaker", nullable = true, insertable = true, updatable = true)
+    @Column(name = "Speaker", nullable = false, insertable = true, updatable = true)
     private boolean speaker;
 
     @Basic
-    @Column(name = "television", nullable = true, insertable = true, updatable = true)
+    @Column(name = "Television", nullable = false, insertable = true, updatable = true)
     private boolean television;
 
     @Basic
-    @Column(name = "CreateTime", nullable = true, insertable = true, updatable = true)
-    private Timestamp createTime;
+    @Column(name = "CreateTime", nullable = false, insertable = true, updatable = true, columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createTime;
 
     public RoomType(){
 
     }
 
-    public RoomType(String slots, Integer verticalRows, String horizontalRows, String noSlotsEachHRows,
-                    boolean airConditioning, boolean fan, boolean projector, boolean speaker, boolean television, Timestamp createTime) {
+    public RoomType(Integer slots, Integer verticalRows, String horizontalRows, String noSlotsEachHRows,
+                    boolean airConditioning, boolean fan, boolean projector, boolean speaker, boolean television, Date createTime) {
         this.slots = slots;
         this.verticalRows = verticalRows;
         this.horizontalRows = horizontalRows;
@@ -81,11 +82,11 @@ public class RoomType {
         this.id = id;
     }
 
-    public String getSlots() {
+    public Integer getSlots() {
         return slots;
     }
 
-    public void setSlots(String slots) {
+    public void setSlots(Integer slots) {
         this.slots = slots;
     }
 
@@ -153,11 +154,11 @@ public class RoomType {
         this.television = television;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date date) {
         this.createTime = createTime;
     }
 }

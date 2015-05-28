@@ -1,0 +1,133 @@
+.notify-active {
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    cursor: pointer;
+}
+
+.notify-active:hover {
+    font-weight: bold;
+}
+
+.notify-active p{
+    float: left;
+    margin: 0;
+}
+
+.notify-active .equipment{
+    width: 150px;
+}
+
+.notify-active .time{
+    float: right;
+}
+
+.notify-active.type-1{
+    background-color: #f2dede;
+}
+
+.notify-active.type-2{
+    background-color: #fcf8e3;
+}
+
+.notify-active.type-3{
+    background-color: #dff0d8;
+}
+
+.modal .table .date-report{
+    width: 150px;
+}
+
+.modal .table .reporter{
+    width: 164px;
+}
+
+.modal .table .staff{
+    width: 164px;
+}
+
+.top-control {
+    margin: 0 0 5px;
+}
+
+.top-control p{
+    margin: 10px 0 0;
+    float: left;
+    height: 35px;
+    text-align: end;
+    font-weight: bold;
+}
+
+.top-control select{
+    float: right;
+}
+
+.classroom-map {
+    width: 100%;
+    height: 410px;
+    background-color: #f1f1f1;
+}
+
+.group-equipment{
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin: 10px 0 0;
+}
+
+.group-equipment input{
+    float: left;
+    margin: 21px 13px 0 5px;
+}
+
+.group-equipment .equipment{
+    float: left;
+    margin: 0 0 0 13px;
+    line-height: 50px;
+}
+
+.group-equipment .quantity{
+    float: right;
+    line-height: 50px;
+}
+
+.search {
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px 7px;
+}
+
+.search .control{
+    width: 25%;
+    float: left;
+}
+
+.search .control select{
+    width: 140px;
+}
+
+
+.body-content .table .room{
+    width: 10%;
+}
+
+.body-content .table .equipment{
+    width: 25%;
+}
+
+.body-content .table .report-time{
+    width: 20%;
+}
+
+.body-content .table .staff{
+    width: 25%;
+}
+
+.body-content .table .control{
+    width: 20%;
+}
+
+#history-map .map{
+    height: 100px;
+ }

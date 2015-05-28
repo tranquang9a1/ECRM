@@ -176,6 +176,7 @@ function myFunction() {
             divLoa.className='subThietBi';
             document.getElementsByTagName('div')[1].appendChild(divLoa);
         }
+
     }
 
 }

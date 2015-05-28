@@ -25,7 +25,7 @@ public class HelloController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String printWelcome(ModelMap model, HttpServletRequest request) {
-        return "test";
+        return "Login";
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -33,11 +33,29 @@ public class HelloController {
                         HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = userDAO.login(username, password);
-        if (user.getRole().getName().equalsIgnoreCase("Staff")) {
-            return "home";
+        if (user.isStatus()) {
+            session.setAttribute("USER", user);
+            if(user.getRole().getName().equals("Admin")){
+                return "home";
+            }
+            if(user.getRole().getName().equals("Staff")){
+                return "Staff_Classroom";
+            }
+            if(user.getRole().getName().equals("User")){
+                return "home";
+            }
         }
         return "error";
     }
+
+    //Logout
+    @RequestMapping(value = "logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.removeAttribute("USER");
+        return "Login";
+    }
+    //
 
     @RequestMapping(value = "print", method = RequestMethod.GET)
     public String print(HttpServletRequest request) {

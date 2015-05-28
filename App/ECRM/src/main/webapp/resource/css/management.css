@@ -1,0 +1,133 @@
+.medium-table .name{
+    width: 23%;
+}
+
+.medium-table .phone{
+    width: 17%;
+}
+
+.medium-table .email{
+    width: 20%;
+}
+
+.medium-table .rooms{
+    width: 20%;
+}
+
+.medium-table .control{
+    width: 20%;
+}
+
+.search {
+    float: left;
+    background-color: #fff;
+    margin: 15px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+.search input[type='text']{
+     margin: 0 30px 0 0;
+ }
+
+.search select{
+     margin: 0 30px 0 0;
+ }
+
+.modal.modal-small .content-modal{
+    height: 240px;
+    margin-top: -120px;
+}
+
+.modal.modal-small .content-modal .body-modal{
+    padding-top: 15px;
+}
+
+.small-table{
+    width: 400px;
+}
+
+.small-table .room-number{
+    width: 100px;
+}
+
+.small-table .room-type{
+    width: 150px;
+}
+
+.small-table .control{
+    width: 150px;
+}
+
+.classroom-map{
+    background-color: #f1f1f1;
+    height: 340px;
+}
+
+.equipment-table .equip-type{
+    width: 20%;
+}
+
+.equipment-table .equip-name{
+    width: 40%;
+}
+
+.equipment-table .quantity{
+    width: 15%;
+}
+
+.equipment-table .warranty{
+    width: 25%;
+}
+
+.room-map{
+    margin: 15px 0 0;
+}
+
+.room-map #detail{
+    width: 365px;
+    float: left;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.room-map .row{
+    margin: 0 0 10px;
+}
+
+.room-map .row#row-1{
+    font-weight: bold;
+}
+
+.room-map .row .item {
+    float: left;
+    width: 100px;
+    line-height: 35px;
+    height: 35px;
+    margin: 0 15px 15px 0;
+}
+
+.room-map .row .item select{
+    width: 100px;
+}
+
+.room-map .title-map{
+    float: left;
+    font-weight: bold;
+    width: 100px;
+    margin: 0 15px 0 0;
+}
+
+.room-map .title-map div{
+    float: left;
+    width: 100px;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 0 15px;
+}
+
+.map-container {
+    width: 100%;
+    height: 470px;
+    margin: 15px 0 0;
+}

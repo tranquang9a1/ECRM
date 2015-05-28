@@ -18,7 +18,7 @@ public class RoomTypeDAOImpl extends BaseDAO<RoomType, Integer> implements RoomT
 
     public RoomType findByID(int id) {
         RoomType roomType = new RoomType();
-        Query query = entityManager.createQuery("Select r from tblRoomType r where r.id = :id");
+        Query query = entityManager.createQuery("Select r from tblRoomType r where r.Id = :Id");
         query.setParameter("Id", id);
         roomType = (RoomType) query.getSingleResult();
         return roomType;

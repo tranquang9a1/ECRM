@@ -16,9 +16,12 @@
     <link rel="stylesheet" href="resource/css/general.css"/>
     <link rel="stylesheet" href="resource/css/management.css"/>
     <link rel="stylesheet" href="resource/css/roomtype.css"/>
+    <script src="../../resource/js/jquery-1.11.3.js"></script>
+    <script src="../../resource/js/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 <c:set var="user" value="${sessionScope.USER}"/>
+
 <div class="contain-layout">
     <jsp:include flush="true" page="Header.jsp"/>
 </div>
@@ -26,6 +29,7 @@
     <div class="title page-title right-button">
         <p>Quản lý phòng học</p>
         <input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo phòng học"/>
+
         <div class="clear"></div>
     </div>
     <div class="body-content">
@@ -38,129 +42,44 @@
             </div>
             <div class="content-tab">
                 <div id="tab1" class="body-tab active">
-                    <div class="search" style="  margin: 0 0 15px;">
-                        <input type="text" placeholder="............."/>
-                        <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="table small-table">
-                        <div class="header-table">
-                            <div class="room-number">
-                                <div>Số phòng</div>
-                            </div>
-                            <div class="room-type">
-                                <div>Loại phòng</div>
-                            </div>
-                            <div class="control">
-                                <div>Quản lý</div>
-                            </div>
-                            <p class="clear"></p>
-                        </div>
-                        <div class="body-table">
-                            <div class="row">
-                                <div class="room-number">
-                                    <div>101</div>
-                                </div>
-                                <div class="room-type">
-                                    <div>Loại 1</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                        <div class="btn btn-view" title="Xem sơ đồ"><i class="fa fa-eye"></i></div>
-                                        <div class="btn btn-remove" onclick="conform(2, {room: 101})" title="Xóa"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room-number">
-                                    <div>103</div>
-                                </div>
-                                <div class="room-type">
-                                    <div>Loại 1</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                        <div class="btn btn-view" title="Xem sơ đồ"><i class="fa fa-eye"></i></div>
-                                        <div class="btn btn-remove" onclick="conform(2, {room: 103})" title="Xóa"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room-number">
-                                    <div>202</div>
-                                </div>
-                                <div class="room-type">
-                                    <div>Loại 2</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                        <div class="btn btn-view" title="Xem sơ đồ"><i class="fa fa-eye"></i></div>
-                                        <div class="btn btn-remove" onclick="conform(2, {room: 202})" title="Xóa"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room-number">
-                                    <div>210</div>
-                                </div>
-                                <div class="room-type">
-                                    <div>Loại 1</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                        <div class="btn btn-view" title="Xem sơ đồ"><i class="fa fa-eye"></i></div>
-                                        <div class="btn btn-remove" onclick="conform(2, {room: 210})" title="Xóa"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room-number">
-                                    <div>506</div>
-                                </div>
-                                <div class="room-type">
-                                    <div>Loại 3</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i></div>
-                                        <div class="btn btn-view" title="Xem sơ đồ"><i class="fa fa-eye"></i></div>
-                                        <div class="btn btn-remove" onclick="conform(2, {room: 506})" title="Xóa"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                        </div>
-                    </div>
+                    <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                 </div>
                 <div id="tab2" class="body-tab">
                     <div>
                         <input type="button" class="btn btn-orange" style="margin: 0" onclick="showModal(1, 'modal-3')"
                                value="Tạo loại phòng"/>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="modal modal-medium" id="modal-view">
+    <div class="content-modal">
+        <div class="header-modal title">
+            <p id="roomname"></p>
+            <i class="fa fa-times" onclick="showModal(0, 'modal-view')"></i>
+        </div>
+        <div class="body-modal">
+            <div class="group-control">
+                <div class="name">Sơ đồ</div>
+            </div>
+            <div class="classroom-map" id="classroommap">
+            </div>
+        </div>
+        <div class="footer-modal">
+            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-view');clearthietbi()" value="Thoát"/>
+            <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-view','modal-1')"
+                   value="Chỉnh Sửa"/>
+        </div>
+    </div>
+    <div class="black-background"></div>
+</div>
 <form action="/createClassroom">
     <div class="modal modal-small" id="modal-1">
         <div class="content-modal">
             <div class="header-modal title">
-                <p>Nhập từ file excel</p>
+                <p>Tạo Phòng</p>
                 <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
             </div>
             <div class="body-modal">
@@ -179,14 +98,14 @@
                 </div>
             </div>
             <div class="footer-modal">
-                <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát"/>
-                <input type="submit" class="btn btn-orange" onclick="conform(1)" value="Thêm"/>
+                <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()" value="Thoát"/>
+                <input type="submit" class="btn btn-orange" onclick="conform(1);clearthietbi()" value="Thêm"/>
             </div>
         </div>
         <div class="black-background"></div>
     </div>
 </form>
-<div class="modal modal-large" id="modal-2">
+<div class="modal modal-medium" id="modal-2">
     <div class="content-modal">
         <div class="header-modal title">
             <p>Loại phòng học</p>
@@ -197,12 +116,13 @@
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Loại phòng</div>
                 <div class="control">
-                    <select onchange="changeFunc()" id="selectBox">
+                    <select id="selectBox">
                         <option value="" selected>...</option>
                         <c:forEach var="r" items="${roomtypes}">
-                            <option value="{id :${r.id}, verticalRows:${r.verticalRows}, horizontalRows:${r.horizontalRows}
-                            , noSlotsEachHRows:${r.noSlotsEachHRows}, airConditioning:${r.airConditioning},
-                            fan:${r.fan}, projector:${r.projector}, speaker:${r.speaker}, television:${r.television}}">Loai ${r.id}</option>
+                            <option data-value='{"id" :${r.id}, "verticalRows":${r.verticalRows}, "horizontalRows":"${r.horizontalRows}", "noSlotsEachHRows":"${r.noSlotsEachHRows}",
+                            "airConditioning":${r.airConditioning},
+                            "fan":${r.fan}, "projector":${r.projector}, "speaker":${r.speaker}, "television":${r.television}}'>
+                                Loai ${r.id}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -210,12 +130,12 @@
             <div class="group-control">
                 <div class="name">Sơ đồ</div>
             </div>
-            <div class="classroom-map" id="classroommap">
+            <div class="classroom-map" id="roomtypemap">
             </div>
         </div>
         <div class="footer-modal">
             <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-2','modal-1')" value="Thoát"/>
-            <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-2','modal-1')" value="Chọn"/>
+            <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-2','modal-1') " value="Chọn"/>
         </div>
     </div>
     <div class="black-background"></div>
@@ -230,31 +150,31 @@
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Máy chiếu</div>
                 <div class="control">
-                    <input type="checkbox" id="projector"/>
+                    <input class="check-box" type="checkbox" id="projector"/>
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Máy quạt</div>
                 <div class="control">
-                    <input type="checkbox" id="quat"/>
+                    <input class="check-box" type="checkbox" id="quat"/>
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Máy lạnh</div>
                 <div class="control">
-                    <input type="checkbox" id="mayLanh"/>
+                    <input class="check-box" type="checkbox" id="mayLanh"/>
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Tivi</div>
                 <div class="control">
-                    <input type="checkbox" id="tivi"/>
+                    <input class="check-box" type="checkbox" id="tivi"/>
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Loa</div>
                 <div class="control">
-                    <input type="checkbox" id="loa"/>
+                    <input class="check-box" type="checkbox" id="loa"/>
                 </div>
             </div>
             <div class="group-control">
@@ -296,9 +216,8 @@
             </div>
         </div>
         <div class="footer-modal">
-            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-3')" value="Thoát"/>
-            <input type="button" class="btn btn-orange" onclick="viewMap(); showModal(2, 'modal-3','modal-4')"
-                   value="Xem trước"/>
+            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-3'); clearthietbi()" value="Thoát"/>
+            <input type="button" class="btn btn-orange" onclick="viewMap(); showModal(2, 'modal-3','modal-4')" value="Xem trước"/>
         </div>
     </div>
     <div class="black-background"></div>
@@ -327,7 +246,7 @@
             <div class="footer-modal">
                 <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-4', 'modal-3')"
                        value="Quay lại"/>
-                <input type="submit" class="btn btn-orange" onclick="conform(2)" value="Tạo mẫu"/>
+                <input type="submit" class="btn btn-orange" onclick="conform(2); clearthietbi()" value="Tạo mẫu"/>
             </div>
         </div>
         <div class="black-background"></div>
@@ -335,6 +254,8 @@
 </form>
 <script src="../../resource/js/script.js"></script>
 <script src="../../resource/js/roomtype.js"></script>
+<script src="../../resource/js/staff_manageclassroom.js"></script>
+
 <script>
     window.onload = createDetailMap;
     function doAction(choose, object) {
@@ -350,6 +271,14 @@
                 alert("Loại phòng đã được lưu thành công!");
                 break;
         }
+    }
+    function clearthietbi(){
+        $(".thietBi").remove();
+        document.getElementById("loaiphong").innerHTML = "";
+        $('#selectBox option:first-child').attr("selected", "selected");
+        $('#vrow option:first-child').attr("selected", "selected");
+        createDetailMap();
+        $(".check-box").prop("checked", false);
     }
 </script>
 </body>

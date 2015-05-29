@@ -8,12 +8,16 @@ var o = new Object();
 var array = [];
 var slots = 0;
 
-function changeFunc() {
-    var selectBox = document.getElementById("selectBox");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    document.getElementById('loaiphong').innerHTML = selectedValue;
-    document.getElementById('roomtype').value = selectedValue;
-}
+    $("#selectBox").change(function(){
+        var selectedValue = $(this).find(":selected").data("value");
+        alert(selectedValue.id);
+        document.getElementById('loaiphong').innerHTML = selectedValue.id;
+        document.getElementById('roomtype').value = selectedValue.id;
+        showMap( selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+            , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+            selectedValue.television);
+    });
+
 
 function createDetailMap() {
     var colElement = document.getElementById("vrow");
@@ -263,7 +267,7 @@ function showMap( mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, l
     var o = new Object();
     var chieuDaiBan = 0;
     var chieuDaiSubDiv = 0;
-    var classroommap = document.getElementById('classroommap');
+    var classroommap = document.getElementById('roomtypemap');
 
     while (classroommap.hasChildNodes()) {
         classroommap.removeChild(classroommap.lastChild);

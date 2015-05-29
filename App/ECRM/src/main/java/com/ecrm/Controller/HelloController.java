@@ -48,6 +48,8 @@ public class HelloController {
             if (user.getTblRoleByRoleId().getName().equals("Staff")) {
                 List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
                 request.setAttribute("ALLROOMTYPE", lstRoomType);
+                List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
+                request.setAttribute("ALLCLASSROOM", lstClassRoom);
                 return "Staff_Classroom";
             }
             if (user.getTblRoleByRoleId().getName().equals("User")) {
@@ -65,30 +67,5 @@ public class HelloController {
         return "Login";
     }
 
-    //create roomtype
-    @RequestMapping(value = "createRoomType")
-    public String createRoomType(HttpServletRequest request,@RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
-                                 @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NoSlotsEachHRows") String noSlotsEachHRows,
-                                 @RequestParam("AirConditioning") boolean airConditioning, @RequestParam("Fan") boolean fan,
-                                 @RequestParam("Projector") boolean projectors, @RequestParam("Speaker") boolean speaker,
-                                 @RequestParam("Television") boolean television){
-        horizontalRows = horizontalRows.substring(0, horizontalRows.length()-1);
-        noSlotsEachHRows = noSlotsEachHRows.substring(0, noSlotsEachHRows.length()-1);
-        java.util.Date date = new java.util.Date();
-        TblRoomTypeEntity roomType = new TblRoomTypeEntity(0,slots, verticalRows,horizontalRows,noSlotsEachHRows,airConditioning,fan,projectors,
-                speaker,television, new Timestamp(date.getTime()),null);
-        roomTypeDAO.persist(roomType);
-        return "Staff_Classroom";
-    }
 
-    //create roomtype
-    @RequestMapping(value = "createClassroom")
-    public String createClassroom(HttpServletRequest request,@RequestParam("RoomType") int roomTypeId,
-                                  @RequestParam("RoomName") String roomName){
-        TblRoomTypeEntity roomType = roomTypeDAO.find(roomTypeId);
-        Date date = new Date();
-        TblClassroomEntity classroom = new TblClassroomEntity(0, roomName, 0, new Timestamp(date.getTime()), null, roomTypeId);
-        classroomDAO.persist(classroom);
-        return "Staff_Classroom";
-    }
 }

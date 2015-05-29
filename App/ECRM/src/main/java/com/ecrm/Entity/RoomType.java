@@ -55,7 +55,13 @@ public class RoomType {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
 
-    public RoomType(){
+    @Basic
+    @Column(name = "UpdateTime", nullable = true, insertable = true, updatable = true, columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateTime;
+
+
+    public RoomType() {
 
     }
 
@@ -73,6 +79,21 @@ public class RoomType {
         this.createTime = createTime;
     }
 
+    public RoomType(Integer slots, Integer verticalRows, String horizontalRows, String noSlotsEachHRows,
+                    boolean airConditioning, boolean fan, boolean projector, boolean speaker, boolean television,
+                    Date createTime, Date updateTime) {
+        this.slots = slots;
+        this.verticalRows = verticalRows;
+        this.horizontalRows = horizontalRows;
+        this.noSlotsEachHRows = noSlotsEachHRows;
+        this.airConditioning = airConditioning;
+        this.fan = fan;
+        this.projector = projector;
+        this.speaker = speaker;
+        this.television = television;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
 
     public Integer getId() {
         return id;
@@ -160,5 +181,13 @@ public class RoomType {
 
     public void setCreateTime(Date date) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

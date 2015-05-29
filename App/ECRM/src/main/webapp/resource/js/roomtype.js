@@ -8,6 +8,14 @@ var o = new Object();
 var array = [];
 var slots = 0;
 
+function changeFunc() {
+    var selectBox = document.getElementById("selectBox");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    alert(selectedValue);
+    document.getElementById('loaiphong').innerHTML = selectedValue;
+    document.getElementById('roomtype').value = selectedValue;
+}
+
 function createDetailMap() {
     var colElement = document.getElementById("vrow");
     var col = colElement.options[colElement.selectedIndex].value;
@@ -236,28 +244,39 @@ function viewMap() {
     document.getElementById("Slots").value = slots;
     document.getElementById("VerticalRows").value = vrows;
     for(i = 0; i<vrows; i++){
-        temp1+= document.getElementById(soDayNgang[i]).value+',';
+        temp1+= document.getElementById(soDayNgang[i]).value+'-';
     }
     document.getElementById("HorizontalRows").value = temp1;
     for(i = 0; i<vrows; i++){
-        temp2+= document.getElementById(soChoNgoi[i]).value+',';
+        temp2+= document.getElementById(soChoNgoi[i]).value+'-';
     }
     document.getElementById("NoSlotsEachHRows").value = temp2;
 
 }
 
-function showMap(vrows, soDayNgang, soChoNgoi, mapId) {
+function showMap( mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
     /*var vrows = 2;
      var soDayNgang = [5, 5];
      var soChoNgoi = [3, 3];*/
+    var horizontalRows = sDayNgang.split('-');
+    var noSlotsEachRows = sChoNgoi.split('-');
     var array = [];
     var o = new Object();
     var chieuDaiBan = 0;
     var chieuDaiSubDiv = 0;
-    var container = document.getElementById(mapId);
-    while (container.hasChildNodes()) {
-        container.removeChild(container.lastChild);
+    var classroommap = document.getElementById('classroommap');
+
+    while (classroommap.hasChildNodes()) {
+        classroommap.removeChild(classroommap.lastChild);
     }
+
+    var container = document.createElement('div');
+    container.id = mapId;
+    container.className = 'map-container';
+    classroommap.appendChild(container);
+
+
+
     var divT = document.createElement('div');
     divT.className = 'thietBi';
     container.appendChild(divT);
@@ -266,6 +285,7 @@ function showMap(vrows, soDayNgang, soChoNgoi, mapId) {
     div.className = 'map';
     div.id = 'idMap';
     container.appendChild(div);
+    div.style.height = "300px";
     //tao div bang
     var divBang = document.createElement('div');
     divBang.className = 'bang';
@@ -279,8 +299,8 @@ function showMap(vrows, soDayNgang, soChoNgoi, mapId) {
         /*var soDay = document.getElementById(soDayNgang[i]);
          var soCho = document.getElementById(soChoNgoi[i]);*/
         o = {
-            soDay: soDayNgang[i],
-            soChoNgoi: soChoNgoi[i]
+            soDay: horizontalRows[i],
+            soChoNgoi: noSlotsEachRows[i]
         }
         array[i] = o;
     }
@@ -363,32 +383,47 @@ function showMap(vrows, soDayNgang, soChoNgoi, mapId) {
     if (chieuDaiSubDiv > 400) {
         document.getElementById('idBang').style.width = chieuDaiSubDiv + "px";
     } else {
-        document.getElementById('idBang').style.width = "400px";
+        document.getElementById('idBang').style.width = "100%";
     }
     //projector
-    var divProjector = document.createElement('div');
-    divProjector.id = 'idProjector';
-    divProjector.className = 'subThietBi';
-    document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
+    if(projector){
+        var divProjector = document.createElement('div');
+        divProjector.id = 'idProjector';
+        divProjector.className = 'subThietBi';
+        document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
+    }
+
     //tivi
-    var divTivi = document.createElement('div');
-    divTivi.id = 'idTivi';
-    divTivi.className = 'subThietBi';
-    document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
+    if(tivi){
+        var divTivi = document.createElement('div');
+        divTivi.id = 'idTivi';
+        divTivi.className = 'subThietBi';
+        document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
+    }
+
     //may lanh
-    var divMayLanh = document.createElement('div');
-    divMayLanh.id = 'idMayLanh';
-    divMayLanh.className = 'subThietBi';
-    document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
+    if(mayLanh){
+        var divMayLanh = document.createElement('div');
+        divMayLanh.id = 'idMayLanh';
+        divMayLanh.className = 'subThietBi';
+        document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
+    }
+
     //quat
-    var divQuat = document.createElement('div');
-    divQuat.id = 'idQuat';
-    divQuat.className = 'subThietBi';
-    document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
+    if(quat){
+        var divQuat = document.createElement('div');
+        divQuat.id = 'idQuat';
+        divQuat.className = 'subThietBi';
+        document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
+    }
+
     //loa
-    var divLoa = document.createElement('div');
-    divLoa.id = 'idLoa';
-    divLoa.className = 'subThietBi';
-    document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
+    if(loa){
+        var divLoa = document.createElement('div');
+        divLoa.id = 'idLoa';
+        divLoa.className = 'subThietBi';
+        document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
+    }
+
 
 }

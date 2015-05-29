@@ -1,7 +1,9 @@
 package com.ecrm.Controller;
 
+import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
+import com.ecrm.Entity.Classroom;
 import com.ecrm.Entity.RoomType;
 import com.ecrm.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -23,6 +27,8 @@ public class HelloController {
     UserDAOImpl userDAO;
     @Autowired
     RoomTypeDAOImpl roomTypeDAO;
+    @Autowired
+    ClassroomDAOImpl classroomDAO;
 
     @RequestMapping(method = RequestMethod.GET)
     public String printWelcome(ModelMap model, HttpServletRequest request) {
@@ -41,6 +47,8 @@ public class HelloController {
                 return "home";
             }
             if (user.getRole().getName().equals("Staff")) {
+                List<RoomType> lstRoomType = roomTypeDAO.findAll();
+                request.setAttribute("ALLROOMTYPE", lstRoomType);
                 return "Staff_Classroom";
             }
             if (user.getRole().getName().equals("User")) {
@@ -71,6 +79,18 @@ public class HelloController {
         RoomType roomType = new RoomType(slots, verticalRows,horizontalRows,noSlotsEachHRows,airConditioning,fan,projectors,
                 speaker,television, new Timestamp(date.getTime()));
         roomTypeDAO.persist(roomType);
+        return "Staff_Classroom";
+    }
+
+    //create roomtype
+    @RequestMapping(value = "createClassroom")
+    public String createClassroom(HttpServletRequest request,@RequestParam("RoomType") int roomTypeId,
+                                  @RequestParam("RoomName") String roomName){
+        RoomType roomType = roomTypeDAO.findByID(roomTypeId);
+        Date date = new Date();
+        date = new Timestamp(date.getTime());
+        Classroom classroom = new Classroom(roomType, roomName, 0, new Timestamp(date.getTime()));
+        classroomDAO.persist(classroom);
         return "Staff_Classroom";
     }
 }

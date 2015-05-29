@@ -157,55 +157,61 @@
         </div>
     </div>
 </div>
-<div class="modal modal-small" id="modal-1">
-    <div class="content-modal">
-        <div class="header-modal title">
-            <p>Nhập từ file excel</p>
-            <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
-        </div>
-        <div class="body-modal">
-            <div class="group-control">
-                <div class="name">Số phòng</div>
-                <div class="control">
-                    <input type="text" placeholder=".........................."/>
+<form action="/createClassroom">
+    <div class="modal modal-small" id="modal-1">
+        <div class="content-modal">
+            <div class="header-modal title">
+                <p>Nhập từ file excel</p>
+                <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+            </div>
+            <div class="body-modal">
+                <div class="group-control">
+                    <div class="name">Số phòng</div>
+                    <div class="control">
+                        <input type="text" name="RoomName" placeholder=".........................."/>
+                    </div>
+                </div>
+                <div class="group-control">
+                    <div class="name">Loại phòng</div>
+                    <div class="value" id="loaiphong"></div>
+                    <input type="hidden" name="RoomType" value="" id="roomtype">
+                    <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-2')"
+                           value="Chọn"/>
                 </div>
             </div>
-            <div class="group-control">
-                <div class="name">Loại phòng</div>
-                <div class="value">Loại phòng 1</div>
-                <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-2')" value="Chọn"/>
+            <div class="footer-modal">
+                <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát"/>
+                <input type="submit" class="btn btn-orange" onclick="conform(1)" value="Thêm"/>
             </div>
         </div>
-        <div class="footer-modal">
-            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát"/>
-            <input type="button" class="btn btn-orange" onclick="conform(1)" value="Thêm"/>
-        </div>
+        <div class="black-background"></div>
     </div>
-    <div class="black-background"></div>
-</div>
+</form>
 <div class="modal modal-large" id="modal-2">
     <div class="content-modal">
         <div class="header-modal title">
             <p>Loại phòng học</p>
             <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1')"></i>
         </div>
+        <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
         <div class="body-modal">
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Loại phòng</div>
                 <div class="control">
-                    <select>
-                        <option>Loại 1</option>
-                        <option>Loại 2</option>
-                        <option>Loại 3</option>
-                        <option>Loại 4</option>
+                    <select onchange="changeFunc()" id="selectBox">
+                        <option value="" selected>...</option>
+                        <c:forEach var="r" items="${roomtypes}">
+                            <option value="${r.id}"
+                                    onclick="showMap(${r.id}, ${r.verticalRows}, '${r.horizontalRows}', '${r.noSlotsEachHRows}', ${r.airConditioning},
+                                        ${r.fan}, ${r.projector}, ${r.speaker}, ${r.television})">Loại ${r.id}</option>
+                        </c:forEach>
                     </select>
                 </div>
             </div>
             <div class="group-control">
                 <div class="name">Sơ đồ</div>
             </div>
-            <div class="classroom-map">
-
+            <div class="classroom-map" id="classroommap">
             </div>
         </div>
         <div class="footer-modal">

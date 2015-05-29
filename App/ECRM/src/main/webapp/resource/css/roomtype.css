@@ -4,7 +4,6 @@
     text-align: center;
     overflow: scroll;
     display: inline-block;
-    border: 0.5px solid cyan;
 }
 
 .day {
@@ -97,7 +96,7 @@
 }
 .board {
     height: 20px;
-    background-color: #f0f0f0;
+    background-color: #999999;
     color: #666;
     text-align: center;
     padding: 3px;
@@ -109,7 +108,6 @@
     width: 400px;
     height: 40px;
     display: inline-block;
-    border: 0.5px solid cyan;
     text-align: center;
 }
 .subThietBi{

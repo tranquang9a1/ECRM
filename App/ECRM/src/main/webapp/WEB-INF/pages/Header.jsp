@@ -35,7 +35,7 @@
 
             <p>Trang Chủ</p>
         </li>
-        <c:if test="${user.role.name =='Staff'}">
+        <c:if test="${user.tblRoleByRoleId.name =='Staff'}">
             <li>
                 <a href="../HTML/Notify.html">
                     <img src=""/>
@@ -71,7 +71,7 @@
             </li>
         </c:if>
 
-        <c:if test="${user.role.name =='Admin'}">
+        <c:if test="${user.tblRoleByRoleId.name =='Admin'}">
             <li>
                 <a href="../HTML/Account.html">
                     <img src=""/>

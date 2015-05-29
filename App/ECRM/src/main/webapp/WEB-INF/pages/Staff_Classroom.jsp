@@ -11,11 +11,11 @@
 <head>
     <meta charset="UTF-8"/>
     <title>ECRM - Equipment Classroom Management</title>
-    <link rel="stylesheet" href="../../resource/css/font-awesome.css"/>
-    <link rel="stylesheet" href="../../resource/css/layout.css"/>
-    <link rel="stylesheet" href="../../resource/css/general.css"/>
-    <link rel="stylesheet" href="../../resource/css/management.css"/>
-    <link rel="stylesheet" href="../../resource/css/roomtype.css"/>
+    <link rel="stylesheet" href="resource/css/font-awesome.css"/>
+    <link rel="stylesheet" href="resource/css/layout.css"/>
+    <link rel="stylesheet" href="resource/css/general.css"/>
+    <link rel="stylesheet" href="resource/css/management.css"/>
+    <link rel="stylesheet" href="resource/css/roomtype.css"/>
 </head>
 <body>
 <c:set var="user" value="${sessionScope.USER}"/>
@@ -26,7 +26,6 @@
     <div class="title page-title right-button">
         <p>Quản lý phòng học</p>
         <input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo phòng học"/>
-
         <div class="clear"></div>
     </div>
     <div class="body-content">
@@ -201,9 +200,9 @@
                     <select onchange="changeFunc()" id="selectBox">
                         <option value="" selected>...</option>
                         <c:forEach var="r" items="${roomtypes}">
-                            <option value="${r.id}"
-                                    onclick="showMap(${r.id}, ${r.verticalRows}, '${r.horizontalRows}', '${r.noSlotsEachHRows}', ${r.airConditioning},
-                                        ${r.fan}, ${r.projector}, ${r.speaker}, ${r.television})">Loại ${r.id}</option>
+                            <option value="{id :${r.id}, verticalRows:${r.verticalRows}, horizontalRows:${r.horizontalRows}
+                            , noSlotsEachHRows:${r.noSlotsEachHRows}, airConditioning:${r.airConditioning},
+                            fan:${r.fan}, projector:${r.projector}, speaker:${r.speaker}, television:${r.television}}">Loai ${r.id}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -344,6 +343,7 @@
             case 1:
                 showModal(0, 'modal-3');
                 alert("Loại phòng đã được lưu thành công!");
+
                 break;
             case 2:
                 showModal(0, 'modal-4');

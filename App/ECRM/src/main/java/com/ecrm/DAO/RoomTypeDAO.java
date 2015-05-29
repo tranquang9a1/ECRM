@@ -1,6 +1,6 @@
 package com.ecrm.DAO;
 
-import com.ecrm.Entity.RoomType;
+import com.ecrm.Entity.TblRoomTypeEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -10,8 +10,4 @@ import java.util.Date;
  */
 @Repository
 public interface RoomTypeDAO {
-    public RoomType findByID(int i);
-
-    public void createRoomType(int slots, int verticalRows, String horizontalRows, String noSlotsEachHRows,
-                                   int airConditioning, int fan,int projectors, int speaker,int television, Date createTime);
 }

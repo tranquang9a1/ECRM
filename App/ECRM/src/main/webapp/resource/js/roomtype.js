@@ -11,7 +11,6 @@ var slots = 0;
 function changeFunc() {
     var selectBox = document.getElementById("selectBox");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    alert(selectedValue);
     document.getElementById('loaiphong').innerHTML = selectedValue;
     document.getElementById('roomtype').value = selectedValue;
 }

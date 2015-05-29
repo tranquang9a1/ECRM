@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:sqlserver://localhost:1433;databaseName=ecrm</property>
+    <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+    <mapping class="entity.TblClassroomEntity"/>
+    <mapping class="entity.TblEquipmentEntity"/>
+    <mapping class="entity.TblEquipmentCategoryEntity"/>
+    <mapping class="entity.TblReportEntity"/>
+    <mapping class="entity.TblReportDetailEntity"/>
+    <mapping class="entity.TblRoleEntity"/>
+    <mapping class="entity.TblRoomTypeEntity"/>
+    <mapping class="entity.TblScheduleEntity"/>
+    <mapping class="entity.TblUserEntity"/>
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

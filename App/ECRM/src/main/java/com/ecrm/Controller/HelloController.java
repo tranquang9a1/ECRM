@@ -3,11 +3,10 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
-import com.ecrm.Entity.Classroom;
-import com.ecrm.Entity.RoomType;
-import com.ecrm.Entity.User;
+import com.ecrm.Entity.TblClassroomEntity;
+import com.ecrm.Entity.TblRoomTypeEntity;
+import com.ecrm.Entity.TblUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,18 +39,18 @@ public class HelloController {
     public String login(@RequestParam("username") String username, @RequestParam("password") String password,
                         HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = userDAO.login(username, password);
+        TblUserEntity user = userDAO.login(username, password);
         if (user.isStatus()) {
             session.setAttribute("USER", user);
-            if (user.getRole().getName().equals("Admin")) {
+            if (user.getTblRoleByRoleId().getName().equals("Admin")) {
                 return "home";
             }
-            if (user.getRole().getName().equals("Staff")) {
-                List<RoomType> lstRoomType = roomTypeDAO.findAll();
+            if (user.getTblRoleByRoleId().getName().equals("Staff")) {
+                List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
                 request.setAttribute("ALLROOMTYPE", lstRoomType);
                 return "Staff_Classroom";
             }
-            if (user.getRole().getName().equals("User")) {
+            if (user.getTblRoleByRoleId().getName().equals("User")) {
                 return "home";
             }
         }
@@ -76,8 +75,8 @@ public class HelloController {
         horizontalRows = horizontalRows.substring(0, horizontalRows.length()-1);
         noSlotsEachHRows = noSlotsEachHRows.substring(0, noSlotsEachHRows.length()-1);
         java.util.Date date = new java.util.Date();
-        RoomType roomType = new RoomType(slots, verticalRows,horizontalRows,noSlotsEachHRows,airConditioning,fan,projectors,
-                speaker,television, new Timestamp(date.getTime()));
+        TblRoomTypeEntity roomType = new TblRoomTypeEntity(0,slots, verticalRows,horizontalRows,noSlotsEachHRows,airConditioning,fan,projectors,
+                speaker,television, new Timestamp(date.getTime()),null);
         roomTypeDAO.persist(roomType);
         return "Staff_Classroom";
     }
@@ -86,10 +85,9 @@ public class HelloController {
     @RequestMapping(value = "createClassroom")
     public String createClassroom(HttpServletRequest request,@RequestParam("RoomType") int roomTypeId,
                                   @RequestParam("RoomName") String roomName){
-        RoomType roomType = roomTypeDAO.findByID(roomTypeId);
+        TblRoomTypeEntity roomType = roomTypeDAO.find(roomTypeId);
         Date date = new Date();
-        date = new Timestamp(date.getTime());
-        Classroom classroom = new Classroom(roomType, roomName, 0, new Timestamp(date.getTime()));
+        TblClassroomEntity classroom = new TblClassroomEntity(0, roomName, 0, new Timestamp(date.getTime()), null, roomTypeId);
         classroomDAO.persist(classroom);
         return "Staff_Classroom";
     }

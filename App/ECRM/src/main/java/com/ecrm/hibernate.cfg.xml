@@ -15,6 +15,7 @@
     <mapping class="entity.TblRoomTypeEntity"/>
     <mapping class="entity.TblScheduleEntity"/>
     <mapping class="entity.TblUserEntity"/>
+    <mapping class="entity.SysdiagramsEntity"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

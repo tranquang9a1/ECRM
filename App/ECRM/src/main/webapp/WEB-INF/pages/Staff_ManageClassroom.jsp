@@ -40,7 +40,7 @@
                         <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
                         </div>
                         <div class="btn btn-view" title="Xem sơ đồ"
-                             onclick="showModal(1, 'modal-view'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.noSlotsEachHRows}'
+                             onclick="showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.noSlotsEachHRows}'
                                      , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
                                      , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television})">
                             <i class="fa fa-eye"></i>

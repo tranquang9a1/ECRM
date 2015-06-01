@@ -19,6 +19,7 @@ public class TblEquipmentEntity {
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
+    @GeneratedValue
     @Id
     @Column(name = "Id")
     public int getId() {
@@ -134,5 +135,16 @@ public class TblEquipmentEntity {
 
     public void setTblReportDetailsById(Collection<TblReportDetailEntity> tblReportDetailsById) {
         this.tblReportDetailsById = tblReportDetailsById;
+    }
+
+    public TblEquipmentEntity() {
+    }
+
+    public TblEquipmentEntity(int categoryId, int classroomId, int usingTime, String position, String status) {
+        this.categoryId = categoryId;
+        this.classroomId = classroomId;
+        this.usingTime = usingTime;
+        this.position = position;
+        this.status = status;
     }
 }

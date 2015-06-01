@@ -28,8 +28,6 @@
 <div class="container">
     <div class="title page-title right-button">
         <p>Quản lý phòng học</p>
-        <input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo phòng học"/>
-
         <div class="clear"></div>
     </div>
     <div class="body-content">
@@ -101,7 +99,7 @@
     <div class="black-background"></div>
 </div>
 <%--Modal hien len khi nhap vao nut tao phong cua CLASSROOM--%>
-<form action="/createClassroom">
+<form action="/createClassroom" id="createClassroom">
     <div class="modal modal-small" id="modal-1">
         <div class="content-modal">
             <div class="header-modal title">
@@ -125,7 +123,7 @@
             </div>
             <div class="footer-modal">
                 <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()" value="Thoát"/>
-                <input type="submit" class="btn btn-orange" onclick="conform(1);clearthietbi()" value="Thêm"/>
+                <input type="button" class="btn btn-orange" onclick="conform(1)" value="Thêm"/>
             </div>
         </div>
         <div class="black-background"></div>
@@ -293,8 +291,8 @@
         switch (choose) {
             case 1:
                 showModal(0, 'modal-roomtypedetail');
-                alert("Loại phòng đã được lưu thành công!");
-
+                clearthietbi();
+                document.getElementById('createClassroom').submit();
                 break;
             case 2:
                 showModal(0, 'modal-4');

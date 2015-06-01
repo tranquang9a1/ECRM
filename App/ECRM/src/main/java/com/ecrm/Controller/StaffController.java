@@ -37,6 +37,7 @@ public class StaffController {
         TblRoomTypeEntity roomType = new TblRoomTypeEntity(0,slots, verticalRows,horizontalRows,noSlotsEachHRows,airConditioning,fan,projectors,
                 speaker,television, new Timestamp(date.getTime()),null);
         roomTypeDAO.persist(roomType);
+
         return "Staff_Classroom";
     }
 
@@ -46,8 +47,9 @@ public class StaffController {
                                   @RequestParam("RoomName") String roomName){
         TblRoomTypeEntity roomType = roomTypeDAO.find(roomTypeId);
         Date date = new Date();
-        TblClassroomEntity classroom = new TblClassroomEntity(0, roomName, 0, new Timestamp(date.getTime()), null, roomTypeId);
+        TblClassroomEntity classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null);
         classroomDAO.persist(classroom);
+
         return "Staff_Classroom";
     }
 

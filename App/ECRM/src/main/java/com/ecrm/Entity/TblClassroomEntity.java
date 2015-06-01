@@ -1,27 +1,26 @@
 package com.ecrm.Entity;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/1/2015.
  */
 @Entity
 @Table(name = "tblClassroom", schema = "dbo", catalog = "ecrm")
 public class TblClassroomEntity {
     private int id;
+    private Integer roomTypeId;
     private String name;
     private Integer damagedLevel;
     private Timestamp createTime;
     private Timestamp updateTime;
-    private Integer roomTypeId;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
+    private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblReportEntity> tblReportsById;
     private Collection<TblScheduleEntity> tblSchedulesById;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -29,6 +28,16 @@ public class TblClassroomEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "RoomTypeId")
+    public Integer getRoomTypeId() {
+        return roomTypeId;
+    }
+
+    public void setRoomTypeId(Integer roomTypeId) {
+        this.roomTypeId = roomTypeId;
     }
 
     @Basic
@@ -79,6 +88,7 @@ public class TblClassroomEntity {
         TblClassroomEntity that = (TblClassroomEntity) o;
 
         if (id != that.id) return false;
+        if (roomTypeId != null ? !roomTypeId.equals(that.roomTypeId) : that.roomTypeId != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (damagedLevel != null ? !damagedLevel.equals(that.damagedLevel) : that.damagedLevel != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
@@ -90,6 +100,7 @@ public class TblClassroomEntity {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (roomTypeId != null ? roomTypeId.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (damagedLevel != null ? damagedLevel.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
@@ -97,24 +108,23 @@ public class TblClassroomEntity {
         return result;
     }
 
-    @Basic
-    @Column(name = "RoomTypeId")
-    public Integer getRoomTypeId() {
-        return roomTypeId;
-    }
-
-    public void setRoomTypeId(Integer roomTypeId) {
-        this.roomTypeId = roomTypeId;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id",insertable = false, updatable = false)
+    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id", insertable = false, updatable = false)
     public TblRoomTypeEntity getTblRoomTypeByRoomTypeId() {
         return tblRoomTypeByRoomTypeId;
     }
 
     public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeByRoomTypeId) {
         this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
+    }
+
+    @OneToMany(mappedBy = "tblClassroomByClassroomId")
+    public Collection<TblEquipmentEntity> getTblEquipmentsById() {
+        return tblEquipmentsById;
+    }
+
+    public void setTblEquipmentsById(Collection<TblEquipmentEntity> tblEquipmentsById) {
+        this.tblEquipmentsById = tblEquipmentsById;
     }
 
     @OneToMany(mappedBy = "tblClassroomByClassRoomId")
@@ -138,13 +148,13 @@ public class TblClassroomEntity {
     public TblClassroomEntity() {
     }
 
-    public TblClassroomEntity(int id, String name, Integer damagedLevel, Timestamp createTime, Timestamp updateTime,
-                              Integer roomTypeId) {
+    public TblClassroomEntity(int id, Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
+                              Timestamp updateTime) {
         this.id = id;
+        this.roomTypeId = roomTypeId;
         this.name = name;
         this.damagedLevel = damagedLevel;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.roomTypeId = roomTypeId;
     }
 }

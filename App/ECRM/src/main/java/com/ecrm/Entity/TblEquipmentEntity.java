@@ -4,22 +4,22 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/1/2015.
  */
 @Entity
 @Table(name = "tblEquipment", schema = "dbo", catalog = "ecrm")
 public class TblEquipmentEntity {
     private int id;
+    private int categoryId;
     private int classroomId;
     private int usingTime;
     private String position;
     private String status;
-    private int categoryId;
+    private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -27,6 +27,16 @@ public class TblEquipmentEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "CategoryId")
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Basic
@@ -77,6 +87,7 @@ public class TblEquipmentEntity {
         TblEquipmentEntity that = (TblEquipmentEntity) o;
 
         if (id != that.id) return false;
+        if (categoryId != that.categoryId) return false;
         if (classroomId != that.classroomId) return false;
         if (usingTime != that.usingTime) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
@@ -88,6 +99,7 @@ public class TblEquipmentEntity {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + categoryId;
         result = 31 * result + classroomId;
         result = 31 * result + usingTime;
         result = 31 * result + (position != null ? position.hashCode() : 0);
@@ -95,18 +107,18 @@ public class TblEquipmentEntity {
         return result;
     }
 
-    @Basic
-    @Column(name = "CategoryId")
-    public int getCategoryId() {
-        return categoryId;
+    @ManyToOne
+    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    public TblClassroomEntity getTblClassroomByClassroomId() {
+        return tblClassroomByClassroomId;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setTblClassroomByClassroomId(TblClassroomEntity tblClassroomByClassroomId) {
+        this.tblClassroomByClassroomId = tblClassroomByClassroomId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "CategoryId", referencedColumnName = "Id", nullable = false,insertable = false, updatable = false)
+    @JoinColumn(name = "CategoryId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
     public TblEquipmentCategoryEntity getTblEquipmentCategoryByCategoryId() {
         return tblEquipmentCategoryByCategoryId;
     }

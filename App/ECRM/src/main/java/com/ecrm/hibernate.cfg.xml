@@ -16,6 +16,15 @@
     <mapping class="entity.TblScheduleEntity"/>
     <mapping class="entity.TblUserEntity"/>
     <mapping class="entity.SysdiagramsEntity"/>
+    <mapping class="Entity.TblClassroomEntity"/>
+    <mapping class="Entity.TblEquipmentEntity"/>
+    <mapping class="Entity.TblEquipmentCategoryEntity"/>
+    <mapping class="Entity.TblReportEntity"/>
+    <mapping class="Entity.TblReportDetailEntity"/>
+    <mapping class="Entity.TblRoleEntity"/>
+    <mapping class="Entity.TblRoomTypeEntity"/>
+    <mapping class="Entity.TblScheduleEntity"/>
+    <mapping class="Entity.TblUserEntity"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

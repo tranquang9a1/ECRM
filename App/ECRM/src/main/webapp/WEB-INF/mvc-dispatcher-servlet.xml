@@ -35,7 +35,7 @@
             <value>sa</value>
         </property>
         <property name="password">
-            <value>123456</value>
+            <value>doannguyenminhchi</value>
         </property>
     </bean>
 

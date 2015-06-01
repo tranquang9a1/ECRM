@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="user" value="${sessionScope.USER}"/>
+<c:set var="tab" value="${requestScope.ACTIVETAB}"/>
 <div class="header-bar">
     <div class="logo">Equipment Classroom Management</div>
     <div class="account-notify">
@@ -31,56 +32,73 @@
 <div class="list-category">
     <ul class="main-item">
         <li>
-            <img src=""/>
-
-            <p>Trang Chủ</p>
+            <a href="/">
+                <img src=""/>
+                <p>Trang Chủ</p>
+            </a>
         </li>
-        <c:if test="${user.tblRoleByRoleId.name =='Staff'}">
+        <c:if test="${user.tblRoleByRoleId.name == 'Staff'}">
             <li>
                 <a href="../HTML/Notify.html">
                     <img src=""/>
-
                     <p>Thông Báo</p>
                 </a>
             </li>
             <li>
                 <a href="../HTML/Equipment.html">
                     <img src=""/>
-
                     <p>Thiết Bị</p>
                 </a>
             </li>
             <li class="active">
                 <a href="../HTML/Classroom.html">
                     <img src=""/>
-
                     <p>Phòng Học</p>
                 </a>
             </li>
             <li>
                 <img src=""/>
-
                 <p>Thống Kê</p>
             </li>
             <li>
                 <a href="../HTML/Schedule.html">
                     <img src=""/>
-
                     <p>Xếp Lịch</p>
                 </a>
             </li>
         </c:if>
 
-        <c:if test="${user.tblRoleByRoleId.name =='Admin'}">
+        <c:if test="${user.tblRoleByRoleId.name == 'Admin'}">
             <li>
                 <a href="../HTML/Account.html">
                     <img src=""/>
-
                     <p>Tài Khoản</p>
                 </a>
             </li>
         </c:if>
 
-
+        <c:if test="${user.tblRoleByRoleId.name == 'Teacher'}">
+            <li id="USER_NOTIFY">
+                <a href="/giang-vien/thong-bao">
+                    <img src="" />
+                    <p>Thông báo</p>
+                </a>
+            </li>
+            <li>
+                <a href="home.jsp">
+                    <img src="" />
+                    <p>Lịch dạy</p>
+                </a>
+            </li>
+            <li>
+                <a href="home.jsp">
+                    <img src="" />
+                    <p>Tài khoản</p>
+                </a>
+            </li>
+        </c:if>
     </ul>
+    <script>
+        document.getElementById("${tab}").className += " active";
+    </script>
 </div>

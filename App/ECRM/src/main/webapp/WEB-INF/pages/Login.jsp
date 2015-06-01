@@ -8,15 +8,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>abc</title>
+    <title>ECRM - Equipment Classroom Management</title>
+    <link href="resource/css/layout.css" rel="stylesheet"/>
 </head>
 <body>
-
-<form action="/login" method="post">
-  Username: <input type="text" value="" name="username"/><br/>
-  Password: <input type="text" value="" name="password"/><br/>
-
-  <button type="submit">Login</button>
-</form>
+  <form class="login-form" action="/login" method="post">
+    <p>ECRM</p>
+    <p><input type="text" value="" name="username" placeholder="Tài khoản"/></p>
+    <p><input type="password" value="" name="password" placeholder="Mật khẩu"/></p>
+    <p><input type="checkbox" name="rememberAccount"/> Duy trì đăng nhập</p>
+    <button type="submit">Đăng nhập</button>
+  </form>
 </body>
 </html>

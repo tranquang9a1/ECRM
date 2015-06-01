@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -52,8 +50,8 @@ public class HelloController {
                 request.setAttribute("ALLCLASSROOM", lstClassRoom);
                 return "Staff_Classroom";
             }
-            if (user.getTblRoleByRoleId().getName().equals("User")) {
-                return "home";
+            if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
+                return "redirect:/giang-vien/thong-bao";
             }
         }
         return "error";

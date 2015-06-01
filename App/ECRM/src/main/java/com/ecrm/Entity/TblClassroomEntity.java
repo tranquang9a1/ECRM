@@ -20,6 +20,7 @@ public class TblClassroomEntity {
     private Collection<TblReportEntity> tblReportsById;
     private Collection<TblScheduleEntity> tblSchedulesById;
 
+    @GeneratedValue
     @Id
     @Column(name = "Id")
     public int getId() {
@@ -148,13 +149,19 @@ public class TblClassroomEntity {
     public TblClassroomEntity() {
     }
 
-    public TblClassroomEntity(int id, Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
-                              Timestamp updateTime) {
-        this.id = id;
+
+    public TblClassroomEntity(Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
+                              TblRoomTypeEntity tblRoomTypeByRoomTypeId, Timestamp updateTime,
+                              Collection<TblEquipmentEntity> tblEquipmentsById, Collection<TblReportEntity> tblReportsById,
+                              Collection<TblScheduleEntity> tblSchedulesById) {
         this.roomTypeId = roomTypeId;
         this.name = name;
         this.damagedLevel = damagedLevel;
         this.createTime = createTime;
+        this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
         this.updateTime = updateTime;
+        this.tblEquipmentsById = tblEquipmentsById;
+        this.tblReportsById = tblReportsById;
+        this.tblSchedulesById = tblSchedulesById;
     }
 }

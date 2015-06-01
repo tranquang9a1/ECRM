@@ -12,18 +12,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Htang on 5/29/2015.
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/staff")
 public class StaffController {
     @Autowired
     RoomTypeDAOImpl roomTypeDAO;
     @Autowired
     ClassroomDAOImpl classroomDAO;
 
+    @RequestMapping(value = "classroom")
+    public String init(HttpServletRequest request){
+        List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
+        request.setAttribute("ALLROOMTYPE", lstRoomType);
+        List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
+        request.setAttribute("ALLCLASSROOM", lstClassRoom);
+        return "Staff_Classroom";
+    }
     //create roomtype
     @RequestMapping(value = "createRoomType")
     public String createRoomType(HttpServletRequest request,@RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
@@ -38,7 +47,7 @@ public class StaffController {
                 speaker,television, new Timestamp(date.getTime()),null);
         roomTypeDAO.persist(roomType);
 
-        return "Staff_Classroom";
+        return "redirect:/staff/classroom";
     }
 
     //create roomtype
@@ -47,10 +56,11 @@ public class StaffController {
                                   @RequestParam("RoomName") String roomName){
         TblRoomTypeEntity roomType = roomTypeDAO.find(roomTypeId);
         Date date = new Date();
-        TblClassroomEntity classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null);
+        TblClassroomEntity classroom = new TblClassroomEntity(roomTypeId, roomName, 0, new Timestamp(date.getTime()),null, null,null, null, null );
+        System.out.println("1234");
         classroomDAO.persist(classroom);
-
-        return "Staff_Classroom";
+        System.out.println("abc");
+        return "redirect:/staff/classroom";
     }
 
 }

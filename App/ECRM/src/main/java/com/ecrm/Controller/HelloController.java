@@ -44,11 +44,8 @@ public class HelloController {
                 return "home";
             }
             if (user.getTblRoleByRoleId().getName().equals("Staff")) {
-                List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
-                request.setAttribute("ALLROOMTYPE", lstRoomType);
-                List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
-                request.setAttribute("ALLCLASSROOM", lstClassRoom);
-                return "Staff_Classroom";
+
+                return "redirect:/staff/classroom";
             }
             if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
                 return "redirect:/giang-vien/thong-bao";

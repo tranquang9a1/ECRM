@@ -4,11 +4,11 @@
 function showClassroomMap(roomname, mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
     var a = document.get
     //add roomname
-    document.getElementById('roomname').innerHTML = "Phòng" + roomname;
+    document.getElementById('roomname').innerHTML = "Phï¿½ng" + roomname;
     //
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
-    var classroommap = document.getElementsByClassName('classroom-map')[0];
+    var classroommap = document.getElementById('class-roommap');
 
     while (classroommap.hasChildNodes()) {
         classroommap.removeChild(classroommap.lastChild);

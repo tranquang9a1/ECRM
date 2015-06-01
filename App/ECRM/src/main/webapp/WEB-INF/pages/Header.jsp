@@ -98,7 +98,7 @@
             </li>
         </c:if>
     </ul>
-    <script>
+    <%--<script>
         document.getElementById("${tab}").className += " active";
-    </script>
+    </script>--%>
 </div>

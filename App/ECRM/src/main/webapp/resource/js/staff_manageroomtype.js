@@ -5,7 +5,7 @@ $("#selectBox").change(function () {
     var selectedValue = $(this).find(":selected").data("value");
     document.getElementById('loaiphong').innerHTML = selectedValue.id;
     document.getElementById('roomtype').value = selectedValue.id;
-    showMap(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+    showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
         , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
         selectedValue.television);
 });
@@ -13,7 +13,7 @@ function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projec
     document.getElementById('roomtypename').innerHTML = "Loai " + mapId;
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
-    var classroommap = document.getElementsByClassName('classroom-map')[1];
+    var classroommap = document.getElementById('roomtype-map');
 
     while (classroommap.hasChildNodes()) {
         classroommap.removeChild(classroommap.lastChild);
@@ -49,15 +49,17 @@ function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projec
 
 }
 
-function showMap(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
+function showRoomtypeMapByDropDownList(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
 
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
-    var classroommap = document.getElementsByClassName('classroom-map')[2];
+    var classroommap = document.getElementById('roomtype-map2');
 
     while (classroommap.hasChildNodes()) {
         classroommap.removeChild(classroommap.lastChild);
     }
+
+
     generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi);
 }
 function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi) {
@@ -66,11 +68,11 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     var o = new Object();
     var chieuDaiBan = 0;
     var chieuDaiSubDiv = 0;
+
     var container = document.createElement('div');
-    container.id = mapId;
+    container.id = "roomtype-" + mapId;
     container.className = 'map-container';
     classroommap.appendChild(container);
-
 
     var divT = document.createElement('div');
     divT.className = 'thietBi';
@@ -78,17 +80,17 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     //tao div map
     var div = document.createElement('div');
     div.className = 'map';
-    div.id = 'idMap';
     container.appendChild(div);
-    div.style.height = "300px";
+
     //tao div bang
     var divBang = document.createElement('div');
     divBang.className = 'bang';
-    divBang.id = 'idBang';
     div.appendChild(divBang);
     var divScreen = document.createElement('div');
-    divScreen.className = 'board';
-    divScreen.innerHTML = 'Board';
+    divScreen.className = 'equipment board';
+    divScreen.setAttribute("data-equipment","Bảng");
+    divScreen.setAttribute("data-position","[0]");
+    divScreen.innerHTML = 'Bảng';
     divBang.appendChild(divScreen);
     for (var i = 0; i < vrows; i++) {
         o = {
@@ -100,7 +102,6 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     //tao div con chua map
     var subDiv = document.createElement('div');
     subDiv.className = 'subDiv';
-    subDiv.id = 'idSubDiv';
     div.appendChild(subDiv);
     //chay vong for day doc
     for (var i = 0; i < vrows; i++) {
@@ -110,110 +111,111 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
         divDay.id = 'day' + i;
         divDay.className = 'day';
         subDiv.appendChild(divDay);
-        //tao ban giao vien
 
         //chay vong for so day ngang moi day doc
-        for (var j = 0; j < array[i].soDay; j++) {
+        for (var j = 0; j <= array[i].soDay; j++) {
             //tao ban giao vien
             if (j === 0) {
-                var divBanGheGV = document.createElement('div');
-                var divBanGV = document.createElement('div');
-                divBanGV.id = 'banGV' + i;
-                divBanGV.className = 'banGV';
-                var divDayGheGV = document.createElement('div');
-                divDayGheGV.className = 'divDayGhe';
-                var divGheGV = document.createElement('div');
-                divGheGV.id = 'gheGV' + i;
-                divGheGV.className = 'ghe';
-                divDay.appendChild(divBanGheGV);
-                divBanGheGV.appendChild(divDayGheGV);
-                divBanGheGV.appendChild(divBanGV);
-                divDayGheGV.appendChild(divGheGV);
-
+                if(i == 0) {
+                    var divBanGheGV = document.createElement('div');
+                    var divBanGV = document.createElement('div');
+                    divBanGV.className = 'equipment banGV';
+                    divBanGV.setAttribute('data-equipment', 'Bàn');
+                    divBanGV.setAttribute('data-position', '[' + i + ',' + j + ']');
+                    var divDayGheGV = document.createElement('div');
+                    divDayGheGV.className = 'divDayGhe';
+                    var divGheGV = document.createElement('div');
+                    divGheGV.className = 'equipment ghe';
+                    divGheGV.setAttribute('data-equipment', 'Ghế');
+                    divGheGV.setAttribute('data-position', '[' + i + ',' + j + ',0]');
+                    divDay.appendChild(divBanGheGV);
+                    divBanGheGV.appendChild(divDayGheGV);
+                    divBanGheGV.appendChild(divBanGV);
+                    divDayGheGV.appendChild(divGheGV);
+                } else {
+                    var divBanGheGV = document.createElement('div');
+                    divBanGheGV.style.height = 70 + "px";
+                    divDay.appendChild(divBanGheGV);
+                }
+            } else {
+                chieuDaiBan = 0;
+                var divBanGhe = document.createElement('div');
+                var divBan = document.createElement('div');
+                divBan.className = 'equipment ban';
+                divBan.setAttribute('data-equipment','Bàn');
+                divBan.setAttribute('data-position','[' + i + ',' + j + ']');
+                var divDayGhe = document.createElement('div');
+                divDayGhe.className = 'divDayGhe';
+                divDay.appendChild(divBanGhe);
+                divBanGhe.appendChild(divBan);
+                divBanGhe.appendChild(divDayGhe);
+                //chay vong for so cho ngoi moi ban
+                for (var k = 0; k < array[i].soChoNgoi; k++) {
+                    var divGhe = document.createElement('div');
+                    divGhe.className = 'equipment ghe';
+                    divGhe.setAttribute('data-equipment','Ghế');
+                    divGhe.setAttribute('data-position','[' + i + ',' + j + ',' + k + ']');
+                    divDayGhe.appendChild(divGhe);
+                    chieuDaiBan += 34;
+                }
+                divBan.style.width = chieuDaiBan - 4 + "px";
             }
-            if (i != 0) {
-                document.getElementById('banGV' + i).style.visibility = 'hidden';
-                document.getElementById('gheGV' + i).style.visibility = 'hidden';
-            }
-            chieuDaiBan = 0;
-            var divBanGhe = document.createElement('div');
-            var divBan = document.createElement('div');
-            divBan.id = 'ban' + i + 'day' + j;
-            divBan.className = 'ban';
-            var divDayGhe = document.createElement('div');
-            divDayGhe.className = 'divDayGhe';
-            divDay.appendChild(divBanGhe);
-            divBanGhe.appendChild(divBan);
-            divBanGhe.appendChild(divDayGhe);
-            //chay vong for so cho ngoi moi ban
-            for (var k = 0; k < array[i].soChoNgoi; k++) {
-                var divGhe = document.createElement('div');
-                divGhe.id = 'ban' + i + 'day' + j + 'ghe' + k;
-                divGhe.className = 'ghe';
-                divDayGhe.appendChild(divGhe);
-                chieuDaiBan += 34;
-            }
-            if (j == (array.length - 1)) {
-                document.getElementById('ban' + i + 'day' + j).style.marginRight = '0px';
-
-            }
-            document.getElementById('ban' + i + 'day' + j).style.width = chieuDaiBan - 4 + "px";
-        }
-        if (i == (vrows - 1)) {
-            document.getElementById('day' + i).style.marginRight = '0px';
-
         }
         chieuDaiSubDiv += chieuDaiBan;
-
-
     }
+
     chieuDaiSubDiv = chieuDaiSubDiv + 15 * (array.length) - 15;
-    document.getElementById('idSubDiv').style.width = chieuDaiSubDiv + "px";
-    var objDiv = document.getElementById("idMap");
-    objDiv.scrollLeft = chieuDaiSubDiv * 1 / 2;
+    subDiv.style.width = chieuDaiSubDiv + "px";
+    div.scrollLeft = chieuDaiSubDiv * 1 / 2;
     if (chieuDaiSubDiv > 400) {
-        document.getElementById('idBang').style.width = chieuDaiSubDiv + "px";
+        divBang.style.width = chieuDaiSubDiv + "px";
     } else {
-        document.getElementById('idBang').style.width = "100%";
+        divBang.style.width = "100%";
     }
+
     //projector
-    if (projector) {
+    if(projector){
         var divProjector = document.createElement('div');
-        divProjector.id = 'idProjector';
-        divProjector.className = 'subThietBi';
-        document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
+        divProjector.className = 'equipment subThietBi projector';
+        divProjector.setAttribute('data-equipment','Máy chiếu');
+        divProjector.setAttribute('data-position','[1]');
+        divT.appendChild(divProjector);
     }
 
     //tivi
-    if (tivi) {
+    if(tivi){
         var divTivi = document.createElement('div');
-        divTivi.id = 'idTivi';
-        divTivi.className = 'subThietBi';
-        document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
+        divTivi.className = 'equipment subThietBi tivi';
+        divTivi.setAttribute('data-equipment','Tivi');
+        divTivi.setAttribute('data-position','[2]');
+        divT.appendChild(divTivi);
     }
 
     //may lanh
-    if (mayLanh) {
+    if(mayLanh){
         var divMayLanh = document.createElement('div');
-        divMayLanh.id = 'idMayLanh';
-        divMayLanh.className = 'subThietBi';
-        document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
+        divMayLanh.className = 'equipment subThietBi mayLanh';
+        divMayLanh.setAttribute('data-equipment','Máy lạnh');
+        divMayLanh.setAttribute('data-position','[3]');
+        divT.appendChild(divMayLanh);
     }
 
     //quat
-    if (quat) {
+    if(quat){
         var divQuat = document.createElement('div');
-        divQuat.id = 'idQuat';
-        divQuat.className = 'subThietBi';
-        document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
+        divQuat.className = 'equipment subThietBi quat';
+        divQuat.setAttribute('data-equipment','Quạt');
+        divQuat.setAttribute('data-position','[4]');
+        divT.appendChild(divQuat);
     }
 
     //loa
-    if (loa) {
+    if(loa){
         var divLoa = document.createElement('div');
-        divLoa.id = 'idLoa';
-        divLoa.className = 'subThietBi';
-        document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
+        divLoa.className = 'equipment subThietBi loa';
+        divLoa.setAttribute('data-equipment','Loa');
+        divLoa.setAttribute('data-position','[5]');
+        divT.appendChild(divLoa);
     }
 }
 

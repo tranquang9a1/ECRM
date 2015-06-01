@@ -11,11 +11,11 @@
 <head>
     <meta charset="UTF-8"/>
     <title>ECRM - Equipment Classroom Management</title>
-    <link rel="stylesheet" href="resource/css/font-awesome.css"/>
-    <link rel="stylesheet" href="resource/css/layout.css"/>
-    <link rel="stylesheet" href="resource/css/general.css"/>
-    <link rel="stylesheet" href="resource/css/management.css"/>
-    <link rel="stylesheet" href="resource/css/roomtype.css"/>
+    <link rel="stylesheet" href="../../resource/css/font-awesome.css"/>
+    <link rel="stylesheet" href="../../resource/css/layout.css"/>
+    <link rel="stylesheet" href="../../resource/css/general.css"/>
+    <link rel="stylesheet" href="../../resource/css/management.css"/>
+    <link rel="stylesheet" href="../../resource/css/roomtype-2.css"/>
     <script src="../../resource/js/jquery-1.11.3.js"></script>
     <script src="../../resource/js/jquery-1.11.3.min.js"></script>
 </head>
@@ -65,7 +65,7 @@
             <div class="group-control">
                 <div class="name">Sơ đồ</div>
             </div>
-            <div class="classroom-map" id="classroommap">
+            <div id="class-roommap">
             </div>
         </div>
         <div class="footer-modal">
@@ -87,7 +87,7 @@
             <div class="group-control">
                 <div class="name">Sơ đồ</div>
             </div>
-            <div class="classroom-map">
+            <div id="roomtype-map">
             </div>
         </div>
         <div class="footer-modal">
@@ -99,7 +99,7 @@
     <div class="black-background"></div>
 </div>
 <%--Modal hien len khi nhap vao nut tao phong cua CLASSROOM--%>
-<form action="/createClassroom" id="createClassroom">
+<form action="/staff/createClassroom" id="createClassroom">
     <div class="modal modal-small" id="modal-1">
         <div class="content-modal">
             <div class="header-modal title">
@@ -123,7 +123,7 @@
             </div>
             <div class="footer-modal">
                 <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()" value="Thoát"/>
-                <input type="button" class="btn btn-orange" onclick="conform(1)" value="Thêm"/>
+                <input type="submit" class="btn btn-orange" onclick="conform(1); clearthietbi()" value="Thêm"/>
             </div>
         </div>
         <div class="black-background"></div>
@@ -155,7 +155,7 @@
             <div class="group-control">
                 <div class="name">Sơ đồ</div>
             </div>
-            <div class="classroom-map">
+            <div id="roomtype-map2">
             </div>
         </div>
         <div class="footer-modal">
@@ -249,7 +249,7 @@
     <div class="black-background"></div>
 </div>
 <%--Modal hien len khi nhap vao nut Xem truoc kieu phong khi tao ROOMTYPE--%>
-<form action="createRoomType">
+<form action="/staffcreateRoomType">
     <div class="modal modal-medium" id="modal-4">
         <input type="hidden" id="Slots" name="Slots" value="">
         <input type="hidden" id="VerticalRows" name="VerticalRows" value="">
@@ -283,6 +283,7 @@
 <script src="../../resource/js/roomtype.js"></script>
 <script src="../../resource/js/staff_manageclassroom.js"></script>
 <script src="../../resource/js/staff_manageroomtype.js"></script>
+<script src="../../resource/js/roomtype-2.js"></script>
 
 <script>
     window.onload = createDetailMap;
@@ -292,7 +293,6 @@
             case 1:
                 showModal(0, 'modal-roomtypedetail');
                 clearthietbi();
-                document.getElementById('createClassroom').submit();
                 break;
             case 2:
                 showModal(0, 'modal-4');

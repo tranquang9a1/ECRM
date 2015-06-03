@@ -1,0 +1,12 @@
+<resources>
+    <color name="background">#ff53a3ff</color>
+    <color name="titleBg">#ffffff</color>
+    <color name="tabActive">#ffffff</color>
+    <color name="tabDelimiter">#ff53a3ff</color>
+    <color name="tab">#ff53a3ff</color>
+    <color name="font">#323232</color>
+    <color name="live_item_bg">#ffffff</color>
+    <color name="itemPressed">#ccc</color>
+    <color name="evenRow">#ffffff</color>
+    <color name="oddRow">#f2f2f2</color>
+</resources>

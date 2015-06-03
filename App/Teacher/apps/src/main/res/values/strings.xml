@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ECRM Teacher</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_change_pass">Update Password</string>
+    <string name="invalid_password">Password is too short</string>
+    <string name="incorrect_password">Password is incorrect</string>
+    <string name="field_required">This field is required</string>
+    <string name="checkingConnection">Checking connection…</string>
+    <string name="noConnection">Cannot connect to internet! Please try again</string>
+    <string name="tryAgain">Try again</string>
+    <string name="tabClassroom">CLASSROOM</string>
+    <string name="tabAccount">ACCOUNT</string>
+    <string name="no_class">You are not teaching is any class!</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+</resources>

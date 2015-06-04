@@ -28,6 +28,7 @@
 <div class="container">
     <div class="title page-title right-button">
         <p>Quản lý phòng học</p>
+
         <div class="clear"></div>
     </div>
     <div class="body-content">
@@ -40,19 +41,22 @@
             </div>
             <div class="content-tab">
                 <div id="tab1" class="body-tab active">
-                    <div><input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo phòng học"/></div>
+                    <div><input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')"
+                                value="Tạo phòng học"/></div>
                     <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                 </div>
                 <div id="tab2" class="body-tab">
                     <div>
-                        <div></div><input type="button" class="btn btn-orange" style="margin: 0" onclick="showModal(1, 'modal-roomtypedetail')"
+                        <div></div>
+                        <input type="button" class="btn btn-orange" style="margin: 0"
+                               onclick="showModal(1, 'modal-roomtypedetail')"
                                value="Tạo loại phòng"/></div>
-                        <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
-                    </div>
+                    <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <%--Modal hien len khi nhap vao nut xem cua CLASSROOM--%>
 <div class="modal modal-medium" id="modal-manageclassroom">
@@ -69,7 +73,8 @@
             </div>
         </div>
         <div class="footer-modal">
-            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-manageclassroom');clearthietbi()" value="Thoát"/>
+            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-manageclassroom');clearthietbi()"
+                   value="Thoát"/>
             <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-manageclassroom','modal-1')"
                    value="Chỉnh Sửa"/>
         </div>
@@ -80,7 +85,7 @@
 <div class="modal modal-medium" id="modal-manageroomtype">
     <div class="content-modal">
         <div class="header-modal title">
-            <p id="roomtypename"></p>
+            <p class="roomtypename"></p>
             <i class="fa fa-times" onclick="showModal(0, 'modal-view')"></i>
         </div>
         <div class="body-modal">
@@ -91,8 +96,10 @@
             </div>
         </div>
         <div class="footer-modal">
-            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-manageroomtype');clearthietbi()" value="Thoát"/>
-            <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-manageroomtype','modal-roomtypedetail')"
+            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-manageroomtype');clearthietbi()"
+                   value="Thoát"/>
+            <input type="button" class="btn btn-orange"
+                   onclick="showModal(2, 'modal-manageroomtype','modal-roomtypedetail')"
                    value="Chỉnh Sửa"/>
         </div>
     </div>
@@ -122,8 +129,9 @@
                 </div>
             </div>
             <div class="footer-modal">
-                <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()" value="Thoát"/>
-                <input type="submit" class="btn btn-orange" onclick="conform(1); clearthietbi()" value="Thêm"/>
+                <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()"
+                       value="Thoát"/>
+                <input type="button" class="btn btn-orange" onclick="conform(1); clearthietbi()" value="Thêm"/>
             </div>
         </div>
         <div class="black-background"></div>
@@ -169,7 +177,7 @@
 <div class="modal modal-medium" id="modal-roomtypedetail">
     <div class="content-modal">
         <div class="header-modal title">
-            <p>Tạo loại phòng </p>
+            <p class="roomtypename">Tạo loại phòng </p>
             <i class="fa fa-times" onclick="showModal(0, 'modal-roomtypedetail')"></i>
         </div>
         <div class="body-modal">
@@ -242,15 +250,18 @@
             </div>
         </div>
         <div class="footer-modal">
-            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-roomtypedetail'); clearthietbi()" value="Thoát"/>
-            <input type="button" class="btn btn-orange" onclick="viewMap(); showModal(2, 'modal-roomtypedetail','modal-4')" value="Xem trước"/>
+            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-roomtypedetail'); clearthietbi()"
+                   value="Thoát"/>
+            <input type="button" class="btn btn-orange"
+                   onclick="viewMap(); showModal(2, 'modal-roomtypedetail','modal-4')" value="Xem trước"/>
         </div>
     </div>
     <div class="black-background"></div>
 </div>
 <%--Modal hien len khi nhap vao nut Xem truoc kieu phong khi tao ROOMTYPE--%>
-<form action="/staffcreateRoomType">
+<form action="/staff/createRoomType" id="createRoomType">
     <div class="modal modal-medium" id="modal-4">
+        <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="">
         <input type="hidden" id="Slots" name="Slots" value="">
         <input type="hidden" id="VerticalRows" name="VerticalRows" value="">
         <input type="hidden" id="HorizontalRows" name="HorizontalRows" value="">
@@ -273,14 +284,13 @@
             <div class="footer-modal">
                 <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-4', 'modal-roomtypedetail')"
                        value="Quay lại"/>
-                <input type="submit" class="btn btn-orange" onclick="conform(2); clearthietbi()" value="Tạo mẫu"/>
+                <input type="button" class="btn btn-orange" onclick="conform(2);" value="Tạo mẫu"/>
             </div>
         </div>
         <div class="black-background"></div>
     </div>
 </form>
 <script src="../../resource/js/script.js"></script>
-<script src="../../resource/js/roomtype.js"></script>
 <script src="../../resource/js/staff_manageclassroom.js"></script>
 <script src="../../resource/js/staff_manageroomtype.js"></script>
 <script src="../../resource/js/roomtype-2.js"></script>
@@ -291,16 +301,28 @@
         closeConform();
         switch (choose) {
             case 1:
-                showModal(0, 'modal-roomtypedetail');
+                showModal(0, 'modal-1');
+                document.getElementById('createClassroom').submit();
+                alert("Phong hoc đã được lưu thành công!");
                 clearthietbi();
                 break;
             case 2:
                 showModal(0, 'modal-4');
+                document.getElementById('createRoomType').submit();
                 alert("Loại phòng đã được lưu thành công!");
+                clearthietbi();
+                break;
+            case 3:
+                getRoomTypeId(object);
+                document.getElementById('removeRoomtype').submit();
+                alert("Loai phong da xoa thanh cong!");
                 break;
         }
     }
-    function clearthietbi(){
+    function getRoomTypeId(roomtypeId) {
+        document.getElementById('removeRoomtypeID').value = roomtypeId;
+    }
+    function clearthietbi() {
         $(".thietBi").remove();
         document.getElementById("loaiphong").innerHTML = "";
         $('#selectBox option:first-child').attr("selected", "selected");
@@ -308,12 +330,13 @@
         createDetailMap();
         $(".check-box").prop("checked", false);
         var classroommap = document.getElementsByClassName('classroom-map');
-        for(var i =0; i< classroommap.length; i++){
+        for (var i = 0; i < classroommap.length; i++) {
             while (classroommap[i].hasChildNodes()) {
                 classroommap[i].removeChild(classroommap[i].lastChild);
             }
         }
-
+        document.getElementsByClassName('roomtypename')[1].innerHTML = "Tao Loai Phong";
+        document.getElementById('RoomtypeId').innerHTML = "";
     }
 </script>
 </body>

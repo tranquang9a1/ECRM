@@ -14,7 +14,7 @@ public class TblScheduleEntity {
     private int noStudents;
     private String note;
     private Time timeFrom;
-    private Time timeTo;
+    private int slots;
     private Date dateFrom;
     private Date dateTo;
     private TblClassroomEntity tblClassroomByClassroomId;
@@ -64,13 +64,13 @@ public class TblScheduleEntity {
     }
 
     @Basic
-    @Column(name = "TimeTo")
-    public Time getTimeTo() {
-        return timeTo;
+    @Column(name = "Slots")
+    public int getTimeTo() {
+        return slots;
     }
 
-    public void setTimeTo(Time timeTo) {
-        this.timeTo = timeTo;
+    public void setTimeTo(int slots) {
+        this.slots = slots;
     }
 
     @Basic
@@ -104,7 +104,7 @@ public class TblScheduleEntity {
         if (noStudents != that.noStudents) return false;
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (timeFrom != null ? !timeFrom.equals(that.timeFrom) : that.timeFrom != null) return false;
-        if (timeTo != null ? !timeTo.equals(that.timeTo) : that.timeTo != null) return false;
+        if (slots != that.slots) return false;
         if (dateFrom != null ? !dateFrom.equals(that.dateFrom) : that.dateFrom != null) return false;
         if (dateTo != null ? !dateTo.equals(that.dateTo) : that.dateTo != null) return false;
 
@@ -117,7 +117,7 @@ public class TblScheduleEntity {
         result = 31 * result + noStudents;
         result = 31 * result + (note != null ? note.hashCode() : 0);
         result = 31 * result + (timeFrom != null ? timeFrom.hashCode() : 0);
-        result = 31 * result + (timeTo != null ? timeTo.hashCode() : 0);
+        result = 31 * result + slots;
         result = 31 * result + (dateFrom != null ? dateFrom.hashCode() : 0);
         result = 31 * result + (dateTo != null ? dateTo.hashCode() : 0);
         return result;

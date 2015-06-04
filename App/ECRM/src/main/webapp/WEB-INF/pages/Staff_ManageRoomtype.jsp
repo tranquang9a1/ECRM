@@ -17,53 +17,57 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
 <div class="search" style="  margin: 0 0 15px;">
-  <input type="text" placeholder="............."/>
-  <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
+    <input type="text" placeholder="............."/>
+    <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
 </div>
 <div class="clear"></div>
 <div class="table small-table">
-  <div class="header-table">
-    <div class="room-number">
-      <div>Loai Phong</div>
-    </div>
-    <div class="room-type">
-      <div>So cho ngoi</div>
-    </div>
-    <div class="control">
-      <div>Quản lý</div>
-    </div>
-    <p class="clear"></p>
-  </div>
-  <div class="body-table">
-    <c:forEach items="${roomtypes}" var="r">
-      <div class="row">
+    <div class="header-table">
         <div class="room-number">
-          <div>Loại ${r.id}</div>
+            <div>Loai Phong</div>
         </div>
         <div class="room-type">
-          <div>${r.slots}</div>
+            <div>So cho ngoi</div>
         </div>
         <div class="control">
-          <div class="group-button">
-            <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
-            </div>
-            <div class="btn btn-view" title="Xem sơ đồ"
-                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},${r.verticalRows},'${r.horizontalRows}', '${r.noSlotsEachHRows}'
-                         , ${r.airConditioning}, ${r.fan}, ${r.projector}
-                         , ${r.speaker}, ${r.television})">
-              <i class="fa fa-eye"></i>
-            </div>
-
-            <div class="btn btn-remove" onclick="conform(2, {room: 101})" title="Xóa"><i
-                    class="fa fa-times"></i>
-            </div>
-
-          </div>
+            <div>Quản lý</div>
         </div>
         <p class="clear"></p>
-      </div>
-    </c:forEach>
-  </div>
-</div>
+    </div>
+    <div class="body-table">
+        <form action="/staff/remove" id="removeRoomtype">
+            <input type="hidden" name="RoomtypeId" value="" id="removeRoomtypeID"/>
+            <c:forEach items="${roomtypes}" var="r">
+                <div class="row">
+                    <div class="room-number">
+                        <div>Loại ${r.id}</div>
+                    </div>
+                    <div class="room-type">
+                        <div>${r.slots}</div>
+                    </div>
+                    <div class="control">
+                        <div class="group-button">
+                            <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
+                            </div>
+                            <div class="btn btn-view" title="Xem sơ đồ"
+                                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},${r.verticalRows},'${r.horizontalRows}', '${r.noSlotsEachHRows}'
+                                         , ${r.airConditioning}, ${r.fan}, ${r.projector}
+                                         , ${r.speaker}, ${r.television})">
+                                <i class="fa fa-eye"></i>
+                            </div>
+                            <div class="btn btn-remove" onclick="conform(3, ${r.id})" title="Xóa"><i
+                                    class="fa fa-times"></i>
+                            </div>
 
+                        </div>
+                    </div>
+                    <p class="clear"></p>
+                </div>
+            </c:forEach>
+        </form>
+    </div>
+</div>
+<script>
+
+</script>
 

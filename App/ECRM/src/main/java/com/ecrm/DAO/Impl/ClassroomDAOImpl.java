@@ -6,6 +6,7 @@ import com.ecrm.Entity.TblClassroomEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.util.Collection;
 
 /**
  * Created by Htang on 5/29/2015.

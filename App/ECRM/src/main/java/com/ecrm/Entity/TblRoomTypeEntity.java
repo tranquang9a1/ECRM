@@ -187,7 +187,7 @@ public class TblRoomTypeEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "tblRoomTypeByRoomTypeId")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tblRoomTypeByRoomTypeId", cascade = CascadeType.ALL)
     public Collection<TblClassroomEntity> getTblClassroomsById() {
         return tblClassroomsById;
     }
@@ -215,4 +215,5 @@ public class TblRoomTypeEntity {
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
+
 }

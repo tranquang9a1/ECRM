@@ -18,6 +18,13 @@ public class RoomTypeDAOImpl extends BaseDAO<TblRoomTypeEntity, Integer> impleme
         super(TblRoomTypeEntity.class);
     }
 
+    public TblRoomTypeEntity getRoomtypeById(int roomtypeId){
+        TblRoomTypeEntity roomTypeEntity = new TblRoomTypeEntity();
+        Query query = entityManager.createQuery("SELECT r FROM TblRoomTypeEntity r WHERE r.id = :id");
+        query.setParameter("id", roomtypeId);
+        roomTypeEntity = (TblRoomTypeEntity) query.getSingleResult();
+        return roomTypeEntity;
+    }
 
 
 }

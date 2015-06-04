@@ -10,7 +10,7 @@ $("#selectBox").change(function () {
         selectedValue.television);
 });
 function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
-    document.getElementById('roomtypename').innerHTML = "Loai " + mapId;
+    document.getElementsByClassName('roomtypename')[0].innerHTML = "Loai " + mapId;
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
     var classroommap = document.getElementById('roomtype-map');
@@ -46,7 +46,8 @@ function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projec
     }
     document.getElementById('vrow').selectedIndex = vrows -1;
     createDetailMap(horizontalRows, noSlotsEachRows);
-
+    document.getElementsByClassName('roomtypename')[1].innerHTML = "Loai "+mapId;
+    document.getElementById('RoomtypeId').value = mapId;
 }
 
 function showRoomtypeMapByDropDownList(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {

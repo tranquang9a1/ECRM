@@ -8,17 +8,9 @@ var o = new Object();
 var array = [];
 var slots = 0;
 
-$("#selectBox").change(function(){
-    var selectedValue = $(this).find(":selected").data("value");
-    alert(selectedValue.id);
-    document.getElementById('loaiphong').innerHTML = selectedValue.id;
-    document.getElementById('roomtype').value = selectedValue.id;
-    showMap( selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
-        , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
-        selectedValue.television);
-});
 
-function createDetailMap() {
+
+function createDetailMap(horizontalRows,noSlotsEachRows) {
     var colElement = document.getElementById("vrow");
     var col = colElement.options[colElement.selectedIndex].value;
     var row1 = document.getElementById("row-1");
@@ -42,12 +34,18 @@ function createDetailMap() {
         var select1 = createSelect("SoDayNgang" + (i+1));
         item2.appendChild(select1);
         row2.appendChild(item2);
+        if(horizontalRows != null){
+            document.getElementById("SoDayNgang" + (i+1)).selectedIndex = horizontalRows[i]-1;
+        }
 
         var item3 = document.createElement("div");
         item3.className = "item";
         var select2 = createSelect("SoChoNgoi" + (i+1));
         item3.appendChild(select2);
         row3.appendChild(item3);
+        if(noSlotsEachRows != null){
+            document.getElementById("SoChoNgoi" + (i+1)).selectedIndex = noSlotsEachRows[i]-1;
+        }
 
         soDayNgang[i] = "SoDayNgang" + (i+1);
         soChoNgoi[i] = "SoChoNgoi" + (i+1);
@@ -195,7 +193,7 @@ function viewMap() {
     if(document.getElementById('projector').checked){
         var divProjector = document.createElement('div');
         divProjector.id = 'idProjector';
-        divProjector.className='subThietBi';
+        divProjector.className='equipment subThietBi projector';
         document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
         document.getElementById("Projectors").value = true;
     }else{
@@ -205,7 +203,7 @@ function viewMap() {
     if(document.getElementById('tivi').checked){
         var divTivi = document.createElement('div');
         divTivi.id = 'idTivi';
-        divTivi.className='subThietBi';
+        divTivi.className='equipment subThietBi tivi';
         document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
         document.getElementById("Television").value = true;
     }else{
@@ -215,7 +213,7 @@ function viewMap() {
     if(document.getElementById('mayLanh').checked){
         var divMayLanh = document.createElement('div');
         divMayLanh.id = 'idMayLanh';
-        divMayLanh.className='subThietBi';
+        divMayLanh.className='equipment subThietBi mayLanh';
         document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
         document.getElementById("AirConditioning").value = true;
     }else{
@@ -225,7 +223,7 @@ function viewMap() {
     if(document.getElementById('quat').checked){
         var divQuat = document.createElement('div');
         divQuat.id = 'idQuat';
-        divQuat.className='subThietBi';
+        divQuat.className='equipment subThietBi quat';
         document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
         document.getElementById("Fan").value = true;
     }else{
@@ -235,7 +233,7 @@ function viewMap() {
     if(document.getElementById('loa').checked){
         var divLoa = document.createElement('div');
         divLoa.id = 'idLoa';
-        divLoa.className='subThietBi';
+        divLoa.className='equipment subThietBi loa';
         document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
         document.getElementById("Speaker").value = true;
     }else{
@@ -368,7 +366,6 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
 
     chieuDaiSubDiv = chieuDaiSubDiv + 15 * (array.length) - 15;
     subDiv.style.width = chieuDaiSubDiv + "px";
-    div.scrollLeft = chieuDaiSubDiv * 1 / 2;
     if (chieuDaiSubDiv > 400) {
         divBang.style.width = chieuDaiSubDiv + "px";
     } else {
@@ -434,3 +431,12 @@ function setChooseEquipment(){
         }
     });
 }
+$("#selectBox").change(function(){
+    var selectedValue = $(this).find(":selected").data("value");
+    alert(selectedValue.id);
+    document.getElementById('loaiphong').innerHTML = selectedValue.id;
+    document.getElementById('roomtype').value = selectedValue.id;
+    showMap( selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+        , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+        selectedValue.television);
+});

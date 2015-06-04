@@ -9,14 +9,13 @@ import com.ecrm.Entity.TblEquipmentEntity;
 import com.ecrm.Entity.TblRoomTypeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Htang on 5/29/2015.
@@ -42,18 +41,24 @@ public class StaffController {
 
     //create roomtype
     @RequestMapping(value = "createRoomType")
-    public String createRoomType(HttpServletRequest request, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
+    public String createRoomType(HttpServletRequest request,@RequestParam ("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
                                  @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NoSlotsEachHRows") String noSlotsEachHRows,
                                  @RequestParam("AirConditioning") boolean airConditioning, @RequestParam("Fan") boolean fan,
                                  @RequestParam("Projector") boolean projectors, @RequestParam("Speaker") boolean speaker,
                                  @RequestParam("Television") boolean television) {
+        TblRoomTypeEntity roomType = new TblRoomTypeEntity();
         horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
         noSlotsEachHRows = noSlotsEachHRows.substring(0, noSlotsEachHRows.length() - 1);
         java.util.Date date = new java.util.Date();
-        TblRoomTypeEntity roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, noSlotsEachHRows, airConditioning, fan, projectors,
-                speaker, television, new Timestamp(date.getTime()), null);
-        roomTypeDAO.persist(roomType);
-
+        if(roomtypeId!=""){
+            roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), slots, verticalRows, horizontalRows, noSlotsEachHRows, airConditioning, fan, projectors,
+                    speaker, television, new Timestamp(date.getTime()), new Timestamp(date.getTime()));
+            roomTypeDAO.merge(roomType);
+        }else{
+            roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, noSlotsEachHRows, airConditioning, fan, projectors,
+                    speaker, television, new Timestamp(date.getTime()), null);
+            roomTypeDAO.persist(roomType);
+        }
         return "redirect:/staff/classroom";
     }
 
@@ -141,4 +146,20 @@ public class StaffController {
         equipmentDAO.persist(e);
     }
 
+    //remove roomtype
+    @RequestMapping(value = "remove")
+    @Transactional
+    public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId){
+        TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
+        Collection<TblClassroomEntity>  tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
+        if(tblClassroomEntities.size()>0){
+            for(TblClassroomEntity tblClassroomEntity : tblClassroomEntities){
+                tblClassroomEntity.setRoomTypeId(null);
+
+            }
+        }
+        roomTypeEntity.getTblClassroomsById().clear();
+        roomTypeDAO.remove(roomTypeEntity);
+        return "redirect:/staff/classroom";
+    }
 }

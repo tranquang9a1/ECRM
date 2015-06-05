@@ -44,7 +44,7 @@
 </html>
 <script>
     window.onload = function(){
-        showMap('classroom-map', ${r.id}, ${r.verticalRows},'${r.horizontalRows}', '${r.noSlotsEachHRows}',
+        showMap('classroom-map', ${r.id}, ${r.verticalRows},'${r.horizontalRows}', '${r.NumberOfSlotsEachHRows}',
                 ${r.airConditioning}, ${r.fan}, ${r.projector}, ${r.speaker}, ${r.television});
         setChooseEquipment();
     }

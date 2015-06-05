@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblRoomType", schema = "dbo", catalog = "ecrm")
@@ -14,18 +14,19 @@ public class TblRoomTypeEntity {
     private int slots;
     private int verticalRows;
     private String horizontalRows;
-    private String noSlotsEachHRows;
-    private boolean airConditioning;
-    private boolean fan;
-    private boolean projector;
-    private boolean speaker;
-    private boolean television;
+    private String numberOfSlotsEachHRows;
+    private int airConditioning;
+    private int fan;
+    private int projector;
+    private int speaker;
+    private Integer buld;
+    private int television;
     private Timestamp createTime;
+    private Boolean isDelete;
     private Timestamp updateTime;
     private Collection<TblClassroomEntity> tblClassroomsById;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -66,62 +67,72 @@ public class TblRoomTypeEntity {
     }
 
     @Basic
-    @Column(name = "NoSlotsEachHRows")
-    public String getNoSlotsEachHRows() {
-        return noSlotsEachHRows;
+    @Column(name = "NumberOfSlotsEachHRows")
+    public String getNumberOfSlotsEachHRows() {
+        return numberOfSlotsEachHRows;
     }
 
-    public void setNoSlotsEachHRows(String noSlotsEachHRows) {
-        this.noSlotsEachHRows = noSlotsEachHRows;
+    public void setNumberOfSlotsEachHRows(String numberOfSlotsEachHRows) {
+        this.numberOfSlotsEachHRows = numberOfSlotsEachHRows;
     }
 
     @Basic
     @Column(name = "AirConditioning")
-    public boolean isAirConditioning() {
+    public int getAirConditioning() {
         return airConditioning;
     }
 
-    public void setAirConditioning(boolean airConditioning) {
+    public void setAirConditioning(int airConditioning) {
         this.airConditioning = airConditioning;
     }
 
     @Basic
     @Column(name = "Fan")
-    public boolean isFan() {
+    public int getFan() {
         return fan;
     }
 
-    public void setFan(boolean fan) {
+    public void setFan(int fan) {
         this.fan = fan;
     }
 
     @Basic
     @Column(name = "Projector")
-    public boolean isProjector() {
+    public int getProjector() {
         return projector;
     }
 
-    public void setProjector(boolean projector) {
+    public void setProjector(int projector) {
         this.projector = projector;
     }
 
     @Basic
     @Column(name = "Speaker")
-    public boolean isSpeaker() {
+    public int getSpeaker() {
         return speaker;
     }
 
-    public void setSpeaker(boolean speaker) {
+    public void setSpeaker(int speaker) {
         this.speaker = speaker;
     }
 
     @Basic
+    @Column(name = "Buld")
+    public Integer getBuld() {
+        return buld;
+    }
+
+    public void setBuld(Integer buld) {
+        this.buld = buld;
+    }
+
+    @Basic
     @Column(name = "Television")
-    public boolean isTelevision() {
+    public int getTelevision() {
         return television;
     }
 
-    public void setTelevision(boolean television) {
+    public void setTelevision(int television) {
         this.television = television;
     }
 
@@ -133,6 +144,16 @@ public class TblRoomTypeEntity {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    @Basic
+    @Column(name = "IsDelete")
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Basic
@@ -162,9 +183,11 @@ public class TblRoomTypeEntity {
         if (television != that.television) return false;
         if (horizontalRows != null ? !horizontalRows.equals(that.horizontalRows) : that.horizontalRows != null)
             return false;
-        if (noSlotsEachHRows != null ? !noSlotsEachHRows.equals(that.noSlotsEachHRows) : that.noSlotsEachHRows != null)
+        if (numberOfSlotsEachHRows != null ? !numberOfSlotsEachHRows.equals(that.numberOfSlotsEachHRows) : that.numberOfSlotsEachHRows != null)
             return false;
+        if (buld != null ? !buld.equals(that.buld) : that.buld != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
+        if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
 
         return true;
@@ -176,18 +199,20 @@ public class TblRoomTypeEntity {
         result = 31 * result + slots;
         result = 31 * result + verticalRows;
         result = 31 * result + (horizontalRows != null ? horizontalRows.hashCode() : 0);
-        result = 31 * result + (noSlotsEachHRows != null ? noSlotsEachHRows.hashCode() : 0);
-        result = 31 * result + (airConditioning ? 1 : 0);
-        result = 31 * result + (fan ? 1 : 0);
-        result = 31 * result + (projector ? 1 : 0);
-        result = 31 * result + (speaker ? 1 : 0);
-        result = 31 * result + (television ? 1 : 0);
+        result = 31 * result + (numberOfSlotsEachHRows != null ? numberOfSlotsEachHRows.hashCode() : 0);
+        result = 31 * result + airConditioning;
+        result = 31 * result + fan;
+        result = 31 * result + projector;
+        result = 31 * result + speaker;
+        result = 31 * result + (buld != null ? buld.hashCode() : 0);
+        result = 31 * result + television;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tblRoomTypeByRoomTypeId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tblRoomTypeByRoomTypeId")
     public Collection<TblClassroomEntity> getTblClassroomsById() {
         return tblClassroomsById;
     }
@@ -195,25 +220,4 @@ public class TblRoomTypeEntity {
     public void setTblClassroomsById(Collection<TblClassroomEntity> tblClassroomsById) {
         this.tblClassroomsById = tblClassroomsById;
     }
-
-    public TblRoomTypeEntity() {
-    }
-
-    public TblRoomTypeEntity(int id, int slots, int verticalRows, String horizontalRows, String noSlotsEachHRows,
-                             boolean airConditioning, boolean fan, boolean projector, boolean speaker, boolean television,
-                             Timestamp createTime, Timestamp updateTime) {
-        this.id = id;
-        this.slots = slots;
-        this.verticalRows = verticalRows;
-        this.horizontalRows = horizontalRows;
-        this.noSlotsEachHRows = noSlotsEachHRows;
-        this.airConditioning = airConditioning;
-        this.fan = fan;
-        this.projector = projector;
-        this.speaker = speaker;
-        this.television = television;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
 }

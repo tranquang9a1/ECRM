@@ -5,24 +5,23 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblReport", schema = "dbo", catalog = "ecrm")
 public class TblReportEntity {
     private int id;
+    private String userId;
+    private int classRoomId;
     private Timestamp createTime;
     private String evaluate;
     private String description;
     private boolean status;
     private TblClassroomEntity tblClassroomByClassRoomId;
-    private int userId;
-    private int classRoomId;
     private TblUserEntity tblUserByUserId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -30,6 +29,26 @@ public class TblReportEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "UserId")
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "ClassRoomId")
+    public int getClassRoomId() {
+        return classRoomId;
+    }
+
+    public void setClassRoomId(int classRoomId) {
+        this.classRoomId = classRoomId;
     }
 
     @Basic
@@ -80,7 +99,9 @@ public class TblReportEntity {
         TblReportEntity that = (TblReportEntity) o;
 
         if (id != that.id) return false;
+        if (classRoomId != that.classRoomId) return false;
         if (status != that.status) return false;
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (evaluate != null ? !evaluate.equals(that.evaluate) : that.evaluate != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
@@ -91,6 +112,8 @@ public class TblReportEntity {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + classRoomId;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (evaluate != null ? evaluate.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
@@ -108,28 +131,8 @@ public class TblReportEntity {
         this.tblClassroomByClassRoomId = tblClassroomByClassRoomId;
     }
 
-    @Basic
-    @Column(name = "UserId")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "ClassRoomId")
-    public int getClassRoomId() {
-        return classRoomId;
-    }
-
-    public void setClassRoomId(int classRoomId) {
-        this.classRoomId = classRoomId;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
     public TblUserEntity getTblUserByUserId() {
         return tblUserByUserId;
     }

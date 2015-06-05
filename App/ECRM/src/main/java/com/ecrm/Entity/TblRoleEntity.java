@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblRole", schema = "dbo", catalog = "ecrm")
@@ -14,7 +14,6 @@ public class TblRoleEntity {
     private Collection<TblUserEntity> tblUsersById;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;

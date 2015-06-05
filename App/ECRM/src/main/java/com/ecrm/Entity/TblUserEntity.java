@@ -4,33 +4,31 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblUser", schema = "dbo", catalog = "ecrm")
 public class TblUserEntity {
-    private int id;
+    private int roleId;
     private String username;
     private String password;
-    private String fullname;
-    private String phone;
     private boolean status;
+    private Collection<TblReportEntity> tblReportsByUsername;
+    private Collection<TblScheduleEntity> tblSchedulesByUsername;
     private TblRoleEntity tblRoleByRoleId;
-    private int roleId;
-    private Collection<TblReportEntity> tblReportsById;
-    private Collection<TblScheduleEntity> tblSchedulesById;
-
-    @Id
-    @Column(name = "Id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private TblUserInfoEntity tblUserInfoByUsername;
 
     @Basic
+    @Column(name = "RoleId")
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    @Id
     @Column(name = "Username")
     public String getUsername() {
         return username;
@@ -51,26 +49,6 @@ public class TblUserEntity {
     }
 
     @Basic
-    @Column(name = "Fullname")
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    @Basic
-    @Column(name = "Phone")
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    @Basic
     @Column(name = "Status")
     public boolean isStatus() {
         return status;
@@ -87,29 +65,43 @@ public class TblUserEntity {
 
         TblUserEntity that = (TblUserEntity) o;
 
-        if (id != that.id) return false;
+        if (roleId != that.roleId) return false;
         if (status != that.status) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (fullname != null ? !fullname.equals(that.fullname) : that.fullname != null) return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = roleId;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (fullname != null ? fullname.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (status ? 1 : 0);
         return result;
     }
 
+    @OneToMany(mappedBy = "tblUserByUserId")
+    public Collection<TblReportEntity> getTblReportsByUsername() {
+        return tblReportsByUsername;
+    }
+
+    public void setTblReportsByUsername(Collection<TblReportEntity> tblReportsByUsername) {
+        this.tblReportsByUsername = tblReportsByUsername;
+    }
+
+    @OneToMany(mappedBy = "tblUserByUserId")
+    public Collection<TblScheduleEntity> getTblSchedulesByUsername() {
+        return tblSchedulesByUsername;
+    }
+
+    public void setTblSchedulesByUsername(Collection<TblScheduleEntity> tblSchedulesByUsername) {
+        this.tblSchedulesByUsername = tblSchedulesByUsername;
+    }
+
     @ManyToOne
-    @JoinColumn(name = "RoleId", referencedColumnName = "Id", nullable = false , insertable = false, updatable = false)
+    @JoinColumn(name = "RoleId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
     public TblRoleEntity getTblRoleByRoleId() {
         return tblRoleByRoleId;
     }
@@ -118,34 +110,12 @@ public class TblUserEntity {
         this.tblRoleByRoleId = tblRoleByRoleId;
     }
 
-    @Basic
-    @Column(name = "RoleId")
-    public int getRoleId() {
-        return roleId;
+    @OneToOne(mappedBy = "tblUserByUsername")
+    public TblUserInfoEntity getTblUserInfoByUsername() {
+        return tblUserInfoByUsername;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    @OneToMany(mappedBy = "tblUserByUserId")
-    public Collection<TblReportEntity> getTblReportsById() {
-        return tblReportsById;
-    }
-
-    public void setTblReportsById(Collection<TblReportEntity> tblReportsById) {
-        this.tblReportsById = tblReportsById;
-    }
-
-    @OneToMany(mappedBy = "tblUserByUserId")
-    public Collection<TblScheduleEntity> getTblSchedulesById() {
-        return tblSchedulesById;
-    }
-
-    public void setTblSchedulesById(Collection<TblScheduleEntity> tblSchedulesById) {
-        this.tblSchedulesById = tblSchedulesById;
-    }
-
-    public TblUserEntity() {
+    public void setTblUserInfoByUsername(TblUserInfoEntity tblUserInfoByUsername) {
+        this.tblUserInfoByUsername = tblUserInfoByUsername;
     }
 }

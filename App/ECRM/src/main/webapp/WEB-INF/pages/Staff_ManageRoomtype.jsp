@@ -50,7 +50,7 @@
                             <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
                             </div>
                             <div class="btn btn-view" title="Xem sơ đồ"
-                                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},${r.verticalRows},'${r.horizontalRows}', '${r.noSlotsEachHRows}'
+                                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},${r.verticalRows},'${r.horizontalRows}', '${r.numberOfSlotsEachHRows}'
                                          , ${r.airConditioning}, ${r.fan}, ${r.projector}
                                          , ${r.speaker}, ${r.television})">
                                 <i class="fa fa-eye"></i>

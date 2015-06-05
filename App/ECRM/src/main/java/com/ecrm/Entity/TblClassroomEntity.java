@@ -1,10 +1,11 @@
 package com.ecrm.Entity;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
- * Created by Htang on 6/1/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblClassroom", schema = "dbo", catalog = "ecrm")
@@ -14,13 +15,13 @@ public class TblClassroomEntity {
     private String name;
     private Integer damagedLevel;
     private Timestamp createTime;
+    private Boolean isDelete;
     private Timestamp updateTime;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblReportEntity> tblReportsById;
     private Collection<TblScheduleEntity> tblSchedulesById;
 
-    @GeneratedValue
     @Id
     @Column(name = "Id")
     public int getId() {
@@ -72,6 +73,16 @@ public class TblClassroomEntity {
     }
 
     @Basic
+    @Column(name = "IsDelete")
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    @Basic
     @Column(name = "UpdateTime")
     public Timestamp getUpdateTime() {
         return updateTime;
@@ -93,6 +104,7 @@ public class TblClassroomEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (damagedLevel != null ? !damagedLevel.equals(that.damagedLevel) : that.damagedLevel != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
+        if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
 
         return true;
@@ -105,6 +117,7 @@ public class TblClassroomEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (damagedLevel != null ? damagedLevel.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }
@@ -143,25 +156,6 @@ public class TblClassroomEntity {
     }
 
     public void setTblSchedulesById(Collection<TblScheduleEntity> tblSchedulesById) {
-        this.tblSchedulesById = tblSchedulesById;
-    }
-
-    public TblClassroomEntity() {
-    }
-
-
-    public TblClassroomEntity(Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
-                              TblRoomTypeEntity tblRoomTypeByRoomTypeId, Timestamp updateTime,
-                              Collection<TblEquipmentEntity> tblEquipmentsById, Collection<TblReportEntity> tblReportsById,
-                              Collection<TblScheduleEntity> tblSchedulesById) {
-        this.roomTypeId = roomTypeId;
-        this.name = name;
-        this.damagedLevel = damagedLevel;
-        this.createTime = createTime;
-        this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
-        this.updateTime = updateTime;
-        this.tblEquipmentsById = tblEquipmentsById;
-        this.tblReportsById = tblReportsById;
         this.tblSchedulesById = tblSchedulesById;
     }
 }

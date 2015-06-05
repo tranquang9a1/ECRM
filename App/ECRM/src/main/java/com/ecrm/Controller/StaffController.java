@@ -42,23 +42,23 @@ public class StaffController {
     //create roomtype
     @RequestMapping(value = "createRoomType")
     public String createRoomType(HttpServletRequest request,@RequestParam ("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
-                                 @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NoSlotsEachHRows") String noSlotsEachHRows,
-                                 @RequestParam("AirConditioning") boolean airConditioning, @RequestParam("Fan") boolean fan,
-                                 @RequestParam("Projector") boolean projectors, @RequestParam("Speaker") boolean speaker,
-                                 @RequestParam("Television") boolean television) {
+                                 @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NumberOfSlotsEachHRows") String NumberOfSlotsEachHRows,
+                                 @RequestParam("AirConditioning") int airConditioning, @RequestParam("Fan") int fan,
+                                 @RequestParam("Projector") int projectors, @RequestParam("Speaker") int speaker,
+                                 @RequestParam("Television") int television, @RequestParam("Buld") int buld) {
         TblRoomTypeEntity roomType = new TblRoomTypeEntity();
         horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
-        noSlotsEachHRows = noSlotsEachHRows.substring(0, noSlotsEachHRows.length() - 1);
+        NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
         java.util.Date date = new java.util.Date();
-        if(roomtypeId!=""){
-            roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), slots, verticalRows, horizontalRows, noSlotsEachHRows, airConditioning, fan, projectors,
+        /*if(roomtypeId!=""){
+            roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
                     speaker, television, new Timestamp(date.getTime()), new Timestamp(date.getTime()));
             roomTypeDAO.merge(roomType);
         }else{
-            roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, noSlotsEachHRows, airConditioning, fan, projectors,
+            roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
                     speaker, television, new Timestamp(date.getTime()), null);
             roomTypeDAO.persist(roomType);
-        }
+        }*/
         return "redirect:/staff/classroom";
     }
 
@@ -67,9 +67,9 @@ public class StaffController {
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
                                   @RequestParam("RoomName") String roomName) {
         Date date = new Date();
-
-        TblClassroomEntity classroom = new TblClassroomEntity(roomTypeId, roomName, 0, new Timestamp(date.getTime()),
-                null, null, null, null, null);
+        TblClassroomEntity classroom = new TblClassroomEntity();
+        /*classroom = new TblClassroomEntity(roomTypeId, roomName, 0, new Timestamp(date.getTime()),
+                null, null, null, null, null);*/
         classroomDAO.persist(classroom);
         int id = classroomDAO.getId(roomName);
         colectionEquipment(id, roomTypeId);
@@ -85,8 +85,8 @@ public class StaffController {
         if (roomTypeEntity.getHorizontalRows().length() > 1) {
             soDay = roomTypeEntity.getHorizontalRows().split("-");
         }
-        if (roomTypeEntity.getNoSlotsEachHRows().length() > 1) {
-            soChoNgoi = roomTypeEntity.getNoSlotsEachHRows().split("-");
+        /*if (roomTypeEntity.getNumberOfSlotsEachHRows().length() > 1) {
+            soChoNgoi = roomTypeEntity.getNumberOfSlotsEachHRows().split("-");
         }
         for (int i = 0; i < vrows; i++) {
             for (int j = 0; j <= Integer.parseInt(soDay[i]); j++) {
@@ -142,7 +142,7 @@ public class StaffController {
             equipmentDAO.persist(e);
         }
         e = new TblEquipmentEntity(6, classroomId, 3000, "[6]",
-                "OK");
+                "OK");*/
         equipmentDAO.persist(e);
     }
 

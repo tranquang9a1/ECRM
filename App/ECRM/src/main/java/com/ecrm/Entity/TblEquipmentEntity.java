@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * Created by Htang on 6/1/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblEquipment", schema = "dbo", catalog = "ecrm")
@@ -19,7 +19,6 @@ public class TblEquipmentEntity {
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
-    @GeneratedValue
     @Id
     @Column(name = "Id")
     public int getId() {
@@ -135,16 +134,5 @@ public class TblEquipmentEntity {
 
     public void setTblReportDetailsById(Collection<TblReportDetailEntity> tblReportDetailsById) {
         this.tblReportDetailsById = tblReportDetailsById;
-    }
-
-    public TblEquipmentEntity() {
-    }
-
-    public TblEquipmentEntity(int categoryId, int classroomId, int usingTime, String position, String status) {
-        this.categoryId = categoryId;
-        this.classroomId = classroomId;
-        this.usingTime = usingTime;
-        this.position = position;
-        this.status = status;
     }
 }

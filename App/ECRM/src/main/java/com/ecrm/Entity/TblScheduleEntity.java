@@ -5,25 +5,24 @@ import java.sql.Date;
 import java.sql.Time;
 
 /**
- * Created by Htang on 5/29/2015.
+ * Created by Htang on 6/5/2015.
  */
 @Entity
 @Table(name = "tblSchedule", schema = "dbo", catalog = "ecrm")
 public class TblScheduleEntity {
     private int id;
-    private int noStudents;
+    private String userId;
+    private int classroomId;
+    private int numberOfStudents;
     private String note;
     private Time timeFrom;
     private int slots;
     private Date dateFrom;
     private Date dateTo;
     private TblClassroomEntity tblClassroomByClassroomId;
-    private int userId;
-    private int classroomId;
     private TblUserEntity tblUserByUserId;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -34,13 +33,33 @@ public class TblScheduleEntity {
     }
 
     @Basic
-    @Column(name = "NoStudents")
-    public int getNoStudents() {
-        return noStudents;
+    @Column(name = "UserId")
+    public String getUserId() {
+        return userId;
     }
 
-    public void setNoStudents(int noStudents) {
-        this.noStudents = noStudents;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "ClassroomId")
+    public int getClassroomId() {
+        return classroomId;
+    }
+
+    public void setClassroomId(int classroomId) {
+        this.classroomId = classroomId;
+    }
+
+    @Basic
+    @Column(name = "NumberOfStudents")
+    public int getNumberOfStudents() {
+        return numberOfStudents;
+    }
+
+    public void setNumberOfStudents(int numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
     }
 
     @Basic
@@ -65,11 +84,11 @@ public class TblScheduleEntity {
 
     @Basic
     @Column(name = "Slots")
-    public int getTimeTo() {
+    public int getSlots() {
         return slots;
     }
 
-    public void setTimeTo(int slots) {
+    public void setSlots(int slots) {
         this.slots = slots;
     }
 
@@ -101,10 +120,12 @@ public class TblScheduleEntity {
         TblScheduleEntity that = (TblScheduleEntity) o;
 
         if (id != that.id) return false;
-        if (noStudents != that.noStudents) return false;
+        if (classroomId != that.classroomId) return false;
+        if (numberOfStudents != that.numberOfStudents) return false;
+        if (slots != that.slots) return false;
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (timeFrom != null ? !timeFrom.equals(that.timeFrom) : that.timeFrom != null) return false;
-        if (slots != that.slots) return false;
         if (dateFrom != null ? !dateFrom.equals(that.dateFrom) : that.dateFrom != null) return false;
         if (dateTo != null ? !dateTo.equals(that.dateTo) : that.dateTo != null) return false;
 
@@ -114,7 +135,9 @@ public class TblScheduleEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + noStudents;
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + classroomId;
+        result = 31 * result + numberOfStudents;
         result = 31 * result + (note != null ? note.hashCode() : 0);
         result = 31 * result + (timeFrom != null ? timeFrom.hashCode() : 0);
         result = 31 * result + slots;
@@ -133,28 +156,8 @@ public class TblScheduleEntity {
         this.tblClassroomByClassroomId = tblClassroomByClassroomId;
     }
 
-    @Basic
-    @Column(name = "UserId")
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "ClassroomId")
-    public int getClassroomId() {
-        return classroomId;
-    }
-
-    public void setClassroomId(int classroomId) {
-        this.classroomId = classroomId;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
     public TblUserEntity getTblUserByUserId() {
         return tblUserByUserId;
     }

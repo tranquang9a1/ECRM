@@ -108,7 +108,7 @@ public class TblEquipmentEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false)
     public TblClassroomEntity getTblClassroomByClassroomId() {
         return tblClassroomByClassroomId;
     }
@@ -118,7 +118,7 @@ public class TblEquipmentEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "CategoryId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "CategoryId", referencedColumnName = "Id", nullable = false)
     public TblEquipmentCategoryEntity getTblEquipmentCategoryByCategoryId() {
         return tblEquipmentCategoryByCategoryId;
     }

@@ -19,7 +19,7 @@ public class TblRoomTypeEntity {
     private int fan;
     private int projector;
     private int speaker;
-    private Integer buld;
+    private Integer bulb;
     private int television;
     private Timestamp createTime;
     private Boolean isDelete;
@@ -117,13 +117,13 @@ public class TblRoomTypeEntity {
     }
 
     @Basic
-    @Column(name = "Buld")
-    public Integer getBuld() {
-        return buld;
+    @Column(name = "Bulb")
+    public Integer getBulb() {
+        return bulb;
     }
 
-    public void setBuld(Integer buld) {
-        this.buld = buld;
+    public void setBulb(Integer bulb) {
+        this.bulb = bulb;
     }
 
     @Basic
@@ -185,7 +185,7 @@ public class TblRoomTypeEntity {
             return false;
         if (numberOfSlotsEachHRows != null ? !numberOfSlotsEachHRows.equals(that.numberOfSlotsEachHRows) : that.numberOfSlotsEachHRows != null)
             return false;
-        if (buld != null ? !buld.equals(that.buld) : that.buld != null) return false;
+        if (bulb != null ? !bulb.equals(that.bulb) : that.bulb != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
@@ -204,7 +204,7 @@ public class TblRoomTypeEntity {
         result = 31 * result + fan;
         result = 31 * result + projector;
         result = 31 * result + speaker;
-        result = 31 * result + (buld != null ? buld.hashCode() : 0);
+        result = 31 * result + (bulb != null ? bulb.hashCode() : 0);
         result = 31 * result + television;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
@@ -219,5 +219,27 @@ public class TblRoomTypeEntity {
 
     public void setTblClassroomsById(Collection<TblClassroomEntity> tblClassroomsById) {
         this.tblClassroomsById = tblClassroomsById;
+    }
+
+
+    public TblRoomTypeEntity() {
+    }
+
+    public TblRoomTypeEntity(int id, int slots, int verticalRows, String horizontalRows, String numberOfSlotsEachHRows,
+                             int airConditioning, int fan, int projector, int speaker, Integer bulb, int television, Timestamp createTime, Boolean isDelete, Timestamp updateTime) {
+        this.id = id;
+        this.slots = slots;
+        this.verticalRows = verticalRows;
+        this.horizontalRows = horizontalRows;
+        this.numberOfSlotsEachHRows = numberOfSlotsEachHRows;
+        this.airConditioning = airConditioning;
+        this.fan = fan;
+        this.projector = projector;
+        this.speaker = speaker;
+        this.bulb = bulb;
+        this.television = television;
+        this.createTime = createTime;
+        this.isDelete = isDelete;
+        this.updateTime = updateTime;
     }
 }

@@ -50,7 +50,7 @@ public class StaffController {
         horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
         NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
         java.util.Date date = new java.util.Date();
-        /*if(roomtypeId!=""){
+        if(roomtypeId!=""){
             roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
                     speaker, television, new Timestamp(date.getTime()), new Timestamp(date.getTime()));
             roomTypeDAO.merge(roomType);
@@ -58,7 +58,7 @@ public class StaffController {
             roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
                     speaker, television, new Timestamp(date.getTime()), null);
             roomTypeDAO.persist(roomType);
-        }*/
+        }
         return "redirect:/staff/classroom";
     }
 

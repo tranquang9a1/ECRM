@@ -147,7 +147,7 @@ public class TblScheduleEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false)
     public TblClassroomEntity getTblClassroomByClassroomId() {
         return tblClassroomByClassroomId;
     }
@@ -157,7 +157,7 @@ public class TblScheduleEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false)
     public TblUserEntity getTblUserByUserId() {
         return tblUserByUserId;
     }

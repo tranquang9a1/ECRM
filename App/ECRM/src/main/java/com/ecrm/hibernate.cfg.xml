@@ -35,6 +35,7 @@
     <mapping class="com.ecrm.Entity.TblScheduleEntity"/>
     <mapping class="com.ecrm.Entity.TblUserEntity"/>
     <mapping class="com.ecrm.Entity.TblUserInfoEntity"/>
+    <mapping class="com.ecrm.Entity.TeachingTimeEntity"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

@@ -121,7 +121,7 @@ public class TblReportDetailEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "EquipmentId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "EquipmentId", referencedColumnName = "Id", nullable = false)
     public TblEquipmentEntity getTblEquipmentByEquipmentId() {
         return tblEquipmentByEquipmentId;
     }
@@ -131,7 +131,7 @@ public class TblReportDetailEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ReportId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "ReportId", referencedColumnName = "Id", nullable = false)
     public TblReportEntity getTblReportByReportId() {
         return tblReportByReportId;
     }

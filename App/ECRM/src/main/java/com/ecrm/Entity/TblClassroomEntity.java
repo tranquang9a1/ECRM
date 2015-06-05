@@ -123,7 +123,7 @@ public class TblClassroomEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id", insertable = false, updatable = false)
+    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id")
     public TblRoomTypeEntity getTblRoomTypeByRoomTypeId() {
         return tblRoomTypeByRoomTypeId;
     }

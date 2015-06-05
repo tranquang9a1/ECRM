@@ -40,6 +40,7 @@ public class HelloController {
         TblUserEntity user = userDAO.login(username, password);
         if (user.isStatus()) {
             session.setAttribute("USER", user);
+
             if (user.getTblRoleByRoleId().getName().equals("Admin")) {
                 return "home";
             }

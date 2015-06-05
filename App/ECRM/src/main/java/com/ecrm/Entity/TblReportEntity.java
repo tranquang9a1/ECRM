@@ -122,7 +122,7 @@ public class TblReportEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ClassRoomId", referencedColumnName = "Id", nullable = false)
+    @JoinColumn(name = "ClassRoomId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
     public TblClassroomEntity getTblClassroomByClassRoomId() {
         return tblClassroomByClassRoomId;
     }
@@ -132,7 +132,7 @@ public class TblReportEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false)
+    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
     public TblUserEntity getTblUserByUserId() {
         return tblUserByUserId;
     }

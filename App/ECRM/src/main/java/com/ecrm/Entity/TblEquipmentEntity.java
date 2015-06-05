@@ -12,7 +12,6 @@ public class TblEquipmentEntity {
     private int id;
     private int categoryId;
     private int classroomId;
-    private int usingTime;
     private String position;
     private String status;
     private TblClassroomEntity tblClassroomByClassroomId;
@@ -20,6 +19,7 @@ public class TblEquipmentEntity {
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -47,16 +47,6 @@ public class TblEquipmentEntity {
 
     public void setClassroomId(int classroomId) {
         this.classroomId = classroomId;
-    }
-
-    @Basic
-    @Column(name = "UsingTime")
-    public int getUsingTime() {
-        return usingTime;
-    }
-
-    public void setUsingTime(int usingTime) {
-        this.usingTime = usingTime;
     }
 
     @Basic
@@ -89,7 +79,6 @@ public class TblEquipmentEntity {
         if (id != that.id) return false;
         if (categoryId != that.categoryId) return false;
         if (classroomId != that.classroomId) return false;
-        if (usingTime != that.usingTime) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
@@ -101,14 +90,13 @@ public class TblEquipmentEntity {
         int result = id;
         result = 31 * result + categoryId;
         result = 31 * result + classroomId;
-        result = 31 * result + usingTime;
         result = 31 * result + (position != null ? position.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false)
+    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
     public TblClassroomEntity getTblClassroomByClassroomId() {
         return tblClassroomByClassroomId;
     }
@@ -118,7 +106,7 @@ public class TblEquipmentEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "CategoryId", referencedColumnName = "Id", nullable = false)
+    @JoinColumn(name = "CategoryId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
     public TblEquipmentCategoryEntity getTblEquipmentCategoryByCategoryId() {
         return tblEquipmentCategoryByCategoryId;
     }
@@ -134,5 +122,15 @@ public class TblEquipmentEntity {
 
     public void setTblReportDetailsById(Collection<TblReportDetailEntity> tblReportDetailsById) {
         this.tblReportDetailsById = tblReportDetailsById;
+    }
+
+    public TblEquipmentEntity() {
+    }
+
+    public TblEquipmentEntity(int categoryId, int classroomId, String position, String status) {
+        this.categoryId = categoryId;
+        this.classroomId = classroomId;
+        this.position = position;
+        this.status = status;
     }
 }

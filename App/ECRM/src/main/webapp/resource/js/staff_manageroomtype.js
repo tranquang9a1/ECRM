@@ -19,27 +19,27 @@ function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projec
         classroommap.removeChild(classroommap.lastChild);
     }
     generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi);
-    if(projector){
+    if(projector>0){
         document.getElementById('projector').checked = true;
     }else {
         document.getElementById('projector').checked = false;
     }
-    if(quat){
+    if(quat>0){
         document.getElementById('quat').checked = true;
     }else {
         document.getElementById('quat').checked = false;
     }
-    if(mayLanh){
+    if(mayLanh>0){
         document.getElementById('mayLanh').checked = true;
     }else {
         document.getElementById('mayLanh').checked = false;
     }
-    if(tivi){
+    if(tivi>0){
         document.getElementById('tivi').checked = true;
     }else {
         document.getElementById('tivi').checked = false;
     }
-    if(loa){
+    if(loa>0){
         document.getElementById('loa').checked = true;
     }else {
         document.getElementById('loa').checked = false;
@@ -175,7 +175,7 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     }
 
     //projector
-    if(projector){
+    if(projector>0){
         var divProjector = document.createElement('div');
         divProjector.className = 'equipment subThietBi projector';
         divProjector.setAttribute('data-equipment','Máy chiếu');
@@ -184,7 +184,7 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     }
 
     //tivi
-    if(tivi){
+    if(tivi>0){
         var divTivi = document.createElement('div');
         divTivi.className = 'equipment subThietBi tivi';
         divTivi.setAttribute('data-equipment','Tivi');
@@ -193,7 +193,7 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     }
 
     //may lanh
-    if(mayLanh){
+    if(mayLanh>0){
         var divMayLanh = document.createElement('div');
         divMayLanh.className = 'equipment subThietBi mayLanh';
         divMayLanh.setAttribute('data-equipment','Máy lạnh');
@@ -202,7 +202,7 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     }
 
     //quat
-    if(quat){
+    if(quat>0){
         var divQuat = document.createElement('div');
         divQuat.className = 'equipment subThietBi quat';
         divQuat.setAttribute('data-equipment','Quạt');
@@ -211,7 +211,7 @@ function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows
     }
 
     //loa
-    if(loa){
+    if(loa>0){
         var divLoa = document.createElement('div');
         divLoa.className = 'equipment subThietBi loa';
         divLoa.setAttribute('data-equipment','Loa');

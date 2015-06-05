@@ -14,7 +14,7 @@
     <div class="account-notify">
         <div class="account-control">
             <!--<img src="img/user.png" />-->
-            <p>${user.fullname}</p>
+            <p>${user.tblUserInfoByUsername.fullName}</p>
             <img src="../../resource/img/gears.png"/>
 
             <div class="clear"></div>

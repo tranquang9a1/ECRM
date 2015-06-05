@@ -101,7 +101,7 @@ public class TblUserEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "RoleId", referencedColumnName = "Id", nullable = false)
+    @JoinColumn(name = "RoleId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
     public TblRoleEntity getTblRoleByRoleId() {
         return tblRoleByRoleId;
     }

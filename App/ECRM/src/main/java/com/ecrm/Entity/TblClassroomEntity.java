@@ -15,14 +15,15 @@ public class TblClassroomEntity {
     private String name;
     private Integer damagedLevel;
     private Timestamp createTime;
-    private Boolean isDelete;
     private Timestamp updateTime;
+    private Boolean isDelete;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblReportEntity> tblReportsById;
     private Collection<TblScheduleEntity> tblSchedulesById;
 
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -73,16 +74,6 @@ public class TblClassroomEntity {
     }
 
     @Basic
-    @Column(name = "IsDelete")
-    public Boolean getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Boolean isDelete) {
-        this.isDelete = isDelete;
-    }
-
-    @Basic
     @Column(name = "UpdateTime")
     public Timestamp getUpdateTime() {
         return updateTime;
@@ -90,6 +81,16 @@ public class TblClassroomEntity {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Basic
+    @Column(name = "IsDelete")
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Override
@@ -104,8 +105,8 @@ public class TblClassroomEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (damagedLevel != null ? !damagedLevel.equals(that.damagedLevel) : that.damagedLevel != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
+        if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
 
         return true;
     }
@@ -117,13 +118,13 @@ public class TblClassroomEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (damagedLevel != null ? damagedLevel.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id")
+    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id", insertable = false, updatable = false)
     public TblRoomTypeEntity getTblRoomTypeByRoomTypeId() {
         return tblRoomTypeByRoomTypeId;
     }
@@ -157,5 +158,19 @@ public class TblClassroomEntity {
 
     public void setTblSchedulesById(Collection<TblScheduleEntity> tblSchedulesById) {
         this.tblSchedulesById = tblSchedulesById;
+    }
+
+    public TblClassroomEntity() {
+    }
+
+    public TblClassroomEntity(int id, Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
+                              Timestamp updateTime, Boolean isDelete) {
+        this.id = id;
+        this.roomTypeId = roomTypeId;
+        this.name = name;
+        this.damagedLevel = damagedLevel;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.isDelete = isDelete;
     }
 }

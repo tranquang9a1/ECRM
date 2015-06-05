@@ -195,9 +195,9 @@ function viewMap() {
         divProjector.id = 'idProjector';
         divProjector.className='equipment subThietBi projector';
         document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
-        document.getElementById("Projectors").value = true;
+        document.getElementById("Projectors").value = 1;
     }else{
-        document.getElementById("Projectors").value = false;
+        document.getElementById("Projectors").value = 0;
     }
     //tivi
     if(document.getElementById('tivi').checked){
@@ -205,9 +205,9 @@ function viewMap() {
         divTivi.id = 'idTivi';
         divTivi.className='equipment subThietBi tivi';
         document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
-        document.getElementById("Television").value = true;
+        document.getElementById("Television").value = 1;
     }else{
-        document.getElementById("Television").value = false;
+        document.getElementById("Television").value = 0;
     }
     //may lanh
     if(document.getElementById('mayLanh').checked){
@@ -215,9 +215,9 @@ function viewMap() {
         divMayLanh.id = 'idMayLanh';
         divMayLanh.className='equipment subThietBi mayLanh';
         document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
-        document.getElementById("AirConditioning").value = true;
+        document.getElementById("AirConditioning").value = 1;
     }else{
-        document.getElementById("AirConditioning").value = false;
+        document.getElementById("AirConditioning").value = 0;
     }
     //quat
     if(document.getElementById('quat').checked){
@@ -225,9 +225,9 @@ function viewMap() {
         divQuat.id = 'idQuat';
         divQuat.className='equipment subThietBi quat';
         document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
-        document.getElementById("Fan").value = true;
+        document.getElementById("Fan").value = 1;
     }else{
-        document.getElementById("Fan").value = false;
+        document.getElementById("Fan").value = 0;
     }
     //loa
     if(document.getElementById('loa').checked){
@@ -235,10 +235,11 @@ function viewMap() {
         divLoa.id = 'idLoa';
         divLoa.className='equipment subThietBi loa';
         document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
-        document.getElementById("Speaker").value = true;
+        document.getElementById("Speaker").value = 1;
     }else{
-        document.getElementById("Speaker").value = false;
+        document.getElementById("Speaker").value = 0;
     }
+    document.getElementById("Bulb").value = 1;
     var temp1 = "";
     var temp2 = "";
     document.getElementById("Slots").value = slots;
@@ -250,7 +251,7 @@ function viewMap() {
     for(i = 0; i<vrows; i++){
         temp2+= document.getElementById(soChoNgoi[i]).value+'-';
     }
-    document.getElementById("NoSlotsEachHRows").value = temp2;
+    document.getElementById("NumberOfSlotsEachHRows").value = temp2;
 
 }
 
@@ -373,7 +374,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     }
 
     //projector
-    if(projector){
+    if(projector>0){
         var divProjector = document.createElement('div');
         divProjector.className = 'equipment subThietBi projector';
         divProjector.setAttribute('data-equipment','Máy chiếu');
@@ -382,7 +383,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     }
 
     //tivi
-    if(tivi){
+    if(tivi>0){
         var divTivi = document.createElement('div');
         divTivi.className = 'equipment subThietBi tivi';
         divTivi.setAttribute('data-equipment','Tivi');
@@ -391,7 +392,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     }
 
     //may lanh
-    if(mayLanh){
+    if(mayLanh>0){
         var divMayLanh = document.createElement('div');
         divMayLanh.className = 'equipment subThietBi mayLanh';
         divMayLanh.setAttribute('data-equipment','Máy lạnh');
@@ -400,7 +401,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     }
 
     //quat
-    if(quat){
+    if(quat>0){
         var divQuat = document.createElement('div');
         divQuat.className = 'equipment subThietBi quat';
         divQuat.setAttribute('data-equipment','Quạt');
@@ -409,7 +410,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     }
 
     //loa
-    if(loa){
+    if(loa>0){
         var divLoa = document.createElement('div');
         divLoa.className = 'equipment subThietBi loa';
         divLoa.setAttribute('data-equipment','Loa');

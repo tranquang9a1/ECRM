@@ -265,11 +265,12 @@
         <input type="hidden" id="Slots" name="Slots" value="">
         <input type="hidden" id="VerticalRows" name="VerticalRows" value="">
         <input type="hidden" id="HorizontalRows" name="HorizontalRows" value="">
-        <input type="hidden" id="NoSlotsEachHRows" name="NoSlotsEachHRows" value="">
+        <input type="hidden" id="NumberOfSlotsEachHRows" name="NumberOfSlotsEachHRows" value="">
         <input type="hidden" id="AirConditioning" name="AirConditioning" value="">
         <input type="hidden" id="Fan" name="Fan" value="">
         <input type="hidden" id="Projectors" name="Projector" value="">
         <input type="hidden" id="Speaker" name="Speaker" value="">
+        <input type="hidden" id="Bulb" name="Bulb" value="">
         <input type="hidden" id="Television" name="Television" value="">
 
         <div class="content-modal">

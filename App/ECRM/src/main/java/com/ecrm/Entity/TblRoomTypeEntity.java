@@ -27,6 +27,7 @@ public class TblRoomTypeEntity {
     private Collection<TblClassroomEntity> tblClassroomsById;
 
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -220,7 +221,6 @@ public class TblRoomTypeEntity {
     public void setTblClassroomsById(Collection<TblClassroomEntity> tblClassroomsById) {
         this.tblClassroomsById = tblClassroomsById;
     }
-
 
     public TblRoomTypeEntity() {
     }

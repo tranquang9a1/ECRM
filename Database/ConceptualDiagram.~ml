@@ -548,9 +548,9 @@
 <XPD:REF name="Head">LLfaAJzIiUG7pIsu+cZLeQAA</XPD:REF>
 <XPD:REF name="Tail">Aga+PvnOikKaiNSX82Z4+AAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="7SY6q9yV3U6fkN7+ippd+QAA">
+<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
 <XPD:ATTR name="Alpha" type="real">1.5707963267949</XPD:ATTR>
 <XPD:ATTR name="Distance" type="real">15</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">report</XPD:ATTR>
 <XPD:REF name="Model">dfj1a4IHXUSLIQR2eS+ziwAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="EdgeLabelView" guid="BYkVfU1CaE+j/5REITxmWwAA">
@@ -1239,7 +1239,6 @@
 <XPD:REF name="Associations[1]">qCczJrHlGEmBh8ca6AmgiwAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="OwnedElements[20]" type="UMLAssociation" guid="dfj1a4IHXUSLIQR2eS+ziwAA">
-<XPD:ATTR name="Name" type="string">report</XPD:ATTR>
 <XPD:REF name="Namespace">XbsbUbGUREifOMh0KlL/2gAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">++JBDJNcjkiYOrgLKRqYxwAA</XPD:REF>

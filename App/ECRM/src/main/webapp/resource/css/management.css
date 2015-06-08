@@ -58,7 +58,18 @@
 .small-table .control{
     width: 150px;
 }
-
+.small-table .username{
+    width: 100px;
+}
+.small-table .status{
+    width: 50px;
+}
+.small-table .phone{
+    width: 100px;
+}
+.small-table .check-box{
+    width: 10px;
+}
 .classroom-map{
     background-color: #f1f1f1;
     height: 340px;

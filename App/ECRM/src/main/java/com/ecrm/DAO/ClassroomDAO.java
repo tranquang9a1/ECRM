@@ -1,5 +1,6 @@
 package com.ecrm.DAO;
 
+import com.ecrm.Entity.TblClassroomEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -7,5 +8,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ClassroomDAO {
-    public int getId(String name);
+    public TblClassroomEntity getClassroomByName(String name);
 }

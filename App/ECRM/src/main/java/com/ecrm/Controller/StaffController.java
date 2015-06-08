@@ -4,9 +4,12 @@ import com.ecrm.DAO.EquipmentDAO;
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.EquipmentDAOImpl;
 import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
+import com.ecrm.DAO.Impl.ScheduleDAOImpl;
+import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
 import com.ecrm.Entity.TblRoomTypeEntity;
+import com.ecrm.Entity.TblScheduleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Created by Htang on 5/29/2015.
@@ -29,13 +36,16 @@ public class StaffController {
     ClassroomDAOImpl classroomDAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;
+    @Autowired
+    ScheduleDAOImpl scheduleDAO;
 
     @RequestMapping(value = "classroom")
-    public String init(HttpServletRequest request) {
+    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
+        getAvailableRoom();
         List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
         List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
-        for (TblRoomTypeEntity roomTypeEntity : lstRoomType){
-            if(!roomTypeEntity.getIsDelete()){
+        for (TblRoomTypeEntity roomTypeEntity : lstRoomType) {
+            if (!roomTypeEntity.getIsDelete()) {
                 tblRoomTypeEntities.add(roomTypeEntity);
             }
         }
@@ -43,18 +53,19 @@ public class StaffController {
 
         List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
         List<TblClassroomEntity> tblClassroomEntities = new ArrayList<TblClassroomEntity>();
-        for(TblClassroomEntity classroomEntity : lstClassRoom){
-            if(!classroomEntity.getIsDelete()){
+        for (TblClassroomEntity classroomEntity : lstClassRoom) {
+            if (!classroomEntity.getIsDelete()) {
                 tblClassroomEntities.add(classroomEntity);
             }
         }
         request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
+        request.setAttribute("ACTIVETAB", activeTab);
         return "Staff_Classroom";
     }
 
     //create roomtype
     @RequestMapping(value = "createRoomType")
-    public String createRoomType(HttpServletRequest request,@RequestParam ("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
+    public String createRoomType(HttpServletRequest request, @RequestParam("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
                                  @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NumberOfSlotsEachHRows") String NumberOfSlotsEachHRows,
                                  @RequestParam("AirConditioning") int airConditioning, @RequestParam("Fan") int fan,
                                  @RequestParam("Projector") int projectors, @RequestParam("Speaker") int speaker,
@@ -63,115 +74,132 @@ public class StaffController {
         horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
         NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
         java.util.Date date = new java.util.Date();
-        if(roomtypeId!=""){
+
+
+        if (roomtypeId != "") {
+            roomType = roomTypeDAO.find(Integer.parseInt(roomtypeId));
             roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
-                    speaker,bulb, television, roomTypeDAO.find(Integer.parseInt(roomtypeId)).getCreateTime(),false, new Timestamp(date.getTime()));
+                    speaker, bulb, television, roomType.getCreateTime(), false, new Timestamp(date.getTime()));
             roomTypeDAO.merge(roomType);
-        }else{
+        } else {
             roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
-                    speaker,bulb, television, new Timestamp(date.getTime()),false, null);
+                    speaker, bulb, television, new Timestamp(date.getTime()), false, null);
             roomTypeDAO.persist(roomType);
         }
-        return "redirect:/staff/classroom";
+        return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
 
-    //create roomtype
+    //create classroom
     @RequestMapping(value = "createClassroom")
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
                                   @RequestParam("RoomName") String roomName) {
         Date date = new Date();
-        TblClassroomEntity classroom = new TblClassroomEntity();
-        classroom = new TblClassroomEntity(0,roomTypeId, roomName, 0, new Timestamp(date.getTime()),null, false);
-        classroomDAO.persist(classroom);
-        int id = classroomDAO.getId(roomName);
-        colectionEquipment(id, roomTypeId);
-        return "redirect:/staff/classroom";
-    }
-
-    public void colectionEquipment(int classroomId, int roomTypeId) {
-        TblEquipmentEntity e = new TblEquipmentEntity();
-        TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomTypeId);
-        int vrows = roomTypeEntity.getVerticalRows();
-        String[] soDay = null;
-        String[] soChoNgoi = null;
-        if (roomTypeEntity.getHorizontalRows().length() > 1) {
-            soDay = roomTypeEntity.getHorizontalRows().split("-");
-        }
-        if (roomTypeEntity.getNumberOfSlotsEachHRows().length() > 1) {
-            soChoNgoi = roomTypeEntity.getNumberOfSlotsEachHRows().split("-");
-        }
-        for (int i = 0; i < vrows; i++) {
-            for (int j = 0; j <= Integer.parseInt(soDay[i]); j++) {
-                //tao ban giao vien
-                if (j == 0) {
-                    if (i == 0) {
-                        String banGV = "[" + i + "," + j + "]";
-                        e = new TblEquipmentEntity(7, classroomId,  banGV,
-                                "OK");
-                        equipmentDAO.persist(e);
-                        String gheGV = "[" + i + "," + j + ",0]";
-                        e = new TblEquipmentEntity(8, classroomId,gheGV,
-                                "OK");
-                        equipmentDAO.persist(e);
-                    }
-                } else {
-                    String ban = "[" + i + "," + j + "]";
-                    e = new TblEquipmentEntity(7, classroomId, ban,
-                            "OK");
-                    equipmentDAO.persist(e);
-                    for (int k = 0; k < Integer.parseInt(soChoNgoi[i]); k++) {
-                        String ghe = "[" + i + "," + j + "," + k + "]";
-                        e = new TblEquipmentEntity(8, classroomId,ghe,
-                                "OK");
-                        equipmentDAO.persist(e);
-                    }
-                }
+        if(roomName!=null){
+            TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
+            if (classroom != null) {
+                classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, 0, classroom.getCreateTime(),
+                        new Timestamp(date.getTime()), false);
+                classroomDAO.merge(classroom);
+            }else{
+                classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null, false);
+                classroomDAO.persist(classroom);
             }
         }
-        if (roomTypeEntity.getProjector() > 0) {
-            e = new TblEquipmentEntity(1, classroomId, "[1]",
-                    "OK");
-            equipmentDAO.persist(e);
-        }
-        if (roomTypeEntity.getTelevision()>0) {
-            e = new TblEquipmentEntity(2, classroomId,"[2]",
-                    "OK");
-            equipmentDAO.persist(e);
-        }
-        if (roomTypeEntity.getAirConditioning()>0) {
-            e = new TblEquipmentEntity(3, classroomId, "[3]",
-                    "OK");
-            equipmentDAO.persist(e);
-        }
-        if (roomTypeEntity.getFan()>0) {
-            e = new TblEquipmentEntity(4, classroomId, "[4]",
-                    "OK");
-            equipmentDAO.persist(e);
-        }
-        if (roomTypeEntity.getSpeaker()>0) {
-            e = new TblEquipmentEntity(5, classroomId, "[5]",
-                    "OK");
-            equipmentDAO.persist(e);
-        }
-        e = new TblEquipmentEntity(6, classroomId, "[6]",
-                "OK");
-        equipmentDAO.persist(e);
+        return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
+
     //remove roomtype
-    @RequestMapping(value = "remove")
+    @RequestMapping(value = "removeRoomType")
     @Transactional
-    public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId){
+    public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
         TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
-        Collection<TblClassroomEntity>  tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
-        if(tblClassroomEntities.size()>0){
-            for(TblClassroomEntity tblClassroomEntity : tblClassroomEntities){
+        Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
+        if (tblClassroomEntities.size() > 0) {
+            for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
                 tblClassroomEntity.setIsDelete(true);
                 classroomDAO.merge(tblClassroomEntity);
             }
         }
         roomTypeEntity.setIsDelete(true);
         roomTypeDAO.merge(roomTypeEntity);
-        return "redirect:/staff/classroom";
+        return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
+
+    //remove classroom
+    @RequestMapping(value = "removeClassroom")
+    @Transactional
+    public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
+        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
+        classroomEntity.setIsDelete(true);
+        classroomDAO.merge(classroomEntity);
+        return "redirect:/staff/classroom?ACTIVETAB=tab1";
+    }
+
+    //Insert Equipment
+    public void insertDamagedEquipment(int classroomId, String positon) {
+        TblEquipmentEntity e = equipmentDAO.findEquipmentHavePosition(classroomId, positon);
+        if (e == null) {
+            if (positon.equals("[1]")) {
+                e = new TblEquipmentEntity(1, classroomId, positon, "Damaged");
+            }
+            if (positon.equals("[2]")) {
+                e = new TblEquipmentEntity(2, classroomId, positon, "Damaged");
+            }
+            if (positon.equals("[3]")) {
+                e = new TblEquipmentEntity(3, classroomId, positon, "Damaged");
+            }
+            if (positon.equals("[4]")) {
+                e = new TblEquipmentEntity(4, classroomId, positon, "Damaged");
+            }
+            if (positon.equals("[5]")) {
+                e = new TblEquipmentEntity(5, classroomId, positon, "Damaged");
+            }
+            if (positon.equals("[6]")) {
+                e = new TblEquipmentEntity(6, classroomId, positon, "Damaged");
+            }
+            if (positon.length() == 5) {
+                e = new TblEquipmentEntity(7, classroomId, positon, "Damaged");
+            } else {
+                e = new TblEquipmentEntity(8, classroomId, positon, "Damaged");
+
+            }
+        }
+    }
+
+    public String getAvailableRoom(){
+        TblClassroomEntity tblClassroomEntity = classroomDAO.find(1022);
+        int classroomId = tblClassroomEntity.getId();
+        TblScheduleEntity tblScheduleEntity = scheduleDAO.find(1);
+        int currentSlots = tblScheduleEntity.getNumberOfStudents();
+        Date date = tblScheduleEntity.getDateFrom();
+        Time timeFrom = tblScheduleEntity.getTimeFrom();
+        String time = timeFrom.toString();
+        System.out.println("Time from:"+time);
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        Date d = null;
+        try {
+            d = df.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+
+        cal.add(Calendar.MINUTE, tblScheduleEntity.getSlots()*45);
+        Date timeTO = cal.getTime();
+        System.out.println("TIme to: "+ df.format(timeTO));
+
+        Collection<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
+        for(TblClassroomEntity classroomEntity : tblClassroomEntities){
+            int slots = classroomEntity.getTblRoomTypeByRoomTypeId().getSlots();
+            if(slots<currentSlots){
+                tblClassroomEntities.remove(classroomEntity);
+            }
+        }
+
+        return "";
+    }
+
+
 }

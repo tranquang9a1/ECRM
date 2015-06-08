@@ -27,34 +27,35 @@
         <p class="clear"></p>
     </div>
     <div class="body-table">
-        <c:forEach items="${classrooms}" var="cl">
-            <div class="row">
-                <div class="room-number">
-                    <div>${cl.name}</div>
-                </div>
-                <div class="room-type">
-                    <div>Loại ${cl.roomTypeId}</div>
-                </div>
-                <div class="control">
-                    <div class="group-button">
-                        <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
-                        </div>
-                        <div class="btn btn-view" title="Xem sơ đồ"
-                             onclick="showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
-                                     , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
-                                     , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television})">
-                            <i class="fa fa-eye"></i>
-                        </div>
-
-                        <div class="btn btn-remove" onclick="conform(2, {room: 101})" title="Xóa"><i
-                                class="fa fa-times"></i>
-                        </div>
-
+        <form action="/staff/removeClassroom" id="removeClassroom">
+            <input type="hidden" value="" id="removeClassroomName" name="classroomName"/>
+            <c:forEach items="${classrooms}" var="cl">
+                <div class="row">
+                    <div class="room-number">
+                        <div>${cl.name}</div>
                     </div>
+                    <div class="room-type">
+                        <div>Loại ${cl.roomTypeId}</div>
+                    </div>
+                    <div class="control">
+                        <div class="group-button">
+                            <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
+                            </div>
+                            <div class="btn btn-view" title="Xem sơ đồ"
+                                 onclick="showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
+                                         , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
+                                         , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television})">
+                                <i class="fa fa-eye"></i>
+                            </div>
+                            <div class="btn btn-remove" onclick="conform(4, ${cl.name})" title="Xóa"><i
+                                    class="fa fa-times"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="clear"></p>
                 </div>
-                <p class="clear"></p>
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </form>
     </div>
 
 </div>

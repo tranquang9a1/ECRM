@@ -35,7 +35,7 @@
         <p class="clear"></p>
     </div>
     <div class="body-table">
-        <form action="/staff/remove" id="removeRoomtype">
+        <form action="/staff/removeRoomType" id="removeRoomtype">
             <input type="hidden" name="RoomtypeId" value="" id="removeRoomtypeID"/>
             <c:forEach items="${roomtypes}" var="r">
                 <div class="row">

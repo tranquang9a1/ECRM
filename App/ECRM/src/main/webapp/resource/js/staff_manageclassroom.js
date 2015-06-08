@@ -4,7 +4,7 @@
 function showClassroomMap(roomname, mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
     var a = document.get
     //add roomname
-    document.getElementById('roomname').innerHTML = "Ph�ng" + roomname;
+    document.getElementById('roomname').innerHTML = "Phòng" + roomname;
     //
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
@@ -15,4 +15,6 @@ function showClassroomMap(roomname, mapId, vrows, sDayNgang, sChoNgoi, mayLanh, 
     }
 
     generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi);
+    document.getElementById('classroomName').innerHTML = "Phòng "+roomname;
+    document.getElementById('roomNameId').value = roomname;
 }

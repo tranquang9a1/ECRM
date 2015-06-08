@@ -17,13 +17,11 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
         super(TblClassroomEntity.class);
     }
 
-    public int getId(String name){
-        int id = 0;
+    public TblClassroomEntity getClassroomByName(String name){
         Query q= entityManager.createQuery("select c from TblClassroomEntity c where c.name = :name");
         q.setParameter("name", name);
         TblClassroomEntity c = (TblClassroomEntity) q.getSingleResult();
-        id = c.getId();
-        return id;
+        return c;
     }
 
 }

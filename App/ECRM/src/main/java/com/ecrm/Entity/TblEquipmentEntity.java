@@ -13,6 +13,7 @@ public class TblEquipmentEntity {
     private int categoryId;
     private int classroomId;
     private String position;
+    private int timeRemain;
     private String status;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
@@ -60,6 +61,12 @@ public class TblEquipmentEntity {
     }
 
     @Basic
+    @Column(name = "TimeRemain")
+    public int getTimeRemain(){ return timeRemain;}
+
+    public void setTimeRemain(int timeRemain) { this.timeRemain = timeRemain; }
+
+    @Basic
     @Column(name = "Status")
     public String getStatus() {
         return status;
@@ -80,6 +87,7 @@ public class TblEquipmentEntity {
         if (categoryId != that.categoryId) return false;
         if (classroomId != that.classroomId) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
+        if (timeRemain != that.timeRemain) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
@@ -91,6 +99,7 @@ public class TblEquipmentEntity {
         result = 31 * result + categoryId;
         result = 31 * result + classroomId;
         result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + timeRemain;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }

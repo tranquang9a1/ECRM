@@ -59,7 +59,7 @@ function conform(choose, object){
     var btnYes = document.createElement("input");
     btnYes.className = "btn btn-orange";
     btnYes.type = "button";
-    btnYes.value = "Yes! I sure";
+    btnYes.value = "Yes! I'm sure";
     btnYes.addEventListener("click", function() { doAction(choose, object)}, false);
     var btnNo = document.createElement("input");
     btnNo.className = "btn btn-normal";

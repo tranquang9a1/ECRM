@@ -25,4 +25,11 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         user = (TblUserEntity) query.getSingleResult();
         return user;
     }
+
+    public TblUserEntity findUser(String username){
+        Query query = entityManager.createQuery("select u from  TblUserEntity u where  u.username = :username");
+        query.setParameter("username", username);
+        TblUserEntity tblUserEntity = (TblUserEntity) query.getSingleResult();
+        return tblUserEntity;
+    }
 }

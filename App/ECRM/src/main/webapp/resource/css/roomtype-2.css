@@ -1,8 +1,8 @@
 .map {
     width: 100%;
-    height: 420px;
+    height: 400px;
     text-align: center;
-    overflow: hidden;
+    overflow: scroll;
     display: inline-block;
 }
 

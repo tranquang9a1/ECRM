@@ -51,7 +51,7 @@
                 </a>
             </li>
             <li class="active">
-                <a href="../HTML/Classroom.html">
+                <a href="/staff/classroom?ACTIVETAB=tab1">
                     <img src=""/>
                     <p>Phòng Học</p>
                 </a>
@@ -70,7 +70,7 @@
 
         <c:if test="${user.tblRoleByRoleId.name == 'Admin'}">
             <li>
-                <a href="../HTML/Account.html">
+                <a href="/admin/account?ACTIVETAB=tab1">
                     <img src=""/>
                     <p>Tài Khoản</p>
                 </a>
@@ -98,7 +98,7 @@
             </li>
         </c:if>
     </ul>
-    <%--<script>
-        document.getElementById("${tab}").className += " active";
+   <%-- <script>
+        document.getElementById("${tab}").className = "body-tab active";
     </script>--%>
 </div>

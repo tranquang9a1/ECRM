@@ -21,6 +21,7 @@
 </head>
 <body>
 <c:set var="user" value="${sessionScope.USER}"/>
+<c:set var="tab" value="${requestScope.ACTIVETAB}"/>
 
 <div class="contain-layout">
     <jsp:include flush="true" page="Header.jsp"/>
@@ -40,7 +41,7 @@
                 </ul>
             </div>
             <div class="content-tab">
-                <div id="tab1" class="body-tab active">
+                <div id="tab1" class="body-tab">
                     <div><input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')"
                                 value="Tạo phòng học"/></div>
                     <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
@@ -75,7 +76,7 @@
         <div class="footer-modal">
             <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-manageclassroom');clearthietbi()"
                    value="Thoát"/>
-            <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-manageclassroom','modal-1')"
+            <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-manageclassroom','modal-1'); "
                    value="Chỉnh Sửa"/>
         </div>
     </div>
@@ -110,14 +111,14 @@
     <div class="modal modal-small" id="modal-1">
         <div class="content-modal">
             <div class="header-modal title">
-                <p>Tạo Phòng</p>
+                <p id="classroomName">Tạo Phòng</p>
                 <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
             </div>
             <div class="body-modal">
                 <div class="group-control">
                     <div class="name">Số phòng</div>
                     <div class="control">
-                        <input type="text" name="RoomName" placeholder=".........................."/>
+                        <input id="roomNameId" type="text" value="" name="RoomName" placeholder=".........................."/>
                     </div>
                 </div>
                 <div class="group-control">
@@ -131,7 +132,7 @@
             <div class="footer-modal">
                 <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()"
                        value="Thoát"/>
-                <input type="button" class="btn btn-orange" onclick="conform(1); clearthietbi()" value="Thêm"/>
+                <input type="button" class="btn btn-orange" onclick="conform(1);" value="Thêm"/>
             </div>
         </div>
         <div class="black-background"></div>
@@ -317,12 +318,23 @@
                 getRoomTypeId(object);
                 document.getElementById('removeRoomtype').submit();
                 alert("Loai phong da xoa thanh cong!");
+                clearthietbi();
+                break;
+            case 4:
+                getClassroomName(object);
+                document.getElementById('removeClassroom').submit();
+                alert("Phong hoc da xoa thanh cong!");
+                clearthietbi();
                 break;
         }
     }
     function getRoomTypeId(roomtypeId) {
         document.getElementById('removeRoomtypeID').value = roomtypeId;
     }
+    function getClassroomName(removeClassroomName) {
+        document.getElementById('removeClassroomName').value = removeClassroomName;
+    }
+
     function clearthietbi() {
         $(".thietBi").remove();
         document.getElementById("loaiphong").innerHTML = "";
@@ -338,7 +350,10 @@
         }
         document.getElementsByClassName('roomtypename')[1].innerHTML = "Tao Loai Phong";
         document.getElementById('RoomtypeId').innerHTML = "";
+        document.getElementById('classroomName').innerHTML = "Tạo Phòng";
+        document.getElementById('roomNameId').value = "";
     }
+    document.getElementById("${tab}").className = "body-tab active";
 </script>
 </body>
 </html>

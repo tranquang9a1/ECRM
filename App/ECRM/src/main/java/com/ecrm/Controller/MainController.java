@@ -19,7 +19,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class HelloController {
+public class MainController {
     @Autowired
     UserDAOImpl userDAO;
     @Autowired
@@ -42,11 +42,10 @@ public class HelloController {
             session.setAttribute("USER", user);
 
             if (user.getTblRoleByRoleId().getName().equals("Admin")) {
-                return "home";
+                return "redirect:/admin/account?ACTIVETAB=tab1";
             }
             if (user.getTblRoleByRoleId().getName().equals("Staff")) {
-
-                return "redirect:/staff/classroom";
+                return "redirect:/staff/classroom?ACTIVETAB=tab1";
             }
             if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
                 return "redirect:/giang-vien/thong-bao";

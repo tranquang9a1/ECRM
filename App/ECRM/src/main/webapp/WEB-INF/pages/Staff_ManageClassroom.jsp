@@ -21,6 +21,9 @@
         <div class="room-type">
             <div>Loại phòng</div>
         </div>
+        <div class="statusS">
+            <div>Trạng thái</div>
+        </div>
         <div class="control">
             <div>Quản lý</div>
         </div>
@@ -36,6 +39,14 @@
                     </div>
                     <div class="room-type">
                         <div>Loại ${cl.roomTypeId}</div>
+                    </div>
+                    <div class="statusS">
+                    <c:if test="${ not cl.isAllInformation}">
+
+                            <a href="/staff/EquipmentInformation?ClassroomId=${cl.id}">Nhấn vào để cập nhật thiết
+                                bị!</a>
+
+                    </c:if>
                     </div>
                     <div class="control">
                         <div class="group-button">

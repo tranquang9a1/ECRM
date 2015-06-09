@@ -44,7 +44,7 @@
 }
 
 .small-table{
-    width: 400px;
+    width: 550px;
 }
 
 .small-table .room-number{
@@ -56,6 +56,9 @@
 }
 
 .small-table .control{
+    width: 150px;
+}
+.small-table .statusS{
     width: 150px;
 }
 .small-table .username{

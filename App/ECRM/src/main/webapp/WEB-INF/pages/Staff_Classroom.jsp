@@ -191,13 +191,15 @@
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Máy quạt</div>
                 <div class="control">
-                    <input class="check-box" type="checkbox" id="quat"/>
+                    <input class="check-box" type="checkbox" id="quat" onclick="checkFan();"/>
+                    Số lượng: <input disabled id="quantityFan" style="width: 20px">
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Máy lạnh</div>
                 <div class="control">
-                    <input class="check-box" type="checkbox" id="mayLanh"/>
+                    <input class="check-box" type="checkbox" id="mayLanh" onclick="checkMayLanh();"/>
+                    Số lượng: <input disabled id="quantityAir" style="width: 20px">
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
@@ -354,6 +356,25 @@
         document.getElementById('roomNameId').value = "";
     }
     document.getElementById("${tab}").className = "body-tab active";
+
+    function checkMayLanh(){
+        if(document.getElementById('mayLanh').checked){
+            document.getElementById('quantityAir').disabled = false;
+        }else{
+            document.getElementById('quantityAir').disabled = true;
+            document.getElementById('quantityAir').value = "";
+        }
+    }
+
+    function checkFan(){
+        if(document.getElementById('quat').checked){
+            document.getElementById('quantityFan').disabled = false;
+        }else{
+            document.getElementById('quantityFan').disabled = true;
+            document.getElementById('quantityFan').value = "";
+        }
+    }
+
 </script>
 </body>
 </html>

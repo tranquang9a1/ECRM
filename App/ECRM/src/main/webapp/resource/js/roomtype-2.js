@@ -212,7 +212,7 @@ function viewMap() {
         divMayLanh.id = 'idMayLanh';
         divMayLanh.className='equipment subThietBi mayLanh';
         document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
-        document.getElementById("AirConditioning").value = 1;
+        document.getElementById("AirConditioning").value = document.getElementById('quantityAir').value;
     }else{
         document.getElementById("AirConditioning").value = 0;
     }
@@ -222,7 +222,7 @@ function viewMap() {
         divQuat.id = 'idQuat';
         divQuat.className='equipment subThietBi quat';
         document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
-        document.getElementById("Fan").value = 1;
+        document.getElementById("Fan").value = document.getElementById('quantityFan').value;
     }else{
         document.getElementById("Fan").value = 0;
     }

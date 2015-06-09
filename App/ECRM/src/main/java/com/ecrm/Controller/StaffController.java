@@ -108,6 +108,7 @@ public class StaffController {
                 classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, 0, classroom.getCreateTime(),
                         new Timestamp(date.getTime()), false, false);
                 classroomDAO.merge(classroom);
+                insertEquipment(roomName);
             } else {
                 classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null, false, false);
                 classroomDAO.persist(classroom);

@@ -3,6 +3,7 @@ package com.ecrm.Entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by Htang on 6/5/2015.
@@ -11,7 +12,7 @@ import java.util.Collection;
 @Table(name = "tblReport", schema = "dbo", catalog = "ecrm")
 public class TblReportEntity {
     private int id;
-    private String userId;
+    private String username;
     private int classRoomId;
     private Timestamp createTime;
     private String evaluate;
@@ -21,7 +22,19 @@ public class TblReportEntity {
     private TblUserEntity tblUserByUserId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
+    public TblReportEntity(){}
+
+    public TblReportEntity(String username, int roomId, String evaluate, String description){
+        this.username = username;
+        this.classRoomId = roomId;
+        this.createTime = new Timestamp(new Date().getTime());
+        this.evaluate = evaluate;
+        this.description = description;
+        this.status = true;
+    }
+
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -32,13 +45,13 @@ public class TblReportEntity {
     }
 
     @Basic
-    @Column(name = "UserId")
-    public String getUserId() {
-        return userId;
+    @Column(name = "Username")
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Basic
@@ -101,7 +114,7 @@ public class TblReportEntity {
         if (id != that.id) return false;
         if (classRoomId != that.classRoomId) return false;
         if (status != that.status) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (evaluate != null ? !evaluate.equals(that.evaluate) : that.evaluate != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
@@ -112,7 +125,7 @@ public class TblReportEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + classRoomId;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (evaluate != null ? evaluate.hashCode() : 0);
@@ -132,7 +145,7 @@ public class TblReportEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "Username", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
     public TblUserEntity getTblUserByUserId() {
         return tblUserByUserId;
     }

@@ -11,7 +11,7 @@ import java.sql.Time;
 @Table(name = "tblSchedule", schema = "dbo", catalog = "ecrm")
 public class TblScheduleEntity {
     private int id;
-    private String userId;
+    private String username;
     private int classroomId;
     private int numberOfStudents;
     private String note;
@@ -33,13 +33,13 @@ public class TblScheduleEntity {
     }
 
     @Basic
-    @Column(name = "UserId")
-    public String getUserId() {
-        return userId;
+    @Column(name = "Username")
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Basic
@@ -123,7 +123,7 @@ public class TblScheduleEntity {
         if (classroomId != that.classroomId) return false;
         if (numberOfStudents != that.numberOfStudents) return false;
         if (slots != that.slots) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (timeFrom != null ? !timeFrom.equals(that.timeFrom) : that.timeFrom != null) return false;
         if (dateFrom != null ? !dateFrom.equals(that.dateFrom) : that.dateFrom != null) return false;
@@ -135,7 +135,7 @@ public class TblScheduleEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + classroomId;
         result = 31 * result + numberOfStudents;
         result = 31 * result + (note != null ? note.hashCode() : 0);
@@ -157,7 +157,7 @@ public class TblScheduleEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "Username", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
     public TblUserEntity getTblUserByUserId() {
         return tblUserByUserId;
     }

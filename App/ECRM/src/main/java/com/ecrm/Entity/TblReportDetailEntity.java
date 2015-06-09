@@ -20,6 +20,16 @@ public class TblReportDetailEntity {
     private TblEquipmentEntity tblEquipmentByEquipmentId;
     private TblReportEntity tblReportByReportId;
 
+    public TblReportDetailEntity(){}
+
+    public TblReportDetailEntity(int equipmentId, int reportId, String damagedLevel, String position){
+        this.equipmentId = equipmentId;
+        this.reportId = reportId;
+        this.damagedLevel = damagedLevel;
+        this.status = true;
+        this.position = position;
+    }
+
     @Id
     @Column(name = "EquipmentId")
     public int getEquipmentId() {

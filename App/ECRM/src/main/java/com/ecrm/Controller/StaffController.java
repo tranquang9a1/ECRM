@@ -41,7 +41,7 @@ public class StaffController {
 
     @RequestMapping(value = "classroom")
     public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
-        getAvailableRoom();
+        //getAvailableRoom();
         List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
         List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
         for (TblRoomTypeEntity roomTypeEntity : lstRoomType) {
@@ -136,37 +136,6 @@ public class StaffController {
         return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
-    //Insert Equipment
-    public void insertDamagedEquipment(int classroomId, String positon) {
-        TblEquipmentEntity e = equipmentDAO.findEquipmentHavePosition(classroomId, positon);
-        if (e == null) {
-            if (positon.equals("[1]")) {
-                e = new TblEquipmentEntity(1, classroomId, positon, "Damaged");
-            }
-            if (positon.equals("[2]")) {
-                e = new TblEquipmentEntity(2, classroomId, positon, "Damaged");
-            }
-            if (positon.equals("[3]")) {
-                e = new TblEquipmentEntity(3, classroomId, positon, "Damaged");
-            }
-            if (positon.equals("[4]")) {
-                e = new TblEquipmentEntity(4, classroomId, positon, "Damaged");
-            }
-            if (positon.equals("[5]")) {
-                e = new TblEquipmentEntity(5, classroomId, positon, "Damaged");
-            }
-            if (positon.equals("[6]")) {
-                e = new TblEquipmentEntity(6, classroomId, positon, "Damaged");
-            }
-            if (positon.length() == 5) {
-                e = new TblEquipmentEntity(7, classroomId, positon, "Damaged");
-            } else {
-                e = new TblEquipmentEntity(8, classroomId, positon, "Damaged");
-
-            }
-        }
-    }
-
     public String getAvailableRoom(){
         TblClassroomEntity tblClassroomEntity = classroomDAO.find(1022);
         int classroomId = tblClassroomEntity.getId();
@@ -200,6 +169,4 @@ public class StaffController {
 
         return "";
     }
-
-
 }

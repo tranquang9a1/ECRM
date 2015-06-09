@@ -12,6 +12,8 @@ public class TblEquipmentEntity {
     private int id;
     private int categoryId;
     private int classroomId;
+    private String name;
+    private String serialNumber;
     private String position;
     private int timeRemain;
     private String status;
@@ -51,6 +53,26 @@ public class TblEquipmentEntity {
     }
 
     @Basic
+    @Column(name = "Name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Basic
+    @Column(name = "SerialNumber")
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    @Basic
     @Column(name = "Position")
     public String getPosition() {
         return position;
@@ -87,6 +109,8 @@ public class TblEquipmentEntity {
         if (categoryId != that.categoryId) return false;
         if (classroomId != that.classroomId) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null) return false;
         if (timeRemain != that.timeRemain) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
@@ -99,6 +123,8 @@ public class TblEquipmentEntity {
         result = 31 * result + categoryId;
         result = 31 * result + classroomId;
         result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (serialNumber != null ? serialNumber.hashCode() : 0);
         result = 31 * result + timeRemain;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;

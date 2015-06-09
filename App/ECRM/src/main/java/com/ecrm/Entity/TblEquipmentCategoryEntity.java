@@ -11,7 +11,6 @@ import java.util.Collection;
 public class TblEquipmentCategoryEntity {
     private int id;
     private String name;
-    private int usingTime;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
 
     @Id
@@ -34,15 +33,6 @@ public class TblEquipmentCategoryEntity {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "UsingTime")
-    public int getUsingTime() {
-        return usingTime;
-    }
-
-    public void setUsingTime(int usingTime) {
-        this.usingTime = usingTime;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -52,7 +42,6 @@ public class TblEquipmentCategoryEntity {
         TblEquipmentCategoryEntity that = (TblEquipmentCategoryEntity) o;
 
         if (id != that.id) return false;
-        if (usingTime != that.usingTime) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -62,7 +51,6 @@ public class TblEquipmentCategoryEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + usingTime;
         return result;
     }
 

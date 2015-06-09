@@ -102,7 +102,7 @@ public class StaffController {
             if (classroom != null) {
                 Collection<TblEquipmentEntity> tblEquipmentEntities = classroom.getTblEquipmentsById();
                 for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                    tblEquipmentEntity.setClassroomId(0);
+                    tblEquipmentEntity.setClassroomId(null);
                     equipmentDAO.merge(tblEquipmentEntity);
                 }
                 classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, 0, classroom.getCreateTime(),
@@ -163,7 +163,7 @@ public class StaffController {
         return "Staff_InformationEquipment";
     }
 
-    
+
 
     public void insertEquipment(String roomName) {
         TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName);
@@ -199,7 +199,7 @@ public class StaffController {
                 classroomDAO.merge(tblClassroomEntity);
                 Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
                 for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                    tblEquipmentEntity.setClassroomId(0);
+                    tblEquipmentEntity.setClassroomId(null);
                     equipmentDAO.merge(tblEquipmentEntity);
                 }
             }
@@ -218,7 +218,7 @@ public class StaffController {
         classroomDAO.merge(classroomEntity);
         Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
         for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            tblEquipmentEntity.setClassroomId(0);
+            tblEquipmentEntity.setClassroomId(null);
             equipmentDAO.merge(tblEquipmentEntity);
         }
         return "redirect:/staff/classroom?ACTIVETAB=tab1";

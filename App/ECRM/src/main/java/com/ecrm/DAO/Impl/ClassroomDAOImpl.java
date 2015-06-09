@@ -6,7 +6,7 @@ import com.ecrm.Entity.TblClassroomEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Htang on 5/29/2015.
@@ -17,11 +17,36 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
         super(TblClassroomEntity.class);
     }
 
-    public TblClassroomEntity getClassroomByName(String name){
-        Query q= entityManager.createQuery("select c from TblClassroomEntity c where c.name = :name");
-        q.setParameter("name", name);
-        TblClassroomEntity c = (TblClassroomEntity) q.getSingleResult();
-        return c;
+    @Override
+    public int getId(String name) {
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblClassroomEntity c " +
+                "WHERE c.name = :name");
+        query.setParameter("name", name);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()){
+            TblClassroomEntity room = (TblClassroomEntity)queryResult.get(0);
+            return room.getId();
+        }
+
+        return 0;
     }
 
+    @Override
+    public TblClassroomEntity getClassroomByName(String name) {
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblClassroomEntity c " +
+                "WHERE c.name = :name");
+        query.setParameter("name", name);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()){
+            return (TblClassroomEntity)queryResult.get(0);
+        }
+
+        return null;
+    }
 }

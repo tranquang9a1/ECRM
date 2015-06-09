@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -36,10 +37,10 @@
 
         <div class="clear"></div>
     </div>
-    <form action="" method="get">
+    <form action="" id="information">
         <c:if test="${not empty projector }">
             Chọn projector trong kho:
-            <select name="">
+            <select name="projector">
                 <option>---</option>
                 <c:forEach items="${avai_projector}" var="p">
                     <option>${p.name}-${p.serialNumber}</option>
@@ -49,7 +50,7 @@
         <br/>
         <c:if test="${not empty tivi }">
             Chọn tivi trong kho:
-            <select>
+            <select name="tivi">
                 <option>---</option>
                 <c:forEach items="${avai_tivi}" var="t">
                     <option>${t.name}-${t.serialNumber}</option>
@@ -60,23 +61,33 @@
         <c:if test="${not empty air }">
             <c:forEach var="as" items="${air}" varStatus="i">
                 Chọn may lanh thu ${i.count} trong kho:
-                <select>
+                <select name="air${i.count}" id="air${i.count}">
                     <option>---</option>
                     <c:forEach items="${avai_air}" var="a">
                         <option>${a.name}-${a.serialNumber}</option>
                     </c:forEach>
                 </select>
-
                 <br/>
             </c:forEach>
         </c:if>
-        <button type="submit">OK</button>
+        <input type="hidden" value="" id="airConditioning" name="airConditioning"/>
+
     </form>
-</div>
+    <button onclick="clicks(${fn:length(air)});">OK</button>
 </div>
 
 <script src="../../resource/js/script.js"></script>
-
+<script>
+    function clicks(size) {
+        var information = "";
+        for (var i = 1; i <= size; i++) {
+            var air = 'air' + i;
+            information += document.getElementById(air).value.toString()+" ";
+        }
+        document.getElementById("airConditioning").value= information;
+        /*document.getElementById('information').submit();*/
+    }
+</script>
 
 </body>
 </html>

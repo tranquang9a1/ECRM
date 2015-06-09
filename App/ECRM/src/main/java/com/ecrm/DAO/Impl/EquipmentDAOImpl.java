@@ -20,6 +20,12 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         super(TblEquipmentEntity.class);
     }
 
+    public List<TblEquipmentEntity> findAllE(){
+        Query q = entityManager.createQuery("select e from TblEquipmentEntity e");
+        List<TblEquipmentEntity> tblEquipmentEntities = q.getResultList();
+        return tblEquipmentEntities;
+    }
+
     @Override
     public List<TblEquipmentEntity> getEquipmentsInClassroom(int roomId) {
 
@@ -58,7 +64,7 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         return null;
     }
 
-    @Override
+    /*@Override
     public boolean insertDamagedEquipment(int classroomId, String position) {
         TblEquipmentEntity e = findEquipmentHavePosition(classroomId, position);
         if (e == null) {
@@ -87,5 +93,5 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
             }
         }
         return false;
-    }
+    }*/
 }

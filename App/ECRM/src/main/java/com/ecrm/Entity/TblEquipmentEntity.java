@@ -11,18 +11,17 @@ import java.util.Collection;
 public class TblEquipmentEntity {
     private int id;
     private int categoryId;
-    private int classroomId;
+    private Integer classroomId;
+    private String position;
+    private Integer timeRemain;
     private String name;
     private String serialNumber;
-    private String position;
-    private int timeRemain;
     private String status;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
     @Id
-    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -44,12 +43,32 @@ public class TblEquipmentEntity {
 
     @Basic
     @Column(name = "ClassroomId")
-    public int getClassroomId() {
+    public Integer getClassroomId() {
         return classroomId;
     }
 
-    public void setClassroomId(int classroomId) {
+    public void setClassroomId(Integer classroomId) {
         this.classroomId = classroomId;
+    }
+
+    @Basic
+    @Column(name = "Position")
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    @Basic
+    @Column(name = "TimeRemain")
+    public Integer getTimeRemain() {
+        return timeRemain;
+    }
+
+    public void setTimeRemain(Integer timeRemain) {
+        this.timeRemain = timeRemain;
     }
 
     @Basic
@@ -73,22 +92,6 @@ public class TblEquipmentEntity {
     }
 
     @Basic
-    @Column(name = "Position")
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    @Basic
-    @Column(name = "TimeRemain")
-    public int getTimeRemain(){ return timeRemain;}
-
-    public void setTimeRemain(int timeRemain) { this.timeRemain = timeRemain; }
-
-    @Basic
     @Column(name = "Status")
     public String getStatus() {
         return status;
@@ -107,11 +110,11 @@ public class TblEquipmentEntity {
 
         if (id != that.id) return false;
         if (categoryId != that.categoryId) return false;
-        if (classroomId != that.classroomId) return false;
+        if (classroomId != null ? !classroomId.equals(that.classroomId) : that.classroomId != null) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
+        if (timeRemain != null ? !timeRemain.equals(that.timeRemain) : that.timeRemain != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null) return false;
-        if (timeRemain != that.timeRemain) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
@@ -121,17 +124,17 @@ public class TblEquipmentEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + categoryId;
-        result = 31 * result + classroomId;
+        result = 31 * result + (classroomId != null ? classroomId.hashCode() : 0);
         result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + (timeRemain != null ? timeRemain.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (serialNumber != null ? serialNumber.hashCode() : 0);
-        result = 31 * result + timeRemain;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "ClassroomId", referencedColumnName = "Id", insertable = false, updatable = false)
     public TblClassroomEntity getTblClassroomByClassroomId() {
         return tblClassroomByClassroomId;
     }
@@ -162,10 +165,13 @@ public class TblEquipmentEntity {
     public TblEquipmentEntity() {
     }
 
-    public TblEquipmentEntity(int categoryId, int classroomId, String position, String status) {
+    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position, int timeRemain, String status) {
         this.categoryId = categoryId;
         this.classroomId = classroomId;
+        this.name = name;
+        this.serialNumber = serialNumber;
         this.position = position;
+        this.timeRemain = timeRemain;
         this.status = status;
     }
 }

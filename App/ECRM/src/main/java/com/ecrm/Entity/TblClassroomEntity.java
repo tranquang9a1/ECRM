@@ -17,6 +17,7 @@ public class TblClassroomEntity {
     private Timestamp createTime;
     private Timestamp updateTime;
     private Boolean isDelete;
+    private Boolean isAllInformation;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblReportEntity> tblReportsById;
@@ -93,6 +94,16 @@ public class TblClassroomEntity {
         this.isDelete = isDelete;
     }
 
+    @Basic
+    @Column(name = "IsAllInformation")
+    public Boolean getIsAllInformation() {
+        return isAllInformation;
+    }
+
+    public void setIsAllInformation(Boolean isAllInformation) {
+        this.isAllInformation = isAllInformation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -133,7 +144,7 @@ public class TblClassroomEntity {
         this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
     }
 
-    @OneToMany(mappedBy = "tblClassroomByClassroomId")
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "tblClassroomByClassroomId")
     public Collection<TblEquipmentEntity> getTblEquipmentsById() {
         return tblEquipmentsById;
     }
@@ -164,7 +175,7 @@ public class TblClassroomEntity {
     }
 
     public TblClassroomEntity(int id, Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
-                              Timestamp updateTime, Boolean isDelete) {
+                              Timestamp updateTime, Boolean isDelete, Boolean isAllInformation) {
         this.id = id;
         this.roomTypeId = roomTypeId;
         this.name = name;
@@ -172,5 +183,6 @@ public class TblClassroomEntity {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.isDelete = isDelete;
+        this.isAllInformation = getIsAllInformation();
     }
 }

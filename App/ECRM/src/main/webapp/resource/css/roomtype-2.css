@@ -58,7 +58,7 @@
 
 .ban {
     height: 30px;
-    background-color: brown;
+    background-color: rgb(213, 162, 125);
     border-radius: 5px;
 }
 
@@ -80,7 +80,7 @@
     height: 30px;
     margin-bottom: 4px;
     width: 30px;
-    background-color: saddlebrown;
+    background-color: rgb(213, 162, 125);
     border-radius: 5px;
 }
 
@@ -171,6 +171,18 @@
     background-repeat: no-repeat;
 }
 
+.equipment{
+    cursor: pointer;
+}
+
 .equipment.choose{
-    background-color: #5cb85c;
+    background-color: dodgerblue;
+    border-radius: 5px;
+}
+
+.damaged{
+    background-color: rgb(231, 41, 41)!important;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }

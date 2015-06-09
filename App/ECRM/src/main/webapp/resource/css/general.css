@@ -211,9 +211,7 @@
     background-color: #083357;
 }
 
-.group-button {
-
-}
+.group-button { }
 
 .group-button .btn{
     height: 15px!important;
@@ -239,6 +237,10 @@
     background-color: #5bc0de;
 }
 
+.btn.disable{
+    background-color: #507084 !important;
+    cursor: default;
+}
 
 /*CONTROL*/
 .group-control{
@@ -254,6 +256,10 @@
 .group-control.line{
     padding: 15px 0 0;
     border-top: 1px solid #ccc;
+}
+
+.group-control.hidden {
+    display: none;
 }
 
 .group-control .btn{
@@ -464,7 +470,7 @@ input[type='checkbox'] {
 }
 
 .conform .content-conform .control-button{
-    width: 170px;
+    width: 185px;
     margin: 25px auto;
 }
 
@@ -487,4 +493,24 @@ input[type='checkbox'] {
     z-index: 20;
     top: 0;
     left: 0;
+}
+
+/*LABEL*/
+.label {
+    margin: 4px 0;
+    padding: 4px 10px;
+    line-height: 19px;
+    color: white;
+}
+
+.label.red {
+    background-color: #d9534f;
+}
+
+.label.green {
+    background-color: #5cb85c;
+}
+
+.label.blue {
+    background-color: #5bc0de;
 }

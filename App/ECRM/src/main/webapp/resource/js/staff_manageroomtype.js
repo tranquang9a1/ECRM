@@ -63,6 +63,7 @@ function showRoomtypeMapByDropDownList(mapId, vrows, sDayNgang, sChoNgoi, mayLan
 
     generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi);
 }
+
 function generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi) {
 
     var array = [];

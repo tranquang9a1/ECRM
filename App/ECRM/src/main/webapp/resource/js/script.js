@@ -26,12 +26,15 @@ function showModal(show, modal1, modal2) {
     var bgA = document.getElementById(modal1).getElementsByClassName("black-background")[0];
     var modalA = document.getElementById(modal1).getElementsByClassName("content-modal")[0];
 
-    if(show == 0) {
+    if (show == 0) {
         bgA.className = "black-background";
         modalA.className = "content-modal";
-    } else if(show == 1) {
-        bgA.className += " active";
-        modalA.className += " active";
+    } else if (show == 1) {
+        var lock = document.getElementById(modal1).getAttribute("data-lock");
+        if(lock != "true") {
+            bgA.className += " active";
+            modalA.className += " active";
+        }
     } else {
         bgA.className = "black-background";
         modalA.className = "content-modal";

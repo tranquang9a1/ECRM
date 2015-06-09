@@ -1,13 +1,15 @@
 .notify-active {
     padding: 9px 14px;
     margin-bottom: 14px;
-    background-color: #f7f7f9;
+    background-color: #f7f7f7;
     border: 1px solid #e1e1e8;
     cursor: pointer;
 }
 
 .notify-active:hover {
     font-weight: bold;
+    border: 1px solid #777;
+    background-color: rgb(214, 223, 252);
 }
 
 .notify-active p{
@@ -15,7 +17,7 @@
     margin: 0;
 }
 
-.notify-active .equipment{
+.notify-active .room{
     width: 150px;
 }
 
@@ -107,27 +109,6 @@
     width: 140px;
 }
 
-
-/*.body-content .table .room{*/
-    /*width: 10%;*/
-/*}*/
-
-/*.body-content .table .equipment{*/
-    /*width: 25%;*/
-/*}*/
-
-/*.body-content .table .report-time{*/
-    /*width: 20%;*/
-/*}*/
-
-/*.body-content .table .staff{*/
-    /*width: 25%;*/
-/*}*/
-
-/*.body-content .table .control{*/
-    /*width: 20%;*/
-/*}*/
-
-/*#history-map .map{*/
-    /*height: 100px;*/
- /*}*/
+#report-history .map{
+    height: 390px
+}

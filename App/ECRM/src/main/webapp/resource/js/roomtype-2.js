@@ -1,14 +1,11 @@
 /**
  * Created by ChiDNMSE60717 on 5/26/2015.
  */
-var listEquiment = [];
 var soDayNgang = [];
 var soChoNgoi = [];
 var o = new Object();
 var array = [];
 var slots = 0;
-
-
 
 function createDetailMap(horizontalRows,noSlotsEachRows) {
     var colElement = document.getElementById("vrow");
@@ -264,10 +261,6 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     var chieuDaiSubDiv = 0;
     var classroommap = document.getElementById(mapId);
 
-    //while (classroommap.hasChildNodes()) {
-    //    classroommap.removeChild(classroommap.lastChild);
-    //}
-
     classroommap.innerHTML ="";
 
     var container = document.createElement('div');
@@ -288,9 +281,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     divBang.className = 'bang';
     div.appendChild(divBang);
     var divScreen = document.createElement('div');
-    divScreen.className = 'equipment board';
-    divScreen.setAttribute("data-equipment","Bảng");
-    divScreen.setAttribute("data-position","[0]");
+    divScreen.className = 'board';
     divScreen.innerHTML = 'Bảng';
     divBang.appendChild(divScreen);
     for (var i = 0; i < vrows; i++) {
@@ -320,15 +311,11 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
                 if(i == 0) {
                     var divBanGheGV = document.createElement('div');
                     var divBanGV = document.createElement('div');
-                    divBanGV.className = 'equipment banGV';
-                    divBanGV.setAttribute('data-equipment', 'Bàn');
-                    divBanGV.setAttribute('data-position', '[' + i + ',' + j + ']');
+                    divBanGV.className = 'banGV';
                     var divDayGheGV = document.createElement('div');
                     divDayGheGV.className = 'divDayGhe';
                     var divGheGV = document.createElement('div');
-                    divGheGV.className = 'equipment ghe';
-                    divGheGV.setAttribute('data-equipment', 'Ghế');
-                    divGheGV.setAttribute('data-position', '[' + i + ',' + j + ',0]');
+                    divGheGV.className = 'ghe';
                     divDay.appendChild(divBanGheGV);
                     divBanGheGV.appendChild(divDayGheGV);
                     divBanGheGV.appendChild(divBanGV);
@@ -342,9 +329,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
                 chieuDaiBan = 0;
                 var divBanGhe = document.createElement('div');
                 var divBan = document.createElement('div');
-                divBan.className = 'equipment ban';
-                divBan.setAttribute('data-equipment','Bàn');
-                divBan.setAttribute('data-position','[' + i + ',' + j + ']');
+                divBan.className = 'ban';
                 var divDayGhe = document.createElement('div');
                 divDayGhe.className = 'divDayGhe';
                 divDay.appendChild(divBanGhe);
@@ -353,9 +338,7 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
                 //chay vong for so cho ngoi moi ban
                 for (var k = 0; k < array[i].soChoNgoi; k++) {
                     var divGhe = document.createElement('div');
-                    divGhe.className = 'equipment ghe';
-                    divGhe.setAttribute('data-equipment','Ghế');
-                    divGhe.setAttribute('data-position','[' + i + ',' + j + ',' + k + ']');
+                    divGhe.className = 'ghe';
                     divDayGhe.appendChild(divGhe);
                     chieuDaiBan += 34;
                 }
@@ -376,62 +359,39 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     //projector
     if(projector>0){
         var divProjector = document.createElement('div');
-        divProjector.className = 'equipment subThietBi projector';
-        divProjector.setAttribute('data-equipment','Máy chiếu');
-        divProjector.setAttribute('data-position','[1]');
+        divProjector.className = 'subThietBi projector';
         divT.appendChild(divProjector);
     }
 
     //tivi
     if(tivi>0){
         var divTivi = document.createElement('div');
-        divTivi.className = 'equipment subThietBi tivi';
-        divTivi.setAttribute('data-equipment','Tivi');
-        divTivi.setAttribute('data-position','[2]');
+        divTivi.className = 'subThietBi tivi';
         divT.appendChild(divTivi);
     }
 
     //may lanh
     if(mayLanh>0){
         var divMayLanh = document.createElement('div');
-        divMayLanh.className = 'equipment subThietBi mayLanh';
-        divMayLanh.setAttribute('data-equipment','Máy lạnh');
-        divMayLanh.setAttribute('data-position','[3]');
+        divMayLanh.className = 'subThietBi mayLanh';
         divT.appendChild(divMayLanh);
     }
 
     //quat
     if(quat>0){
         var divQuat = document.createElement('div');
-        divQuat.className = 'equipment subThietBi quat';
-        divQuat.setAttribute('data-equipment','Quạt');
-        divQuat.setAttribute('data-position','[4]');
+        divQuat.className = 'subThietBi quat';
         divT.appendChild(divQuat);
     }
 
     //loa
     if(loa>0){
         var divLoa = document.createElement('div');
-        divLoa.className = 'equipment subThietBi loa';
-        divLoa.setAttribute('data-equipment','Loa');
-        divLoa.setAttribute('data-position','[5]');
+        divLoa.className = 'subThietBi loa';
         divT.appendChild(divLoa);
     }
 }
 
-function setChooseEquipment(){
-    $(".equipment").click(function(){
-        if($(this).attr("data-choose") === "true"){
-            $(this).removeClass("choose");
-            $(this).removeAttr("data-choose");
-            document.getElementById("list-equipment").removeChild(document.getElementById("equipment-" + $(this).attr("data-position")));
-        } else {
-            $(this).addClass("choose");
-            $(this).attr("data-choose", "true");
-            document.getElementById("list-equipment").innerHTML += "<span id='equipment-" + $(this).attr("data-position") + "'>" + $(this).attr("data-equipment") + $(this).attr("data-position") + " </span>";
-        }
-    });
-}
 $("#selectBox").change(function(){
     var selectedValue = $(this).find(":selected").data("value");
     alert(selectedValue.id);

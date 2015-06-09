@@ -136,37 +136,77 @@ public class StaffController {
         return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
-    public String getAvailableRoom(){
+    public String getAvailableRoom() {
         TblClassroomEntity tblClassroomEntity = classroomDAO.find(1022);
         int classroomId = tblClassroomEntity.getId();
-        TblScheduleEntity tblScheduleEntity = scheduleDAO.find(1);
+        TblScheduleEntity tblScheduleEntity = scheduleDAO.find(3);
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
-        Date date = tblScheduleEntity.getDateFrom();
+        int slots = tblScheduleEntity.getSlots();
+        Date dateFrom = tblScheduleEntity.getDateFrom();
         Time timeFrom = tblScheduleEntity.getTimeFrom();
-        String time = timeFrom.toString();
-        System.out.println("Time from:"+time);
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        Date d = null;
-        try {
-            d = df.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
+        String datetime = dateFrom.toString() + " " + timeFrom.toString();
+        List<Date> time = timeFraction(datetime, slots);
+        Date now = new Date();
 
-        cal.add(Calendar.MINUTE, tblScheduleEntity.getSlots()*45);
-        Date timeTO = cal.getTime();
-        System.out.println("TIme to: "+ df.format(timeTO));
-
-        Collection<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
-        for(TblClassroomEntity classroomEntity : tblClassroomEntities){
-            int slots = classroomEntity.getTblRoomTypeByRoomTypeId().getSlots();
-            if(slots<currentSlots){
-                tblClassroomEntities.remove(classroomEntity);
+        for(int i=0; i<time.size(); i++){
+            long from = (now.getTime() - time.get(i).getTime())/60000;
+            if(from >= 70){
+                time.remove(i);
             }
         }
 
-        return "";
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
+        for (int i = 0; i < tblClassroomEntities.size(); i++) {
+            int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
+            if (numberOfStudent < currentSlots) {
+                tblClassroomEntities.remove(i);
+            }
+        }
+
+        for (int i = 0; i < tblClassroomEntities.size(); i++) {
+            Collection<TblScheduleEntity> tblScheduleEntities = tblClassroomEntities.get(i).getTblSchedulesById();
+            if (tblScheduleEntities != null) {
+                for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
+                    if (tblScheduleEntity1.getDateFrom().toString().equals(dateFrom.toString())) {
+                        if (tblScheduleEntity1.getTimeFrom().toString().equals(timeFrom.toString())) {
+                            if (tblScheduleEntity1.getSlots() == slots) {
+                                tblClassroomEntities.remove(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        String classroom = "";
+        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+            classroom += classroomEntity.getName();
+        }
+        System.out.println("--------Classroom: " + classroom);
+        return classroom;
+    }
+
+    public List<Date> timeFraction(String datetime, int slots) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date timeFrom1 = null;
+        try {
+            timeFrom1 = df.parse(datetime);
+        } catch (ParseException e) {
+            System.out.println("erroe!!!!");
+        }
+
+        List<Date> time = new ArrayList<Date>();
+        df.format(timeFrom1);
+        time.add(timeFrom1);
+        for (int i = 1; i <= slots; i++) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(timeFrom1);
+            cal.add(Calendar.MINUTE, i * 90);
+            Date t = cal.getTime();
+            df.format(t);
+            time.add(t);
+        }
+        return time;
     }
 }

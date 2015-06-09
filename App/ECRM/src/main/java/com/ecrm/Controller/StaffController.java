@@ -119,6 +119,11 @@ public class StaffController {
             for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
                 tblClassroomEntity.setIsDelete(true);
                 classroomDAO.merge(tblClassroomEntity);
+                Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
+                for(TblEquipmentEntity tblEquipmentEntity:tblEquipmentEntities){
+                    tblEquipmentEntity.setClassroomId(0);
+                    equipmentDAO.merge(tblEquipmentEntity);
+                }
             }
         }
         roomTypeEntity.setIsDelete(true);
@@ -133,6 +138,11 @@ public class StaffController {
         TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
         classroomEntity.setIsDelete(true);
         classroomDAO.merge(classroomEntity);
+        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+        for(TblEquipmentEntity tblEquipmentEntity:tblEquipmentEntities){
+            tblEquipmentEntity.setClassroomId(0);
+            equipmentDAO.merge(tblEquipmentEntity);
+        }
         return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 

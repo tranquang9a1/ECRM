@@ -1,5 +1,8 @@
 package com.ecrm.Entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -143,8 +146,8 @@ public class TblClassroomEntity {
     public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeByRoomTypeId) {
         this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
     }
-
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "tblClassroomByClassroomId")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "tblClassroomByClassroomId")
     public Collection<TblEquipmentEntity> getTblEquipmentsById() {
         return tblEquipmentsById;
     }
@@ -152,7 +155,7 @@ public class TblClassroomEntity {
     public void setTblEquipmentsById(Collection<TblEquipmentEntity> tblEquipmentsById) {
         this.tblEquipmentsById = tblEquipmentsById;
     }
-
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassRoomId")
     public Collection<TblReportEntity> getTblReportsById() {
         return tblReportsById;
@@ -161,7 +164,7 @@ public class TblClassroomEntity {
     public void setTblReportsById(Collection<TblReportEntity> tblReportsById) {
         this.tblReportsById = tblReportsById;
     }
-
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassroomId")
     public Collection<TblScheduleEntity> getTblSchedulesById() {
         return tblSchedulesById;

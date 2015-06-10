@@ -41,7 +41,6 @@ public class StaffController {
 
     @RequestMapping(value = "classroom")
     public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
-        //getAvailableRoom();
         List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
         List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
         for (TblRoomTypeEntity roomTypeEntity : lstRoomType) {
@@ -97,7 +96,27 @@ public class StaffController {
         }
         return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
-
+    //remove roomtype
+    @RequestMapping(value = "removeRoomType")
+    @Transactional
+    public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
+        TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
+        Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
+        if (tblClassroomEntities.size() > 0) {
+            for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
+                tblClassroomEntity.setIsDelete(true);
+                classroomDAO.merge(tblClassroomEntity);
+                Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
+                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                    tblEquipmentEntity.setClassroomId(null);
+                    equipmentDAO.merge(tblEquipmentEntity);
+                }
+            }
+        }
+        roomTypeEntity.setIsDelete(true);
+        roomTypeDAO.merge(roomTypeEntity);
+        return "redirect:/staff/classroom?ACTIVETAB=tab2";
+    }
     //create classroom
     @RequestMapping(value = "createClassroom")
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
@@ -123,7 +142,22 @@ public class StaffController {
         }
         return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
+    //remove classroom
+    @RequestMapping(value = "removeClassroom")
+    @Transactional
+    public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
+        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
+        classroomEntity.setIsDelete(true);
+        classroomDAO.merge(classroomEntity);
+        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+            tblEquipmentEntity.setClassroomId(null);
+            equipmentDAO.merge(tblEquipmentEntity);
+        }
+        return "redirect:/staff/classroom?ACTIVETAB=tab1";
+    }
 
+    //Tạo Trang cập nhật những equipment chưa có thông tin
     @RequestMapping(value = "EquipmentInformation")
     public String createEquipmentInformation(HttpServletRequest request, @RequestParam("ClassroomId") int classroomId) {
         TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
@@ -171,8 +205,7 @@ public class StaffController {
         return "Staff_InformationEquipment";
     }
 
-
-    //Insert equipment with no information
+    //Insert những equipment chưa có thông tin
     public void insertEquipment(String roomName) {
         TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName);
         TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity();
@@ -194,7 +227,7 @@ public class StaffController {
         }
     }
 
-    //Update information of equiment have using time
+    //Update thông tin cho những equipment chưa có thông tin
     @Transactional
     @RequestMapping(value = "updateInformation")
     public String updateInformation(HttpServletRequest request, @RequestParam("projector") int projector,
@@ -229,82 +262,52 @@ public class StaffController {
         }
     }
 
-
-    //remove roomtype
-    @RequestMapping(value = "removeRoomType")
-    @Transactional
-    public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
-        TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
-        Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
-        if (tblClassroomEntities.size() > 0) {
-            for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
-                tblClassroomEntity.setIsDelete(true);
-                classroomDAO.merge(tblClassroomEntity);
-                Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
-                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                    tblEquipmentEntity.setClassroomId(null);
-                    equipmentDAO.merge(tblEquipmentEntity);
-                }
-            }
-        }
-        roomTypeEntity.setIsDelete(true);
-        roomTypeDAO.merge(roomTypeEntity);
-        return "redirect:/staff/classroom?ACTIVETAB=tab2";
-    }
-
-    //remove classroom
-    @RequestMapping(value = "removeClassroom")
-    @Transactional
-    public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
-        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
-        classroomEntity.setIsDelete(true);
-        classroomDAO.merge(classroomEntity);
-        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            tblEquipmentEntity.setClassroomId(null);
-            equipmentDAO.merge(tblEquipmentEntity);
-        }
-        return "redirect:/staff/classroom?ACTIVETAB=tab1";
-    }
-
-    public String getAvailableRoom() {
-        TblClassroomEntity tblClassroomEntity = classroomDAO.find(1022);
-        int classroomId = tblClassroomEntity.getId();
-        TblScheduleEntity tblScheduleEntity = scheduleDAO.find(3);
+    //Tìm phòng trống
+    public List<TblClassroomEntity> getAvailableRoom(TblScheduleEntity tblScheduleEntity) {
+        //lay so cho ngoi
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
+        //lay so tiet hoc
         int slots = tblScheduleEntity.getSlots();
+        //lay thoi gian voi ngay hien tai
         Date dateFrom = tblScheduleEntity.getDateFrom();
         Time timeFrom = tblScheduleEntity.getTimeFrom();
         String datetime = dateFrom.toString() + " " + timeFrom.toString();
+        //phân rã giờ theo số tiết, mỗi tiết 90 phút, trả về List
         List<Date> time = timeFraction(datetime, slots);
+        //Kiểm trả thời điểm hiện tại
+        //So sánh với từng múi giờ nếu từ thời điểm hiện tại đến cuối tiết ít hơn 20 phút thì bỏ
+        //Nếu nhiều hơn 20p thì vẫn lấy.
         Date now = new Date();
-
         for (int i = 0; i < time.size(); i++) {
             long from = (now.getTime() - time.get(i).getTime()) / 60000;
             if (from >= 70) {
                 time.remove(i);
             }
         }
-
+        //Tìm những phòng có chỗ ngồi phù hợp
+        List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
         for (int i = 0; i < tblClassroomEntities.size(); i++) {
             int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
-            if (numberOfStudent < currentSlots) {
-                tblClassroomEntities.remove(i);
+            if (numberOfStudent >= currentSlots) {
+                fitClassroom.add(tblClassroomEntities.get(i));
             }
         }
 
-        for (int i = 0; i < tblClassroomEntities.size(); i++) {
-            Collection<TblScheduleEntity> tblScheduleEntities = tblClassroomEntities.get(i).getTblSchedulesById();
+        tblClassroomEntities.clear();
+
+        //So sánh ngày giờ với những schedule khác
+        for (int i = 0; i < fitClassroom.size(); i++) {
+            Collection<TblScheduleEntity> tblScheduleEntities = fitClassroom.get(i).getTblSchedulesById();
             if (tblScheduleEntities != null) {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                     //So sanh ngay
                     if (tblScheduleEntity1.getDateFrom().toString().equals(dateFrom.toString())) {
                         //So sanh gio
-                        List<Date> listTimeToCompare = timeFraction(tblScheduleEntity1.getTimeFrom().toString(),
-                                tblScheduleEntity1.getSlots());
+                        String t = tblScheduleEntity1.getDateFrom().toString()+" "+tblScheduleEntity1.getTimeFrom().toString();
+                        List<Date> listTimeToCompare = timeFraction(t, tblScheduleEntity1.getSlots());
                         if(timeComparation(time, listTimeToCompare)){
-                            tblClassroomEntities.remove(i);
+                            fitClassroom.remove(i);
                         }
                     }
                 }
@@ -313,13 +316,14 @@ public class StaffController {
 
 
         String classroom = "";
-        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+        for (TblClassroomEntity classroomEntity : fitClassroom) {
             classroom += classroomEntity.getName();
         }
         System.out.println("--------Classroom: " + classroom);
-        return classroom;
+        return fitClassroom;
     }
 
+    //Phân rã thời gian theo tiết học
     public List<Date> timeFraction(String datetime, int slots) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date timeFrom1 = null;
@@ -343,6 +347,7 @@ public class StaffController {
         return time;
     }
 
+    //So sánh giờ
     public Boolean timeComparation(List<Date> time, List<Date>timeToCompare){
         boolean temp = false;
         int count = 0;

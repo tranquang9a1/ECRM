@@ -298,11 +298,13 @@ public class StaffController {
             Collection<TblScheduleEntity> tblScheduleEntities = tblClassroomEntities.get(i).getTblSchedulesById();
             if (tblScheduleEntities != null) {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
+                    //So sanh ngay
                     if (tblScheduleEntity1.getDateFrom().toString().equals(dateFrom.toString())) {
-                        if (tblScheduleEntity1.getTimeFrom().toString().equals(timeFrom.toString())) {
-                            if (tblScheduleEntity1.getSlots() == slots) {
-                                tblClassroomEntities.remove(i);
-                            }
+                        //So sanh gio
+                        List<Date> listTimeToCompare = timeFraction(tblScheduleEntity1.getTimeFrom().toString(),
+                                tblScheduleEntity1.getSlots());
+                        if(timeComparation(time, listTimeToCompare)){
+                            tblClassroomEntities.remove(i);
                         }
                     }
                 }
@@ -339,5 +341,21 @@ public class StaffController {
             time.add(t);
         }
         return time;
+    }
+
+    public Boolean timeComparation(List<Date> time, List<Date>timeToCompare){
+        boolean temp = false;
+        int count = 0;
+        for(int i=0; i<time.size(); i++){
+            for(int j =0; j<timeToCompare.size(); j++){
+                if(time.get(i).getTime() == timeToCompare.get(j).getTime()){
+                    count+=1;
+                }
+            }
+        }
+        if(count>=2){
+            temp = true;
+        }
+        return temp;
     }
 }

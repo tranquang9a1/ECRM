@@ -60,6 +60,12 @@ public class StaffController {
             if (!classroomEntity.getIsDelete()) {
                 tblClassroomEntities.add(classroomEntity);
             }
+            Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+            for(TblEquipmentEntity tblEquipmentEntity: tblEquipmentEntities){
+                if(tblEquipmentEntity.getName()==null){
+                    classroomEntity.setIsAllInformation(false);
+                }
+            }
         }
         request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
         request.setAttribute("ACTIVETAB", activeTab);
@@ -106,11 +112,11 @@ public class StaffController {
                     equipmentDAO.merge(tblEquipmentEntity);
                 }
                 classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, 0, classroom.getCreateTime(),
-                        new Timestamp(date.getTime()), false, false);
+                        new Timestamp(date.getTime()), false, true);
                 classroomDAO.merge(classroom);
                 insertEquipment(roomName);
             } else {
-                classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null, false, false);
+                classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null, false, true);
                 classroomDAO.persist(classroom);
                 insertEquipment(roomName);
             }
@@ -126,13 +132,13 @@ public class StaffController {
         List<TblEquipmentEntity> tivi = new ArrayList<TblEquipmentEntity>();
         List<TblEquipmentEntity> air = new ArrayList<TblEquipmentEntity>();
             for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                if (tblEquipmentEntity.getCategoryId() == 1) {
+                if (tblEquipmentEntity.getCategoryId() == 1 && tblEquipmentEntity.getName()==null) {
                     projector.add(tblEquipmentEntity);
                 }
-                if (tblEquipmentEntity.getCategoryId() == 2) {
+                if (tblEquipmentEntity.getCategoryId() == 2&& tblEquipmentEntity.getName()==null) {
                     tivi.add(tblEquipmentEntity);
                 }
-                if (tblEquipmentEntity.getCategoryId() == 3) {
+                if (tblEquipmentEntity.getCategoryId() == 3&& tblEquipmentEntity.getName()==null) {
                     air.add(tblEquipmentEntity);
                 }
             }
@@ -143,7 +149,7 @@ public class StaffController {
         List<TblEquipmentEntity> availableEquipment = new ArrayList<TblEquipmentEntity>();
         availableEquipment = equipmentDAO.findAll();
         for (TblEquipmentEntity tblEquipmentEntity : availableEquipment) {
-            if (tblEquipmentEntity.getClassroomId()==null) {
+            if (tblEquipmentEntity.getClassroomId()==null && tblEquipmentEntity.getName()!=null) {
                 if (tblEquipmentEntity.getCategoryId() == 1) {
                     availableProjector.add(tblEquipmentEntity);
                 }
@@ -161,29 +167,65 @@ public class StaffController {
         request.setAttribute("AVAILABLETIVI", availableTivi);
         request.setAttribute("AIR", air);
         request.setAttribute("AVAILABLEAIR", availableAir);
+        request.setAttribute("CLASSROOMID", classroomId);
         return "Staff_InformationEquipment";
     }
 
 
-
+    //Insert equipment with no information
     public void insertEquipment(String roomName) {
         TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName);
         TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity();
         TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
         if (roomTypeEntity.getProjector() > 0) {
-            tblEquipmentEntity = new TblEquipmentEntity(1, classroomEntity.getId(), "", "", "[1]", 0, "OK");
+            tblEquipmentEntity = new TblEquipmentEntity(1, classroomEntity.getId(), null, null, "[1]", 0, "OK");
             equipmentDAO.persist(tblEquipmentEntity);
         }
         if (roomTypeEntity.getAirConditioning() > 0) {
             for (int i = 0; i < roomTypeEntity.getAirConditioning(); i++) {
-                tblEquipmentEntity = new TblEquipmentEntity(3, classroomEntity.getId(), "", "", "[3]", 0, "OK");
+                tblEquipmentEntity = new TblEquipmentEntity(3, classroomEntity.getId(), null, null, "[3]", 0, "OK");
                 equipmentDAO.persist(tblEquipmentEntity);
 
             }
         }
         if (roomTypeEntity.getTelevision() > 0) {
-            tblEquipmentEntity = new TblEquipmentEntity(2, classroomEntity.getId(), "", "", "[2]", 0, "OK");
+            tblEquipmentEntity = new TblEquipmentEntity(2, classroomEntity.getId(), null, null, "[2]", 0, "OK");
             equipmentDAO.persist(tblEquipmentEntity);
+        }
+    }
+
+    //Update information of equiment have using time
+    @Transactional
+    @RequestMapping(value = "updateInformation")
+    public String updateInformation(HttpServletRequest request, @RequestParam("projector") int projector,
+                                    @RequestParam("tivi") int tivi, @RequestParam("airConditioning") String airConditioning,
+                                    @RequestParam("classroomId") int classroomId){
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+        if(projector!=0){
+            executeUpdateInformation(tblEquipmentEntities, projector, 1);
+        }
+        if(tivi!=0){
+            executeUpdateInformation(tblEquipmentEntities, tivi, 2);
+        }
+        if(airConditioning!=null){
+            String []array = airConditioning.split("-");
+            for(int i = 0; i<array.length; i++){
+                executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
+            }
+        }
+        return "";
+    }
+    //execute Update information
+    public void executeUpdateInformation(Collection<TblEquipmentEntity> tblEquipmentEntities,int equipment, int category){
+        TblEquipmentEntity targetEquipmentEntity = equipmentDAO.find(equipment);
+        for(TblEquipmentEntity currentEquipment:tblEquipmentEntities){
+            if(currentEquipment.getCategoryId()==category){
+                targetEquipmentEntity.setClassroomId(currentEquipment.getClassroomId());
+                targetEquipmentEntity.setPosition(currentEquipment.getPosition());
+                equipmentDAO.merge(targetEquipmentEntity);
+                equipmentDAO.remove(currentEquipment);
+            }
         }
     }
 

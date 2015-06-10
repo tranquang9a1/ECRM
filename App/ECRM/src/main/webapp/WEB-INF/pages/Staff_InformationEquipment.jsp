@@ -27,6 +27,7 @@
 <c:set var="avai_tivi" value="${requestScope.AVAILABLETIVI}"/>
 <c:set var="air" value="${requestScope.AIR}"/>
 <c:set var="avai_air" value="${requestScope.AVAILABLEAIR}"/>
+<c:set var="classroomId" value="${requestScope.CLASSROOMID}"/>
 
 <div class="contain-layout">
     <jsp:include flush="true" page="Header.jsp"/>
@@ -37,34 +38,42 @@
 
         <div class="clear"></div>
     </div>
-    <form action="" id="information">
+    <form action="/staff/updateInformation" id="information">
+        <input hidden value="${classroomId}" name="classroomId"/>
         <c:if test="${not empty projector }">
             Chọn projector trong kho:
             <select name="projector">
-                <option>---</option>
+                <option value="0">---</option>
                 <c:forEach items="${avai_projector}" var="p">
-                    <option>${p.name}-${p.serialNumber}</option>
+                    <option value="${p.id}">${p.name}-${p.serialNumber}</option>
                 </c:forEach>
             </select>
+        </c:if >
+        <c:if test="${empty projector }">
+            <input hidden value="0" name="projector"/>
         </c:if>
         <br/>
         <c:if test="${not empty tivi }">
             Chọn tivi trong kho:
             <select name="tivi">
-                <option>---</option>
+                <option value="0">---</option>
                 <c:forEach items="${avai_tivi}" var="t">
-                    <option>${t.name}-${t.serialNumber}</option>
+                    <option value="${t.id}">${t.name}-${t.serialNumber}</option>
                 </c:forEach>
             </select>
+
+        </c:if>
+        <c:if test="${empty tivi }">
+            <input hidden value="0" name="tivi"/>
         </c:if>
         <br/>
         <c:if test="${not empty air }">
             <c:forEach var="as" items="${air}" varStatus="i">
                 Chọn may lanh thu ${i.count} trong kho:
-                <select name="air${i.count}" id="air${i.count}">
-                    <option>---</option>
+                <select id="air${i.count}">
+                    <option value="0">---</option>
                     <c:forEach items="${avai_air}" var="a">
-                        <option>${a.name}-${a.serialNumber}</option>
+                        <option value="${a.id}">${a.name}-${a.serialNumber}</option>
                     </c:forEach>
                 </select>
                 <br/>
@@ -81,11 +90,10 @@
     function clicks(size) {
         var information = "";
         for (var i = 1; i <= size; i++) {
-            var air = 'air' + i;
-            information += document.getElementById(air).value.toString()+" ";
+            information += document.getElementById('air'+i).value.toString()+"-";
         }
         document.getElementById("airConditioning").value= information;
-        /*document.getElementById('information').submit();*/
+        document.getElementById('information').submit();
     }
 </script>
 

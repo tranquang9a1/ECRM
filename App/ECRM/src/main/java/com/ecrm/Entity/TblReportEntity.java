@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Htang on 6/5/2015.
@@ -20,7 +21,7 @@ public class TblReportEntity {
     private boolean status;
     private TblClassroomEntity tblClassroomByClassRoomId;
     private TblUserEntity tblUserByUserId;
-    private Collection<TblReportDetailEntity> tblReportDetailsById;
+    private List<TblReportDetailEntity> tblReportDetailsById;
 
     public TblReportEntity(){}
 
@@ -154,12 +155,12 @@ public class TblReportEntity {
         this.tblUserByUserId = tblUserByUserId;
     }
 
-    @OneToMany(mappedBy = "tblReportByReportId")
-    public Collection<TblReportDetailEntity> getTblReportDetailsById() {
+    @OneToMany(mappedBy = "tblReportByReportId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<TblReportDetailEntity> getTblReportDetailsById() {
         return tblReportDetailsById;
     }
 
-    public void setTblReportDetailsById(Collection<TblReportDetailEntity> tblReportDetailsById) {
+    public void setTblReportDetailsById(List<TblReportDetailEntity> tblReportDetailsById) {
         this.tblReportDetailsById = tblReportDetailsById;
     }
 }

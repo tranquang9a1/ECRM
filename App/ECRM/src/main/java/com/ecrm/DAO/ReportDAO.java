@@ -12,4 +12,6 @@ import java.util.List;
 public interface ReportDAO {
 
     public List<TblReportEntity> getAllReportInStatus(boolean status);
+
+    public List<TblReportEntity> getReportByUserId(String username);
 }

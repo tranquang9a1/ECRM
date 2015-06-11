@@ -38,4 +38,13 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
 
         return result;
     }
+
+    @Override
+    public List<TblReportEntity> getReportByUserId(String username) {
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username =:username");
+        query.setParameter("username", username);
+
+        return query.getResultList();
+
+    }
 }

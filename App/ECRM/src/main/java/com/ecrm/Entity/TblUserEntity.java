@@ -2,6 +2,7 @@ package com.ecrm.Entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Htang on 6/5/2015.
@@ -13,8 +14,8 @@ public class TblUserEntity {
     private String username;
     private String password;
     private boolean status;
-    private Collection<TblReportEntity> tblReportsByUsername;
-    private Collection<TblScheduleEntity> tblSchedulesByUsername;
+    private List<TblReportEntity> tblReportsByUsername;
+    private List<TblScheduleEntity> tblSchedulesByUsername;
     private TblRoleEntity tblRoleByRoleId;
     private TblUserInfoEntity tblUserInfoByUsername;
 
@@ -83,20 +84,20 @@ public class TblUserEntity {
     }
 
     @OneToMany(mappedBy = "tblUserByUserId")
-    public Collection<TblReportEntity> getTblReportsByUsername() {
+    public List<TblReportEntity> getTblReportsByUsername() {
         return tblReportsByUsername;
     }
 
-    public void setTblReportsByUsername(Collection<TblReportEntity> tblReportsByUsername) {
+    public void setTblReportsByUsername(List<TblReportEntity> tblReportsByUsername) {
         this.tblReportsByUsername = tblReportsByUsername;
     }
 
     @OneToMany(mappedBy = "tblUserByUserId")
-    public Collection<TblScheduleEntity> getTblSchedulesByUsername() {
+    public List<TblScheduleEntity> getTblSchedulesByUsername() {
         return tblSchedulesByUsername;
     }
 
-    public void setTblSchedulesByUsername(Collection<TblScheduleEntity> tblSchedulesByUsername) {
+    public void setTblSchedulesByUsername(List<TblScheduleEntity> tblSchedulesByUsername) {
         this.tblSchedulesByUsername = tblSchedulesByUsername;
     }
 

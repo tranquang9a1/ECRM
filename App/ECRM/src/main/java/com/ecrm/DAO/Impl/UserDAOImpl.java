@@ -3,9 +3,11 @@ package com.ecrm.DAO.Impl;
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.UserDAO;
 import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.Entity.TblUserInfoEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.sql.Timestamp;
 
 /**
  * Created by QuangTV on 5/18/2015.
@@ -31,5 +33,19 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         query.setParameter("username", username);
         TblUserEntity tblUserEntity = (TblUserEntity) query.getSingleResult();
         return tblUserEntity;
+    }
+
+    public boolean updateLastLogin(String username, Timestamp lastLogin) {
+        Query query = entityManager.createQuery("UPDATE u from TblUserInfoEntity u set u.lastLogin = :lastLogin " +
+                "where u.username = :username");
+        query.setParameter("username", username);
+        query.setParameter("lastLogin", lastLogin);
+
+        TblUserInfoEntity result = (TblUserInfoEntity)query.getSingleResult();
+        if (result != null) {
+            return true;
+        }
+        return false;
+
     }
 }

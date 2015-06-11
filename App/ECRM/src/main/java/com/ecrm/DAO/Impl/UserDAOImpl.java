@@ -5,6 +5,7 @@ import com.ecrm.DAO.UserDAO;
 import com.ecrm.Entity.TblUserEntity;
 import com.ecrm.Entity.TblUserInfoEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.sql.Timestamp;
@@ -35,14 +36,15 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         return tblUserEntity;
     }
 
+    @Transactional
     public boolean updateLastLogin(String username, Timestamp lastLogin) {
-        Query query = entityManager.createQuery("UPDATE u from TblUserInfoEntity u set u.lastLogin = :lastLogin " +
+        Query query = entityManager.createQuery("UPDATE TblUserInfoEntity u set u.lastLogin = :lastLogin " +
                 "where u.username = :username");
         query.setParameter("username", username);
         query.setParameter("lastLogin", lastLogin);
 
-        TblUserInfoEntity result = (TblUserInfoEntity)query.getSingleResult();
-        if (result != null) {
+        int rows = query.executeUpdate();
+        if (rows > 0) {
             return true;
         }
         return false;

@@ -5,12 +5,12 @@ package com.ecrm.DTO;
  */
 public class ReportDetailDTO {
     private String equipmentName;
-    private String desription;
+    private String description;
     private String damaged;
 
-    public ReportDetailDTO(String equipmentName, String desription, String damaged) {
+    public ReportDetailDTO(String equipmentName, String description, String damaged) {
         this.equipmentName = equipmentName;
-        this.desription = desription;
+        this.description = description;
         this.damaged = damaged;
     }
 
@@ -25,12 +25,12 @@ public class ReportDetailDTO {
         this.equipmentName = equipmentName;
     }
 
-    public String getDesription() {
-        return desription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesription(String desription) {
-        this.desription = desription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getDamaged() {

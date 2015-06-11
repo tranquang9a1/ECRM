@@ -16,7 +16,7 @@ public class ReportDTO {
     private int classId;
     private String createTime;
     private String evaluate;
-    private List<ReportDetailDTO> equipment;
+    private List<ReportDetailDTO> equipments;
 
     public ReportDTO(int reportId, String username, String fullname, int classId, String createTime, String evaluate,
                      List<ReportDetailDTO> equipmentId) {
@@ -26,7 +26,7 @@ public class ReportDTO {
         this.classId = classId;
         this.createTime = createTime;
         this.evaluate = evaluate;
-        this.equipment = equipmentId;
+        this.equipments = equipmentId;
     }
 
     public ReportDTO() {
@@ -82,10 +82,10 @@ public class ReportDTO {
 
 
     public List<ReportDetailDTO> getEquipment() {
-        return equipment;
+        return equipments;
     }
 
     public void setEquipment(List<ReportDetailDTO> equipmentId) {
-        this.equipment = equipmentId;
+        this.equipments = equipmentId;
     }
 }

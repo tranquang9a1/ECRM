@@ -14,4 +14,8 @@ public interface ReportDAO {
     public List<TblReportEntity> getAllReportInStatus(boolean status);
 
     public List<TblReportEntity> getReportByUserId(String username);
+
+    public List<TblReportEntity> getAllReport(int limit, int offset);
+
+    public boolean createReport();
 }

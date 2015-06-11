@@ -7,6 +7,8 @@ import com.ecrm.Entity.TblEquipmentCategoryEntity;
 import com.ecrm.Entity.TblReportEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+
 /**
  * Created by ChiDNMSE60717 on 5/30/2015.
  */
@@ -14,5 +16,13 @@ import org.springframework.stereotype.Repository;
 public class EquipmentCategoryDAOImpl extends BaseDAO<TblEquipmentCategoryEntity, Integer> implements EquipmentCategoryDAO {
     public EquipmentCategoryDAOImpl(){
         super(TblEquipmentCategoryEntity.class);
+    }
+
+    @Override
+    public int findEquipmentId(String name) {
+        Query query = entityManager.createQuery("Select e from TblEquipmentCategoryEntity e WHERE e.name = :name");
+        query.setParameter("name", name);
+        TblEquipmentCategoryEntity entity = (TblEquipmentCategoryEntity) query.getSingleResult();
+        return entity.getId();
     }
 }

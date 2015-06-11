@@ -34,6 +34,8 @@ public class TblReportEntity {
         this.status = true;
     }
 
+
+
     @Id
     @GeneratedValue
     @Column(name = "Id")

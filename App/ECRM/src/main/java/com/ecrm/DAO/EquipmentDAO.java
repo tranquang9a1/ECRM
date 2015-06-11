@@ -15,5 +15,7 @@ public interface EquipmentDAO {
 
     public TblEquipmentEntity findEquipmentHavePosition(int roomId, String position);
 
+
+
     /*public boolean insertDamagedEquipment(int classroomId, String position);*/
 }

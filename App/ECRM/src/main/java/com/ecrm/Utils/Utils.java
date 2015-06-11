@@ -1,6 +1,7 @@
 package com.ecrm.Utils;
 
 import com.ecrm.DTO.AccountDTO;
+import com.ecrm.DTO.ClassroomDTO;
 import com.ecrm.DTO.ReportDTO;
 import com.ecrm.DTO.ReportDetailDTO;
 import com.ecrm.Entity.TblReportDetailEntity;
@@ -27,8 +28,17 @@ public class Utils {
         accountDTO.setRole(userEntity.getTblRoleByRoleId().getName());
         accountDTO.setStatus(userEntity.isStatus());
         accountDTO.setUsername(userEntity.getUsername());
-        accountDTO.setClassId(1);
+        List<ClassroomDTO> classrooms = new ArrayList<ClassroomDTO>();
 
+        for (int i = 0; i < 7; i++) {
+            ClassroomDTO classroom = new ClassroomDTO();
+            classroom.setClassId(i+1022);
+            classroom.setClassroomName("Phòng 30" + i);
+            classroom.setTimeFrom("1355245200000");
+            classroom.setTimeTo("1355245200000");
+            classrooms.add(classroom);
+        }
+        accountDTO.setClassrooms(classrooms);
         return accountDTO;
     }
 
@@ -54,7 +64,7 @@ public class Utils {
         reportDTO.setUsername(reportEntity.getUsername());
         reportDTO.setFullname(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName());
         reportDTO.setClassId(reportEntity.getClassRoomId());
-        reportDTO.setCreateTime("213123123123");
+        reportDTO.setCreateTime("1355245200000");
         List<TblReportDetailEntity> detail = reportEntity.getTblReportDetailsById();
         reportDTO.setEquipment(convertFromReportEntityToDTO(detail));
         reportDTO.setEvaluate(reportEntity.getEvaluate());
@@ -70,7 +80,7 @@ public class Utils {
             ReportDetailDTO dto = new ReportDetailDTO();
             dto.setEquipmentName(entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName());
             dto.setDamaged(entity.getDamagedLevel());
-            dto.setDesription(entity.getSolution());
+            dto.setDescription(entity.getSolution());
             result.add(dto);
         }
 

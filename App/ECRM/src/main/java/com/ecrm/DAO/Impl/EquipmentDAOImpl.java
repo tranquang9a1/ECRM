@@ -94,4 +94,6 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         }
         return false;
     }*/
+
+
 }

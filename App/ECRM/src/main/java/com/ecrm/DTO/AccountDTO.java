@@ -1,6 +1,7 @@
 package com.ecrm.DTO;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by Thuy_Tien on 6/8/2015.
@@ -13,10 +14,10 @@ public class AccountDTO {
     private String role;
     private Timestamp lastLogin;
     private boolean status;
-    private int classId;
+    private List<ClassroomDTO> classrooms;
 
     public AccountDTO(String username, String password, String fullname, String phone, String role, Timestamp lastLogin,
-                      boolean status, int classId) {
+                      boolean status, List<ClassroomDTO> classrooms) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
@@ -24,7 +25,7 @@ public class AccountDTO {
         this.role = role;
         this.lastLogin = lastLogin;
         this.status = status;
-        this.classId = classId;
+        this.classrooms = classrooms;
     }
 
     public AccountDTO() {
@@ -87,11 +88,11 @@ public class AccountDTO {
         this.status = status;
     }
 
-    public int getClassId() {
-        return classId;
+    public List<ClassroomDTO> getClassrooms() {
+        return classrooms;
     }
 
-    public void setClassId(int classId) {
-        this.classId = classId;
+    public void setClassrooms(List<ClassroomDTO> classrooms) {
+        this.classrooms = classrooms;
     }
 }

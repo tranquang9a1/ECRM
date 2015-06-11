@@ -48,6 +48,12 @@ public abstract class BaseDAO<T, ID extends Serializable> {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
+    public void insert(T entity) {
+        entityManager.persist(entity);
+        entityManager.flush();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public void merge(T entity) {
         entityManager.merge(entity);
     }

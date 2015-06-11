@@ -1,16 +1,12 @@
 package com.ecrm.Controller;
 
-import com.ecrm.DAO.Impl.ClassroomDAOImpl;
-import com.ecrm.DAO.Impl.ReportDAOImpl;
-import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
-import com.ecrm.DAO.Impl.UserDAOImpl;
+import com.ecrm.DAO.Impl.*;
+import com.ecrm.DAO.ReportDetailDAO;
 import com.ecrm.DAO.RoomTypeDAO;
 import com.ecrm.DTO.AccountDTO;
 import com.ecrm.DTO.ReportDTO;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblReportEntity;
-import com.ecrm.Entity.TblRoomTypeEntity;
-import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.DTO.ResultDTO;
+import com.ecrm.Entity.*;
 import com.ecrm.Utils.Utils;
 import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +37,15 @@ public class APIController {
 
     @Autowired
     ReportDAOImpl reportDAO;
+
+    @Autowired
+    EquipmentDAOImpl equipmentDAO;
+
+    @Autowired
+    ReportDetailDAOImpl reportDetailDAO;
+
+    @Autowired
+    EquipmentCategoryDAOImpl equipmentCategoryDAO;
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id")int classroomId){
         TblClassroomEntity classroomEntity = new TblClassroomEntity();
@@ -71,4 +76,62 @@ public class APIController {
         List<TblReportEntity> entities = reportDAO.getReportByUserId(username);
         return Utils.convertFromListEntityToListDTO(entities);
     }
+
+    @RequestMapping(value="/getAllReport", method = RequestMethod.GET)
+    public @ResponseBody List<ReportDTO> getAllReport(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+        List<TblReportEntity> entities = reportDAO.getAllReport(limit, offset);
+        return Utils.convertFromListEntityToListDTO(entities);
+    }
+
+    @RequestMapping(value="/createReport", method = RequestMethod.POST)
+    public @ResponseBody
+    ResultDTO createReport( @RequestParam("username") String username,@RequestParam("RoomId") int roomId,
+                            @RequestParam("Evaluate") String evaluate, @RequestParam("Description") String desc,
+                            @RequestParam("ListDamaged") String listDamaged,
+                            @RequestParam("ListPosition") String listPosition,
+                            @RequestParam("ListEvaluate") String listEvaluate
+                            ) {
+        ResultDTO resultDTO = new ResultDTO();
+
+        try {
+            TblReportEntity report = new TblReportEntity(username, roomId, evaluate, desc);
+            reportDAO.insert(report);
+            int reportId = report.getId();
+
+            //equipmentCategoryDAO.findEquipmentId("Bàn");
+
+
+
+
+
+            String[] equipments = listDamaged.split(",");
+            String[] evaluates = listEvaluate.split(",");
+            String[] positions = listPosition.split("-");
+            List<Integer> listId = new ArrayList<Integer>();
+
+            for(int i = 0; i < equipments.length; i++) {
+                TblEquipmentEntity entity = new TblEquipmentEntity(equipmentCategoryDAO.findEquipmentId(equipments[i]),
+                        roomId, "Cái gì đây", "", positions[i], 0, "Damaged", 100);
+                equipmentDAO.insert(entity);
+                TblReportDetailEntity detailEntity = new TblReportDetailEntity(entity.getId(), reportId, evaluates[i], false, positions[i]);
+                reportDetailDAO.insert(detailEntity);
+
+            }
+
+            resultDTO.setError_code(100);
+            resultDTO.setError("OK");
+            return resultDTO;
+        }catch (Exception e) {
+            resultDTO.setError_code(101);
+            resultDTO.setError(e.getMessage());
+            return resultDTO;
+        }
+
+
+
+
+    }
+
+
+
 }

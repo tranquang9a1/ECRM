@@ -17,10 +17,12 @@ public class TblEquipmentEntity {
     private String name;
     private String serialNumber;
     private String status;
+    private int usingTime;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
+    @GeneratedValue
     @Id
     @Column(name = "Id")
     public int getId() {
@@ -90,6 +92,17 @@ public class TblEquipmentEntity {
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
+
+    @Basic
+    @Column(name = "UsingTime")
+    public int getUsingTime() {
+        return usingTime;
+    }
+
+    public void setUsingTime(int usingTime) {
+        this.usingTime = usingTime;
+    }
+
 
     @Basic
     @Column(name = "Status")
@@ -165,7 +178,8 @@ public class TblEquipmentEntity {
     public TblEquipmentEntity() {
     }
 
-    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position, int timeRemain, String status) {
+    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position,
+                              int timeRemain, String status) {
         this.categoryId = categoryId;
         this.classroomId = classroomId;
         this.name = name;
@@ -173,5 +187,19 @@ public class TblEquipmentEntity {
         this.position = position;
         this.timeRemain = timeRemain;
         this.status = status;
+
+    }
+
+
+    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position,
+                             int timeRemain, String status, int usingTime) {
+        this.categoryId = categoryId;
+        this.classroomId = classroomId;
+        this.name = name;
+        this.serialNumber = serialNumber;
+        this.position = position;
+        this.timeRemain = timeRemain;
+        this.status = status;
+        this.usingTime = usingTime;
     }
 }

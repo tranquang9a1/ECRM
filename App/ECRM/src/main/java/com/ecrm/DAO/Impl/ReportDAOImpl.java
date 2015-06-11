@@ -47,4 +47,18 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         return query.getResultList();
 
     }
+
+    @Override
+    public List<TblReportEntity> getAllReport(int limit, int offset) {
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r");
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public boolean createReport() {
+        return true;
+    }
 }

@@ -15,12 +15,36 @@
     <link rel="stylesheet" href="../../resource/css/layout.css"/>
     <link rel="stylesheet" href="../../resource/css/general.css"/>
     <link rel="stylesheet" href="../../resource/css/management.css"/>
-    <link rel="stylesheet" href="../../resource/css/roomtype-2.css"/>
+    <link rel="stylesheet" href="../../resource/css/jquery-ui.css"/>
+
     <script src="../../resource/js/jquery-1.11.3.js"></script>
     <script src="../../resource/js/jquery-1.11.3.min.js"></script>
+    <script src="../../resource/js/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({dateFormat: "yy-mm-dd"});
+        });
+
+        function findAvailableRoom(){
+            $.ajax({
+                type:"get",
+                url:"/ajax/findClassroom",
+                cache: false,
+                data:'slot=' +$("#slot").val() +"&numberOfSlots="+$("#numberOfSlots").val()+
+                "&numberOfStudent="+$("#numberOfStudent").val()+"&date="+$("#datepicker").val(),
+                success: function(responseText){
+                    $('#avai_classroom').html(responseText);
+                },
+                error: function(){
+                    alert('Error while request..');
+                }
+            })
+        }
+    </script>
 </head>
 <body>
 <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
+<c:set var="classrooms" value="${requestScope.CLASSROOMS}"/>
 
 <div class="contain-layout">
     <jsp:include flush="true" page="Header.jsp"/>
@@ -41,17 +65,55 @@
             </div>
             <div class="content-tab">
                 <div id="tab1" class="body-tab">
+                    <a href="/staff/download">Click here to download template!</a>
+
                     <h3>File Upload:</h3>
-                    Select a file to upload: <br />
+                    Select a file to upload: <br/>
+
                     <form action="/staff/import" method="post"
                           enctype="multipart/form-data">
                         <input type="file" name="scheduleFile" size="50" accept=".csv,
                         application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
-                        <br />
-                        <input type="submit" value="Upload File" />
+                        <br/>
+                        <input type="submit" value="Upload File"/>
                     </form>
+
                 </div>
                 <div id="tab2" class="body-tab">
+                    <h3>Nhập lịch bằng tay</h3>
+
+                    <p>Username: <input type="text" name="username"></p><br/>
+
+                    <p>Tiết bắt đầu: <select name="slot" id="slot">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select></p>
+                    <br/>
+
+                    <p>Số tiết: <select name="numberOfSlots" id="numberOfSlots">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select></p><br/>
+                    <p>Số học sinh: <input type="text" name="numberOfStudent" id="numberOfStudent"></p>
+                    </p><br/>
+                    <p>Ngày: <input type="text" id="datepicker" name="date"></p><br/>
+
+                    <p>Phòng học:
+                        <select>
+                            <c:forEach items="${classrooms}" var="c">
+                                <option value="${c.id}">Phòng ${c.name}</option>
+                            </c:forEach>
+                        </select>
+                    </p><br/>
+                    <input type="button" value="Tìm phòng trống" onclick="findAvailableRoom()"><div id="avai_classroom"></div>
                 </div>
             </div>
 

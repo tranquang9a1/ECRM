@@ -14,12 +14,16 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -137,30 +141,30 @@ public class ScheduleController {
                     numberOfSlot = classroomEntity.getTblRoomTypeByRoomTypeId().getSlots();
                     slot = row.getCell(1).getStringCellValue();
                     timeFrom = convertSlotToTime(slot);
-                    for(int i = 2; i<=7; i++){
-                        if(i==2){
-                            insertSchedule( tblScheduleEntity,  row,  i,  teacher,  classroomId,
-                                    numberOfSlot,  timeFrom,  mon, formatter);
+                    for (int i = 2; i <= 7; i++) {
+                        if (i == 2) {
+                            insertSchedule(tblScheduleEntity, row, i, teacher, classroomEntity,
+                                    numberOfSlot, timeFrom, mon, formatter);
                         }
-                        if(i==3){
-                            insertSchedule( tblScheduleEntity,  row,  i,  teacher,  classroomId,
-                                    numberOfSlot,  timeFrom,  tue, formatter);
+                        if (i == 3) {
+                            insertSchedule(tblScheduleEntity, row, i, teacher, classroomEntity,
+                                    numberOfSlot, timeFrom, tue, formatter);
                         }
-                        if(i==4){
-                            insertSchedule( tblScheduleEntity,  row,  i,  teacher,  classroomId,
-                                    numberOfSlot,  timeFrom,  wed, formatter);
+                        if (i == 4) {
+                            insertSchedule(tblScheduleEntity, row, i, teacher, classroomEntity,
+                                    numberOfSlot, timeFrom, wed, formatter);
                         }
-                        if(i==5){
-                            insertSchedule( tblScheduleEntity,  row,  i,  teacher,  classroomId,
-                                    numberOfSlot,  timeFrom,  thu, formatter);
+                        if (i == 5) {
+                            insertSchedule(tblScheduleEntity, row, i, teacher, classroomEntity,
+                                    numberOfSlot, timeFrom, thu, formatter);
                         }
-                        if(i==6){
-                            insertSchedule( tblScheduleEntity,  row,  i,  teacher,  classroomId,
-                                    numberOfSlot,  timeFrom,  fri, formatter);
+                        if (i == 6) {
+                            insertSchedule(tblScheduleEntity, row, i, teacher, classroomEntity,
+                                    numberOfSlot, timeFrom, fri, formatter);
                         }
-                        if(i==7){
-                            insertSchedule( tblScheduleEntity,  row,  i,  teacher,  classroomId,
-                                    numberOfSlot,  timeFrom,  sat, formatter);
+                        if (i == 7) {
+                            insertSchedule(tblScheduleEntity, row, i, teacher, classroomEntity,
+                                    numberOfSlot, timeFrom, sat, formatter);
                         }
                     }
 
@@ -198,26 +202,72 @@ public class ScheduleController {
         return timeFrom;
     }
 
-    public void insertSchedule(TblScheduleEntity tblScheduleEntity, Row row, int cell, String teacher, int classroomId,
+    public void insertSchedule(TblScheduleEntity tblScheduleEntity, Row row, int cell, String teacher, TblClassroomEntity classroomEntity,
                                int numberOfSlot, String timeFrom, String date, DateFormat formatter) throws ParseException {
+        boolean temp = true;
+        Date timeFrom1;
+        Date timeFrom2;
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
         teacher = row.getCell(cell).getStringCellValue();
-        if(!teacher.equals("")){
-            if(checkValidSchedule(teacher, teachingDate, timeFrom)){
-                tblScheduleEntity = new TblScheduleEntity(teacher, classroomId, numberOfSlot, null, timeFrom, 1,
-                        teachingDate);
-                scheduleDAO.persist(tblScheduleEntity);
+        if (!teacher.equals("")) {
+            if (checkValidSchedule(teacher, teachingDate, timeFrom)) {
+                Collection<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
+                for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
+                    if (tblScheduleEntity1.getUsername().equals(teacher) &&
+                            tblScheduleEntity1.getDate().toString().equals(teachingDate.toString())) {
+                        timeFrom1 = parseTime(tblScheduleEntity1.getTimeFrom());
+                        timeFrom2 = parseTime(timeFrom);
+                        if ((timeFrom2.getTime() - timeFrom1.getTime()) / 60000 == 105) {
+                            tblScheduleEntity1.setSlots(tblScheduleEntity1.getSlots() + 1);
+                            scheduleDAO.merge(tblScheduleEntity1);
+                            temp = false;
+                        }
+                    }
+                }
+                if (temp) {
+                    tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, timeFrom, 1,
+                            teachingDate);
+                    scheduleDAO.persist(tblScheduleEntity);
+                }
+
             }
         }
 
     }
 
-    public boolean checkValidSchedule(String teacher, java.sql.Date teachingDate, String teachingTime){
+    public boolean checkValidSchedule(String teacher, java.sql.Date teachingDate, String teachingTime) {
         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(teacher, teachingDate, teachingTime);
-        if(!tblScheduleEntities.isEmpty()){
+        if (!tblScheduleEntities.isEmpty()) {
             return false;
         }
         return true;
+    }
+
+    public Date parseTime(String time) {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        Date timeFrom = null;
+        try {
+            timeFrom = df.parse(time);
+        } catch (ParseException e) {
+            System.out.println("erroe!!!!");
+        }
+        return timeFrom;
+    }
+
+    @RequestMapping(value = "download")
+    public String download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String filename = "D:\\Capstone\\trunk\\Document\\Book1.xlsx";
+
+        File file = new File(filename);
+
+        response.setContentType(new MimetypesFileTypeMap().getContentType(file));
+        response.setContentLength((int) file.length());
+        response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
+
+        InputStream is = new FileInputStream(file);
+        FileCopyUtils.copy(is, response.getOutputStream());
+
+        return null;
     }
 
 }

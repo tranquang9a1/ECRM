@@ -302,14 +302,13 @@ public class StaffController {
             if (tblScheduleEntities != null) {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                     //So sanh ngay
-                    if (tblScheduleEntity1.getDate().toString().equals(dateFrom.toString())) {
+                    if (tblScheduleEntity1.getDate().getTime()==dateFrom.getTime()) {
                         //So sanh gio
                         String t = tblScheduleEntity1.getDate().toString()+" "+tblScheduleEntity1.getTimeFrom();
                         List<Date> listTimeToCompare = timeFraction(t, tblScheduleEntity1.getSlots());
-                        if(!timeComparation(time, listTimeToCompare)){
-                            if(!tblClassroomEntities.contains(fitClassroom.get(i))){
-                                tblClassroomEntities.add(fitClassroom.get(i));
-                            }
+                        if(timeComparation(time, listTimeToCompare)){
+                            fitClassroom.remove(i);
+                            break;
                         }
                     }
                 }
@@ -327,7 +326,7 @@ public class StaffController {
 
     //Phân rã thời gian theo tiết học
     public List<Date> timeFraction(String datetime, int slots) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date timeFrom1 = null;
         try {
             timeFrom1 = df.parse(datetime);

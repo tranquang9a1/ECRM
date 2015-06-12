@@ -179,34 +179,32 @@ public class ScheduleController {
     }
 
     public String convertSlotToTime(String slot) throws ParseException {
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        String timeFrom = timeFormat.format(timeFormat.parse("07:00:00"));
+        String timeFrom = "07:00:00";
         if (slot.equals("Slot 2")) {
-            timeFrom = timeFormat.format(timeFormat.parse("08:45:00"));
+            timeFrom = "08:45:00";
         }
         if (slot.equals("Slot 3")) {
-            timeFrom = timeFormat.format(timeFormat.parse("10:30:00"));
+            timeFrom = "10:30:00";
         }
         if (slot.equals("Slot 4")) {
-            timeFrom = timeFormat.format(timeFormat.parse("12:30:00"));
+            timeFrom = "12:30:00";
         }
         if (slot.equals("Slot 5")) {
-            timeFrom = timeFormat.format(timeFormat.parse("14:15:00"));
+            timeFrom = "14:15:00";
         }
         if (slot.equals("Slot 6")) {
-            timeFrom = timeFormat.format(timeFormat.parse("16:00:00"));
+            timeFrom = "16:00:00";
         }
         return timeFrom;
     }
 
     public void insertSchedule(TblScheduleEntity tblScheduleEntity, Row row, int cell, String teacher, int classroomId,
                                int numberOfSlot, String timeFrom, String date, DateFormat formatter) throws ParseException {
-        Time teachingTime = Time.valueOf(timeFrom);
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
         teacher = row.getCell(cell).getStringCellValue();
         if(!teacher.equals("")){
-            if(checkValidSchedule(teacher, teachingDate, teachingTime)){
-                tblScheduleEntity = new TblScheduleEntity(teacher, classroomId, numberOfSlot, null, teachingTime, 1,
+            if(checkValidSchedule(teacher, teachingDate, timeFrom)){
+                tblScheduleEntity = new TblScheduleEntity(teacher, classroomId, numberOfSlot, null, timeFrom, 1,
                         teachingDate);
                 scheduleDAO.persist(tblScheduleEntity);
             }
@@ -214,10 +212,10 @@ public class ScheduleController {
 
     }
 
-    public boolean checkValidSchedule(String teacher, java.sql.Date teachingDate, Time teachingTime){
+    public boolean checkValidSchedule(String teacher, java.sql.Date teachingDate, String teachingTime){
         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(teacher, teachingDate);
         for(TblScheduleEntity tblScheduleEntity1: tblScheduleEntities){
-            if(tblScheduleEntity1.getTimeFrom().toString().equals(teachingTime.toString())){
+            if(tblScheduleEntity1.getTimeFrom().equals(teachingTime)) {
                 return false;
             }
         }

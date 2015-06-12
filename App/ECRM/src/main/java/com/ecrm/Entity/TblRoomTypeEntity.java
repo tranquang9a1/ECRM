@@ -11,6 +11,7 @@ import java.util.Collection;
 @Table(name = "tblRoomType", schema = "dbo", catalog = "ecrm")
 public class TblRoomTypeEntity {
     private int id;
+    private String name;
     private int slots;
     private int verticalRows;
     private String horizontalRows;
@@ -35,6 +36,18 @@ public class TblRoomTypeEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+
+    @Basic
+    @Column(name="Name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Basic

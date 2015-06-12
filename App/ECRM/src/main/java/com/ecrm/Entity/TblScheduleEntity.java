@@ -15,9 +15,9 @@ public class TblScheduleEntity {
     private int classroomId;
     private int numberOfStudents;
     private String note;
-    private Time timeFrom;
+    private String timeFrom;
     private int slots;
-    private Date dateFrom;
+    private Date date;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblUserEntity tblUserByUserId;
 
@@ -74,11 +74,11 @@ public class TblScheduleEntity {
 
     @Basic
     @Column(name = "TimeFrom")
-    public Time getTimeFrom() {
+    public String getTimeFrom() {
         return timeFrom;
     }
 
-    public void setTimeFrom(Time timeFrom) {
+    public void setTimeFrom(String timeFrom) {
         this.timeFrom = timeFrom;
     }
 
@@ -93,13 +93,13 @@ public class TblScheduleEntity {
     }
 
     @Basic
-    @Column(name = "DateFrom")
-    public Date getDateFrom() {
-        return dateFrom;
+    @Column(name = "Date")
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateFrom(Date dateFrom) {
-        this.dateFrom = dateFrom;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
 
@@ -117,7 +117,7 @@ public class TblScheduleEntity {
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (timeFrom != null ? !timeFrom.equals(that.timeFrom) : that.timeFrom != null) return false;
-        if (dateFrom != null ? !dateFrom.equals(that.dateFrom) : that.dateFrom != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
     }
@@ -131,7 +131,7 @@ public class TblScheduleEntity {
         result = 31 * result + (note != null ? note.hashCode() : 0);
         result = 31 * result + (timeFrom != null ? timeFrom.hashCode() : 0);
         result = 31 * result + slots;
-        result = 31 * result + (dateFrom != null ? dateFrom.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
     }
 
@@ -158,13 +158,13 @@ public class TblScheduleEntity {
     public TblScheduleEntity() {
     }
 
-    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, Time timeFrom, int slots, Date dateFrom) {
+    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, String timeFrom, int slots, Date date) {
         this.username = username;
         this.classroomId = classroomId;
         this.numberOfStudents = numberOfStudents;
         this.note = note;
         this.timeFrom = timeFrom;
         this.slots = slots;
-        this.dateFrom = dateFrom;
+        this.date = date;
     }
 }

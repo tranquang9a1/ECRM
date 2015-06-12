@@ -269,9 +269,9 @@ public class StaffController {
         //lay so tiet hoc
         int slots = tblScheduleEntity.getSlots();
         //lay thoi gian voi ngay hien tai
-        Date dateFrom = tblScheduleEntity.getDateFrom();
-        Time timeFrom = tblScheduleEntity.getTimeFrom();
-        String datetime = dateFrom.toString() + " " + timeFrom.toString();
+        Date dateFrom = tblScheduleEntity.getDate();
+        String timeFrom = tblScheduleEntity.getTimeFrom();
+        String datetime = dateFrom.toString() + " " + timeFrom;
         //phân rã giờ theo số tiết, mỗi tiết 90 phút, trả về List
         List<Date> time = timeFraction(datetime, slots);
         //Kiểm trả thời điểm hiện tại
@@ -302,9 +302,9 @@ public class StaffController {
             if (tblScheduleEntities != null) {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                     //So sanh ngay
-                    if (tblScheduleEntity1.getDateFrom().toString().equals(dateFrom.toString())) {
+                    if (tblScheduleEntity1.getDate().toString().equals(dateFrom.toString())) {
                         //So sanh gio
-                        String t = tblScheduleEntity1.getDateFrom().toString()+" "+tblScheduleEntity1.getTimeFrom().toString();
+                        String t = tblScheduleEntity1.getDate().toString()+" "+tblScheduleEntity1.getTimeFrom();
                         List<Date> listTimeToCompare = timeFraction(t, tblScheduleEntity1.getSlots());
                         if(!timeComparation(time, listTimeToCompare)){
                             if(!tblClassroomEntities.contains(fitClassroom.get(i))){

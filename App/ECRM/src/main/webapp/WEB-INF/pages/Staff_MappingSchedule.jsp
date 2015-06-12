@@ -25,20 +25,30 @@
             $("#datepicker").datepicker({dateFormat: "yy-mm-dd"});
         });
 
-        function findAvailableRoom(){
-            $.ajax({
-                type:"get",
-                url:"/ajax/findClassroom",
-                cache: false,
-                data:'slot=' +$("#slot").val() +"&numberOfSlots="+$("#numberOfSlots").val()+
-                "&numberOfStudent="+$("#numberOfStudent").val()+"&date="+$("#datepicker").val(),
-                success: function(responseText){
-                    $('#avai_classroom').html(responseText);
-                },
-                error: function(){
-                    alert('Error while request..');
-                }
-            })
+        function findAvailableRoom() {
+            if (document.getElementById('chckBox').checked) {
+                document.getElementById('classroom').style.display = 'none';
+                document.getElementById('avai_classroom').style.display = 'block';
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/findClassroom",
+                    cache: false,
+                    data: 'slot=' + $("#slot").val() + "&numberOfSlots=" + $("#numberOfSlots").val() +
+                    "&numberOfStudent=" + $("#numberOfStudent").val() + "&date=" + $("#datepicker").val(),
+                    success: function (responseText) {
+                        $('#avai').html(responseText);
+                    },
+                    error: function () {
+                        alert('Error while request..');
+                    }
+                })
+                document.getElementById('classroomId').value = "1-"+document.getElementById('avai').value;
+            } else {
+                document.getElementById('avai_classroom').style.display = 'none';
+                document.getElementById('classroom').style.display = 'block';
+                document.getElementById('classroomId').value = "2-"+document.getElementById('all').value;
+            }
+
         }
     </script>
 </head>
@@ -82,38 +92,53 @@
                 <div id="tab2" class="body-tab">
                     <h3>Nhập lịch bằng tay</h3>
 
-                    <p>Username: <input type="text" name="username"></p><br/>
+                    <form action="/staff/importManually">
+                        <input hidden name="classroomId" id="classroomId">
+                        <p>Username: <input type="text" name="username"></p><br/>
 
-                    <p>Tiết bắt đầu: <select name="slot" id="slot">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select></p>
-                    <br/>
+                        <p>Tiết bắt đầu: <select name="slot" id="slot">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select></p>
+                        <br/>
 
-                    <p>Số tiết: <select name="numberOfSlots" id="numberOfSlots">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select></p><br/>
-                    <p>Số học sinh: <input type="text" name="numberOfStudent" id="numberOfStudent"></p>
-                    </p><br/>
-                    <p>Ngày: <input type="text" id="datepicker" name="date"></p><br/>
+                        <p>Số tiết: <select name="numberOfSlots" id="numberOfSlots">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select></p>
+                        <br/>
 
-                    <p>Phòng học:
-                        <select>
-                            <c:forEach items="${classrooms}" var="c">
-                                <option value="${c.id}">Phòng ${c.name}</option>
-                            </c:forEach>
-                        </select>
-                    </p><br/>
-                    <input type="button" value="Tìm phòng trống" onclick="findAvailableRoom()"><div id="avai_classroom"></div>
+                        <p>Số học sinh: <input type="text" name="numberOfStudent" id="numberOfStudent"></p>
+                        </p><br/>
+
+                        <p>Ngày: <input type="text" id="datepicker" name="date"></p><br/>
+
+                        <p>Phòng học:<input type="checkbox" onclick="findAvailableRoom()" id="chckBox">Tìm phòng
+                            trống<br/>
+
+                        <div id="classroom">
+                            <select id="all">
+                                <c:forEach items="${classrooms}" var="c">
+                                    <option value="${c.id}">Phòng ${c.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div id="avai_classroom" style="display: none">
+                            <select id="avai">
+
+                            </select>
+                        </div>
+                        </p><br/>
+                        <button type="submit">Tạo</button>
+                    </form>
                 </div>
             </div>
 

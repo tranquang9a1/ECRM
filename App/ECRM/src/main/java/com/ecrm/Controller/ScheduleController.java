@@ -2,6 +2,7 @@ package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
+import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
 import org.apache.commons.fileupload.FileItem;
@@ -46,6 +47,8 @@ public class ScheduleController {
 
     @RequestMapping(value = "schedule")
     public String mappingSchedule(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
+        request.setAttribute("CLASSROOMS", tblClassroomEntities);
         request.setAttribute("ACTIVETAB", activeTab);
         return "Staff_MappingSchedule";
     }
@@ -270,4 +273,30 @@ public class ScheduleController {
         return null;
     }
 
+    //Manually import
+    @RequestMapping(value = "importManually")
+    public String importManually(HttpServletRequest request,@RequestParam("username")String username, @RequestParam("classroomId")String classroomId,
+                                 @RequestParam("slot")String slot, @RequestParam("numberOfSlots")int numberOfSlots,
+                                 @RequestParam("numberOfStudent")int numberOfStudent, @RequestParam("date")String date) throws ParseException {
+        String []array = classroomId.split("-");
+        String timeFrom = convertSlotToTime(slot);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
+        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(array[1]), numberOfStudent, null, timeFrom, numberOfSlots,
+                teachingDate);
+        if(array[0].equals("1")){
+            scheduleDAO.persist(tblScheduleEntity);
+        }else{
+            TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(array[1]));
+            if(tblScheduleEntity1!=null){
+                tblScheduleEntity1.setUsername(username);
+                tblScheduleEntity1.setSlots(numberOfSlots);
+                scheduleDAO.merge(tblScheduleEntity1);
+            }else{
+                scheduleDAO.persist(tblScheduleEntity);
+            }
+
+        }
+        return "redirect:/staff/schedule?ACTIVETAB=tab2";
+    }
 }

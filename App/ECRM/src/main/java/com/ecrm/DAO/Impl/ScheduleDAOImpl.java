@@ -73,4 +73,14 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         return tblScheduleEntities;
     }
+
+    public TblScheduleEntity findSpecificSchedule(java.util.Date date, String timeFrom, int classroomId){
+        Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where" +
+                " s.date = :date and s.timeFrom = :timeFrom and s.classroomId = :classroomId");
+        q.setParameter("date", date);
+        q.setParameter("timeFrom", timeFrom);
+        q.setParameter("classroomId", classroomId);
+        TblScheduleEntity tblScheduleEntity = (TblScheduleEntity) q.getSingleResult();
+        return tblScheduleEntity;
+    }
 }

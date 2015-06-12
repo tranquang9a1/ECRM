@@ -281,8 +281,9 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     divBang.className = 'bang';
     div.appendChild(divBang);
     var divScreen = document.createElement('div');
-    divScreen.className = 'board';
-    divScreen.innerHTML = 'Bảng';
+    divScreen.className = 'equipment board';
+    divScreen.setAttribute("data-equipment","Bảng");
+    divScreen.setAttribute("data-position","[0]");
     divBang.appendChild(divScreen);
     for (var i = 0; i < vrows; i++) {
         o = {
@@ -311,11 +312,15 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
                 if(i == 0) {
                     var divBanGheGV = document.createElement('div');
                     var divBanGV = document.createElement('div');
-                    divBanGV.className = 'banGV';
+                    divBanGV.className = 'equipment banGV';
+                    divBanGV.setAttribute('data-equipment', 'Bàn');
+                    divBanGV.setAttribute('data-position', '[' + i + ',' + j + ']');
                     var divDayGheGV = document.createElement('div');
                     divDayGheGV.className = 'divDayGhe';
                     var divGheGV = document.createElement('div');
-                    divGheGV.className = 'ghe';
+                    divGheGV.className = 'equipment ghe';
+                    divGheGV.setAttribute('data-equipment', 'Ghế');
+                    divGheGV.setAttribute('data-position', '[' + i + ',' + j + ',0]');
                     divDay.appendChild(divBanGheGV);
                     divBanGheGV.appendChild(divDayGheGV);
                     divBanGheGV.appendChild(divBanGV);
@@ -329,7 +334,9 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
                 chieuDaiBan = 0;
                 var divBanGhe = document.createElement('div');
                 var divBan = document.createElement('div');
-                divBan.className = 'ban';
+                divBan.className = 'equipment ban';
+                divBan.setAttribute('data-equipment','Bàn');
+                divBan.setAttribute('data-position','[' + i + ',' + j + ']');
                 var divDayGhe = document.createElement('div');
                 divDayGhe.className = 'divDayGhe';
                 divDay.appendChild(divBanGhe);
@@ -338,7 +345,9 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
                 //chay vong for so cho ngoi moi ban
                 for (var k = 0; k < array[i].soChoNgoi; k++) {
                     var divGhe = document.createElement('div');
-                    divGhe.className = 'ghe';
+                    divGhe.className = 'equipment ghe';
+                    divGhe.setAttribute('data-equipment','Ghế');
+                    divGhe.setAttribute('data-position','[' + i + ',' + j + ',' + k + ']');
                     divDayGhe.appendChild(divGhe);
                     chieuDaiBan += 34;
                 }
@@ -359,35 +368,45 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
     //projector
     if(projector>0){
         var divProjector = document.createElement('div');
-        divProjector.className = 'subThietBi projector';
+        divProjector.className = 'equipment subThietBi projector';
+        divProjector.setAttribute('data-equipment','Máy chiếu');
+        divProjector.setAttribute('data-position','[1]');
         divT.appendChild(divProjector);
     }
 
     //tivi
     if(tivi>0){
         var divTivi = document.createElement('div');
-        divTivi.className = 'subThietBi tivi';
+        divTivi.className = 'equipment subThietBi tivi';
+        divTivi.setAttribute('data-equipment','Tivi');
+        divTivi.setAttribute('data-position','[2]');
         divT.appendChild(divTivi);
     }
 
     //may lanh
     if(mayLanh>0){
         var divMayLanh = document.createElement('div');
-        divMayLanh.className = 'subThietBi mayLanh';
+        divMayLanh.className = 'equipment subThietBi mayLanh';
+        divMayLanh.setAttribute('data-equipment','Máy lạnh');
+        divMayLanh.setAttribute('data-position','[3]');
         divT.appendChild(divMayLanh);
     }
 
     //quat
     if(quat>0){
         var divQuat = document.createElement('div');
-        divQuat.className = 'subThietBi quat';
+        divQuat.className = 'equipment subThietBi quat';
+        divQuat.setAttribute('data-equipment','Quạt');
+        divQuat.setAttribute('data-position','[4]');
         divT.appendChild(divQuat);
     }
 
     //loa
     if(loa>0){
         var divLoa = document.createElement('div');
-        divLoa.className = 'subThietBi loa';
+        divLoa.className = 'equipment subThietBi loa';
+        divLoa.setAttribute('data-equipment','Loa');
+        divLoa.setAttribute('data-position','[5]');
         divT.appendChild(divLoa);
     }
 }

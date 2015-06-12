@@ -50,8 +50,7 @@ public class APIController {
     public String generateMap(HttpServletRequest request, @RequestParam("id")int classroomId){
         TblClassroomEntity classroomEntity = new TblClassroomEntity();
         classroomEntity = classroomDAO.find(classroomId);
-        TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
-        request.setAttribute("ROOMTYPE", roomTypeEntity);
+        request.setAttribute("CLASSROOM", classroomEntity);
         return "ClassroomMap";
     }
 

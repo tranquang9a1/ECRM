@@ -17,7 +17,7 @@ public class TblEquipmentEntity {
     private String name;
     private String serialNumber;
     private String status;
-    private int usingTime;
+    private Integer usingTime;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
@@ -93,13 +93,14 @@ public class TblEquipmentEntity {
         this.serialNumber = serialNumber;
     }
 
+
     @Basic
     @Column(name = "UsingTime")
-    public int getUsingTime() {
+    public Integer getUsingTime() {
         return usingTime;
     }
 
-    public void setUsingTime(int usingTime) {
+    public void setUsingTime(Integer usingTime) {
         this.usingTime = usingTime;
     }
 

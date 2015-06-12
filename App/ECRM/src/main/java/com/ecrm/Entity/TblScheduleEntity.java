@@ -22,6 +22,7 @@ public class TblScheduleEntity {
     private TblUserEntity tblUserByUserId;
 
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -152,5 +153,18 @@ public class TblScheduleEntity {
 
     public void setTblUserByUserId(TblUserEntity tblUserByUserId) {
         this.tblUserByUserId = tblUserByUserId;
+    }
+
+    public TblScheduleEntity() {
+    }
+
+    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, Time timeFrom, int slots, Date dateFrom) {
+        this.username = username;
+        this.classroomId = classroomId;
+        this.numberOfStudents = numberOfStudents;
+        this.note = note;
+        this.timeFrom = timeFrom;
+        this.slots = slots;
+        this.dateFrom = dateFrom;
     }
 }

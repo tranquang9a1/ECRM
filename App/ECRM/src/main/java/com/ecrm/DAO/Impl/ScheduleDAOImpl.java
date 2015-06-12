@@ -6,6 +6,8 @@ import com.ecrm.Entity.TblScheduleEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,5 +62,14 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         }
 
         return result;
+    }
+
+    public List<TblScheduleEntity> findScheduleWithDate(String username, java.util.Date dateFrom){
+        Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.username = :username and" +
+                " s.dateFrom = :dateFrom ");
+        q.setParameter("username", username);
+        q.setParameter("dateFrom", dateFrom);
+        List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+        return tblScheduleEntities;
     }
 }

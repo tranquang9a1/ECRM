@@ -306,8 +306,10 @@ public class StaffController {
                         //So sanh gio
                         String t = tblScheduleEntity1.getDateFrom().toString()+" "+tblScheduleEntity1.getTimeFrom().toString();
                         List<Date> listTimeToCompare = timeFraction(t, tblScheduleEntity1.getSlots());
-                        if(timeComparation(time, listTimeToCompare)){
-                            fitClassroom.remove(i);
+                        if(!timeComparation(time, listTimeToCompare)){
+                            if(!tblClassroomEntities.contains(fitClassroom.get(i))){
+                                tblClassroomEntities.add(fitClassroom.get(i));
+                            }
                         }
                     }
                 }
@@ -316,11 +318,11 @@ public class StaffController {
 
 
         String classroom = "";
-        for (TblClassroomEntity classroomEntity : fitClassroom) {
+        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
             classroom += classroomEntity.getName();
         }
         System.out.println("--------Classroom: " + classroom);
-        return fitClassroom;
+        return tblClassroomEntities;
     }
 
     //Phân rã thời gian theo tiết học
@@ -339,7 +341,7 @@ public class StaffController {
         for (int i = 1; i <= slots; i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(timeFrom1);
-            cal.add(Calendar.MINUTE, i * 90);
+            cal.add(Calendar.MINUTE, i * 105);
             Date t = cal.getTime();
             df.format(t);
             time.add(t);

@@ -213,11 +213,9 @@ public class ScheduleController {
     }
 
     public boolean checkValidSchedule(String teacher, java.sql.Date teachingDate, String teachingTime){
-        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(teacher, teachingDate);
-        for(TblScheduleEntity tblScheduleEntity1: tblScheduleEntities){
-            if(tblScheduleEntity1.getTimeFrom().equals(teachingTime)) {
-                return false;
-            }
+        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(teacher, teachingDate, teachingTime);
+        if(!tblScheduleEntities.isEmpty()){
+            return false;
         }
         return true;
     }

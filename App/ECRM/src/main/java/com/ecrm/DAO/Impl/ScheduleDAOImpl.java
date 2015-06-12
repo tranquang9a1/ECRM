@@ -64,11 +64,12 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         return result;
     }
 
-    public List<TblScheduleEntity> findScheduleWithDate(String username, java.util.Date dateFrom){
+    public List<TblScheduleEntity> findScheduleWithDate(String username, java.util.Date date, String timeFrom){
         Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.username = :username and" +
-                " s.dateFrom = :dateFrom ");
+                " s.date = :date and s.timeFrom =:timeFrom");
         q.setParameter("username", username);
-        q.setParameter("dateFrom", dateFrom);
+        q.setParameter("date", date);
+        q.setParameter("timeFrom", timeFrom);
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         return tblScheduleEntities;
     }

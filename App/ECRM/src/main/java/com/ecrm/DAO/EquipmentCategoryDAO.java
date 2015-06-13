@@ -12,4 +12,5 @@ import java.util.List;
 public interface EquipmentCategoryDAO {
 
     public List<TblEquipmentCategoryEntity> getCategoriesInRoom(int room);
+    public int findEquipmentId(String name);
 }

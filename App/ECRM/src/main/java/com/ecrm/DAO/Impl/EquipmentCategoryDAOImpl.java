@@ -44,5 +44,12 @@ public class EquipmentCategoryDAOImpl extends BaseDAO<TblEquipmentCategoryEntity
         return result;
     }
 
+    @Override
+    public int findEquipmentId(String name) {
+        Query query = entityManager.createQuery("Select e from TblEquipmentCategoryEntity e WHERE e.name = :name");
+        query.setParameter("name", name);
+        TblEquipmentCategoryEntity entity = (TblEquipmentCategoryEntity) query.getSingleResult();
+        return entity.getId();
+    }
 
 }

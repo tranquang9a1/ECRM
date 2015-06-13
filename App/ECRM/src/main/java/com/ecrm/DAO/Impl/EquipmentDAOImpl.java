@@ -22,8 +22,9 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
 
     public List<TblEquipmentEntity> findAllE(){
         Query q = entityManager.createQuery("select e from TblEquipmentEntity e");
-        List<TblEquipmentEntity> tblEquipmentEntities = q.getResultList();
+        List<TblEquipmentEntity> tblEquipmentEntities =  q.getResultList();
         return tblEquipmentEntities;
+
     }
 
     @Override

@@ -81,7 +81,7 @@ public class UserController {
 
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
-        TblReportEntity report = new TblReportEntity(user.getUsername(), roomId, evaluate, desc);
+        TblReportEntity report = new TblReportEntity(user.getUsername(), roomId, evaluate);
         reportDAO.persist(report);
 
         String[] evaluates = listEvaluate.split(",");

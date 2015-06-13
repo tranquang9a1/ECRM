@@ -6,10 +6,7 @@ import com.ecrm.DAO.Impl.EquipmentDAOImpl;
 import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.ScheduleDAO;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblEquipmentEntity;
-import com.ecrm.Entity.TblRoomTypeEntity;
-import com.ecrm.Entity.TblScheduleEntity;
+import com.ecrm.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,8 +57,8 @@ public class StaffController {
                 tblClassroomEntities.add(classroomEntity);
             }
             Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-            for(TblEquipmentEntity tblEquipmentEntity: tblEquipmentEntities){
-                if(tblEquipmentEntity.getName()==null){
+            for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                if (tblEquipmentEntity.getName() == null) {
                     classroomEntity.setIsAllInformation(false);
                 }
             }
@@ -96,6 +93,7 @@ public class StaffController {
         }
         return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
+
     //remove roomtype
     @RequestMapping(value = "removeRoomType")
     @Transactional
@@ -117,6 +115,7 @@ public class StaffController {
         roomTypeDAO.merge(roomTypeEntity);
         return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
+
     //create classroom
     @RequestMapping(value = "createClassroom")
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
@@ -130,18 +129,19 @@ public class StaffController {
                     tblEquipmentEntity.setClassroomId(null);
                     equipmentDAO.merge(tblEquipmentEntity);
                 }
-                classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, 0, classroom.getCreateTime(),
+                classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, classroom.getCreateTime(),
                         new Timestamp(date.getTime()), false, true);
                 classroomDAO.merge(classroom);
                 insertEquipment(roomName);
             } else {
-                classroom = new TblClassroomEntity(0, roomTypeId, roomName, 0, new Timestamp(date.getTime()), null, false, true);
+                classroom = new TblClassroomEntity(0, roomTypeId, roomName, new Timestamp(date.getTime()), null, false, true);
                 classroomDAO.persist(classroom);
                 insertEquipment(roomName);
             }
         }
         return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
+
     //remove classroom
     @RequestMapping(value = "removeClassroom")
     @Transactional
@@ -165,17 +165,17 @@ public class StaffController {
         List<TblEquipmentEntity> projector = new ArrayList<TblEquipmentEntity>();
         List<TblEquipmentEntity> tivi = new ArrayList<TblEquipmentEntity>();
         List<TblEquipmentEntity> air = new ArrayList<TblEquipmentEntity>();
-            for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                if (tblEquipmentEntity.getCategoryId() == 1 && tblEquipmentEntity.getName()==null) {
-                    projector.add(tblEquipmentEntity);
-                }
-                if (tblEquipmentEntity.getCategoryId() == 2&& tblEquipmentEntity.getName()==null) {
-                    tivi.add(tblEquipmentEntity);
-                }
-                if (tblEquipmentEntity.getCategoryId() == 3&& tblEquipmentEntity.getName()==null) {
-                    air.add(tblEquipmentEntity);
-                }
+        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+            if (tblEquipmentEntity.getCategoryId() == 1 && tblEquipmentEntity.getName() == null) {
+                projector.add(tblEquipmentEntity);
             }
+            if (tblEquipmentEntity.getCategoryId() == 2 && tblEquipmentEntity.getName() == null) {
+                tivi.add(tblEquipmentEntity);
+            }
+            if (tblEquipmentEntity.getCategoryId() == 3 && tblEquipmentEntity.getName() == null) {
+                air.add(tblEquipmentEntity);
+            }
+        }
 
         List<TblEquipmentEntity> availableProjector = new ArrayList<TblEquipmentEntity>();
         List<TblEquipmentEntity> availableTivi = new ArrayList<TblEquipmentEntity>();
@@ -183,7 +183,7 @@ public class StaffController {
         List<TblEquipmentEntity> availableEquipment = new ArrayList<TblEquipmentEntity>();
         availableEquipment = equipmentDAO.findAll();
         for (TblEquipmentEntity tblEquipmentEntity : availableEquipment) {
-            if (tblEquipmentEntity.getClassroomId()==null && tblEquipmentEntity.getName()!=null) {
+            if (tblEquipmentEntity.getClassroomId() == null && tblEquipmentEntity.getName() != null) {
                 if (tblEquipmentEntity.getCategoryId() == 1) {
                     availableProjector.add(tblEquipmentEntity);
                 }
@@ -232,28 +232,29 @@ public class StaffController {
     @RequestMapping(value = "updateInformation")
     public String updateInformation(HttpServletRequest request, @RequestParam("projector") int projector,
                                     @RequestParam("tivi") int tivi, @RequestParam("airConditioning") String airConditioning,
-                                    @RequestParam("classroomId") int classroomId){
+                                    @RequestParam("classroomId") int classroomId) {
         TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-        if(projector!=0){
+        if (projector != 0) {
             executeUpdateInformation(tblEquipmentEntities, projector, 1);
         }
-        if(tivi!=0){
+        if (tivi != 0) {
             executeUpdateInformation(tblEquipmentEntities, tivi, 2);
         }
-        if(airConditioning!=null){
-            String []array = airConditioning.split("-");
-            for(int i = 0; i<array.length; i++){
+        if (airConditioning != null) {
+            String[] array = airConditioning.split("-");
+            for (int i = 0; i < array.length; i++) {
                 executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
             }
         }
         return "";
     }
+
     //execute Update information
-    public void executeUpdateInformation(Collection<TblEquipmentEntity> tblEquipmentEntities,int equipment, int category){
+    public void executeUpdateInformation(Collection<TblEquipmentEntity> tblEquipmentEntities, int equipment, int category) {
         TblEquipmentEntity targetEquipmentEntity = equipmentDAO.find(equipment);
-        for(TblEquipmentEntity currentEquipment:tblEquipmentEntities){
-            if(currentEquipment.getCategoryId()==category){
+        for (TblEquipmentEntity currentEquipment : tblEquipmentEntities) {
+            if (currentEquipment.getCategoryId() == category) {
                 targetEquipmentEntity.setClassroomId(currentEquipment.getClassroomId());
                 targetEquipmentEntity.setPosition(currentEquipment.getPosition());
                 equipmentDAO.merge(targetEquipmentEntity);
@@ -302,11 +303,11 @@ public class StaffController {
             if (tblScheduleEntities != null) {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                     //So sanh ngay
-                    if (tblScheduleEntity1.getDate().getTime()==dateFrom.getTime()) {
+                    if (tblScheduleEntity1.getDate().getTime() == dateFrom.getTime()) {
                         //So sanh gio
-                        String t = tblScheduleEntity1.getDate().toString()+" "+tblScheduleEntity1.getTimeFrom();
+                        String t = tblScheduleEntity1.getDate().toString() + " " + tblScheduleEntity1.getTimeFrom();
                         List<Date> listTimeToCompare = timeFraction(t, tblScheduleEntity1.getSlots());
-                        if(timeComparation(time, listTimeToCompare)){
+                        if (timeComparation(time, listTimeToCompare)) {
                             fitClassroom.remove(i);
                             break;
                         }
@@ -349,19 +350,184 @@ public class StaffController {
     }
 
     //So sánh giờ
-    public Boolean timeComparation(List<Date> time, List<Date>timeToCompare){
+    public Boolean timeComparation(List<Date> time, List<Date> timeToCompare) {
         boolean temp = false;
         int count = 0;
-        for(int i=0; i<time.size(); i++){
-            for(int j =0; j<timeToCompare.size(); j++){
-                if(time.get(i).getTime() == timeToCompare.get(j).getTime()){
-                    count+=1;
+        for (int i = 0; i < time.size(); i++) {
+            for (int j = 0; j < timeToCompare.size(); j++) {
+                if (time.get(i).getTime() == timeToCompare.get(j).getTime()) {
+                    count += 1;
                 }
             }
         }
-        if(count>=2){
+        if (count >= 2) {
             temp = true;
         }
         return temp;
+    }
+
+    //Check damaged level
+    public int checkDamagedLevel(TblReportEntity tblReportEntity) {
+        int damagedLevel = 0;
+        int projectorDamagedLevel = 0;
+        int mayLanhDamagedLevel = 0;
+        int tiviDamagedLevel = 0;
+        int quatDamagedLevel = 0;
+        int loaDamagedLevel = 0;
+        int denDamagedLevel = 0;
+        int banDamagedLevel = 0;
+        int gheDamagedLevel = 0;
+        int MayLanh = 0;
+        int Quat = 0;
+        int classroomId = tblReportEntity.getClassRoomId();
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+        TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
+        int chair = roomTypeEntity.getSlots();
+        String[] row = roomTypeEntity.getHorizontalRows().split("-");
+        int table = 0;
+        for (int i = 0; i < row.length; i++) {
+            table += Integer.parseInt(row[i]);
+        }
+        if (roomTypeEntity.getAirConditioning() > 0) {
+            MayLanh = roomTypeEntity.getAirConditioning();
+        }
+        if (roomTypeEntity.getFan() > 0) {
+            Quat = roomTypeEntity.getFan();
+        }
+        Collection<TblEquipmentEntity> damagedEquipment = new ArrayList<TblEquipmentEntity>();
+        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+            if (!tblEquipmentEntity.isStatus()) {
+                damagedEquipment.add(tblEquipmentEntity);
+            }
+        }
+        if (!damagedEquipment.isEmpty()) {
+            for (TblEquipmentEntity tblEquipmentEntity : damagedEquipment) {
+                if (tblEquipmentEntity.getCategoryId() == 1) {
+                    Collection<TblReportDetailEntity> projectors = tblEquipmentEntity.getTblReportDetailsById();
+                    for (TblReportDetailEntity project : projectors) {
+                        if (project.getDamagedLevel().equals("1")) {
+                            projectorDamagedLevel = 20;
+                        }
+                        if (project.getDamagedLevel().equals("2")) {
+                            projectorDamagedLevel = 30;
+                        } else {
+                            projectorDamagedLevel = 50;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 2) {
+                    Collection<TblReportDetailEntity> tivis = tblEquipmentEntity.getTblReportDetailsById();
+                    for (TblReportDetailEntity tivi : tivis) {
+                        if (tivi.getDamagedLevel().equals("1")) {
+                            tiviDamagedLevel = 20;
+                        }
+                        if (tivi.getDamagedLevel().equals("2")) {
+                            tiviDamagedLevel = 30;
+                        } else {
+                            tiviDamagedLevel = 50;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 3) {
+                    Collection<TblReportDetailEntity> mayLanhs = tblEquipmentEntity.getTblReportDetailsById();
+                    for (TblReportDetailEntity mayLanh : mayLanhs) {
+                        if (mayLanh.getDamagedLevel().equals("1")) {
+                            mayLanhDamagedLevel += 10;
+                        }
+                        if (mayLanh.getDamagedLevel().equals("2")) {
+                            mayLanhDamagedLevel += 15;
+                        } else {
+                            mayLanhDamagedLevel += 25;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 4) {
+                    Collection<TblReportDetailEntity> quats = tblEquipmentEntity.getTblReportDetailsById();
+                    if (MayLanh == 0) {
+                        if ((quats.size()/Quat)*100 >=50) {
+                            quatDamagedLevel = 50;
+                        }
+                    } else {
+                        for (TblReportDetailEntity quat : quats) {
+                            if (quat.getDamagedLevel().equals("1")) {
+                                quatDamagedLevel += 1;
+                            }
+                            if (quat.getDamagedLevel().equals("2")) {
+                                quatDamagedLevel += 3;
+                            } else {
+                                quatDamagedLevel += 5;
+                            }
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 5) {
+                    Collection<TblReportDetailEntity> loas = tblEquipmentEntity.getTblReportDetailsById();
+                    for (TblReportDetailEntity loa : loas) {
+                        if (loa.getDamagedLevel().equals("1")) {
+                            loaDamagedLevel = 1;
+                        }
+                        if (loa.getDamagedLevel().equals("2")) {
+                            loaDamagedLevel = 3;
+                        } else {
+                            loaDamagedLevel = 5;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 6) {
+                    Collection<TblReportDetailEntity> dens = tblEquipmentEntity.getTblReportDetailsById();
+                    for (TblReportDetailEntity den : dens) {
+                        if (den.getDamagedLevel().equals("1")) {
+                            denDamagedLevel = 10;
+                        }
+                        if (den.getDamagedLevel().equals("2")) {
+                            denDamagedLevel = 20;
+                        } else {
+                            denDamagedLevel = 50;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 7) {
+                    Collection<TblReportDetailEntity> bans = tblEquipmentEntity.getTblReportDetailsById();
+                    if((bans.size()/table)/100>=50){
+                        banDamagedLevel = 50;
+                    }else {
+                        for (TblReportDetailEntity ban : bans) {
+                            if (ban.getDamagedLevel().equals("1")) {
+                                banDamagedLevel += 2;
+                            }
+                            if (ban.getDamagedLevel().equals("2")) {
+                                banDamagedLevel += 3;
+                            } else {
+                                banDamagedLevel += 5;
+                            }
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 8) {
+                    Collection<TblReportDetailEntity> ghes = tblEquipmentEntity.getTblReportDetailsById();
+                    if((ghes.size()/chair)/100>=50){
+                        gheDamagedLevel = 50;
+                    }else {
+                        for (TblReportDetailEntity ghe : ghes) {
+                            if (ghe.getDamagedLevel().equals("1")) {
+                                gheDamagedLevel += 1;
+                            }
+                            if (ghe.getDamagedLevel().equals("2")) {
+                                gheDamagedLevel += 2;
+                            } else {
+                                gheDamagedLevel += 3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        damagedLevel = projectorDamagedLevel+mayLanhDamagedLevel+tiviDamagedLevel+loaDamagedLevel+quatDamagedLevel+denDamagedLevel
+                +banDamagedLevel+gheDamagedLevel;
+        if(damagedLevel>100){
+            damagedLevel = 100;
+        }
+        return damagedLevel;
     }
 }

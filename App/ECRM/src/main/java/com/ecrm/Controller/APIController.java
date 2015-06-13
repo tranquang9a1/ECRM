@@ -93,7 +93,7 @@ public class APIController {
         ResultDTO resultDTO = new ResultDTO();
 
         try {
-            TblReportEntity report = new TblReportEntity(username, roomId, evaluate, desc);
+            TblReportEntity report = new TblReportEntity(username, roomId, evaluate);
             reportDAO.insert(report);
             int reportId = report.getId();
 
@@ -110,7 +110,7 @@ public class APIController {
 
             for(int i = 0; i < equipments.length; i++) {
                 TblEquipmentEntity entity = new TblEquipmentEntity(equipmentCategoryDAO.findEquipmentId(equipments[i]),
-                        roomId, "Cái gì đây", "", positions[i], 0, "Damaged", 100);
+                        roomId, "Cái gì đây", "", positions[i], 0, false);
                 equipmentDAO.insert(entity);
                 TblReportDetailEntity detailEntity = new TblReportDetailEntity(entity.getId(), reportId, evaluates[i], false, positions[i]);
                 reportDetailDAO.insert(detailEntity);

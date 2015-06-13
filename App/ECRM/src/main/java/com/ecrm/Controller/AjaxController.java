@@ -3,6 +3,7 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
+import com.ecrm.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/ajax")
 public class AjaxController {
+    Utils utils;
     @Autowired
     ClassroomDAOImpl classroomDAO;
     @RequestMapping(value = "findClassroom")
@@ -48,7 +50,7 @@ public class AjaxController {
         String numberOfSlot = request.getParameter("numberOfSlots");
         String date = request.getParameter("date");
         String dateTime = date+" "+ timeFrom;
-        List<Date> time = timeFraction(dateTime, Integer.parseInt(numberOfSlot));
+        List<Date> time = utils.timeFraction(dateTime, Integer.parseInt(numberOfSlot));
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
@@ -70,8 +72,8 @@ public class AjaxController {
                     if (tblScheduleEntity1.getDate().getTime()==format.parse(date).getTime()) {
                         //So sanh gio
                         String t = tblScheduleEntity1.getDate().toString()+" "+tblScheduleEntity1.getTimeFrom();
-                        List<Date> listTimeToCompare = timeFraction(t, tblScheduleEntity1.getSlots());
-                        if(timeComparation(time, listTimeToCompare)){
+                        List<Date> listTimeToCompare = utils.timeFraction(t, tblScheduleEntity1.getSlots());
+                        if(utils.timeComparation(time, listTimeToCompare)){
                             fitClassroom.remove(i);
                             break;
                         }
@@ -89,42 +91,5 @@ public class AjaxController {
         }
     }
 
-    public List<Date> timeFraction(String datetime, int slots) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date timeFrom1 = null;
-        try {
-            timeFrom1 = df.parse(datetime);
-        } catch (ParseException e) {
-            System.out.println("erroe!!!!");
-        }
 
-        List<Date> time = new ArrayList<Date>();
-        df.format(timeFrom1);
-        time.add(timeFrom1);
-        for (int i = 1; i <= slots; i++) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(timeFrom1);
-            cal.add(Calendar.MINUTE, i * 105);
-            Date t = cal.getTime();
-            df.format(t);
-            time.add(t);
-        }
-        return time;
-    }
-    //So sánh giờ
-    public Boolean timeComparation(List<Date> time, List<Date>timeToCompare){
-        boolean temp = false;
-        int count = 0;
-        for(int i=0; i<time.size(); i++){
-            for(int j =0; j<timeToCompare.size(); j++){
-                if(time.get(i).getTime() == timeToCompare.get(j).getTime()){
-                    count+=1;
-                }
-            }
-        }
-        if(count>=2){
-            temp = true;
-        }
-        return temp;
-    }
 }

@@ -275,19 +275,18 @@ public class ScheduleController {
 
     //Manually import
     @RequestMapping(value = "importManually")
-    public String importManually(HttpServletRequest request,@RequestParam("username")String username, @RequestParam("classroomId")String classroomId,
+    public String importManually(HttpServletRequest request,@RequestParam("username")String username, @RequestParam("all")String all, @RequestParam("avai") String avai,
                                  @RequestParam("slot")String slot, @RequestParam("numberOfSlots")int numberOfSlots,
                                  @RequestParam("numberOfStudent")int numberOfStudent, @RequestParam("date")String date) throws ParseException {
-        String []array = classroomId.split("-");
         String timeFrom = convertSlotToTime(slot);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
-        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(array[1]), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
+        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
                 teachingDate);
-        if(array[0].equals("1")){
+        if(all.equals("0")){
             scheduleDAO.persist(tblScheduleEntity);
         }else{
-            TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(array[1]));
+            TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(all));
             if(tblScheduleEntity1!=null){
                 tblScheduleEntity1.setUsername(username);
                 tblScheduleEntity1.setSlots(numberOfSlots);

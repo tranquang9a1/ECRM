@@ -42,12 +42,9 @@
                         alert('Error while request..');
                     }
                 })
-                alert(document.getElementById('avai').value);
-                document.getElementById('classroomId').value = "1-"+document.getElementById('avai').value;
             } else {
                 document.getElementById('avai_classroom').style.display = 'none';
                 document.getElementById('classroom').style.display = 'block';
-                document.getElementById('classroomId').value = "2-"+document.getElementById('all').value;
             }
 
         }
@@ -127,6 +124,7 @@
 
                         <div id="classroom">
                             <select id="all">
+                                <option value="0">---</option>
                                 <c:forEach items="${classrooms}" var="c">
                                     <option value="${c.id}">Phòng ${c.name}</option>
                                 </c:forEach>
@@ -134,7 +132,7 @@
                         </div>
                         <div id="avai_classroom" style="display: none">
                             <select id="avai">
-
+                                <option value="0">---</option>
                             </select>
                         </div>
                         </p><br/>

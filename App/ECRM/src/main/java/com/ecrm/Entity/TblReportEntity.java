@@ -25,15 +25,14 @@ public class TblReportEntity {
 
     public TblReportEntity(){}
 
-    public TblReportEntity(String username, int roomId, String evaluate){
+    public TblReportEntity(String username, int roomId, int damagedLevel, String evaluate){
         this.username = username;
         this.classRoomId = roomId;
         this.createTime = new Timestamp(new Date().getTime());
+        this.damagedLevel = damagedLevel;
         this.evaluate = evaluate;
         this.status = true;
     }
-
-
 
     @Id
     @GeneratedValue
@@ -115,6 +114,7 @@ public class TblReportEntity {
 
         if (id != that.id) return false;
         if (classRoomId != that.classRoomId) return false;
+        if (damagedLevel != that.damagedLevel) return false;
         if (status != that.status) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
@@ -128,6 +128,7 @@ public class TblReportEntity {
         int result = id;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + classRoomId;
+        result = 31 * result + damagedLevel;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (evaluate != null ? evaluate.hashCode() : 0);
         result = 31 * result + (status ? 1 : 0);

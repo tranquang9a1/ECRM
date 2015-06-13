@@ -16,7 +16,6 @@ public class TblClassroomEntity {
     private int id;
     private Integer roomTypeId;
     private String name;
-    private Integer damagedLevel;
     private Timestamp createTime;
     private Timestamp updateTime;
     private Boolean isDelete;
@@ -55,16 +54,6 @@ public class TblClassroomEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Basic
-    @Column(name = "DamagedLevel")
-    public Integer getDamagedLevel() {
-        return damagedLevel;
-    }
-
-    public void setDamagedLevel(Integer damagedLevel) {
-        this.damagedLevel = damagedLevel;
     }
 
     @Basic
@@ -117,7 +106,6 @@ public class TblClassroomEntity {
         if (id != that.id) return false;
         if (roomTypeId != null ? !roomTypeId.equals(that.roomTypeId) : that.roomTypeId != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (damagedLevel != null ? !damagedLevel.equals(that.damagedLevel) : that.damagedLevel != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
         if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
@@ -130,7 +118,6 @@ public class TblClassroomEntity {
         int result = id;
         result = 31 * result + (roomTypeId != null ? roomTypeId.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (damagedLevel != null ? damagedLevel.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
@@ -177,12 +164,11 @@ public class TblClassroomEntity {
     public TblClassroomEntity() {
     }
 
-    public TblClassroomEntity(int id, Integer roomTypeId, String name, Integer damagedLevel, Timestamp createTime,
+    public TblClassroomEntity(int id, Integer roomTypeId, String name, Timestamp createTime,
                               Timestamp updateTime, Boolean isDelete, Boolean isAllInformation) {
         this.id = id;
         this.roomTypeId = roomTypeId;
         this.name = name;
-        this.damagedLevel = damagedLevel;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.isDelete = isDelete;

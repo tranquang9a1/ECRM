@@ -15,10 +15,9 @@ public class TblScheduleEntity {
     private int classroomId;
     private int numberOfStudents;
     private String note;
-    private String timeFrom;
+    private Time timeFrom;
     private int slots;
     private Date date;
-    private Date dateTo;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblUserEntity tblUserByUserId;
 
@@ -75,11 +74,11 @@ public class TblScheduleEntity {
 
     @Basic
     @Column(name = "TimeFrom")
-    public String getTimeFrom() {
+    public Time getTimeFrom() {
         return timeFrom;
     }
 
-    public void setTimeFrom(String timeFrom) {
+    public void setTimeFrom(Time timeFrom) {
         this.timeFrom = timeFrom;
     }
 
@@ -103,17 +102,6 @@ public class TblScheduleEntity {
         this.date = date;
     }
 
-    @Basic
-    @Column(name = "DateTo")
-    public Date getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(Date dateTo) {
-        this.dateFrom = dateTo;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -129,7 +117,6 @@ public class TblScheduleEntity {
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (timeFrom != null ? !timeFrom.equals(that.timeFrom) : that.timeFrom != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (dateTo != null ? !dateTo.equals(that.dateTo) : that.dateTo != null) return false;
 
         return true;
     }
@@ -144,7 +131,6 @@ public class TblScheduleEntity {
         result = 31 * result + (timeFrom != null ? timeFrom.hashCode() : 0);
         result = 31 * result + slots;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (dateTo != null ? dateTo.hashCode() : 0);
         return result;
     }
 
@@ -171,7 +157,7 @@ public class TblScheduleEntity {
     public TblScheduleEntity() {
     }
 
-    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, String timeFrom, int slots, Date date) {
+    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, Time timeFrom, int slots, Date date) {
         this.username = username;
         this.classroomId = classroomId;
         this.numberOfStudents = numberOfStudents;

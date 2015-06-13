@@ -20,7 +20,7 @@ public class TblRoomTypeEntity {
     private int fan;
     private int projector;
     private int speaker;
-    private Integer bulb;
+    private int bulb;
     private int television;
     private Timestamp createTime;
     private Boolean isDelete;
@@ -37,8 +37,6 @@ public class TblRoomTypeEntity {
     public void setId(int id) {
         this.id = id;
     }
-
-
 
     @Basic
     @Column(name="Name")
@@ -132,11 +130,11 @@ public class TblRoomTypeEntity {
 
     @Basic
     @Column(name = "Bulb")
-    public Integer getBulb() {
+    public int getBulb() {
         return bulb;
     }
 
-    public void setBulb(Integer bulb) {
+    public void setBulb(int bulb) {
         this.bulb = bulb;
     }
 
@@ -195,11 +193,11 @@ public class TblRoomTypeEntity {
         if (projector != that.projector) return false;
         if (speaker != that.speaker) return false;
         if (television != that.television) return false;
+        if (bulb != that.bulb) return false;
         if (horizontalRows != null ? !horizontalRows.equals(that.horizontalRows) : that.horizontalRows != null)
             return false;
         if (numberOfSlotsEachHRows != null ? !numberOfSlotsEachHRows.equals(that.numberOfSlotsEachHRows) : that.numberOfSlotsEachHRows != null)
             return false;
-        if (bulb != null ? !bulb.equals(that.bulb) : that.bulb != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (isDelete != null ? !isDelete.equals(that.isDelete) : that.isDelete != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
@@ -218,7 +216,7 @@ public class TblRoomTypeEntity {
         result = 31 * result + fan;
         result = 31 * result + projector;
         result = 31 * result + speaker;
-        result = 31 * result + (bulb != null ? bulb.hashCode() : 0);
+        result = 31 * result + bulb;
         result = 31 * result + television;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
@@ -239,7 +237,7 @@ public class TblRoomTypeEntity {
     }
 
     public TblRoomTypeEntity(int id, int slots, int verticalRows, String horizontalRows, String numberOfSlotsEachHRows,
-                             int airConditioning, int fan, int projector, int speaker, Integer bulb, int television, Timestamp createTime, Boolean isDelete, Timestamp updateTime) {
+                             int airConditioning, int fan, int projector, int speaker, int bulb, int television, Timestamp createTime, Boolean isDelete, Timestamp updateTime) {
         this.id = id;
         this.slots = slots;
         this.verticalRows = verticalRows;

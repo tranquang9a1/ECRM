@@ -17,7 +17,6 @@ public class TblReportEntity {
     private int classRoomId;
     private Timestamp createTime;
     private String evaluate;
-    private String description;
     private boolean status;
     private TblClassroomEntity tblClassroomByClassRoomId;
     private TblUserEntity tblUserByUserId;
@@ -25,12 +24,11 @@ public class TblReportEntity {
 
     public TblReportEntity(){}
 
-    public TblReportEntity(String username, int roomId, String evaluate, String description){
+    public TblReportEntity(String username, int roomId, String evaluate){
         this.username = username;
         this.classRoomId = roomId;
         this.createTime = new Timestamp(new Date().getTime());
         this.evaluate = evaluate;
-        this.description = description;
         this.status = true;
     }
 
@@ -88,16 +86,6 @@ public class TblReportEntity {
     }
 
     @Basic
-    @Column(name = "Description")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Basic
     @Column(name = "Status")
     public boolean isStatus() {
         return status;
@@ -120,7 +108,6 @@ public class TblReportEntity {
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (evaluate != null ? !evaluate.equals(that.evaluate) : that.evaluate != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
 
         return true;
     }
@@ -132,7 +119,6 @@ public class TblReportEntity {
         result = 31 * result + classRoomId;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (evaluate != null ? evaluate.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (status ? 1 : 0);
         return result;
     }

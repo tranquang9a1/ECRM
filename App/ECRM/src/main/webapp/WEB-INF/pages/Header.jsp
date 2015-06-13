@@ -45,7 +45,7 @@
                 </a>
             </li>
             <li>
-                <a href="../HTML/Equipment.html">
+                <a href="/staff/equipment">
                     <img src=""/>
                     <p>Thiết Bị</p>
                 </a>

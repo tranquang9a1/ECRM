@@ -23,7 +23,6 @@ import java.util.*;
 @Controller
 @RequestMapping("/ajax")
 public class AjaxController {
-    Utils utils;
     @Autowired
     ClassroomDAOImpl classroomDAO;
     @RequestMapping(value = "findClassroom")
@@ -50,7 +49,7 @@ public class AjaxController {
         String numberOfSlot = request.getParameter("numberOfSlots");
         String date = request.getParameter("date");
         String dateTime = date+" "+ timeFrom;
-        List<Date> time = utils.timeFraction(dateTime, Integer.parseInt(numberOfSlot));
+        List<Date> time = Utils.timeFraction(dateTime, Integer.parseInt(numberOfSlot));
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
@@ -72,8 +71,8 @@ public class AjaxController {
                     if (tblScheduleEntity1.getDate().getTime()==format.parse(date).getTime()) {
                         //So sanh gio
                         String t = tblScheduleEntity1.getDate().toString()+" "+tblScheduleEntity1.getTimeFrom();
-                        List<Date> listTimeToCompare = utils.timeFraction(t, tblScheduleEntity1.getSlots());
-                        if(utils.timeComparation(time, listTimeToCompare)){
+                        List<Date> listTimeToCompare = Utils.timeFraction(t, tblScheduleEntity1.getSlots());
+                        if(Utils.timeComparation(time, listTimeToCompare)){
                             fitClassroom.remove(i);
                             break;
                         }
@@ -82,6 +81,9 @@ public class AjaxController {
             }
         }
         response.setContentType("text/html");
+        response.getWriter().write("<option value='0'>");
+        response.getWriter().write("---");
+        response.getWriter().write("</option>");
         if(!fitClassroom.isEmpty()){
             for(int j = 0; j< fitClassroom.size(); j++){
                 response.getWriter().write("<option value='"+fitClassroom.get(j).getId()+"'>");

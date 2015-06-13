@@ -166,7 +166,7 @@ public class TblEquipmentEntity {
     public TblEquipmentEntity() {
     }
 
-    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position, int timeRemain, boolean status) {
+    public TblEquipmentEntity(int categoryId, Integer classroomId, String name, String serialNumber, String position, Integer timeRemain, boolean status) {
         this.categoryId = categoryId;
         this.classroomId = classroomId;
         this.name = name;

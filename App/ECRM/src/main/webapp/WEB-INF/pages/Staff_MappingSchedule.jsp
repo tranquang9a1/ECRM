@@ -29,6 +29,7 @@
             if (document.getElementById('chckBox').checked) {
                 document.getElementById('classroom').style.display = 'none';
                 document.getElementById('avai_classroom').style.display = 'block';
+                document.getElementById("all").selectedIndex = 0;
                 $.ajax({
                     type: "get",
                     url: "/ajax/findClassroom",
@@ -45,6 +46,8 @@
             } else {
                 document.getElementById('avai_classroom').style.display = 'none';
                 document.getElementById('classroom').style.display = 'block';
+                document.getElementById("avai").selectedIndex = 0;
+
             }
 
         }
@@ -91,7 +94,6 @@
                     <h3>Nhập lịch bằng tay</h3>
 
                     <form action="/staff/importManually">
-                        <input hidden name="classroomId" id="classroomId">
                         <p>Username: <input type="text" name="username"></p><br/>
 
                         <p>Tiết bắt đầu: <select name="slot" id="slot">
@@ -123,7 +125,7 @@
                             trống<br/>
 
                         <div id="classroom">
-                            <select id="all">
+                            <select id="all" name="all">
                                 <option value="0">---</option>
                                 <c:forEach items="${classrooms}" var="c">
                                     <option value="${c.id}">Phòng ${c.name}</option>
@@ -131,7 +133,7 @@
                             </select>
                         </div>
                         <div id="avai_classroom" style="display: none">
-                            <select id="avai">
+                            <select id="avai" name="avai">
                                 <option value="0">---</option>
                             </select>
                         </div>

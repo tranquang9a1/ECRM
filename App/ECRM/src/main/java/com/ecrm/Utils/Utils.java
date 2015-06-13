@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Utils {
 
-    ClassroomDAOImpl classroomDAO;
+    static ClassroomDAOImpl classroomDAO;
     public static AccountDTO convertFromUserToAccountDTO(TblUserEntity userEntity) {
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setFullname(userEntity.getTblUserInfoByUsername().getFullName());
@@ -92,7 +92,7 @@ public class Utils {
     }
 
     //Check damaged level
-    public int checkDamagedLevel(TblReportEntity tblReportEntity) {
+    public static int checkDamagedLevel(TblReportEntity tblReportEntity) {
         int damagedLevel = 0;
         int projectorDamagedLevel = 0;
         int mayLanhDamagedLevel = 0;
@@ -319,8 +319,8 @@ public class Utils {
     }
 
     //Phân rã thời gian theo tiết học
-    public List<Date> timeFraction(String datetime, int slots) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    public static List<Date> timeFraction(String datetime, int slots) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date timeFrom1 = null;
         try {
             timeFrom1 = df.parse(datetime);
@@ -343,7 +343,7 @@ public class Utils {
     }
 
     //So sánh giờ
-    public Boolean timeComparation(List<Date> time, List<Date> timeToCompare) {
+    public static Boolean timeComparation(List<Date> time, List<Date> timeToCompare) {
         boolean temp = false;
         int count = 0;
         for (int i = 0; i < time.size(); i++) {

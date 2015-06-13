@@ -241,13 +241,13 @@ public class StaffController {
         if (tivi != 0) {
             executeUpdateInformation(tblEquipmentEntities, tivi, 2);
         }
-        if (airConditioning != null) {
+        if (airConditioning != "") {
             String[] array = airConditioning.split("-");
             for (int i = 0; i < array.length; i++) {
                 executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
             }
         }
-        return "";
+        return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
     //execute Update information

@@ -22,4 +22,6 @@ public interface ReportDAO {
     public List<TblReportEntity> getAllReport(int limit, int offset);
 
     public boolean createReport();
+
+    public List<TblReportEntity> getReportByClassId();
 }

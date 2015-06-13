@@ -66,9 +66,11 @@ public class Utils {
         reportDTO.setClassId(reportEntity.getClassRoomId());
         reportDTO.setCreateTime("1355245200000");
         List<TblReportDetailEntity> detail = reportEntity.getTblReportDetailsById();
-        reportDTO.setEquipment(convertFromReportEntityToDTO(detail));
+        reportDTO.setEquipments(convertFromReportEntityToDTO(detail));
         reportDTO.setEvaluate(reportEntity.getEvaluate());
         reportDTO.setReportId(reportEntity.getId());
+        reportDTO.setStatus(reportEntity.isStatus());
+        reportDTO.setDamageLevel(88);
 
         return reportDTO;
     }
@@ -81,6 +83,9 @@ public class Utils {
             dto.setEquipmentName(entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName());
             dto.setDamaged(entity.getDamagedLevel());
             dto.setDescription(entity.getSolution());
+            dto.setResolveTime(entity.getResolveTime());
+            dto.setSolution(entity.getSolution());
+            dto.setStatus(entity.isStatus());
             result.add(dto);
         }
 

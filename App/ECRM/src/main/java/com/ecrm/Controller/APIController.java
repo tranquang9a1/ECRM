@@ -1,6 +1,7 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.*;
+import com.ecrm.DAO.ReportDAO;
 import com.ecrm.DAO.ReportDetailDAO;
 import com.ecrm.DAO.RoomTypeDAO;
 import com.ecrm.DTO.AccountDTO;
@@ -93,7 +94,7 @@ public class APIController {
         ResultDTO resultDTO = new ResultDTO();
 
         try {
-            TblReportEntity report = new TblReportEntity(username, roomId, evaluate);
+            TblReportEntity report = new TblReportEntity(username, roomId, 100, evaluate);
             reportDAO.insert(report);
             int reportId = report.getId();
 
@@ -107,6 +108,7 @@ public class APIController {
             String[] evaluates = listEvaluate.split(",");
             String[] positions = listPosition.split("-");
             List<Integer> listId = new ArrayList<Integer>();
+
 
             for(int i = 0; i < equipments.length; i++) {
                 TblEquipmentEntity entity = new TblEquipmentEntity(equipmentCategoryDAO.findEquipmentId(equipments[i]),
@@ -131,6 +133,14 @@ public class APIController {
 
     }
 
+    @RequestMapping(value = "/getReportStaff", method = RequestMethod.GET)
+    public @ResponseBody ReportDTO getReportStaff() {
+        ReportDTO dto = new ReportDTO();
 
+        List<TblReportEntity> result = reportDAO.getReportByClassId();
+
+        return dto;
+
+    }
 
 }

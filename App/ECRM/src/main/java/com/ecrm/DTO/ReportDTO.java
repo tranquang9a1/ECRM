@@ -16,17 +16,21 @@ public class ReportDTO {
     private int classId;
     private String createTime;
     private String evaluate;
+    private boolean status;
+    private int damageLevel;
     private List<ReportDetailDTO> equipments;
 
     public ReportDTO(int reportId, String username, String fullname, int classId, String createTime, String evaluate,
-                     List<ReportDetailDTO> equipmentId) {
+                     boolean status, int damageLevel, List<ReportDetailDTO> equipmentId) {
         this.reportId = reportId;
         this.username = username;
         this.fullname = fullname;
         this.classId = classId;
         this.createTime = createTime;
         this.evaluate = evaluate;
+        this.status = status;
         this.equipments = equipmentId;
+        this.damageLevel = damageLevel;
     }
 
     public ReportDTO() {
@@ -81,11 +85,27 @@ public class ReportDTO {
     }
 
 
-    public List<ReportDetailDTO> getEquipment() {
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public List<ReportDetailDTO> getEquipments() {
         return equipments;
     }
 
-    public void setEquipment(List<ReportDetailDTO> equipmentId) {
-        this.equipments = equipmentId;
+    public void setEquipments(List<ReportDetailDTO> equipments) {
+        this.equipments = equipments;
+    }
+
+    public int getDamageLevel() {
+        return damageLevel;
+    }
+
+    public void setDamageLevel(int damageLevel) {
+        this.damageLevel = damageLevel;
     }
 }

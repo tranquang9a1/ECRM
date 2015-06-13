@@ -82,4 +82,12 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     public boolean createReport() {
         return true;
     }
+
+    @Override
+    public List<TblReportEntity> getReportByClassId() {
+        Query query  = entityManager.createQuery("Select u from TblReportEntity u where u.status = :status group by u.classRoomId");
+        query.setParameter("status", false);
+
+        return  query.getResultList();
+    }
 }

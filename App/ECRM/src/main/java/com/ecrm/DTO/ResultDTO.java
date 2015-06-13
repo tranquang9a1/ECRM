@@ -1,18 +1,19 @@
 package com.ecrm.DTO;
 
 /**
- * Created by Htang on 6/12/2015.
+ * Created by Thuy_Tien on 6/11/2015.
  */
 public class ResultDTO {
+
     private int error_code;
     private String error;
-
-    public ResultDTO() {
-    }
 
     public ResultDTO(int error_code, String error) {
         this.error_code = error_code;
         this.error = error;
+    }
+
+    public ResultDTO() {
     }
 
     public int getError_code() {

@@ -1,7 +1,7 @@
 package com.ecrm.DTO;
 
 /**
- * Created by Htang on 6/12/2015.
+ * Created by Thuy_Tien on 6/11/2015.
  */
 public class ClassroomDTO {
     private int classId;
@@ -9,15 +9,17 @@ public class ClassroomDTO {
     private String timeFrom;
     private String timeTo;
 
-    public ClassroomDTO() {
-    }
-
-    public ClassroomDTO(int classId, String classroomName, String timeFrom, String timeTo) {
+    public ClassroomDTO(int classId, String timeFrom, String timeTo, String classroomName) {
         this.classId = classId;
-        this.classroomName = classroomName;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        this.classroomName = classroomName;
     }
+
+    public ClassroomDTO() {
+
+    }
+
 
     public int getClassId() {
         return classId;
@@ -25,14 +27,6 @@ public class ClassroomDTO {
 
     public void setClassId(int classId) {
         this.classId = classId;
-    }
-
-    public String getClassroomName() {
-        return classroomName;
-    }
-
-    public void setClassroomName(String classroomName) {
-        this.classroomName = classroomName;
     }
 
     public String getTimeFrom() {
@@ -49,5 +43,13 @@ public class ClassroomDTO {
 
     public void setTimeTo(String timeTo) {
         this.timeTo = timeTo;
+    }
+
+    public String getClassroomName() {
+        return classroomName;
+    }
+
+    public void setClassroomName(String classroomName) {
+        this.classroomName = classroomName;
     }
 }

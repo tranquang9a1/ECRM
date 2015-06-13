@@ -16,14 +16,13 @@ public class TblEquipmentEntity {
     private Integer timeRemain;
     private String name;
     private String serialNumber;
-    private String status;
-    private Integer usingTime;
+    private boolean status;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
 
-    @GeneratedValue
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -93,25 +92,13 @@ public class TblEquipmentEntity {
         this.serialNumber = serialNumber;
     }
 
-
-    @Basic
-    @Column(name = "UsingTime")
-    public Integer getUsingTime() {
-        return usingTime;
-    }
-
-    public void setUsingTime(Integer usingTime) {
-        this.usingTime = usingTime;
-    }
-
-
     @Basic
     @Column(name = "Status")
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -129,7 +116,7 @@ public class TblEquipmentEntity {
         if (timeRemain != null ? !timeRemain.equals(that.timeRemain) : that.timeRemain != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (status != that.status) return false;
 
         return true;
     }
@@ -143,7 +130,7 @@ public class TblEquipmentEntity {
         result = 31 * result + (timeRemain != null ? timeRemain.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (serialNumber != null ? serialNumber.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (status ? 1 : 0);
         return result;
     }
 
@@ -179,8 +166,7 @@ public class TblEquipmentEntity {
     public TblEquipmentEntity() {
     }
 
-    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position,
-                              int timeRemain, String status) {
+    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position, int timeRemain, boolean status) {
         this.categoryId = categoryId;
         this.classroomId = classroomId;
         this.name = name;
@@ -188,19 +174,5 @@ public class TblEquipmentEntity {
         this.position = position;
         this.timeRemain = timeRemain;
         this.status = status;
-
-    }
-
-
-    public TblEquipmentEntity(int categoryId, int classroomId, String name, String serialNumber, String position,
-                             int timeRemain, String status, int usingTime) {
-        this.categoryId = categoryId;
-        this.classroomId = classroomId;
-        this.name = name;
-        this.serialNumber = serialNumber;
-        this.position = position;
-        this.timeRemain = timeRemain;
-        this.status = status;
-        this.usingTime = usingTime;
     }
 }

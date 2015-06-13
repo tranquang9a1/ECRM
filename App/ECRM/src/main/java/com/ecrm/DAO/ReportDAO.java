@@ -11,7 +11,11 @@ import java.util.List;
 @Repository
 public interface ReportDAO {
 
-    public List<TblReportEntity> getAllReportInStatus(boolean status);
+    public List<Integer> getDamagedRoom(boolean status);
+
+    public List<TblReportEntity> getReportsInRoom(int room);
+
+//    public
 
     public List<TblReportEntity> getReportByUserId(String username);
 

@@ -20,12 +20,33 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
-    public List<TblReportEntity> getAllReportInStatus(boolean status) {
+    public List<Integer> getDamagedRoom(boolean status) {
+
+        Query query = entityManager.createQuery("SELECT r.classRoomId " +
+                "FROM TblReportEntity r " +
+                "WHERE r.status = :status " +
+                "GROUP BY r.classRoomId");
+        query.setParameter("status", status);
+
+        List queryResult = query.getResultList();
+        List<Integer> result = new ArrayList<Integer>();
+        if(!queryResult.isEmpty()){
+            for(Iterator i = queryResult.iterator(); i.hasNext();) {
+                Integer room = (Integer) i.next();
+                result.add(room);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<TblReportEntity> getReportsInRoom(int room) {
 
         Query query = entityManager.createQuery("SELECT r " +
                 "FROM TblReportEntity r " +
-                "WHERE r.status = :status");
-        query.setParameter("status",status);
+                "WHERE r.classRoomId = :room");
+        query.setParameter("room", room);
 
         List queryResult = query.getResultList();
         List<TblReportEntity> result = new ArrayList<TblReportEntity>();

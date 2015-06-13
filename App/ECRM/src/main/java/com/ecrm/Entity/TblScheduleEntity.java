@@ -18,6 +18,7 @@ public class TblScheduleEntity {
     private String timeFrom;
     private int slots;
     private Date date;
+    private Date dateTo;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblUserEntity tblUserByUserId;
 
@@ -102,6 +103,16 @@ public class TblScheduleEntity {
         this.date = date;
     }
 
+    @Basic
+    @Column(name = "DateTo")
+    public Date getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(Date dateTo) {
+        this.dateFrom = dateTo;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -118,6 +129,7 @@ public class TblScheduleEntity {
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (timeFrom != null ? !timeFrom.equals(that.timeFrom) : that.timeFrom != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (dateTo != null ? !dateTo.equals(that.dateTo) : that.dateTo != null) return false;
 
         return true;
     }
@@ -132,6 +144,7 @@ public class TblScheduleEntity {
         result = 31 * result + (timeFrom != null ? timeFrom.hashCode() : 0);
         result = 31 * result + slots;
         result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (dateTo != null ? dateTo.hashCode() : 0);
         return result;
     }
 

@@ -42,24 +42,16 @@
             </div>
             <div class="content-tab">
                 <div id="tab1" class="body-tab active">
-                    <c:forEach var="i" begin="0" end="${newReport.size() - 1}">
-                        <div class="notify-active" onclick="showReportDetail(${newReport[i].reportId})">
-                            <p class="room">Phòng ${newReport[i].tblClassroomByClassRoomId.name}</p>
-                            <p class="description">
-                                <c:if test="${newReport[i].evaluate == 1}">
-                                    Hư hại nghiêm trọng, cần đổi phòng
-                                </c:if>
-                                <c:if test="${newReport[i].evaluate == 2}">
-                                    Hư hại trung bình, cần sửa gấp
-                                </c:if>
-                                <c:if test="${newReport[i].evaluate == 3}">
-                                    Hư hại nhẹ, vẫn dùng được
-                                </c:if>
-                            </p>
-                            <p class="time"><tmf:formatDate value="${newReport[i].createTime}" pattern="HH:mm dd/MM/yyyy"/></p>
+                    <c:if test="${newReport.size() > 0}">
+                        <c:forEach var="i" begin="0" end="${newReport.size() - 1}">
+                        <div class="notify-active" onclick="showReportDetail(${newReport[i].roomId})">
+                            <p class="room">Phòng ${newReport[i].roomName}</p>
+                            <p class="description">${newReport[i].listEquipments}</p>
+                            <p class="time">Người báo cáo(${newReport[i].reporters})</p>
                             <div class="clear"></div>
                         </div>
                     </c:forEach>
+                    </c:if>
                 </div>
                 <div id="tab2" class="body-tab">
                     <div class="search">
@@ -86,17 +78,13 @@
                         </div>
                         <div class="control">
                             <select>
-                                <option>Phụ trách</option>
-                                <option>Lại Văn Sâm</option>
-                                <option>Trần Lạc Hầu</option>
-                                <option>Cung Thiên Toản</option>
-                                <option>Dương Chí Bình</option>
-                                <option>Trần Quốc An</option>
+                                <option>Ngày báo cáo</option>
+                                <option>02/03/2015</option>
                             </select>
                         </div>
                         <div class="control">
                             <select>
-                                <option>Ngày báo cáo</option>
+                                <option>Ngày sửa chửa</option>
                                 <option>02/03/2015</option>
                             </select>
                         </div>
@@ -105,181 +93,41 @@
 
                     <div class="table">
                         <div class="header-table">
-                            <div class="room">
+                            <div class="width-15">
                                 <div>Phòng</div>
                             </div>
-                            <div class="equipment">
+                            <div class="width-30">
                                 <div>Thiết bị</div>
                             </div>
-                            <div class="report-time">
+                            <div class="width-20">
                                 <div>Ngày báo cáo</div>
                             </div>
-                            <div class="staff">
-                                <div>Phụ trách</div>
+                            <div class="width-20">
+                                <div>Ngày sửa chửa</div>
                             </div>
-                            <div class="control">
-                                <div>Quản lý</div>
+                            <div class="width-15">
+                                <div></div>
                             </div>
                             <p class="clear"></p>
                         </div>
                         <div class="body-table">
                             <div class="row">
-                                <div class="room">
-                                    <div>201</div>
+                                <div class="width-15">
+                                    <div>Phòng 201</div>
                                 </div>
-                                <div class="equipment">
+                                <div class="width-30">
                                     <div>Máy lạnh</div>
                                 </div>
-                                <div class="report-time">
+                                <div class="width-20">
                                     <div>25/3/2015</div>
                                 </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
+                                <div class="width-20">
+                                    <div>25/3/2015</div>
                                 </div>
-                                <div class="control">
+                                <div class="width-15">
                                     <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>101</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>08/2/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Lạc Hồng Quân</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>315</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Ghế</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>20/4/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Lạc Hồng Quân</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>1/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Bàn</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>15/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Lạc Hồng Quân</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>507</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Đèn</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>28/1/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>07/4/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                        <div href="javascript:void(0)" class="btn btn-remove"><i
-                                                class="fa fa-times"></i></div>
+                                        <div title="Xem" onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
+                                                class="fa fa-file"></i></div>
                                     </div>
                                 </div>
                                 <p class="clear"></p>
@@ -312,17 +160,13 @@
                         </div>
                         <div class="control">
                             <select>
-                                <option>Phụ trách</option>
-                                <option>Lại Văn Sâm</option>
-                                <option>Trần Lạc Hầu</option>
-                                <option>Cung Thiên Toản</option>
-                                <option>Dương Chí Bình</option>
-                                <option>Trần Quốc An</option>
+                                <option>Ngày báo cáo</option>
+                                <option>02/03/2015</option>
                             </select>
                         </div>
                         <div class="control">
                             <select>
-                                <option>Ngày báo cáo</option>
+                                <option>Người báo cáo</option>
                                 <option>02/03/2015</option>
                             </select>
                         </div>
@@ -331,167 +175,41 @@
 
                     <div class="table">
                         <div class="header-table">
-                            <div class="room">
+                            <div class="width-15">
                                 <div>Phòng</div>
                             </div>
-                            <div class="equipment">
+                            <div class="width-30">
                                 <div>Thiết bị</div>
                             </div>
-                            <div class="report-time">
-                                <div>Ngày báo cáo</div>
+                            <div class="width-20">
+                                <div>Người báo cáo</div>
                             </div>
-                            <div class="staff">
-                                <div>Phụ trách</div>
+                            <div class="width-20">
+                                <div>Ngày sửa chửa</div>
                             </div>
-                            <div class="control">
-                                <div>Quản lý</div>
+                            <div class="width-15">
+                                <div></div>
                             </div>
                             <p class="clear"></p>
                         </div>
                         <div class="body-table">
                             <div class="row">
-                                <div class="room">
-                                    <div>201</div>
+                                <div class="width-15">
+                                    <div>Phòng 201</div>
                                 </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
+                                <div class="width-30">
+                                    <div>Máy lạnh</div>
                                 </div>
-                                <div class="report-time">
+                                <div class="width-20">
+                                    <div>Nguyễn Thái Bình</div>
+                                </div>
+                                <div class="width-20">
                                     <div>25/3/2015</div>
                                 </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
+                                <div class="width-15">
                                     <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>25/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>25/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>25/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>25/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>25/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
-                                    </div>
-                                </div>
-                                <p class="clear"></p>
-                            </div>
-                            <div class="row">
-                                <div class="room">
-                                    <div>201</div>
-                                </div>
-                                <div class="equipment">
-                                    <div>Máy quạt</div>
-                                </div>
-                                <div class="report-time">
-                                    <div>25/3/2015</div>
-                                </div>
-                                <div class="staff">
-                                    <div>Trần Quốc An</div>
-                                </div>
-                                <div class="control">
-                                    <div class="group-button">
-                                        <div onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
-                                                class="fa fa-pencil"></i></div>
+                                        <div title="Xem" onclick="showModal(1, 'modal-5')" class="btn btn-detail"><i
+                                                class="fa fa-file"></i></div>
                                     </div>
                                 </div>
                                 <p class="clear"></p>

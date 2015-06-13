@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="../resource/css/font-awesome.css"/>
     <link rel="stylesheet" href="../resource/css/layout.css"/>
     <link rel="stylesheet" href="../resource/css/general.css"/>
-    <link rel="stylesheet" href="../resource/css/notify.css"/>
     <link rel="stylesheet" href="../resource/css/roomtype-2.css"/>
+    <link rel="stylesheet" href="../resource/css/notify.css"/>
 
     <script src="../resource/js/jquery-1.11.3.js"></script>
     <script src="../resource/js/script.js"></script>
@@ -24,10 +24,10 @@
 <body>
 <c:set var="room" value="${requestScope.ROOM}"/>
 <c:set var="notifies" value="${requestScope.NOTIFICATIONS}"/>
+<input type="hidden" id="roomId" value="${room.id}"/>
 <div class="contain-layout">
     <jsp:include page="../Header.jsp"/>
 </div>
-
 <div class="container">
     <div class="title page-title right-button">
         <p>Lịch sử báo cáo</p>
@@ -61,12 +61,9 @@
             </div>
             <div class="control">
                 <select>
-                    <option>Phụ trách</option>
-                    <option>Lại Văn Sâm</option>
-                    <option>Trần Lạc Hầu</option>
-                    <option>Cung Thiên Toản</option>
-                    <option>Dương Chí Bình</option>
-                    <option>Trần Quốc An</option>
+                    <option>Trạng thái</option>
+                    <option>Đã sửa</option>
+                    <option>Mới báo cáo</option>
                 </select>
             </div>
             <div class="control">
@@ -100,8 +97,9 @@
                 </div>
                 <p class="clear"></p>
             </div>
-            <div class="body-table">
-                <c:forEach var="i" begin="0" end="${notifies.size()-1}">
+            <div class="body-table" id="content-report">
+                <c:if test="${notifies.size() > 0}">
+                     <c:forEach var="i" begin="0" end="${notifies.size()-1}">
                     <div class="row">
                         <div class="width-10">
                             <div>${notifies[i].room}</div>
@@ -128,7 +126,7 @@
                         <div class="width-15">
                             <div class="group-button">
                                 <div onclick="loadReportHistory(${notifies[i].reportId}, ${notifies[i].room})" class="btn btn-detail"><i
-                                        class="fa fa-pencil"></i>
+                                        class="fa fa-file"></i>
                                 </div>
                                 <div href="javascript:void(0)" class="btn btn-remove"><i class="fa fa-times"></i></div>
                             </div>
@@ -136,6 +134,7 @@
                         <p class="clear"></p>
                     </div>
                 </c:forEach>
+                </c:if>
             </div>
         </div>
     </div>
@@ -144,26 +143,36 @@
     <div class="modal modal-medium" id="modal-1">
         <div class="content-modal">
             <div class="header-modal title">
-                <p>Tạo báo cáo - Sơ đồ phòng học</p>
+                <p>Tạo báo cáo</p>
                 <i class="fa fa-times" onclick="showModal(0, 'modal-1')"></i>
             </div>
             <div class="body-modal">
-                <div class="group-control">
-                    <div class="name">Thiết bị</div>
-                    <div class="value" style="max-width: 300px; overflow: hidden" id="list-equipment"></div>
-                </div>
-                <div id="classroom-map">
-
-                </div>
             </div>
             <div class="footer-modal">
-                <input type="button" class="btn btn-orange" onclick="checkEquipment()" value="Tiếp theo"/>
-                <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát"/>
+                <input type="button" class="btn btn-orange" onclick="conform(1)" value="Gửi báo cáo"/>
+                <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1', 'modal-2')" value="Chọn vị trí"/>
             </div>
         </div>
         <div class="black-background"></div>
     </div>
     <div class="modal modal-medium" id="modal-2">
+        <div class="content-modal">
+            <div class="header-modal title">
+                <p>Sơ đồ phòng</p>
+                <i class="fa fa-times" onclick="showModal(2, 'modal-2', 'modal-1')"></i>
+            </div>
+            <div class="body-modal">
+                <div id="classroom-map">
+
+                </div>
+            </div>
+            <div class="footer-modal">
+                <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-2', 'modal-1')" value="Quay lại"/>
+            </div>
+            </div>
+        <div class="black-background"></div>
+    </div>
+    <div class="modal modal-medium" id="modal-4">
         <form action="/giang-vien/sentReport" id="create-report">
             <div class="content-modal">
                 <div class="header-modal title">
@@ -286,40 +295,46 @@
         <div class="black-background"></div>
     </div>
 </div>
+<div class="content-notification">
+
+</div>
 
 <script>
     <c:if test="${room.id != 0}">
     <c:set var="rt" value="${requestScope.ROOMTYPE}" />
-    <c:set var="equipments" value="${requestScope.EQUIPMENTS}" />
-    var listEquipments = {};
-    <c:forEach var="i" begin="0" end="${equipments.size()-1}">
-    listEquipments["${equipments[i].position.trim()}"] = {
-        "id": ${equipments[i].id},
-        "category": ${equipments[i].categoryId},
-        "status": "${equipments[i].status}"
-    };
-    </c:forEach>
+    <c:set var="equip" value="${requestScope.EQUIPMENTS}" />
+    var positionEquipments = {};
+    var damageEquip = {};
+    <c:if test="${equip.size() > 0}" >
+        <c:forEach begin="0" end="${equip.size() -1}" var="i">
+            positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
+            damageEquip[${equip[i].categoryId}] = ${equip[i].status};
+        </c:forEach>
+    </c:if>
 
     window.onload = function () {
-        showMapForReport('classroom-map', listEquipments, ${rt.id}, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
+        loadEquipment(damageEquip, ${rt.airConditioning}, ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
+        showMap('classroom-map', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
                 ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
         setChooseEquipment('classroom-map');
     }
     </c:if>
     <c:if test="${room.id == 0}">
-    document.getElementById("report-btn").className += " disable";
-    document.getElementById("modal-1").setAttribute("data-lock", "true");
+        document.getElementById("report-btn").className += " disable";
+        document.getElementById("modal-1").setAttribute("data-lock", "true");
     </c:if>
 
     <c:if test="${requestScope.MESSAGE != null}">
-    alert("${requestScope.MESSAGE}");
+        alert("${requestScope.MESSAGE}");
     </c:if>
 
     function doAction(choose, object) {
         closeConform();
         switch (choose) {
             case 1:
-                submitForm();
+                sentReport();
+                showModal(0, 'modal-1');
+                //location.reload();
                 break;
         }
     }

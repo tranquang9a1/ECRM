@@ -29,7 +29,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
                 "FROM TblScheduleEntity s " +
                 "WHERE s.username = :username " +
                 "AND CONVERT (time, CURRENT_TIMESTAMP) >= s.timeFrom " +
-                "AND CONVERT (time, CURRENT_TIMESTAMP) <= DATEADD(HOUR, (s.slots* 1.75), s.timeFrom) " +
+                "AND CONVERT (time, CURRENT_TIMESTAMP) <= DATEADD(MINUTE, (s.slots* 105), s.timeFrom) " +
                 "AND CONVERT (date, CURRENT_TIMESTAMP) >= s.dateFrom " +
                 "AND CONVERT (date, CURRENT_TIMESTAMP) <= s.dateTo");
         query.setParameter("username", username);

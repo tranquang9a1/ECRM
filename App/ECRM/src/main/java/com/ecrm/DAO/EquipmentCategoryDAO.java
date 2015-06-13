@@ -1,6 +1,9 @@
 package com.ecrm.DAO;
 
+import com.ecrm.Entity.TblEquipmentCategoryEntity;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Created by Htang on 5/29/2015.
@@ -8,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipmentCategoryDAO {
 
-    public int findEquipmentId(String name);
+    public List<TblEquipmentCategoryEntity> getCategoriesInRoom(int room);
 }

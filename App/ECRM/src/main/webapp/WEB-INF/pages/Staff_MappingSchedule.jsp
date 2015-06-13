@@ -42,6 +42,7 @@
                         alert('Error while request..');
                     }
                 })
+                alert(document.getElementById('avai').value);
                 document.getElementById('classroomId').value = "1-"+document.getElementById('avai').value;
             } else {
                 document.getElementById('avai_classroom').style.display = 'none';

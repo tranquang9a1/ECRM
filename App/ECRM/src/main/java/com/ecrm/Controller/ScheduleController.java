@@ -218,7 +218,7 @@ public class ScheduleController {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                     if (tblScheduleEntity1.getUsername().equals(teacher) &&
                             tblScheduleEntity1.getDate().toString().equals(teachingDate.toString())) {
-                        timeFrom1 = parseTime(tblScheduleEntity1.getTimeFrom());
+                        timeFrom1 = parseTime(tblScheduleEntity1.getTimeFrom().toString());
                         timeFrom2 = parseTime(timeFrom);
                         if ((timeFrom2.getTime() - timeFrom1.getTime()) / 60000 == 105) {
                             tblScheduleEntity1.setSlots(tblScheduleEntity1.getSlots() + 1);
@@ -228,7 +228,7 @@ public class ScheduleController {
                     }
                 }
                 if (temp) {
-                    tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, timeFrom, 1,
+                    tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
                             teachingDate);
                     scheduleDAO.persist(tblScheduleEntity);
                 }
@@ -282,7 +282,7 @@ public class ScheduleController {
         String timeFrom = convertSlotToTime(slot);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
-        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(array[1]), numberOfStudent, null, timeFrom, numberOfSlots,
+        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(array[1]), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
                 teachingDate);
         if(array[0].equals("1")){
             scheduleDAO.persist(tblScheduleEntity);

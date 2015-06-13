@@ -16,6 +16,7 @@ public class TblReportEntity {
     private String username;
     private int classRoomId;
     private Timestamp createTime;
+    private int damagedLevel;
     private String evaluate;
     private boolean status;
     private TblClassroomEntity tblClassroomByClassRoomId;
@@ -73,6 +74,16 @@ public class TblReportEntity {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    @Basic
+    @Column(name = "DamagedLevel")
+    public int getDamagedLevel() {
+        return damagedLevel;
+    }
+
+    public void setDamagedLevel(int damagedLevel) {
+        this.damagedLevel = damagedLevel;
     }
 
     @Basic

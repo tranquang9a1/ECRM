@@ -12,7 +12,7 @@
     <title></title>
     <link rel="stylesheet" href="../../resource/css/roomtype-2.css"/>
     <script src="../resource/js/jquery-1.11.3.js"></script>
-    <script src="../../resource/js/quang.js"></script>
+    <script src="../../resource/js/user-notify.js"></script>
 
     <style>
         .subDIv {
@@ -60,7 +60,7 @@
                 ${r.tblRoomTypeByRoomTypeId.airConditioning}, ${r.tblRoomTypeByRoomTypeId.fan},
                 ${r.tblRoomTypeByRoomTypeId.projector}, ${r.tblRoomTypeByRoomTypeId.speaker},
                 ${r.tblRoomTypeByRoomTypeId.television});
-        setChooseEquipment();
+        setChooseEquipment('classroom-map');
 
     }
 </script>

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,9 @@ public class APIController {
     public String generateMap(HttpServletRequest request, @RequestParam("id")int classroomId){
         TblClassroomEntity classroomEntity = new TblClassroomEntity();
         classroomEntity = classroomDAO.find(classroomId);
+        Collection<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
         request.setAttribute("CLASSROOM", classroomEntity);
+        request.setAttribute("EQUIPMENTS", equipmentEntities);
         return "ClassroomMap";
     }
 

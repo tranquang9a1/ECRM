@@ -1,9 +1,11 @@
 package com.ecrm.Controller;
 
-import com.ecrm.DAO.EquipmentCategoryDAO;
 import com.ecrm.DAO.Impl.*;
+import com.ecrm.DTO.DamagedRoomDTO;
 import com.ecrm.DTO.GroupReportsDTO;
 import com.ecrm.Entity.*;
+import com.ecrm.Utils.Enumerable.ReportStatus;
+import com.ecrm.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by ChiDNMSE60717 on 6/8/2015.
@@ -31,6 +34,8 @@ public class NotifyController {
     @Autowired
     RoomTypeDAOImpl roomTypeDAO;
     @Autowired
+    ScheduleDAOImpl scheduleDAO;
+    @Autowired
     EquipmentDAOImpl equipmentDAO;
     @Autowired
     EquipmentCategoryDAOImpl equipmentCategoryDAO;
@@ -39,7 +44,7 @@ public class NotifyController {
     public String notifications(HttpServletRequest request){
         HttpSession session = request.getSession();
 
-        List<Integer> rooms = reportDAO.getDamagedRoom(true);
+        List<Integer> rooms = reportDAO.getDamagedRoom();
         List<GroupReportsDTO> groups = new ArrayList<GroupReportsDTO>();
         String reporter = "";
         String equipmentNames = "";
@@ -50,18 +55,13 @@ public class NotifyController {
             group.setRoomId(room.getId());
             group.setRoomName(room.getName());
 
-            List<TblReportEntity> reportsInRoom = reportDAO.getReportsInRoom(room.getId());
-            for(int j = 0; j < reportsInRoom.size(); j++) {
-                reporter += reportsInRoom.get(j).getTblUserByUserId().getTblUserInfoByUsername().getFullName() + ", ";
-            }
-
             List<TblEquipmentCategoryEntity> equipments = equipmentCategoryDAO.getCategoriesInRoom(room.getId());
             for(int j = 0; j < equipments.size(); j++) {
                 equipmentNames += equipments.get(j).getName() + ", ";
             }
 
             group.setListEquipments(equipmentNames.substring(0, equipmentNames.length()-2));
-            group.setReporters(reporter.substring(0, reporter.length()-2));
+            group.setReporters(reportDAO.getReportersInRoom(room.getId()));
 
             groups.add(group);
         }
@@ -72,14 +72,29 @@ public class NotifyController {
     }
 
     @RequestMapping(value = "chi-tiet")
-    public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "reportId") int reportId){
+    public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId){
+        HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
 
-        TblReportEntity report = reportDAO.find(reportId);
-        TblClassroomEntity classroom = report.getTblClassroomByClassRoomId();
-        TblRoomTypeEntity roomType = classroom.getTblRoomTypeByRoomTypeId();
-        List<TblEquipmentEntity> equipments = equipmentDAO.getEquipmentsInClassroom(classroom.getId());
-        List<TblReportDetailEntity> reportDetails = reportDetailDAO.getReportDetailsInReport(reportId);
+        TblClassroomEntity classroom = classroomDAO.find(roomId);
+        List<TblEquipmentEntity> equipments = equipmentDAO.getActiveEquipments(classroom.getId());
 
+        DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId));
+        resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
+        resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
+        resultObject.setEquipments(equipments);
+
+        int damagedLevel = Utils.checkDamagedLevel(classroomDAO.find(roomId));
+        resultObject.setDamagedLevel(damagedLevel);
+
+        if(damagedLevel >= 50) {
+            TblScheduleEntity schedule = scheduleDAO.getScheduleInTime(null, roomId);
+            if (schedule != null) {
+                List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.findAll());
+                resultObject.setSuggestRooms(availableRooms);
+            }
+        }
+        request.setAttribute("DAMAGEDROOM", resultObject);
         return "staff/ReportDetail";
     }
 }

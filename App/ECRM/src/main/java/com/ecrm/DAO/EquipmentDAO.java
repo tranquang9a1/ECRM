@@ -13,7 +13,7 @@ public interface EquipmentDAO {
 
     public List<TblEquipmentEntity> getEquipmentsInClassroom(int roomId);
 
-    public TblEquipmentEntity findEquipmentHavePosition(int roomId, String position);
+    public TblEquipmentEntity findEquipmentHavePosition(int roomId, int category, String position);
 
     public List<TblEquipmentEntity> getActiveEquipments(int roomId);
 

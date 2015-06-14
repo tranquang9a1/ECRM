@@ -16,12 +16,12 @@ public class ReportDTO {
     private int classId;
     private String createTime;
     private String evaluate;
-    private boolean status;
+    private int status;
     private int damageLevel;
     private List<ReportDetailDTO> equipments;
 
     public ReportDTO(int reportId, String username, String fullname, int classId, String createTime, String evaluate,
-                     boolean status, int damageLevel, List<ReportDetailDTO> equipmentId) {
+                     int status, int damageLevel, List<ReportDetailDTO> equipmentId) {
         this.reportId = reportId;
         this.username = username;
         this.fullname = fullname;
@@ -85,11 +85,11 @@ public class ReportDTO {
     }
 
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

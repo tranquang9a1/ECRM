@@ -11,9 +11,10 @@ import java.util.List;
 @Repository
 public interface ScheduleDAO {
 
-    public int getClassroomIdByUsername(String username);
+    public TblScheduleEntity getScheduleInTime(String username, int room);
 
-    public List<TblScheduleEntity> getScheduleOfUser(String username);
+    public List<TblScheduleEntity> getSchedulesOfUser(String username);
+
     public List<TblScheduleEntity> findScheduleWithDate(String username, java.util.Date date, String timeFrom);
     public TblScheduleEntity findSpecificSchedule(java.util.Date date, String timeFrom, int classroomId);
 }

@@ -1,5 +1,8 @@
 package com.ecrm.Entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -224,6 +227,7 @@ public class TblRoomTypeEntity {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblRoomTypeByRoomTypeId")
     public Collection<TblClassroomEntity> getTblClassroomsById() {
         return tblClassroomsById;

@@ -1,5 +1,8 @@
 package com.ecrm.Entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
@@ -83,6 +86,7 @@ public class TblUserEntity {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblUserByUserId")
     public List<TblReportEntity> getTblReportsByUsername() {
         return tblReportsByUsername;
@@ -92,6 +96,7 @@ public class TblUserEntity {
         this.tblReportsByUsername = tblReportsByUsername;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblUserByUserId")
     public List<TblScheduleEntity> getTblSchedulesByUsername() {
         return tblSchedulesByUsername;

@@ -1,5 +1,8 @@
 package com.ecrm.Entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -66,6 +69,7 @@ public class TblEquipmentCategoryEntity {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblEquipmentCategoryByCategoryId")
     public Collection<TblEquipmentEntity> getTblEquipmentsById() {
         return tblEquipmentsById;

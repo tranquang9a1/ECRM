@@ -1,6 +1,7 @@
 package com.ecrm.DAO;
 
 import com.ecrm.Entity.TblReportEntity;
+import com.ecrm.Utils.Enumerable.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,13 +12,15 @@ import java.util.List;
 @Repository
 public interface ReportDAO {
 
-    public List<Integer> getDamagedRoom(boolean status);
+    public List<Integer> getDamagedRoom();
 
-    public List<TblReportEntity> getReportsInRoom(int room);
-
-//    public
+    public List<TblReportEntity> getLiveReportsInRoom(int room);
 
     public List<TblReportEntity> getReportByUserId(String username);
+
+    public String getReportersInRoom(int room);
+
+    public TblReportEntity getReportNewest(int room);
 
     public List<TblReportEntity> getAllReport(int limit, int offset);
 

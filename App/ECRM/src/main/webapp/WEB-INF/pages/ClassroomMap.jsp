@@ -41,12 +41,21 @@
 
     </div>
 </div>
+<script>
+    <c:set var="equip" value="${requestScope.EQUIPMENTS}" />
+    var positionEquipments = {};
+    <c:if test="${equip.size() > 0}" >
+        <c:forEach begin="0" end="${equip.size() -1}" var="i">
+            positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
+        </c:forEach>
+    </c:if>
+</script>
 </body>
 </html>
-<script src="../../resource/js/roomtype-2.js"></script>
+<script src="../../resource/js/roomtype-phone.js"></script>
 <script>
     window.onload = function(){
-        showMap('classroom-map', ${r.roomTypeId}, ${r.tblRoomTypeByRoomTypeId.verticalRows},
+        showMap('classroom-map', positionEquipments, ${r.roomTypeId}, ${r.tblRoomTypeByRoomTypeId.verticalRows},
                 '${r.tblRoomTypeByRoomTypeId.horizontalRows}', '${r.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}',
                 ${r.tblRoomTypeByRoomTypeId.airConditioning}, ${r.tblRoomTypeByRoomTypeId.fan},
                 ${r.tblRoomTypeByRoomTypeId.projector}, ${r.tblRoomTypeByRoomTypeId.speaker},

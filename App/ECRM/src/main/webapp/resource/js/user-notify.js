@@ -241,7 +241,7 @@ function setChooseEquipment(map){
             $(this).addClass("choose");
             $(this).attr("data-choose", "true");
 
-            damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category};
+            damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category, element: $(this)};
             if(noDamagedEquipments[category] != undefined) {
                 noDamagedEquipments[category].size++;
             } else {
@@ -303,8 +303,18 @@ function sentReport(){
             content.appendChild(row);
 
             for (var key in noDamagedEquipments) {
-                if (noDamagedEquipments.hasOwnProperty(key) && noDamagedEquipments[key].category < 7){
-                    $("#row-type-" + key).remove();
+                if (noDamagedEquipments.hasOwnProperty(key) && key < 7){
+                    $("#row-type-" + key + " .width-50 p").text("Đã được báo cáo");
+                }
+            }
+
+            for (var key in damagedEquipments) {
+                if (damagedEquipments.hasOwnProperty(key)){
+                    $(damagedEquipments[key].element).removeClass("equipment");
+                    $(damagedEquipments[key].element).removeClass("choose");
+                    $(damagedEquipments[key].element).removeAttr("data-choose");
+                    $(damagedEquipments[key].element).addClass("damaged");
+                    $(damagedEquipments[key].element).unbind( "click" );
                 }
             }
 
@@ -320,23 +330,23 @@ function sentReport(){
 
 function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
     var listEquipment = new Array();
-    if((listDamage[1] == undefined || listDamage[1] == false) && projector > 0) {
-        listEquipment.push({id: 1, classname: "projector", name: "Projector"});
+    if(listDamage[1] != undefined && projector > 0) {
+        listEquipment.push({id: 1, classname: "projector", name: "Projector", message: (listDamage[1]?"Đã được báo cáo":"")});
     }
-    if((listDamage[3] == undefined || listDamage[3] == false)  && mayLanh > 0) {
-        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition"});
+    if(listDamage[3] != undefined && mayLanh > 0) {
+        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[2]?"Đã được báo cáo":"")});
     }
-    if((listDamage[5] == undefined || listDamage[5] == false)  && loa > 0) {
-        listEquipment.push({id: 5, classname: "speaker", name: "Speaker"});
+    if(listDamage[5] != undefined && loa > 0) {
+        listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[3]?"Đã được báo cáo":"")});
     }
-    if((listDamage[2] == undefined || listDamage[2] == false)  && tivi > 0) {
-        listEquipment.push({id: 2, classname: "tivi", name: "Television"});
+    if(listDamage[2] != undefined && tivi > 0) {
+        listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[4]?"Đã được báo cáo":"")});
     }
-    if((listDamage[4] == undefined || listDamage[4] == false)  && quat > 0) {
-        listEquipment.push({id: 4, classname: "fan", name: "Fan"});
+    if(listDamage[4] != undefined && quat > 0) {
+        listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[5]?"Đã được báo cáo":"")});
     }
-    listEquipment.push({id: 7, classname: "table-icon", name: "Table"});
-    listEquipment.push({id: 8, classname: "chair", name: "Chair"});
+    listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: ""});
+    listEquipment.push({id: 8, classname: "chair", name: "Chair", message: ""});
 
     var contentDiv = document.getElementById("modal-1").getElementsByClassName("body-modal")[0];
     for(var i = 0; i < listEquipment.length; i++) {
@@ -362,7 +372,11 @@ function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
 
         var div3 = document.createElement("div");
         div3.className = "width-50";
+        var textP = document.createElement("p");
+        textP.innerHTML = listEquipment[i].message;
+        textP.className = "message-text";
         createSelect(listEquipment[i].id, div3);
+        div3.appendChild(textP);
 
         var clear = document.createElement("p");
         clear.className = "clear";

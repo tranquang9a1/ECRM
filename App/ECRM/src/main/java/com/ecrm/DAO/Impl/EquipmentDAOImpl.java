@@ -48,14 +48,16 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
     }
 
     @Override
-    public TblEquipmentEntity findEquipmentHavePosition(int roomId, String position) {
+    public TblEquipmentEntity findEquipmentHavePosition(int roomId, int category, String position) {
 
         Query query = entityManager.createQuery("SELECT c " +
                 "FROM TblEquipmentEntity c " +
                 "WHERE c.classroomId = :roomId " +
-                "AND c.position = :position");
+                "AND c.position = :position " +
+                "AND c.categoryId = :category");
         query.setParameter("roomId", roomId);
         query.setParameter("position", position);
+        query.setParameter("category", category);
 
         List queryResult = query.getResultList();
         if (!queryResult.isEmpty()) {

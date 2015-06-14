@@ -115,10 +115,10 @@
                         </div>
                         <div class="width-15">
                             <div>
-                                <c:if test="${notifies[i].status == true}">
+                                <c:if test="${notifies[i].status == 1}">
                                     <p class="label red">Chưa sửa</p>
                                 </c:if>
-                                <c:if test="${notifies[i].status == false}">
+                                <c:if test="${notifies[i].status == 3}">
                                     <p class="label green">Đã sửa</p>
                                 </c:if>
                             </div>

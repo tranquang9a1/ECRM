@@ -1,5 +1,9 @@
 package com.ecrm.Entity;
 
+import com.ecrm.Utils.Enumerable;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -18,7 +22,7 @@ public class TblReportEntity {
     private Timestamp createTime;
     private int damagedLevel;
     private String evaluate;
-    private boolean status;
+    private int status;
     private TblClassroomEntity tblClassroomByClassRoomId;
     private TblUserEntity tblUserByUserId;
     private List<TblReportDetailEntity> tblReportDetailsById;
@@ -31,7 +35,7 @@ public class TblReportEntity {
         this.createTime = new Timestamp(new Date().getTime());
         this.damagedLevel = damagedLevel;
         this.evaluate = evaluate;
-        this.status = true;
+        this.status = Enumerable.ReportStatus.NEW.getValue();
     }
 
     @Id
@@ -97,11 +101,11 @@ public class TblReportEntity {
 
     @Basic
     @Column(name = "Status")
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -131,7 +135,7 @@ public class TblReportEntity {
         result = 31 * result + damagedLevel;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (evaluate != null ? evaluate.hashCode() : 0);
-        result = 31 * result + (status ? 1 : 0);
+        result = 31 * result + status;
         return result;
     }
 
@@ -155,6 +159,7 @@ public class TblReportEntity {
         this.tblUserByUserId = tblUserByUserId;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblReportByReportId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<TblReportDetailEntity> getTblReportDetailsById() {
         return tblReportDetailsById;

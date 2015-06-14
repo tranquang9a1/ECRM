@@ -23,32 +23,32 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
     }
 
     @Override
-    public int getClassroomIdByUsername(String username) {
+    public TblScheduleEntity getScheduleInTime(String username, int room) {
 
         Query query = entityManager.createQuery("SELECT s " +
                 "FROM TblScheduleEntity s " +
-                "WHERE s.username = :username " +
+                "WHERE (s.username = :username OR s.classroomId = :room)" +
                 "AND CONVERT (Time, CURRENT_TIMESTAMP) >= s.timeFrom " +
-                "AND CONVERT (Time, CURRENT_TIMESTAMP) <= DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) " +
-                "AND CONVERT (Date, CURRENT_TIMESTAMP) >= s.date");
+                "AND CONVERT (Time, CURRENT_TIMESTAMP) < DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) " +
+                "AND CONVERT (Date, CURRENT_TIMESTAMP) = s.date");
         query.setParameter("username", username);
+        query.setParameter("room", room);
 
         List list = query.getResultList();
         if(!list.isEmpty()){
             TblScheduleEntity schedule = (TblScheduleEntity) list.get(0);
-            return schedule.getClassroomId();
+            return schedule;
         }
 
-        return 0;
+        return null;
     }
 
     @Override
-    public List<TblScheduleEntity> getScheduleOfUser(String username) {
+    public List<TblScheduleEntity> getSchedulesOfUser(String username) {
         Query query = entityManager.createQuery("SELECT s " +
                 "FROM TblScheduleEntity s " +
                 "WHERE s.username = :username " +
-                "AND CONVERT (date, CURRENT_TIMESTAMP) >= s.dateFrom " +
-                "AND CONVERT (date, CURRENT_TIMESTAMP) <= s.dateTo");
+                "AND CONVERT (Date, CURRENT_TIMESTAMP) = s.date");
         query.setParameter("username", username);
 
         List queryResult = query.getResultList();

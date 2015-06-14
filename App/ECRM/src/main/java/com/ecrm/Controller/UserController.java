@@ -1,11 +1,9 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.*;
-import com.ecrm.DAO.ReportResponseObject;
+import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +42,9 @@ public class UserController {
     @RequestMapping(value = "thong-bao")
     public String notifications(HttpServletRequest request){
         HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
 
-        List<TblReportEntity> list = reportDAO.findAll();
+        List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
         List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
         for(int i = 0; i < list.size(); i++) {
             List<TblReportDetailEntity> reportDetails = reportDetailDAO.getReportDetailsInReport(list.get(i).getId());
@@ -55,12 +53,11 @@ public class UserController {
         }
         request.setAttribute("NOTIFICATIONS", listReport);
 
-        TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
-        int classroomId = scheduleDAO.getClassroomIdByUsername(user.getUsername());
-        if(classroomId != 0) {
-            TblClassroomEntity classroom = classroomDAO.find(classroomId);
+        TblScheduleEntity schedule = scheduleDAO.getScheduleInTime(user.getUsername(), 0);
+        if(schedule != null) {
+            TblClassroomEntity classroom = classroomDAO.find(schedule.getClassroomId());
             TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
-            List<TblEquipmentEntity> listEquipment = equipmentDAO.getActiveEquipments(classroomId);
+            List<TblEquipmentEntity> listEquipment = equipmentDAO.getActiveEquipments(schedule.getClassroomId());
 
             request.setAttribute("ROOM", classroom);
             request.setAttribute("EQUIPMENTS", listEquipment);
@@ -147,7 +144,7 @@ public class UserController {
         HttpSession session= request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
 
-        List<TblScheduleEntity> list = scheduleDAO.getScheduleOfUser(user.getUsername());
+        List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
 
         request.setAttribute("SCHEDULE", list);
         request.setAttribute("ACTIVETAB","USER_SCHEDULE");
@@ -169,20 +166,19 @@ public class UserController {
     }
 
     private TblEquipmentEntity insertEquipment(int reportId, int roomId, int category, String pos, String evaluate){
-        TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, "[" + category + "]");
-        if (category > 6) {
-            equip = equipmentDAO.findEquipmentHavePosition(roomId, pos);
+        String position = null;
+        if(category < 7) {
+            position = "[" + category + "]";
+        } else if(pos != null && "".equals(pos) == false) {
+            position = pos;
         }
+
+        TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, category, position);
+
         if (equip != null) {
             equip.setStatus(true);
             equipmentDAO.merge(equip);
         } else {
-            String position = null;
-            if(category < 7) {
-                position = "[" + category + "]";
-            } else if(pos != null && "".equals(pos) == false) {
-                position = pos;
-            }
             equip = new TblEquipmentEntity(category, roomId, null, null, position, 0, true);
             equipmentDAO.persist(equip);
         }

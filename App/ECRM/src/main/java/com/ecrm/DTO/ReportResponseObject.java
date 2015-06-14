@@ -1,4 +1,4 @@
-package com.ecrm.DAO;
+package com.ecrm.DTO;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.EquipmentCategoryDAOImpl;
@@ -23,7 +23,7 @@ public class ReportResponseObject {
     private String room;
     private String listEquipment = "";
     private String createDate;
-    private boolean status;
+    private int status;
     private int damagedLevel;
 
     public ReportResponseObject(TblReportEntity report, List<TblReportDetailEntity> reportDetails){
@@ -31,7 +31,7 @@ public class ReportResponseObject {
         this.room = report.getTblClassroomByClassRoomId().getName();
         SimpleDateFormat formatter = new SimpleDateFormat ("dd/MM/yyy");
         this.createDate = formatter.format(report.getCreateTime().getTime());
-        this.status = report.isStatus();
+        this.status = report.getStatus();
         this.damagedLevel = 0;
 
         List<String> equipmentName = new ArrayList<String>();
@@ -80,11 +80,11 @@ public class ReportResponseObject {
         this.createDate = createDate;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -1,5 +1,8 @@
 package com.ecrm.Entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -53,6 +56,7 @@ public class TblRoleEntity {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblRoleByRoleId")
     public Collection<TblUserEntity> getTblUsersById() {
         return tblUsersById;

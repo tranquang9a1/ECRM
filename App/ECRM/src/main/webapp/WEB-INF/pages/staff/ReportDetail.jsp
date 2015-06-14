@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<c:set var="room" value="${requestScope.DAMAGEDROOM}"/>
 <div class="modal modal-medium" id="modal-1">
   <div class="content-modal">
     <div class="header-modal title">
@@ -16,93 +16,36 @@
       <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
     </div>
     <div class="body-modal">
-      <div class="tab">
-        <div class="tab-medium">
-          <ul>
-            <li class="active" onclick="changeTab('tab4', this)">Báo cáo</li>
-            <li onclick="changeTab('tab5', this)">Lịch sử</li>
-          </ul>
+      <input type="hidden" value="${room.roomId}" name="roomId"/>
+      <div class="group-control">
+        <div class="name">Phòng</div>
+        <div class="value">${room.roomName}</div>
+      </div>
+      <div class="group-control">
+        <div class="name">Người báo cáo</div>
+        <div class="value">${room.reporters}</div>
+      </div>
+      <div class="group-control">
+        <div class="name">Báo cáo mới nhất</div>
+        <div class="value"><fmt:formatDate value="${room.reportDate}" pattern="HH:mm dd/MM/yyyy" /></div>
+      </div>
+      <div class="group-control line">
+        <div class="name">Mức độ hư hại</div>
+        <div class="value">${room.evaluate}</div>
+      </div>
+      <c:if test="${room.damagedLevel >= 50 && room.suggestRooms != null}" >
+        <div class="group-control">
+          <div class="name">Đề xuất</div>
+          <div class="value">Đổi sang phòng <b>${room.suggestRooms[0]}</b></div>
+          <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng" />
         </div>
-        <div class="content-tab">
-          <div id="tab4" class="body-tab active">
-            <div class="group-control">
-              <div class="name">Phòng</div>
-              <div class="value">203</div>
-            </div>
-            <div class="group-control">
-              <div class="name">Người báo cáo</div>
-              <div class="value">Phạm Văn Khánh</div>
-            </div>
-            <div class="group-control">
-              <div class="name">Thời gian báo cáo</div>
-              <div class="value">7h04, 24/4/2015</div>
-            </div>
-            <div class="group-control">
-              <div class="name">Thiết bị hư hại</div>
-              <div class="value">Máy chiếu - ECRM0251</div>
-              <input type="button" class="btn btn-normal" onclick="showMap(2, [5,5], [3,2], 'idContainer');showModal(2, 'modal-1','modal-2')" value="Vị trí" />
-            </div>
-            <div class="group-control">
-              <div class="name">Chi tiết hư hại</div>
-              <div class="value">.........................................</div>
-            </div>
-            <div class="group-control line">
-              <div class="name">Đề xuất</div>
-              <div class="value">Đổi sang phòng <b>213</b></div>
-              <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng" />
-            </div>
-            <div class="group-control">
-              <div class="name">Mức độ hư hại</div>
-              <div class="value">Nặng, không thể dùng được</div>
-            </div>
-            <div class="group-control">
-              <div class="name">Hư hại của phòng</div>
-              <div class="control">
-                <div class="process">
-                  <p>73%</p>
-                  <div class="percent" style="left:73%"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="tab5" class="body-tab">
-            <div class="row top-control">
-              <p>Máy chiếu - ECRM0251</p>
-              <select class="select">
-                <option>Máy chiếu</option>
-                <option>Máy quạt</option>
-                <option>Đèn</option>
-              </select>
-              <div class="clear"></div>
-            </div>
-            <div class="table">
-              <div class="header-table">
-                <div class="date-report"><div>Ngày báo cáo</div></div>
-                <div class="reporter"><div>Người báo cáo</div></div>
-                <div class="staff"><div>Nhân viên</div></div>
-                <p class="clear"></p>
-              </div>
-              <div class="body-table">
-                <div class="row">
-                  <div class="date-report"><div>10h20 20/3/2015</div></div>
-                  <div class="reporter"><div>Phạm Thế Vinh</div></div>
-                  <div class="staff"><div>Trương Hồng Thái</div></div>
-                  <p class="clear"></p>
-                </div>
-                <div class="row">
-                  <div class="date-report"><div>7h01 15/3/2015</div></div>
-                  <div class="reporter"><div>Trương Thế Hiển</div></div>
-                  <div class="staff"><div>Trương Hồng Thái</div></div>
-                  <p class="clear"></p>
-                </div>
-                <div class="row">
-                  <div class="date-report"><div>8h37 21/2/2015</div></div>
-                  <div class="reporter"><div>Trương Thế Hiển</div></div>
-                  <div class="staff"><div>Lê Quang Hạnh</div></div>
-                  <p class="clear"></p>
-                </div>
-              </div>
-            </div>
+      </c:if>
+      <div class="group-control">
+        <div class="name">Hư hại của phòng</div>
+        <div class="control">
+          <div class="process">
+            <p>${room.damagedLevel}%</p>
+            <div class="percent" style="left:${room.damagedLevel}%"></div>
           </div>
         </div>
       </div>
@@ -141,18 +84,18 @@
     <div class="body-modal">
       <div class="group-control">
         <div class="name">Phòng hiện tại</div>
-        <div class="value">203</div>
+        <div class="value">${room.roomName}</div>
       </div>
       <div class="group-control">
         <div class="name">Phòng trống</div>
         <div class="control">
-          <select>
-            <option>213</option>
-            <option>301</option>
-            <option>413</option>
-            <option>212</option>
-            <option>108</option>
-          </select>
+          <c:if test="${room.suggestRooms != null}">
+            <select>
+              <c:forEach items="${room.suggestRooms}" var="item" >
+                <option value="${item}">${item}</option>
+              </c:forEach>
+            </select>
+          </c:if>
         </div>
       </div>
     </div>

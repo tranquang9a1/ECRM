@@ -128,6 +128,7 @@
 .modal .body-modal .row{
     padding: 8px 0;
     height: 60px;
+    position: relative;
     border-bottom: 1px solid #bbb;
 }
 
@@ -139,6 +140,7 @@
     float: right;
     width: 70%;
     margin: 12px 0;
+    z-index: 1;
 }
 
 .equipment-img {
@@ -190,4 +192,16 @@
 
 .check-damaged.check{
     background-color: #d9534f;
+}
+
+.message-text{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 77px;
+    line-height: 77px;
+    z-index: -1;
+    color: #d9534f;
+    font-weight: bold;
+    margin: 0;
 }

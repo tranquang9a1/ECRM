@@ -41,15 +41,6 @@ public class Utils {
         return accountDTO;
     }
 
-    public static List<ReportDTO> convertFromReportToReportDTO(List<TblReportEntity> reportEntities) {
-        List<ReportDTO> result = new ArrayList<ReportDTO>();
-        for (int i = 0; i < reportEntities.size(); i++) {
-
-        }
-        return result;
-
-    }
-
     public static List<ReportDTO> convertFromListEntityToListDTO(List<TblReportEntity> entities) {
         List<ReportDTO> result = new ArrayList<ReportDTO>();
         for (int i = 0; i < entities.size(); i++) {
@@ -68,7 +59,7 @@ public class Utils {
         reportDTO.setEquipments(convertFromReportEntityToDTO(detail));
         reportDTO.setEvaluate(reportEntity.getEvaluate());
         reportDTO.setReportId(reportEntity.getId());
-        reportDTO.setStatus(reportEntity.isStatus());
+        reportDTO.setStatus(reportEntity.getStatus());
         reportDTO.setDamageLevel(88);
 
         return reportDTO;
@@ -92,7 +83,7 @@ public class Utils {
     }
 
     //Check damaged level
-    public static int checkDamagedLevel(TblReportEntity tblReportEntity) {
+    public static int checkDamagedLevel(TblClassroomEntity classroomEntity) {
         int damagedLevel = 0;
         int projectorDamagedLevel = 0;
         int mayLanhDamagedLevel = 0;
@@ -104,8 +95,7 @@ public class Utils {
         int gheDamagedLevel = 0;
         int MayLanh = 0;
         int Quat = 0;
-        int classroomId = tblReportEntity.getClassRoomId();
-        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
         TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
         int chair = roomTypeEntity.getSlots();
         String[] row = roomTypeEntity.getHorizontalRows().split("-");
@@ -122,7 +112,7 @@ public class Utils {
         Collection<TblEquipmentEntity> damagedEquipment = new ArrayList<TblEquipmentEntity>();
         Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
         for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            if (!tblEquipmentEntity.isStatus()) {
+            if (tblEquipmentEntity.isStatus()) {
                 damagedEquipment.add(tblEquipmentEntity);
             }
         }
@@ -257,7 +247,7 @@ public class Utils {
     }
 
     //Tìm phòng trống
-    public List<TblClassroomEntity> getAvailableRoom(TblScheduleEntity tblScheduleEntity) {
+    public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, List<TblClassroomEntity> tblClassroomEntities) {
         //lay so cho ngoi
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
         //lay so tiet hoc
@@ -280,7 +270,6 @@ public class Utils {
         }
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
-        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
         for (int i = 0; i < tblClassroomEntities.size(); i++) {
             int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
             if (numberOfStudent >= currentSlots) {
@@ -309,13 +298,12 @@ public class Utils {
             }
         }
 
-
-        String classroom = "";
+        List<String> classroom = new ArrayList<String>();
         for (TblClassroomEntity classroomEntity : fitClassroom) {
-            classroom += classroomEntity.getName();
+            classroom.add(classroomEntity.getName());
         }
-        System.out.println("--------Classroom: " + classroom);
-        return fitClassroom;
+
+        return classroom;
     }
 
     //Phân rã thời gian theo tiết học

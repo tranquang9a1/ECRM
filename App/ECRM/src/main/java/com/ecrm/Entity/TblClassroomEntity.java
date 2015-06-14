@@ -133,6 +133,7 @@ public class TblClassroomEntity {
     public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeByRoomTypeId) {
         this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
     }
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassroomId")
     public Collection<TblEquipmentEntity> getTblEquipmentsById() {
@@ -142,6 +143,7 @@ public class TblClassroomEntity {
     public void setTblEquipmentsById(Collection<TblEquipmentEntity> tblEquipmentsById) {
         this.tblEquipmentsById = tblEquipmentsById;
     }
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassRoomId")
     public Collection<TblReportEntity> getTblReportsById() {
@@ -151,6 +153,7 @@ public class TblClassroomEntity {
     public void setTblReportsById(Collection<TblReportEntity> tblReportsById) {
         this.tblReportsById = tblReportsById;
     }
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassroomId")
     public Collection<TblScheduleEntity> getTblSchedulesById() {

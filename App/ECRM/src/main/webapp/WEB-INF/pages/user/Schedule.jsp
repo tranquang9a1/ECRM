@@ -38,9 +38,6 @@
                 <div class="width-25">
                     <div>Bắt đầu</div>
                 </div>
-                <div class="width-25">
-                    <div>Kết thúc</div>
-                </div>
                 <p class="clear"></p>
             </div>
             <div class="body-table">
@@ -56,10 +53,7 @@
                             <div>${schedule[i].slots}</div>
                         </div>
                         <div class="width-25">
-                            <div><fmt:formatDate value="${schedule[i].dateFrom}" pattern="dd/MM/yyyy" /></div>
-                        </div>
-                        <div class="width-25">
-                            <div><fmt:formatDate value="${schedule[i].dateTo}" pattern="dd/MM/yyyy" /></div>
+                            <div><fmt:formatDate value="${schedule[i].date}" pattern="dd/MM/yyyy" /></div>
                         </div>
                         <p class="clear"></p>
                     </div>

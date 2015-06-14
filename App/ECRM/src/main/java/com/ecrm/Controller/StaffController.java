@@ -211,18 +211,17 @@ public class StaffController {
         TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity();
         TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
         if (roomTypeEntity.getProjector() > 0) {
-            tblEquipmentEntity = new TblEquipmentEntity(1, classroomEntity.getId(), null, null, "[1]", 0, true);
+            tblEquipmentEntity = new TblEquipmentEntity(1, classroomEntity.getId(), null, null, "[1]", 0, false);
             equipmentDAO.persist(tblEquipmentEntity);
         }
         if (roomTypeEntity.getAirConditioning() > 0) {
             for (int i = 0; i < roomTypeEntity.getAirConditioning(); i++) {
-                tblEquipmentEntity = new TblEquipmentEntity(3, classroomEntity.getId(), null, null, "[3]", 0, true);
+                tblEquipmentEntity = new TblEquipmentEntity(3, classroomEntity.getId(), null, null, "[3]", 0, false);
                 equipmentDAO.persist(tblEquipmentEntity);
-
             }
         }
         if (roomTypeEntity.getTelevision() > 0) {
-            tblEquipmentEntity = new TblEquipmentEntity(2, classroomEntity.getId(), null, null, "[2]", 0, true);
+            tblEquipmentEntity = new TblEquipmentEntity(2, classroomEntity.getId(), null, null, "[2]", 0, false);
             equipmentDAO.persist(tblEquipmentEntity);
         }
     }

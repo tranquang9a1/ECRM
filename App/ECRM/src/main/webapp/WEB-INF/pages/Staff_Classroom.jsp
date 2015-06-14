@@ -36,8 +36,8 @@
         <div class="tab">
             <div class="tab-medium">
                 <ul>
-                    <li class="active" onclick="changeTab('tab1', this)">Phòng học</li>
-                    <li onclick="changeTab('tab2', this)">Loại phòng</li>
+                    <li id="tab1-1" onclick="changeTab('tab1', this)">Phòng học</li>
+                    <li id="tab2-2" onclick="changeTab('tab2', this)">Loại phòng</li>
                 </ul>
             </div>
             <div class="content-tab">
@@ -140,7 +140,7 @@
 </form>
 <%--Modal hien len khi nhap vao nut chon kieu phong khi tao phong cua CLASSROOM--%>
 <div class="modal modal-medium" id="modal-2">
-    <div class="content-modal">
+    <div class="content-modal" style="height: 660px;">
         <div class="header-modal title">
             <p>Loại phòng học</p>
             <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1')"></i>
@@ -175,17 +175,17 @@
     <div class="black-background"></div>
 </div>
 <%--Modal hien len khi nhap vao nut tao roomtype--%>
-<div class="modal modal-medium" id="modal-roomtypedetail">
-    <div class="content-modal">
+<div class="modal modal-medium" id="modal-roomtypedetail" >
+    <div class="content-modal" style="height: 650px;">
         <div class="header-modal title">
             <p class="roomtypename">Tạo loại phòng </p>
             <i class="fa fa-times" onclick="showModal(0, 'modal-roomtypedetail')"></i>
         </div>
         <div class="body-modal">
             <div class="group-control" style="margin: 15px 0 0">
-                <div class="name">Máy chiếu</div>
+                <div class="name">Tên loại phòng</div>
                 <div class="control">
-                    <input class="check-box" type="checkbox" id="projector"/>
+                    <input  type="text" id="roomTypeName"/>
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
@@ -271,6 +271,7 @@
 <form action="/staff/createRoomType" id="createRoomType">
     <div class="modal modal-medium" id="modal-4">
         <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="">
+        <input type="hidden" id="name" name="RoomtypeName" value="">
         <input type="hidden" id="Slots" name="Slots" value="">
         <input type="hidden" id="VerticalRows" name="VerticalRows" value="">
         <input type="hidden" id="HorizontalRows" name="HorizontalRows" value="">
@@ -281,6 +282,7 @@
         <input type="hidden" id="Speaker" name="Speaker" value="">
         <input type="hidden" id="Bulb" name="Bulb" value="">
         <input type="hidden" id="Television" name="Television" value="">
+
 
         <div class="content-modal">
             <div class="header-modal title">
@@ -360,8 +362,17 @@
         document.getElementById('RoomtypeId').innerHTML = "";
         document.getElementById('classroomName').innerHTML = "Tạo Phòng";
         document.getElementById('roomNameId').value = "";
+        document.getElementById('name').value = "";
     }
     document.getElementById("${tab}").className = "body-tab active";
+    var tab = '${tab}';
+    if(tab === 'tab1'){
+        document.getElementById("tab1-1").className = "active";
+        document.getElementById("tab2-2").className = "";
+    }else{
+        document.getElementById("tab2-2").className = "active";
+        document.getElementById("tab1-1").className = "";
+    }
 
     function checkMayLanh(){
         if(document.getElementById('mayLanh').checked){

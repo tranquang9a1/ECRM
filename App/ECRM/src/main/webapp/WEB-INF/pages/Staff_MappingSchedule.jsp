@@ -70,8 +70,8 @@
         <div class="tab">
             <div class="tab-medium">
                 <ul>
-                    <li class="active" onclick="changeTab('tab1', this)">Upload schedule</li>
-                    <li onclick="changeTab('tab2', this)">Import manually</li>
+                    <li id="tab1-1" onclick="changeTab('tab1', this)">Upload schedule</li>
+                    <li id="tab2-2"  onclick="changeTab('tab2', this)">Import manually</li>
                 </ul>
             </div>
             <div class="content-tab">
@@ -158,7 +158,16 @@
 
         }
     }
+
     document.getElementById("${tab}").className = "body-tab active";
+    var tab = '${tab}';
+    if(tab === 'tab1'){
+        document.getElementById("tab1-1").className = "active";
+        document.getElementById("tab2-2").className = "";
+    }else{
+        document.getElementById("tab2-2").className = "active";
+        document.getElementById("tab1-1").className = "";
+    }
 </script>
 </body>
 </html>

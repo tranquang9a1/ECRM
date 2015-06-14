@@ -70,6 +70,7 @@ function createSelect(id){
 }
 
 function viewMap() {
+    slots = 0;
     var vrows = document.getElementById("vrow").value;
     var chieuDaiBan = 0;
     var chieuDaiSubDiv = 0;
@@ -249,6 +250,7 @@ function viewMap() {
         temp2+= document.getElementById(soChoNgoi[i]).value+'-';
     }
     document.getElementById("NumberOfSlotsEachHRows").value = temp2;
+    document.getElementById('name').value = document.getElementById('roomTypeName').value;
 
 }
 
@@ -413,10 +415,10 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
 
 $("#selectBox").change(function(){
     var selectedValue = $(this).find(":selected").data("value");
-    alert(selectedValue.id);
     document.getElementById('loaiphong').innerHTML = selectedValue.id;
     document.getElementById('roomtype').value = selectedValue.id;
     showMap( selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
         , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
         selectedValue.television);
+    document.getElementById('roomtype-map2').style.height = 440+"px";
 });

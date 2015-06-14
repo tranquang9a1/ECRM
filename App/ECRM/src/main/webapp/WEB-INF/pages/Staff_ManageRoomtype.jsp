@@ -40,7 +40,7 @@
             <c:forEach items="${roomtypes}" var="r">
                 <div class="row">
                     <div class="room-number">
-                        <div>Loại ${r.id}</div>
+                        <div>${r.name}</div>
                     </div>
                     <div class="room-type">
                         <div>${r.slots}</div>
@@ -50,7 +50,7 @@
                             <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
                             </div>
                             <div class="btn btn-view" title="Xem sơ đồ"
-                                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},${r.verticalRows},'${r.horizontalRows}', '${r.numberOfSlotsEachHRows}'
+                                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},'${r.name}', ${r.verticalRows},'${r.horizontalRows}', '${r.numberOfSlotsEachHRows}'
                                          , ${r.airConditioning}, ${r.fan}, ${r.projector}
                                          , ${r.speaker}, ${r.television})">
                                 <i class="fa fa-eye"></i>

@@ -240,9 +240,10 @@ public class TblRoomTypeEntity {
     public TblRoomTypeEntity() {
     }
 
-    public TblRoomTypeEntity(int id, int slots, int verticalRows, String horizontalRows, String numberOfSlotsEachHRows,
+    public TblRoomTypeEntity(int id, String name, int slots, int verticalRows, String horizontalRows, String numberOfSlotsEachHRows,
                              int airConditioning, int fan, int projector, int speaker, int bulb, int television, Timestamp createTime, Boolean isDelete, Timestamp updateTime) {
         this.id = id;
+        this.name = name;
         this.slots = slots;
         this.verticalRows = verticalRows;
         this.horizontalRows = horizontalRows;

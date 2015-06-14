@@ -75,7 +75,7 @@ public class StaffController {
                                  @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NumberOfSlotsEachHRows") String NumberOfSlotsEachHRows,
                                  @RequestParam("AirConditioning") int airConditioning, @RequestParam("Fan") int fan,
                                  @RequestParam("Projector") int projectors, @RequestParam("Speaker") int speaker,
-                                 @RequestParam("Television") int television, @RequestParam("Bulb") int bulb) {
+                                 @RequestParam("Television") int television, @RequestParam("Bulb") int bulb, @RequestParam("RoomtypeName") String roomtypeName) {
         TblRoomTypeEntity roomType = new TblRoomTypeEntity();
         horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
         NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
@@ -84,11 +84,11 @@ public class StaffController {
 
         if (roomtypeId != "") {
             roomType = roomTypeDAO.find(Integer.parseInt(roomtypeId));
-            roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
+            roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
                     speaker, bulb, television, roomType.getCreateTime(), false, new Timestamp(date.getTime()));
             roomTypeDAO.merge(roomType);
         } else {
-            roomType = new TblRoomTypeEntity(0, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
+            roomType = new TblRoomTypeEntity(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
                     speaker, bulb, television, new Timestamp(date.getTime()), false, null);
             roomTypeDAO.persist(roomType);
         }

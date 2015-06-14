@@ -35,10 +35,10 @@
             <c:forEach items="${classrooms}" var="cl">
                 <div class="row">
                     <div class="room-number">
-                        <div>${cl.name}</div>
+                        <div>${cl.tblRoomTypeByRoomTypeId.name}</div>
                     </div>
                     <div class="room-type">
-                        <div>Loại ${cl.roomTypeId}</div>
+                        <div>${cl.name}</div>
                     </div>
                     <div class="statusS">
                     <c:if test="${ not cl.isAllInformation}">

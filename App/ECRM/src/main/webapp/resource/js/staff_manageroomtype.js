@@ -9,8 +9,8 @@ $("#selectBox").change(function () {
         , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
         selectedValue.television);
 });
-function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
-    document.getElementsByClassName('roomtypename')[0].innerHTML = "Loai " + mapId;
+function showMapForEdit(mapId, name, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
+    document.getElementsByClassName('roomtypename')[0].innerHTML = name;
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
     var classroommap = document.getElementById('roomtype-map');
@@ -19,6 +19,7 @@ function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projec
         classroommap.removeChild(classroommap.lastChild);
     }
     generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi);
+    document.getElementById('name').value = name;
     if(projector>0){
         document.getElementById('projector').checked = true;
     }else {
@@ -44,6 +45,7 @@ function showMapForEdit(mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projec
     }else {
         document.getElementById('loa').checked = false;
     }
+
     document.getElementById('vrow').selectedIndex = vrows -1;
     createDetailMap(horizontalRows, noSlotsEachRows);
     document.getElementsByClassName('roomtypename')[1].innerHTML = "Loai "+mapId;
@@ -59,7 +61,6 @@ function showRoomtypeMapByDropDownList(mapId, vrows, sDayNgang, sChoNgoi, mayLan
     while (classroommap.hasChildNodes()) {
         classroommap.removeChild(classroommap.lastChild);
     }
-
 
     generateMap(classroommap, horizontalRows, noSlotsEachRows, mapId, vrows, mayLanh, quat, projector, loa, tivi);
 }

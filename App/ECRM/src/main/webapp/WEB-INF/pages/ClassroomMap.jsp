@@ -55,7 +55,7 @@
 <script src="../../resource/js/roomtype-phone.js"></script>
 <script>
     window.onload = function(){
-        showMap('classroom-map', positionEquipments, ${r.roomTypeId}, ${r.tblRoomTypeByRoomTypeId.verticalRows},
+        showMap('classroom-map', positionEquipments, ${r.tblRoomTypeByRoomTypeId.verticalRows},
                 '${r.tblRoomTypeByRoomTypeId.horizontalRows}', '${r.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}',
                 ${r.tblRoomTypeByRoomTypeId.airConditioning}, ${r.tblRoomTypeByRoomTypeId.fan},
                 ${r.tblRoomTypeByRoomTypeId.projector}, ${r.tblRoomTypeByRoomTypeId.speaker},

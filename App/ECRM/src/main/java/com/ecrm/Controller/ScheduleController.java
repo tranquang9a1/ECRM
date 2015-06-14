@@ -278,6 +278,7 @@ public class ScheduleController {
     public String importManually(HttpServletRequest request,@RequestParam("username")String username, @RequestParam("all")String all, @RequestParam("avai") String avai,
                                  @RequestParam("slot")String slot, @RequestParam("numberOfSlots")int numberOfSlots,
                                  @RequestParam("numberOfStudent")int numberOfStudent, @RequestParam("date")String date) throws ParseException {
+        slot = "Slot "+slot;
         String timeFrom = convertSlotToTime(slot);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());

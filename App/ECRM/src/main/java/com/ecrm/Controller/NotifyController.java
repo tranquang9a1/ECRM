@@ -8,8 +8,10 @@ import com.ecrm.Utils.Enumerable.ReportStatus;
 import com.ecrm.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -77,17 +79,14 @@ public class NotifyController {
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
 
         TblClassroomEntity classroom = classroomDAO.find(roomId);
-        List<TblEquipmentEntity> equipments = equipmentDAO.getActiveEquipments(classroom.getId());
+        List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(classroom.getId());
 
-        DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId));
+        DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId), equipments);
         resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
         resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
-        resultObject.setEquipments(equipments);
+        resultObject.setDamagedLevel(classroom.getDamagedLevel());
 
-        int damagedLevel = Utils.checkDamagedLevel(classroomDAO.find(roomId));
-        resultObject.setDamagedLevel(damagedLevel);
-
-        if(damagedLevel >= 50) {
+        if(classroom.getDamagedLevel() >= 50) {
             TblScheduleEntity schedule = scheduleDAO.getScheduleInTime(null, roomId);
             if (schedule != null) {
                 List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.findAll());
@@ -96,5 +95,55 @@ public class NotifyController {
         }
         request.setAttribute("DAMAGEDROOM", resultObject);
         return "staff/ReportDetail";
+    }
+
+    @RequestMapping(value = "sua-chua")
+    @Transactional
+    public String resolveReport(HttpServletRequest request, @RequestParam(value = "RoomId") int roomId,
+                                @RequestParam(value = "ListResolve") String listResolve){
+        String[] categories = listResolve.split(",");
+        for (int i = 0; i < categories.length; i++) {
+            resolve(roomId, Integer.parseInt(categories[i]));
+        }
+
+        return "redirect:/thong-bao";
+    }
+
+    private boolean resolve(int room, int category){
+        //Change Equipment status and ReportDetail status
+        List<TblEquipmentEntity> equips = equipmentDAO.getDamagedEquipmentsByCategory(room, category);
+        for (int i = 0; i < equips.size(); i++) {
+            equips.get(i).setStatus(false);
+            equipmentDAO.merge(equips.get(i));
+
+            List<TblReportDetailEntity> reportDetails = reportDetailDAO.getUnresolveReportDetail(equips.get(i).getId());
+            for (int j = 0; j < reportDetails.size(); j++) {
+                reportDetails.get(j).setStatus(false);
+                reportDetailDAO.merge(reportDetails.get(j));
+            }
+        }
+
+        //Change Report status
+        List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(room);
+        int flag = 0;
+        for (TblReportEntity report: reports) {
+            List<TblReportDetailEntity> details = report.getTblReportDetailsById();
+            for (int i = 0; i < details.size(); i++) {
+                if(!details.get(i).isStatus()){
+                    flag++;
+                }
+            }
+
+            if(flag == details.size()){
+                report.setStatus(ReportStatus.FINISH.getValue());
+                reportDAO.merge(report);
+            } else if(flag > 0) {
+                report.setStatus(ReportStatus.GOING.getValue());
+                reportDAO.merge(report);
+            }
+            flag = 0;
+        }
+
+        return true;
     }
 }

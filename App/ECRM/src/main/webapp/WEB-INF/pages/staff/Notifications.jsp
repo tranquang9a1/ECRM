@@ -44,13 +44,16 @@
                 <div id="tab1" class="body-tab active">
                     <c:if test="${newReport.size() > 0}">
                         <c:forEach var="i" begin="0" end="${newReport.size() - 1}">
-                        <div class="notify-active" onclick="showReportDetail(${newReport[i].roomId})">
-                            <p class="room">Phòng ${newReport[i].roomName}</p>
-                            <p class="description">${newReport[i].listEquipments}</p>
-                            <p class="time">Người báo cáo(${newReport[i].reporters})</p>
-                            <div class="clear"></div>
-                        </div>
-                    </c:forEach>
+                            <div class="notify-active" onclick="showReportDetail(${newReport[i].roomId})">
+                                <p class="room">Phòng ${newReport[i].roomName}</p>
+
+                                <p class="description">${newReport[i].listEquipments}</p>
+
+                                <p class="time">Người báo cáo(${newReport[i].reporters})</p>
+
+                                <div class="clear"></div>
+                            </div>
+                        </c:forEach>
                     </c:if>
                 </div>
                 <div id="tab2" class="body-tab">
@@ -227,8 +230,8 @@
         closeConform();
         switch (choose) {
             case 1:
-                showModal(0, 'modal-1');
-                alert("Khắc phục thành công!");
+                showModal(0, 'modal-4');
+                sendResolve();
                 break;
             case 2:
                 showModal(0, 'modal-4');
@@ -240,6 +243,6 @@
                 break;
         }
     }
-    </
-    body >
-    < / html >
+</script>
+</body>
+</html>

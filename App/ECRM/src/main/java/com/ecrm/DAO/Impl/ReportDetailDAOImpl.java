@@ -40,10 +40,10 @@ public class ReportDetailDAOImpl extends BaseDAO<TblReportDetailEntity, Integer>
         return result;
     }
 
-    public List<TblReportDetailEntity> getUnresolveReportDetail(int equimentId){
-        Query q = entityManager.createQuery("Select rd from TblReportDetailEntity rd where rd.equipmentId =:equipmentId " +
-                "and rd.status =:true");
-        q.setParameter("equipmentId", equimentId);
+    public List<TblReportDetailEntity> getUnresolveReportDetail(int equipmentId){
+        Query q = entityManager.createQuery("Select rd from TblReportDetailEntity rd where rd.equipmentId = :equipmentId " +
+                "and rd.status = true");
+        q.setParameter("equipmentId", equipmentId);
         List<TblReportDetailEntity> tblReportDetailEntities = q.getResultList();
         return tblReportDetailEntities;
     }

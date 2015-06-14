@@ -13,3 +13,20 @@ function showReportDetail(roomId){
         }
     });
 }
+
+function sendResolve() {
+    var list = "";
+
+    for (var key in listResolve) {
+        if (listResolve.hasOwnProperty(key)){
+            list += key + ",";
+        }
+    }
+
+    if(list.length > 0) {
+        document.getElementById("ListResolve").value = list.substring(0, list.length-1);
+        document.getElementById("resolveForm").submit();
+    } else {
+        alert("Bạn cần chọn thiết bị!");
+    }
+}

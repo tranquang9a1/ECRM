@@ -498,17 +498,22 @@ input[type='checkbox'] {
     margin: 4px 0;
     padding: 4px 10px;
     line-height: 19px;
-    color: white;
+    color: #888888;
+    font-weight: bold;
 }
 
 .label.red {
-    background-color: #d9534f;
+    color: #d9534f;
 }
 
 .label.green {
-    background-color: #5cb85c;
+    color: #35b83a;
 }
 
 .label.blue {
-    background-color: #5bc0de;
+    color: #5bc0de;
+}
+
+.label.yellow {
+    color: #decc25;
 }

@@ -345,8 +345,8 @@ function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
     if(listDamage[4] != undefined && quat > 0) {
         listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[5]?"Đã được báo cáo":"")});
     }
-    listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: ""});
-    listEquipment.push({id: 8, classname: "chair", name: "Chair", message: ""});
+    listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: (listDamage[7]?"Đã được báo cáo":"")});
+    listEquipment.push({id: 8, classname: "chair", name: "Chair", message: (listDamage[8]?"Đã được báo cáo":"")});
 
     var contentDiv = document.getElementById("modal-1").getElementsByClassName("body-modal")[0];
     for(var i = 0; i < listEquipment.length; i++) {

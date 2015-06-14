@@ -118,8 +118,14 @@
                                 <c:if test="${notifies[i].status == 1}">
                                     <p class="label red">Chưa sửa</p>
                                 </c:if>
+                                <c:if test="${notifies[i].status == 2}">
+                                    <p class="label yellow">Đang sửa</p>
+                                </c:if>
                                 <c:if test="${notifies[i].status == 3}">
                                     <p class="label green">Đã sửa</p>
+                                </c:if>
+                                <c:if test="${notifies[i].status == 4}">
+                                    <p class="label">Đã hủy</p>
                                 </c:if>
                             </div>
                         </div>
@@ -307,8 +313,12 @@
     var damageEquip = {};
     <c:if test="${equip.size() > 0}" >
         <c:forEach begin="0" end="${equip.size() -1}" var="i">
-            positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
-            damageEquip[${equip[i].categoryId}] = ${equip[i].status};
+            <c:if test="${equip[i].position != null}">
+                positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
+            </c:if>
+            if(damageEquip[${equip[i].categoryId}] == undefined || damageEquip[${equip[i].categoryId}] == false) {
+                damageEquip[${equip[i].categoryId}] = ${equip[i].status};
+            }
         </c:forEach>
     </c:if>
 

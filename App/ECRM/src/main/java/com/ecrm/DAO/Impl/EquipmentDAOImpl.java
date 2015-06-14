@@ -88,6 +88,47 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         return result;
     }
 
+    @Override
+    public List<TblEquipmentEntity> getDamagedEquipments(int roomId) {
 
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblEquipmentEntity c " +
+                "WHERE c.classroomId = :roomId " +
+                "AND c.status = true");
+        query.setParameter("roomId", roomId);
 
+        List queryResult = query.getResultList();
+        List<TblEquipmentEntity> result = new ArrayList<TblEquipmentEntity>();
+        if (!queryResult.isEmpty()) {
+            for (Iterator i = queryResult.iterator(); i.hasNext(); ) {
+                TblEquipmentEntity item = (TblEquipmentEntity) i.next();
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<TblEquipmentEntity> getDamagedEquipmentsByCategory(int roomId, int category) {
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblEquipmentEntity c " +
+                "WHERE c.classroomId = :roomId " +
+                "AND c.status = true " +
+                "And c.categoryId = :category");
+        query.setParameter("roomId", roomId);
+        query.setParameter("category", category);
+
+        List queryResult = query.getResultList();
+        List<TblEquipmentEntity> result = new ArrayList<TblEquipmentEntity>();
+        if (!queryResult.isEmpty()) {
+            for (Iterator i = queryResult.iterator(); i.hasNext(); ) {
+                TblEquipmentEntity item = (TblEquipmentEntity) i.next();
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
 }

@@ -59,7 +59,7 @@ public class UserController {
         if(schedule != null) {
             TblClassroomEntity classroom = classroomDAO.find(schedule.getClassroomId());
             TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
-            List<TblEquipmentEntity> listEquipment = equipmentDAO.getActiveEquipments(schedule.getClassroomId());
+            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedule.getClassroomId());
 
             request.setAttribute("ROOM", classroom);
             request.setAttribute("EQUIPMENTS", listEquipment);

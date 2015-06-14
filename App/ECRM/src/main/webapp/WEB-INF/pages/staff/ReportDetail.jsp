@@ -9,6 +9,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="room" value="${requestScope.DAMAGEDROOM}"/>
+<c:set var="rt" value="${room.roomtype}" />
+<script>
+  <%--var positionEquipments = {};--%>
+<%--//  var damageEquip = {};--%>
+  <%--<c:forEach items="${equip}" var="item">--%>
+    <%--positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};--%>
+    <%--<c:if test="${item.status == true}">--%>
+    <%--if(damageEquip[${item.categoryId}] == undefined) {--%>
+      <%--damageEquip[${item.categoryId}] = {name: ${item.tblEquipmentCategoryByCategoryId.name}, status: ${item.status}, size: 1};--%>
+    <%--} else {--%>
+      <%--damageEquip[${item.categoryId}].size += 1;--%>
+    <%--}--%>
+    <%--</c:if>--%>
+  <%--</c:forEach>--%>
+</script>
 <div class="modal modal-medium" id="modal-1">
   <div class="content-modal">
     <div class="header-modal title">
@@ -16,7 +31,6 @@
       <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
     </div>
     <div class="body-modal">
-      <input type="hidden" value="${room.roomId}" name="roomId"/>
       <div class="group-control">
         <div class="name">Phòng</div>
         <div class="value">${room.roomName}</div>
@@ -52,8 +66,7 @@
     </div>
     <div class="footer-modal">
       <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát" />
-      <input type="button" class="btn btn-orange" onclick="conform(1)" value="Khắc phục" />
-      <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-1', 'modal-4')" value="Xem tất cả" />
+      <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-1', 'modal-4')" value="Khắc phục" />
     </div>
   </div>
   <div class="black-background"></div>
@@ -109,43 +122,41 @@
 <div class="modal modal-medium" id="modal-4">
   <div class="content-modal">
     <div class="header-modal title">
-      <p>Thiết bị hư hại phòng 203</p>
+      <p>Thiết bị hư hại phòng ${room.roomName}</p>
       <i class="fa fa-times" onclick="showModal(2, 'modal-4','modal-1')"></i>
     </div>
     <div class="body-modal">
-      <div class="group-equipment">
-        <input type="checkbox" />
-        <div style=" float:left; width: 50px; height: 50px; background-color: #f1f1f1"></div>
-        <div class="equipment">Máy chiếu</div>
-        <div class="quantity">1 máy</div>
-        <div class="clear"></div>
-      </div>
-      <div class="group-equipment">
-        <input type="checkbox" />
-        <div style=" float:left; width: 50px; height: 50px; background-color: #f1f1f1"></div>
-        <div class="equipment">Đèn</div>
-        <div class="quantity">3 cái</div>
-        <div class="clear"></div>
-      </div>
-      <div class="group-equipment">
-        <input type="checkbox" />
-        <div style=" float:left; width: 50px; height: 50px; background-color: #f1f1f1"></div>
-        <div class="equipment">Máy quạt</div>
-        <div class="quantity">1 máy</div>
-        <div class="clear"></div>
-      </div>
-      <div class="group-equipment">
-        <input type="checkbox" />
-        <div style=" float:left; width: 50px; height: 50px; background-color: #f1f1f1"></div>
-        <div class="equipment">Ghế</div>
-        <div class="quantity">5 cái</div>
-        <div class="clear"></div>
-      </div>
+      <form action="/thong-bao/sua-chua" id="resolveForm" method="post" style="margin: 0;">
+        <input type="hidden" value="${room.roomId}" name="RoomId"/>
+        <input type="hidden" id="ListResolve" value="" name="ListResolve">
+      </form>
+        <c:forEach items="${room.equipments}" var="item" >
+          <div class="group-equipment">
+            <input type="checkbox" class="equipment-type" value="${item.id}"/>
+            <div class="equip ${item.className}"></div>
+            <div class="equipment">${item.name}</div>
+            <div class="quantity">Số lượng: ${item.size}</div>
+            <div class="clear"></div>
+          </div>
+        </c:forEach>
     </div>
     <div class="footer-modal">
       <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-4','modal-1')" value="Thoát" />
-      <input type="button" class="btn btn-orange" onclick="conform(2)"  value="Khắc phục" />
+      <input type="button" class="btn btn-orange" onclick="conform(1)"  value="Khắc phục" />
     </div>
   </div>
   <div class="black-background"></div>
 </div>
+<script>
+  var listResolve = {};
+  $(".equipment-type").click(function(){
+    if(listResolve[$(this).attr("value")] != undefined) {
+      delete listResolve[$(this).attr("value")];
+    } else {
+      listResolve[$(this).attr("value")] = true;
+    }
+  });
+
+  <%--showMap('idContainer', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},--%>
+            <%--${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});--%>
+</script>

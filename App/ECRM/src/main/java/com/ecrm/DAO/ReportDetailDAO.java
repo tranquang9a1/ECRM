@@ -12,4 +12,5 @@ import java.util.List;
 public interface ReportDetailDAO {
 
     public List<TblReportDetailEntity> getReportDetailsInReport(int reportId);
+    public List<TblReportDetailEntity> getUnresolveReportDetail(int equimentId);
 }

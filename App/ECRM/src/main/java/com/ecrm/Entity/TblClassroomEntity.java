@@ -20,6 +20,7 @@ public class TblClassroomEntity {
     private Timestamp updateTime;
     private Boolean isDelete;
     private Boolean isAllInformation;
+    private Integer damagedLevel;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblReportEntity> tblReportsById;
@@ -94,6 +95,16 @@ public class TblClassroomEntity {
 
     public void setIsAllInformation(Boolean isAllInformation) {
         this.isAllInformation = isAllInformation;
+    }
+
+    @Basic
+    @Column(name = "DamagedLevel")
+    public Integer getDamagedLevel() {
+        return damagedLevel;
+    }
+
+    public void setDamagedLevel(Integer damagedLevel) {
+        this.damagedLevel = damagedLevel;
     }
 
     @Override

@@ -189,6 +189,12 @@
                 </div>
             </div>
             <div class="group-control" style="margin: 15px 0 0">
+                <div class="name">Máy chiếu</div>
+                <div class="control">
+                    <input class="check-box" type="checkbox" id="projector"/>
+                </div>
+            </div>
+            <div class="group-control" style="margin: 15px 0 0">
                 <div class="name">Máy quạt</div>
                 <div class="control">
                     <input class="check-box" type="checkbox" id="quat" onclick="checkFan();"/>

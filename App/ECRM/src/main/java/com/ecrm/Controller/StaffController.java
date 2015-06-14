@@ -244,7 +244,9 @@ public class StaffController {
         if (airConditioning != "") {
             String[] array = airConditioning.split("-");
             for (int i = 0; i < array.length; i++) {
-                executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
+                if (!array[i].equals("0")) {
+                    executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
+                }
             }
         }
         return "redirect:/staff/classroom?ACTIVETAB=tab1";
@@ -262,8 +264,6 @@ public class StaffController {
             }
         }
     }
-
-
 
 
 }

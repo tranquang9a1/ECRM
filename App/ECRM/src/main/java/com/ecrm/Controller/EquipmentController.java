@@ -41,8 +41,7 @@ public class EquipmentController {
             }
         }
         request.setAttribute("EQUIPMENTS", fitEquipment);
-        request.setAttribute("ACTIVELEFTTAB", "STAFF_EQUIP");
-        request.setAttribute("CATEGORIES", tblEquipmentCategoryEntities);
+        request.setAttribute("CATEGORIES", fitCategory);
         return "Staff_Equipment";
     }
 

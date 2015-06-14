@@ -26,5 +26,9 @@ public interface ReportDAO {
 
     public boolean createReport();
 
-    public List<String> getReportByClassId();
+    public List<Integer> getReportByClassId();
+
+    public boolean resolveReport(int reportId, int equipmentId, String solution);
+
+    public boolean updateDamageLevel(int damageLevel, int reportId);
 }

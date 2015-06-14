@@ -13,14 +13,14 @@ public class ReportDTO {
     private int reportId;
     private String username;
     private String fullname;
-    private int classId;
+    private String classId;
     private String createTime;
     private String evaluate;
     private int status;
     private int damageLevel;
     private List<ReportDetailDTO> equipments;
 
-    public ReportDTO(int reportId, String username, String fullname, int classId, String createTime, String evaluate,
+    public ReportDTO(int reportId, String username, String fullname, String classId, String createTime, String evaluate,
                      int status, int damageLevel, List<ReportDetailDTO> equipmentId) {
         this.reportId = reportId;
         this.username = username;
@@ -60,11 +60,11 @@ public class ReportDTO {
         this.fullname = fullname;
     }
 
-    public int getClassId() {
+    public String getClassId() {
         return classId;
     }
 
-    public void setClassId(int classId) {
+    public void setClassId(String classId) {
         this.classId = classId;
     }
 

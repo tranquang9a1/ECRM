@@ -49,4 +49,15 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
 
         return null;
     }
+
+    @Override
+    public boolean updateDamageLevel(int damageLevel, int classId) {
+        Query query = entityManager.createQuery("Update TblClassroomEntity r set r.damagedLevel = :damageLevel where r.id = :classId");
+        query.setParameter("damageLevel", damageLevel);
+        query.setParameter("classId", classId);
+
+        int rows = query.executeUpdate();
+        return rows > 0 ? true : false;
+
+    }
 }

@@ -135,13 +135,43 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
-    public List<String> getReportByClassId() {
-        Query query  = entityManager.createQuery("Select u.classRoomId TblReportEntity u where u.status = :statusnew " +
-                "OR u.status = :statusgoing" + " order by u.createTime DESC");
+    public List<Integer> getReportByClassId() {
+        Query query  = entityManager.createQuery("Select u.classRoomId from TblReportEntity u where u.status = :statusnew " +
+                "order by u.createTime DESC");
         query.setParameter("statusnew", ReportStatus.NEW.getValue());
-        query.setParameter("statusgoing", ReportStatus.GOING.getValue());
         return query.getResultList();
 
+
+    }
+
+    @Override
+    public boolean resolveReport(int reportId, int equipmentId, String solution) {
+        Query query = entityManager.createQuery("Update TblReportDetailEntity u set u.status = true, u.solution =:solution " +
+                "where u.reportId = :reportId and u.equipmentId = :equipmentId ");
+        query.setParameter("solution", solution);
+        query.setParameter("reportId", reportId);
+        query.setParameter("equipmentId", equipmentId);
+
+        Query query1 = entityManager.createQuery("Select u from TblReportDetailEntity u where u.reportId = :reportId and u.status = false ");
+        query1.setParameter("reportId", reportId);
+
+        if (query1.getResultList().size() == 0) {
+            Query query2 = entityManager.createQuery("Update TblReportEntity u set u.status = true");
+            query2.executeUpdate();
+        }
+
+        int rows = query.executeUpdate();
+        return rows > 0 ? true : false;
+    }
+
+    @Override
+    public boolean updateDamageLevel(int damageLevel, int reportId) {
+        Query query = entityManager.createQuery("Update TblReportEntity r set r.damagedLevel = :damageLevel where r.reportId = :reportId");
+        query.setParameter("damageLevel", damageLevel);
+        query.setParameter("reportId", reportId);
+
+        int rows = query.executeUpdate();
+        return rows > 0 ? true : false;
 
     }
 }

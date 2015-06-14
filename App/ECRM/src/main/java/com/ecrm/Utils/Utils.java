@@ -7,7 +7,9 @@ import com.ecrm.DTO.ReportDTO;
 import com.ecrm.DTO.ReportDetailDTO;
 import com.ecrm.Entity.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -19,6 +21,7 @@ public class Utils {
 
     static ClassroomDAOImpl classroomDAO;
 
+
     public static AccountDTO convertFromUserToAccountDTO(TblUserEntity userEntity) {
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setFullname(userEntity.getTblUserInfoByUsername().getFullName());
@@ -28,14 +31,26 @@ public class Utils {
         accountDTO.setRole(userEntity.getTblRoleByRoleId().getName());
         accountDTO.setStatus(userEntity.isStatus());
         accountDTO.setUsername(userEntity.getUsername());
-        List<ClassroomDTO> classrooms = new ArrayList<ClassroomDTO>();
 
-        for (int i = 0; i < 7; i++) {
+        List<ClassroomDTO> classrooms = new ArrayList<ClassroomDTO>();
+        List<TblScheduleEntity> scheduleEntities = userEntity.getTblSchedulesByUsername();
+        for (int i = 0; i < scheduleEntities.size(); i++) {
+            TblScheduleEntity schedule = scheduleEntities.get(i);
             ClassroomDTO classroom = new ClassroomDTO();
-            classroom.setClassId(i + 1022);
-            classroom.setClassroomName("Phòng 30" + i);
-            classroom.setTimeFrom("1355245200000");
-            classroom.setTimeTo("1355245200000");
+
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+
+            String currentDate = dateFormat.format(date);
+            String scheduleDate = dateFormat.format(schedule.getDate());
+            if (currentDate.equalsIgnoreCase(scheduleDate)) {
+                classroom.setClassId(schedule.getClassroomId());
+                classroom.setClassroomName(schedule.getTblClassroomByClassroomId().getName());
+                classroom.setTimeFrom(schedule.getTimeFrom().getTime() + "");
+                classroom.setTimeTo(schedule.getTimeFrom().getTime() + (schedule.getSlots()*Constant.TIME_ONE_SLOT*1000) + "");
+            }
+
             classrooms.add(classroom);
         }
         accountDTO.setClassrooms(classrooms);
@@ -54,14 +69,14 @@ public class Utils {
         ReportDTO reportDTO = new ReportDTO();
         reportDTO.setUsername(reportEntity.getUsername());
         reportDTO.setFullname(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName());
-        reportDTO.setClassId(reportEntity.getClassRoomId());
-        reportDTO.setCreateTime("1355245200000");
+        reportDTO.setClassId(reportEntity.getTblClassroomByClassRoomId().getName());
+        reportDTO.setCreateTime(reportEntity.getCreateTime().getTime() + "");
         List<TblReportDetailEntity> detail = reportEntity.getTblReportDetailsById();
         reportDTO.setEquipments(convertFromReportEntityToDTO(detail));
         reportDTO.setEvaluate(reportEntity.getEvaluate());
         reportDTO.setReportId(reportEntity.getId());
         reportDTO.setStatus(reportEntity.getStatus());
-        reportDTO.setDamageLevel(88);
+        reportDTO.setDamageLevel(reportEntity.getDamagedLevel());
 
         return reportDTO;
     }

@@ -12,8 +12,9 @@ import java.sql.Timestamp;
 public class TblReportDetailEntity {
     private int equipmentId;
     private int reportId;
-    private String damagedLevel;
     private boolean status;
+    private String damagedLevel;
+    private String description;
     private String position;
     private String solution;
     private Timestamp resolveTime;
@@ -22,18 +23,18 @@ public class TblReportDetailEntity {
 
     public TblReportDetailEntity(){}
 
-    public TblReportDetailEntity(int equipmentId, int reportId, String damagedLevel, String position){
+    public TblReportDetailEntity(int equipmentId, int reportId, String damagedLevel, String description, String position){
         this.equipmentId = equipmentId;
         this.reportId = reportId;
         this.damagedLevel = damagedLevel;
-        this.status = true;
+        this.description = description;
         this.position = position;
+        this.status = true;
     }
 
-    public TblReportDetailEntity(int equipmentId, int reportId, String damagedLevel, boolean status, String position) {
+    public TblReportDetailEntity(int equipmentId, int reportId, boolean status, String position) {
         this.equipmentId = equipmentId;
         this.reportId = reportId;
-        this.damagedLevel = damagedLevel;
         this.status = status;
         this.position = position;
     }
@@ -59,6 +60,16 @@ public class TblReportDetailEntity {
     }
 
     @Basic
+    @Column(name = "Status")
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    @Basic
     @Column(name = "DamagedLevel")
     public String getDamagedLevel() {
         return damagedLevel;
@@ -69,13 +80,13 @@ public class TblReportDetailEntity {
     }
 
     @Basic
-    @Column(name = "Status")
-    public boolean isStatus() {
-        return status;
+    @Column(name = "Description")
+    public String getDescription() {
+        return description;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Basic
@@ -118,7 +129,7 @@ public class TblReportDetailEntity {
         if (equipmentId != that.equipmentId) return false;
         if (reportId != that.reportId) return false;
         if (status != that.status) return false;
-        if (damagedLevel != null ? !damagedLevel.equals(that.damagedLevel) : that.damagedLevel != null) return false;
+        if (damagedLevel != that.damagedLevel) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
         if (solution != null ? !solution.equals(that.solution) : that.solution != null) return false;
         if (resolveTime != null ? !resolveTime.equals(that.resolveTime) : that.resolveTime != null) return false;
@@ -130,8 +141,8 @@ public class TblReportDetailEntity {
     public int hashCode() {
         int result = equipmentId;
         result = 31 * result + reportId;
-        result = 31 * result + (damagedLevel != null ? damagedLevel.hashCode() : 0);
         result = 31 * result + (status ? 1 : 0);
+        result = 31 * result + (damagedLevel != null ? damagedLevel.hashCode() : 0);
         result = 31 * result + (position != null ? position.hashCode() : 0);
         result = 31 * result + (solution != null ? solution.hashCode() : 0);
         result = 31 * result + (resolveTime != null ? resolveTime.hashCode() : 0);

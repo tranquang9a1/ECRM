@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -106,6 +107,10 @@ public class NotifyController {
             resolve(roomId, Integer.parseInt(categories[i]));
         }
 
+        TblClassroomEntity room = classroomDAO.find(roomId);
+        room.setDamagedLevel(checkDamagedLevel(room));
+        classroomDAO.merge(room);
+
         return "redirect:/thong-bao";
     }
 
@@ -119,6 +124,7 @@ public class NotifyController {
             List<TblReportDetailEntity> reportDetails = reportDetailDAO.getUnresolveReportDetail(equips.get(i).getId());
             for (int j = 0; j < reportDetails.size(); j++) {
                 reportDetails.get(j).setStatus(false);
+                reportDetails.get(j).setResolveTime(new Timestamp(new Date().getTime()));
                 reportDetailDAO.merge(reportDetails.get(j));
             }
         }
@@ -145,5 +151,165 @@ public class NotifyController {
         }
 
         return true;
+    }
+
+    //Check damaged level
+    public int checkDamagedLevel(TblClassroomEntity classroomEntity) {
+        int damagedLevel = 0;
+        int projectorDamagedLevel = 0;
+        int mayLanhDamagedLevel = 0;
+        int tiviDamagedLevel = 0;
+        int quatDamagedLevel = 0;
+        int loaDamagedLevel = 0;
+        int denDamagedLevel = 0;
+        int banDamagedLevel = 0;
+        int gheDamagedLevel = 0;
+        int MayLanh = 0;
+        int Quat = 0;
+
+        TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
+        int chair = roomTypeEntity.getSlots();
+        String[] row = roomTypeEntity.getHorizontalRows().split("-");
+        int table = 0;
+        for (int i = 0; i < row.length; i++) {
+            table += Integer.parseInt(row[i]);
+        }
+        if (roomTypeEntity.getAirConditioning() > 0) {
+            MayLanh = roomTypeEntity.getAirConditioning();
+        }
+        if (roomTypeEntity.getFan() > 0) {
+            Quat = roomTypeEntity.getFan();
+        }
+        Collection<TblEquipmentEntity> damagedEquipment = new ArrayList<TblEquipmentEntity>();
+        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+            if (tblEquipmentEntity.isStatus()) {
+                damagedEquipment.add(tblEquipmentEntity);
+            }
+        }
+        if (!damagedEquipment.isEmpty()) {
+            for (TblEquipmentEntity tblEquipmentEntity : damagedEquipment) {
+                if (tblEquipmentEntity.getCategoryId() == 1) {
+                    List<TblReportDetailEntity> projectors = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    for (TblReportDetailEntity project : projectors) {
+                        if (project.getDamagedLevel().equals("3")) {
+                            projectorDamagedLevel = 20;
+                        } else if (project.getDamagedLevel().equals("2")) {
+                            projectorDamagedLevel = 30;
+                        } else if (project.getDamagedLevel().equals("1")) {
+                            projectorDamagedLevel = 50;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 2) {
+                    List<TblReportDetailEntity> tivis = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    for (TblReportDetailEntity tivi : tivis) {
+                        if (tivi.getDamagedLevel().equals("3")) {
+                            tiviDamagedLevel = 20;
+                        } else if (tivi.getDamagedLevel().equals("2")) {
+                            tiviDamagedLevel = 30;
+                        } else if (tivi.getDamagedLevel().equals("1")) {
+                            tiviDamagedLevel = 50;
+                        }
+
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 3) {
+                    List<TblReportDetailEntity> mayLanhs = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    for (TblReportDetailEntity mayLanh : mayLanhs) {
+                        if (mayLanh.isStatus()) {
+                            if (mayLanh.getDamagedLevel().equals("3")) {
+                                mayLanhDamagedLevel += 10;
+                            } else if (mayLanh.getDamagedLevel().equals("2")) {
+                                mayLanhDamagedLevel += 15;
+                            } else if (mayLanh.getDamagedLevel().equals("1")) {
+                                mayLanhDamagedLevel += 25;
+                            }
+                        }
+
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 4) {
+                    List<TblReportDetailEntity> quats = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    if (MayLanh == 0) {
+                        if ((quats.size() / Quat) * 100 >= 50) {
+                            quatDamagedLevel = 50;
+                        }
+                    } else {
+                        for (TblReportDetailEntity quat : quats) {
+                            if (quat.getDamagedLevel().equals("3")) {
+                                quatDamagedLevel += 1;
+                            } else if (quat.getDamagedLevel().equals("2")) {
+                                quatDamagedLevel += 3;
+                            } else if (quat.getDamagedLevel().equals("1")) {
+                                quatDamagedLevel += 5;
+                            }
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 5) {
+                    List<TblReportDetailEntity> loas = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    for (TblReportDetailEntity loa : loas) {
+                        if (loa.getDamagedLevel().equals("3")) {
+                            loaDamagedLevel = 1;
+                        } else if (loa.getDamagedLevel().equals("2")) {
+                            loaDamagedLevel = 3;
+                        } else if (loa.getDamagedLevel().equals("1")){
+                            loaDamagedLevel = 5;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 6) {
+                    List<TblReportDetailEntity> dens = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    for (TblReportDetailEntity den : dens) {
+                        if (den.getDamagedLevel().equals("3")) {
+                            denDamagedLevel = 10;
+                        } else if (den.getDamagedLevel().equals("2")) {
+                            denDamagedLevel = 20;
+                        } else if (den.getDamagedLevel().equals("1")){
+                            denDamagedLevel = 50;
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 7) {
+                    List<TblReportDetailEntity> bans = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    if ((bans.size() / table) / 100 >= 50) {
+                        banDamagedLevel = 50;
+                    } else {
+                        for (TblReportDetailEntity ban : bans) {
+                            if (ban.getDamagedLevel().equals("3")) {
+                                banDamagedLevel += 2;
+                            } else if (ban.getDamagedLevel().equals("2")) {
+                                banDamagedLevel += 3;
+                            } else if (ban.getDamagedLevel().equals("1")){
+                                banDamagedLevel += 5;
+                            }
+                        }
+                    }
+                }
+                if (tblEquipmentEntity.getCategoryId() == 8) {
+                    List<TblReportDetailEntity> ghes = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
+                    if ((ghes.size() / chair) / 100 >= 50) {
+                        gheDamagedLevel = 50;
+                    } else {
+                        for (TblReportDetailEntity ghe : ghes) {
+                            if (ghe.getDamagedLevel().equals("3")) {
+                                gheDamagedLevel += 1;
+                            } else if (ghe.getDamagedLevel().equals("2")) {
+                                gheDamagedLevel += 2;
+                            } else if (ghe.getDamagedLevel().equals("1")){
+                                gheDamagedLevel += 3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        damagedLevel = projectorDamagedLevel + mayLanhDamagedLevel + tiviDamagedLevel + loaDamagedLevel + quatDamagedLevel + denDamagedLevel
+                + banDamagedLevel + gheDamagedLevel;
+        if (damagedLevel > 100) {
+            damagedLevel = 100;
+        }
+        return damagedLevel;
     }
 }

@@ -1,14 +1,13 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.*;
+import com.ecrm.DTO.ReportRequestDTO;
 import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -72,51 +71,46 @@ public class UserController {
         return "user/Notifications";
     }
 
-    @RequestMapping(value = "sentReport")
+    @RequestMapping(value = "sentReport", method = RequestMethod.POST)
     @Transactional
     @ResponseBody
-    public String createReport(HttpServletRequest request, @RequestParam("RoomId") int roomId, @RequestParam("Evaluate") String evaluate,
-                               @RequestParam("ListDamaged") String listDamaged, @RequestParam("ListEvaluate") String listEvaluate){
+    public String createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest){
 
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
+        TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
 
-        TblClassroomEntity room = classroomDAO.find(roomId);
-        int damagedLevel = checkDamagedLevel(room);
-        room.setDamagedLevel(damagedLevel);
-        classroomDAO.merge(room);
-
-        TblReportEntity report = new TblReportEntity(user.getUsername(), roomId, 0, evaluate);
+        TblReportEntity report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
         reportDAO.persist(report);
 
-        String[] evaluates = listEvaluate.split(",");
+        String[] evaluates = reportRequest.getListEvaluate().split(",");
         int category = 0;
         String equipmentNames = "";
         TblEquipmentEntity equip;
         TblEquipmentCategoryEntity categoryName;
 
-        if("".equals(listDamaged)) {
+        if("".equals(reportRequest.getListDamaged())) {
             for (int i = 0; i < evaluates.length; i++) {
                 category = Integer.parseInt(evaluates[i].split("-")[0]);
 
-                equip = insertEquipment(report.getId(), roomId, category, null, evaluates[i].split("-")[1]);
+                equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
                 categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
                 equipmentNames += categoryName.getName() + ", ";
             }
         } else {
-            String[] equipments = listDamaged.split("--");
+            String[] equipments = reportRequest.getListDamaged().split("--");
             for (int i = 0; i < evaluates.length; i++) {
                 category = Integer.parseInt(evaluates[i].split("-")[0]);
                 List<String> equipsInCate = getEquipmentsInCategory(equipments, category);
 
                 if(equipsInCate.size() == 0) {
-                    equip = insertEquipment(report.getId(), roomId, category, null, evaluates[i].split("-")[1]);
+                    equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
 
                     categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
                     equipmentNames += categoryName.getName() + ", ";
                 } else {
                     for(int j = 0; j < equipsInCate.size(); j++){
-                        equip = insertEquipment(report.getId(), roomId, category, equipsInCate.get(j), evaluates[i].split("-")[1]);
+                        equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
 
                         if(j == 0) {
                             categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
@@ -127,7 +121,11 @@ public class UserController {
             }
         }
 
-        return roomId + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
+        int damagedLevel = checkDamagedLevel(room);
+        room.setDamagedLevel(damagedLevel);
+        classroomDAO.merge(room);
+
+        return reportRequest.getRoomId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
     }
 
     @RequestMapping(value = "viewHistory")
@@ -172,7 +170,7 @@ public class UserController {
         return result;
     }
 
-    private TblEquipmentEntity insertEquipment(int reportId, int roomId, int category, String pos, String evaluate){
+    private TblEquipmentEntity insertEquipment(int reportId, int roomId, int category, String pos, String evaluate, String description){
         String position = null;
         if(category < 7) {
             position = "[" + category + "]";
@@ -190,7 +188,7 @@ public class UserController {
             equipmentDAO.persist(equip);
         }
 
-        TblReportDetailEntity reportDetail = new TblReportDetailEntity(equip.getId(), reportId, evaluate, equip.getPosition());
+        TblReportDetailEntity reportDetail = new TblReportDetailEntity(equip.getId(), reportId, evaluate, description, equip.getPosition());
         reportDetailDAO.persist(reportDetail);
 
         return equip;

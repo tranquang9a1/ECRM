@@ -80,16 +80,13 @@
                 <div class="width-10">
                     <div>Phòng</div>
                 </div>
-                <div class="width-25">
+                <div class="width-35">
                     <div>Thiết bị</div>
                 </div>
                 <div class="width-20">
                     <div>Ngày báo cáo</div>
                 </div>
-                <div class="width-15">
-                    <div>Hư hại</div>
-                </div>
-                <div class="width-15">
+                <div class="width-20">
                     <div>Trạng thái</div>
                 </div>
                 <div class="width-15">
@@ -104,16 +101,13 @@
                         <div class="width-10">
                             <div>${notifies[i].room}</div>
                         </div>
-                        <div class="width-25">
-                            <div id="list-${notifies[i].reportId}">${notifies[i].listEquipment}</div>
+                        <div class="width-35">
+                            <div id="list-${notifies[i].reportId}" title="${notifies[i].listEquipment}">${notifies[i].listEquipment}</div>
                         </div>
                         <div class="width-20">
                             <div>${notifies[i].createDate}</div>
                         </div>
-                        <div class="width-15">
-                            <div>${notifies[i].damagedLevel}%</div>
-                        </div>
-                        <div class="width-15">
+                        <div class="width-20">
                             <div>
                                 <c:if test="${notifies[i].status == 1}">
                                     <p class="label red">Chưa sửa</p>
@@ -153,6 +147,16 @@
                 <i class="fa fa-times" onclick="showModal(0, 'modal-1')"></i>
             </div>
             <div class="body-modal">
+                <div class="group-control" style="margin: 20px 0">
+                    <div class="name">Đánh giá của bạn</div>
+                    <div class="control" style="width: 300px">
+                        <select id="report-evaluate" style="width: 200px; float: right">
+                            <option value="1">Phải đổi phòng</option>
+                            <option value="2" selected="selected">Cẫn sửa ngay</option>
+                            <option value="3">Vẫn dạy được</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="footer-modal">
                 <input type="button" class="btn btn-orange" onclick="conform(1)" value="Gửi báo cáo"/>
@@ -176,115 +180,6 @@
                 <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-2', 'modal-1')" value="Quay lại"/>
             </div>
             </div>
-        <div class="black-background"></div>
-    </div>
-    <div class="modal modal-medium" id="modal-4">
-        <form action="/giang-vien/sentReport" id="create-report">
-            <div class="content-modal">
-                <div class="header-modal title">
-                    <p>Tạo báo cáo - Chi tiết báo cáo</p>
-                    <i class="fa fa-times" onclick="showModal(0, 'modal-2')"></i>
-                </div>
-                <div class="body-modal">
-                    <input type="hidden" name="RoomId" value="${room.id}"/>
-                    <input type="hidden" name="ListDamaged" value="" id="list-damaged"/>
-                    <input type="hidden" name="ListEvaluate" value="" id="list-evaluate"/>
-
-                    <div class="group-control hidden" id="category-1" style="margin: 20px 0 0">
-                        <div class="name">Máy chiếu</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(1, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control hidden" id="category-2" style="margin: 20px 0 0">
-                        <div class="name">Tivi</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(2, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control hidden" id="category-3" style="margin: 20px 0 0">
-                        <div class="name">Máy lạnh</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(3, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control hidden" id="category-4" style="margin: 20px 0 0">
-                        <div class="name">Máy quạt</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(4, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control hidden" id="category-5" style="margin: 20px 0 0">
-                        <div class="name">Loa</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(5, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control hidden" id="category-7" style="margin: 20px 0 0">
-                        <div class="name">Bàn</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(7, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control hidden" id="category-8" style="margin: 20px 0 0">
-                        <div class="name">Ghế</div>
-                        <div class="control">
-                            <select onchange="changeEvaluate(8, this)">
-                                <option value="1">Nặng, không thể dùng</option>
-                                <option value="2">Trung bình, khó sử dụng được</option>
-                                <option value="3" selected="selected">Bình thường, vẫn hoạt động được</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="group-control line" style="margin: 20px 0 0">
-                        <div class="name">Đánh giá của bạn</div>
-                        <div class="control">
-                            <select name="Evaluate" style="width: 255px">
-                                <option value="1">Phải đổi phòng</option>
-                                <option value="2">Cẫn sửa ngay</option>
-                                <option value="3">Vẫn dạy được</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="group-control" style="margin: 25px 0 0">
-                        <div class="name">Mô tả hư hại</div>
-                        <div class="control">
-                            <textarea name="Description" style="height: 150px; width: 260px;"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-modal">
-                    <input type="button" class="btn btn-orange" onclick="conform(1)" value="Gửi báo cáo"/>
-                    <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-2', 'modal-1')"
-                           value="Quay lại"/>
-                </div>
-            </div>
-        </form>
         <div class="black-background"></div>
     </div>
     <div class="modal modal-medium" id="modal-3">
@@ -313,10 +208,12 @@
     var damageEquip = {};
     <c:if test="${equip.size() > 0}" >
         <c:forEach begin="0" end="${equip.size() -1}" var="i">
-            <c:if test="${equip[i].position != null}">
+            <c:if test="${equip[i].position != null && equip[i].status == true}">
                 positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
             </c:if>
-            if(damageEquip[${equip[i].categoryId}] == undefined || damageEquip[${equip[i].categoryId}] == false) {
+            if(damageEquip[${equip[i].categoryId}] == undefined) {
+                damageEquip[${equip[i].categoryId}] = ${equip[i].status};
+            } else if(damageEquip[${equip[i].categoryId}] == false) {
                 damageEquip[${equip[i].categoryId}] = ${equip[i].status};
             }
         </c:forEach>

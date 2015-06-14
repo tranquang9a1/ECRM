@@ -225,6 +225,9 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
 function setChooseEquipment(map){
     $("#" + map +" .equipment").click(function(){
         var category = $(this).attr("data-categoryId");
+        var message = document.getElementById("category-"+category).parentNode.getElementsByClassName("message-text")[0];
+        var inputT = document.getElementById("category-"+category).parentNode.getElementsByClassName("description-equipment")[0];
+
         if($(this).attr("data-choose") === "true"){
             $(this).removeClass("choose");
             $(this).removeAttr("data-choose");
@@ -237,6 +240,11 @@ function setChooseEquipment(map){
                 document.getElementById("equipment-type-" + category).className = "check-damaged";
             }
 
+            message.style.visibility = "hidden";
+            var valueE = document.getElementById("category-"+id).value;
+            if(inputT != undefined && parseInt(valueE) == 1) {
+                inputT.className = "description-equipment";
+            }
         } else {
             $(this).addClass("choose");
             $(this).attr("data-choose", "true");
@@ -251,6 +259,11 @@ function setChooseEquipment(map){
             document.getElementById("category-" + category).style.display = "block";
             document.getElementById("equipment-type-" + category).setAttribute("data-check", "true");
             document.getElementById("equipment-type-" + category).className = "check-damaged check";
+
+            message.style.visibility = "visible";
+            if(inputT != undefined) {
+                inputT.className += " hidden";
+            }
         }
     });
 }
@@ -285,7 +298,7 @@ function sentReport(){
             "Content-Type": "text/plain; charset=utf-8"
         },
         url: "sentReport",
-        data: {RoomId: room.value, Evaluate: "", Description: "", ListDamaged: listEquipment, ListEvaluate: listEvaluate},
+        data: {RoomId: room.value, Evaluate: $("report-evaluate").val(), ListDamaged: listEquipment, ListEvaluate: listEvaluate},
         success: function(result) {
             var data = result.split('-');
             var html = "<div class='width-10'><div>" + data[1] + "</div></div>";
@@ -334,16 +347,16 @@ function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
         listEquipment.push({id: 1, classname: "projector", name: "Projector", message: (listDamage[1]?"Đã được báo cáo":"")});
     }
     if(listDamage[3] != undefined && mayLanh > 0) {
-        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[2]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[3]?"Đã được báo cáo":"")});
     }
     if(listDamage[5] != undefined && loa > 0) {
-        listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[3]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[5]?"Đã được báo cáo":"")});
     }
     if(listDamage[2] != undefined && tivi > 0) {
-        listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[4]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[2]?"Đã được báo cáo":"")});
     }
     if(listDamage[4] != undefined && quat > 0) {
-        listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[5]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[4]?"Đã được báo cáo":"")});
     }
     listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: (listDamage[7]?"Đã được báo cáo":"")});
     listEquipment.push({id: 8, classname: "chair", name: "Chair", message: (listDamage[8]?"Đã được báo cáo":"")});
@@ -362,13 +375,13 @@ function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
         damageDiv.id = "equipment-type-" + listEquipment[i].id;
         damageDiv.setAttribute("data-check", "false");
         damageDiv.setAttribute("onclick", "changeDamaged(" + listEquipment[i].id + ")");
-        var hiddenInput = document.createElement("input");
-        hiddenInput.setAttribute("type", "hidden");
-        hiddenInput.setAttribute("name", listEquipment[i].name);
+        //var hiddenInput = document.createElement("input");
+        //hiddenInput.setAttribute("type", "hidden");
+        //hiddenInput.setAttribute("name", listEquipment[i].name);
         var div2 = document.createElement("div");
         div2.className = "width-20";
         div2.appendChild(damageDiv);
-        div2.appendChild(hiddenInput);
+        //div2.appendChild(hiddenInput);
 
         var div3 = document.createElement("div");
         div3.className = "width-50";
@@ -393,9 +406,9 @@ function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
 
 function createSelect(id, contentDiv){
     var select = document.createElement("select");
-    select.setAttribute("id","category-"+id);
     select.style.display = "none";
-    select.addEventListener("click", function(){changeEvaluate(id, select);}, false);
+    select.setAttribute("id","category-"+id);
+    select.setAttribute("onchange", "changeEvaluate(" + id + ")");
 
     var listEvaluate = ["Hư hại nặng", "Hư hại trung bình", "Hư hại nhẹ", "Không biết"];
     for(var i = 0; i < 4; i++){
@@ -414,15 +427,24 @@ function createSelect(id, contentDiv){
 
 function changeDamaged(id) {
     var element = document.getElementById("equipment-type-" + id);
+    var message = document.getElementById("category-"+id).parentNode.getElementsByClassName("message-text")[0];
+    var inputT = document.getElementById("category-"+id).parentNode.getElementsByClassName("description-equipment")[0];
+
     if(element.getAttribute("data-check") == "false") {
         if(noDamagedEquipments[id] == undefined) {
-            noDamagedEquipments[id] = {size: 1, evaluate: 4};
+            noDamagedEquipments[id] = {size: 1, evaluate: 4, decs: ""};
         } else {
             noDamagedEquipments[id].size = 1;
         }
         document.getElementById("category-" + id).style.display = "block";
         element.setAttribute("data-check", "true");
         element.className += " check";
+
+        message.style.visibility = "hidden";
+        var valueE = document.getElementById("category-"+id).value;
+        if(inputT != undefined && parseInt(valueE) == 1) {
+            inputT.className = "description-equipment";
+        }
     } else {
         noDamagedEquipments[id] = {size: 0, evaluate: 4};
         document.getElementById("category-" + id).style.display = "none";
@@ -437,11 +459,38 @@ function changeDamaged(id) {
                 $(thisEquip).removeAttr("data-choose");
             }
         }
+
+        message.style.visibility = "visible";
+        if(inputT != undefined) {
+            inputT.className += " hidden";
+        }
     }
 }
 
-function changeEvaluate(category, thisElement) {
-    noDamagedEquipments[category].evaluate = thisElement.value;
+function changeEvaluate(category) {
+    var element = document.getElementById("category-"+category);
+    var inputT = element.parentNode.getElementsByClassName("description-equipment")[0];
+
+    noDamagedEquipments[category].evaluate = parseInt(element.value);
+
+    if(element.value == 1) {
+        element.className = "small";
+
+        if(inputT == undefined) {
+            var inputT = document.createElement("input");
+            inputT.className = "description-equipment";
+            inputT.setAttribute("type", "text");
+            inputT.setAttribute("placeholder", "Chi tiết hư hại");
+            element.parentNode.appendChild(inputT);
+        } else {
+            inputT.className = "description-equipment"
+        }
+    } else {
+        element.className = "";
+        if(inputT != undefined) {
+            inputT.className += " hidden";
+        }
+    }
 }
 
 

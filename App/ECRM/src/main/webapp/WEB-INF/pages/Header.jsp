@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="user" value="${sessionScope.USER}"/>
-<c:set var="tab" value="${requestScope.ACTIVETAB}"/>
+<c:set var="tab" value="${requestScope.ACTIVELEFTTAB}"/>
 <div class="header-bar">
     <div class="logo">Equipment Classroom Management</div>
     <div class="account-notify">
@@ -38,20 +38,20 @@
             </a>
         </li>
         <c:if test="${user.tblRoleByRoleId.name == 'Staff'}">
-            <li>
-                <a href="../HTML/Notify.html">
+            <li id="STAFF_NOTIFY">
+                <a href="/thong-bao">
                     <img src=""/>
                     <p>Thông Báo</p>
                 </a>
             </li>
-            <li>
+            <li id="STAFF_EQUIP">
                 <a href="/staff/equipment">
                     <img src=""/>
                     <p>Thiết Bị</p>
                 </a>
             </li>
-            <li class="active">
-                <a href="/staff/classroom?ACTIVETAB=tab1">
+            <li id="STAFF_CLASSROOM">
+                <a href="/staff/classroom?ACTIVETAB=1">
                     <img src=""/>
                     <p>Phòng Học</p>
                 </a>
@@ -60,7 +60,7 @@
                 <img src=""/>
                 <p>Thống Kê</p>
             </li>
-            <li>
+            <li id="STAFF_SCHEDULE">
                 <a href="/staff/schedule?ACTIVETAB=tab1">
                     <img src=""/>
                     <p>Xếp Lịch</p>
@@ -70,7 +70,7 @@
 
         <c:if test="${user.tblRoleByRoleId.name == 'Admin'}">
             <li>
-                <a href="/admin/account?ACTIVETAB=tab1">
+                <a href="../HTML/Account.html">
                     <img src=""/>
                     <p>Tài Khoản</p>
                 </a>
@@ -84,8 +84,8 @@
                     <p>Thông báo</p>
                 </a>
             </li>
-            <li>
-                <a href="home.jsp">
+            <li id="USER_SCHEDULE">
+                <a href="/giang-vien/lich-day">
                     <img src="" />
                     <p>Lịch dạy</p>
                 </a>
@@ -98,7 +98,7 @@
             </li>
         </c:if>
     </ul>
-   <%-- <script>
-        document.getElementById("${tab}").className = "body-tab active";
-    </script>--%>
+    <script>
+        document.getElementById("${tab}").className += " active";
+    </script>
 </div>

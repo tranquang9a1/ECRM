@@ -49,7 +49,7 @@
 
                                 <p class="description">${newReport[i].listEquipments}</p>
 
-                                <p class="time">Người báo cáo(${newReport[i].reporters})</p>
+                                <p class="time">${newReport[i].reporters}</p>
 
                                 <div class="clear"></div>
                             </div>

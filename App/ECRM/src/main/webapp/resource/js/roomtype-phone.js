@@ -2,7 +2,6 @@
  * Created by ChiDNMSE60717 on 5/26/2015.
  */
 var damagedEquipments = {};
-var noDamagedEquipments = {};
 
 function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
     var horizontalRows = sDayNgang.split('-');

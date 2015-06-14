@@ -12,7 +12,7 @@
     <title></title>
     <link rel="stylesheet" href="../../resource/css/roomtype-2.css"/>
     <script src="../resource/js/jquery-1.11.3.js"></script>
-    <script src="../../resource/js/user-notify.js"></script>
+    <script src="../../resource/js/quang.js"></script>
 
     <style>
         .subDIv {
@@ -44,23 +44,21 @@
 <script>
     <c:set var="equip" value="${requestScope.EQUIPMENTS}" />
     var positionEquipments = {};
-    <c:if test="${equip.size() > 0}" >
-        <c:forEach begin="0" end="${equip.size() -1}" var="i">
-            positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
+        <c:forEach items="${equip}" var="item">
+            <c:if test="${item.position != null && item.status == true}">
+                positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
+            </c:if>
         </c:forEach>
-    </c:if>
 </script>
 </body>
 </html>
 <script src="../../resource/js/roomtype-phone.js"></script>
 <script>
-    window.onload = function(){
-        showMap('classroom-map', positionEquipments, ${r.tblRoomTypeByRoomTypeId.verticalRows},
-                '${r.tblRoomTypeByRoomTypeId.horizontalRows}', '${r.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}',
-                ${r.tblRoomTypeByRoomTypeId.airConditioning}, ${r.tblRoomTypeByRoomTypeId.fan},
-                ${r.tblRoomTypeByRoomTypeId.projector}, ${r.tblRoomTypeByRoomTypeId.speaker},
-                ${r.tblRoomTypeByRoomTypeId.television});
-        setChooseEquipment('classroom-map');
+    showMap('classroom-map', positionEquipments, ${r.tblRoomTypeByRoomTypeId.verticalRows},
+            '${r.tblRoomTypeByRoomTypeId.horizontalRows}', '${r.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}',
+            ${r.tblRoomTypeByRoomTypeId.airConditioning}, ${r.tblRoomTypeByRoomTypeId.fan},
+            ${r.tblRoomTypeByRoomTypeId.projector}, ${r.tblRoomTypeByRoomTypeId.speaker},
+            ${r.tblRoomTypeByRoomTypeId.television});
 
-    }
+    setChooseEquipment('classroom-map');
 </script>

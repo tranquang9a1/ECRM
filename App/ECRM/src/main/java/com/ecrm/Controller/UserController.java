@@ -68,19 +68,25 @@ public class UserController {
             request.setAttribute("ROOM", new TblClassroomEntity());
         }
 
-        request.setAttribute("ACTIVETAB", "USER_NOTIFY");
+        request.setAttribute("ACTIVELEFTTAB", "USER_NOTIFY");
         return "user/Notifications";
     }
 
     @RequestMapping(value = "sentReport")
     @Transactional
     @ResponseBody
-    public String createReport(HttpServletRequest request, @RequestParam("RoomId") int roomId, @RequestParam("Evaluate") String evaluate, @RequestParam("Description") String desc,
+    public String createReport(HttpServletRequest request, @RequestParam("RoomId") int roomId, @RequestParam("Evaluate") String evaluate,
                                @RequestParam("ListDamaged") String listDamaged, @RequestParam("ListEvaluate") String listEvaluate){
 
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
-        TblReportEntity report = new TblReportEntity(user.getUsername(), roomId,100, evaluate);
+
+        TblClassroomEntity room = classroomDAO.find(roomId);
+        int damagedLevel = checkDamagedLevel(room);
+        room.setDamagedLevel(damagedLevel);
+        classroomDAO.merge(room);
+
+        TblReportEntity report = new TblReportEntity(user.getUsername(), roomId, 0, evaluate);
         reportDAO.persist(report);
 
         String[] evaluates = listEvaluate.split(",");
@@ -121,7 +127,6 @@ public class UserController {
             }
         }
 
-        TblClassroomEntity room = classroomDAO.find(report.getClassRoomId());
         return roomId + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
     }
 
@@ -230,13 +235,11 @@ public class UserController {
                 if (tblEquipmentEntity.getCategoryId() == 1) {
                     List<TblReportDetailEntity> projectors = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity project : projectors) {
-                            if (project.getDamagedLevel().equals("1")) {
-                                projectorDamagedLevel = 20;
-                            }
-                            if (project.getDamagedLevel().equals("2")) {
-                                projectorDamagedLevel = 30;
-                            }
                             if (project.getDamagedLevel().equals("3")) {
+                                projectorDamagedLevel = 20;
+                            } else if (project.getDamagedLevel().equals("2")) {
+                                projectorDamagedLevel = 30;
+                            } else if (project.getDamagedLevel().equals("1")) {
                                 projectorDamagedLevel = 50;
                             }
                         }
@@ -244,13 +247,11 @@ public class UserController {
                 if (tblEquipmentEntity.getCategoryId() == 2) {
                     List<TblReportDetailEntity> tivis = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity tivi : tivis) {
-                            if (tivi.getDamagedLevel().equals("1")) {
-                                tiviDamagedLevel = 20;
-                            }
-                            if (tivi.getDamagedLevel().equals("2")) {
-                                tiviDamagedLevel = 30;
-                            }
                             if (tivi.getDamagedLevel().equals("3")) {
+                                tiviDamagedLevel = 20;
+                            } else if (tivi.getDamagedLevel().equals("2")) {
+                                tiviDamagedLevel = 30;
+                            } else if (tivi.getDamagedLevel().equals("1")) {
                                 tiviDamagedLevel = 50;
                             }
 
@@ -260,13 +261,11 @@ public class UserController {
                     List<TblReportDetailEntity> mayLanhs = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity mayLanh : mayLanhs) {
                         if (mayLanh.isStatus()) {
-                            if (mayLanh.getDamagedLevel().equals("1")) {
-                                mayLanhDamagedLevel += 10;
-                            }
-                            if (mayLanh.getDamagedLevel().equals("2")) {
-                                mayLanhDamagedLevel += 15;
-                            }
                             if (mayLanh.getDamagedLevel().equals("3")) {
+                                mayLanhDamagedLevel += 10;
+                            } else if (mayLanh.getDamagedLevel().equals("2")) {
+                                mayLanhDamagedLevel += 15;
+                            } else if (mayLanh.getDamagedLevel().equals("1")) {
                                 mayLanhDamagedLevel += 25;
                             }
                         }
@@ -281,12 +280,11 @@ public class UserController {
                         }
                     } else {
                         for (TblReportDetailEntity quat : quats) {
-                            if (quat.getDamagedLevel().equals("1")) {
+                            if (quat.getDamagedLevel().equals("3")) {
                                 quatDamagedLevel += 1;
-                            }
-                            if (quat.getDamagedLevel().equals("2")) {
+                            } else if (quat.getDamagedLevel().equals("2")) {
                                 quatDamagedLevel += 3;
-                            } else {
+                            } else if (quat.getDamagedLevel().equals("1")) {
                                 quatDamagedLevel += 5;
                             }
                         }
@@ -295,12 +293,11 @@ public class UserController {
                 if (tblEquipmentEntity.getCategoryId() == 5) {
                     List<TblReportDetailEntity> loas = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity loa : loas) {
-                        if (loa.getDamagedLevel().equals("1")) {
+                        if (loa.getDamagedLevel().equals("3")) {
                             loaDamagedLevel = 1;
-                        }
-                        if (loa.getDamagedLevel().equals("2")) {
+                        } else if (loa.getDamagedLevel().equals("2")) {
                             loaDamagedLevel = 3;
-                        } else {
+                        } else if (loa.getDamagedLevel().equals("1")){
                             loaDamagedLevel = 5;
                         }
                     }
@@ -308,12 +305,11 @@ public class UserController {
                 if (tblEquipmentEntity.getCategoryId() == 6) {
                     List<TblReportDetailEntity> dens = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity den : dens) {
-                        if (den.getDamagedLevel().equals("1")) {
+                        if (den.getDamagedLevel().equals("3")) {
                             denDamagedLevel = 10;
-                        }
-                        if (den.getDamagedLevel().equals("2")) {
+                        } else if (den.getDamagedLevel().equals("2")) {
                             denDamagedLevel = 20;
-                        } else {
+                        } else if (den.getDamagedLevel().equals("1")){
                             denDamagedLevel = 50;
                         }
                     }
@@ -324,12 +320,11 @@ public class UserController {
                         banDamagedLevel = 50;
                     } else {
                         for (TblReportDetailEntity ban : bans) {
-                            if (ban.getDamagedLevel().equals("1")) {
+                            if (ban.getDamagedLevel().equals("3")) {
                                 banDamagedLevel += 2;
-                            }
-                            if (ban.getDamagedLevel().equals("2")) {
+                            } else if (ban.getDamagedLevel().equals("2")) {
                                 banDamagedLevel += 3;
-                            } else {
+                            } else if (ban.getDamagedLevel().equals("1")){
                                 banDamagedLevel += 5;
                             }
                         }
@@ -341,12 +336,11 @@ public class UserController {
                         gheDamagedLevel = 50;
                     } else {
                         for (TblReportDetailEntity ghe : ghes) {
-                            if (ghe.getDamagedLevel().equals("1")) {
+                            if (ghe.getDamagedLevel().equals("3")) {
                                 gheDamagedLevel += 1;
-                            }
-                            if (ghe.getDamagedLevel().equals("2")) {
+                            } else if (ghe.getDamagedLevel().equals("2")) {
                                 gheDamagedLevel += 2;
-                            } else {
+                            } else if (ghe.getDamagedLevel().equals("1")){
                                 gheDamagedLevel += 3;
                             }
                         }

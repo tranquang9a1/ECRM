@@ -69,7 +69,7 @@ public class NotifyController {
         }
         request.setAttribute("NEWREPORT", groups);
 
-        request.setAttribute("ACTIVETAB","STAFF_NOTIFY");
+        request.setAttribute("ACTIVELEFTTAB","STAFF_NOTIFY");
         return "staff/Notifications";
     }
 

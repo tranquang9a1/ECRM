@@ -4,7 +4,9 @@ import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ReportDAO;
 import com.ecrm.DAO.ReportDetailDAO;
 import com.ecrm.DAO.RoomTypeDAO;
-import com.ecrm.DTO.*;
+import com.ecrm.DTO.AccountDTO;
+import com.ecrm.DTO.ReportDTO;
+import com.ecrm.DTO.ResultDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Utils;
 import org.omg.Dynamic.Parameter;
@@ -20,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,16 +47,14 @@ public class APIController {
 
     @Autowired
     EquipmentCategoryDAOImpl equipmentCategoryDAO;
-
-    @Autowired
-    ScheduleDAOImpl scheduleDAO;
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id")int classroomId){
         TblClassroomEntity classroomEntity = new TblClassroomEntity();
         classroomEntity = classroomDAO.find(classroomId);
-        Collection<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
+        List<TblEquipmentEntity> equipments = equipmentDAO.getEquipmentsInClassroom(classroomId);
+
+        request.setAttribute("EQUIPMENTS", equipments);
         request.setAttribute("CLASSROOM", classroomEntity);
-        request.setAttribute("EQUIPMENTS", equipmentEntities);
         return "ClassroomMap";
     }
 
@@ -103,6 +101,12 @@ public class APIController {
             reportDAO.insert(report);
             int reportId = report.getId();
 
+            //equipmentCategoryDAO.findEquipmentId("Bàn");
+
+
+
+
+
             String[] equipments = listDamaged.split(",");
             String[] evaluates = listEvaluate.split(",");
             String[] positions = listPosition.split("-");
@@ -133,53 +137,13 @@ public class APIController {
     }
 
     @RequestMapping(value = "/getReportStaff", method = RequestMethod.GET)
-    public @ResponseBody List<ReportClassDTO> getReportStaff() {
-        List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
-        List<String> listClass = reportDAO.getReportByClassId();
-        for (String classId : listClass) {
-            int id = Integer.parseInt(classId);
-            List<TblReportDetailEntity> details = reportDetailDAO.getReportByClassId(id);
-            TblClassroomEntity classroomEntity = classroomDAO.find(id);
-            List<EquipmentDTO> equipments = new ArrayList<EquipmentDTO>();
-            int reportId = 0;
-            for (TblReportDetailEntity entity : details) {
-                EquipmentDTO detailDTO = new EquipmentDTO();
-                detailDTO.setEquipmentName(entity.getTblEquipmentByEquipmentId().getName());
-                detailDTO.setDamage(entity.getDamagedLevel());
-                detailDTO.setEvaluate(entity.getSolution());
-                detailDTO.setReportId(entity.getReportId());
-                detailDTO.setStatus(entity.isStatus());
-                detailDTO.setQuantity(1);
-                reportId = entity.getReportId();
-                equipments.add(detailDTO);
-            }
-            TblReportEntity reportEntity = reportDAO.find(reportId);
-            ReportClassDTO reportClassDTO = new ReportClassDTO();
-            reportClassDTO.setRoomId(id);
-            reportClassDTO.setEquipments(equipments);
-            reportClassDTO.setUserReport(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName());
-            reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
-            reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
-            reportClassDTO.setEvaluate(reportEntity.getEvaluate());
-            result.add(reportClassDTO);
+    public @ResponseBody ReportDTO getReportStaff() {
+        ReportDTO dto = new ReportDTO();
 
-        }
+        List<TblReportEntity> result = reportDAO.getReportByClassId();
 
-        return result;
+        return dto;
 
-    }
-
-    @RequestMapping(value = "/getAvailableRoom", method=RequestMethod.GET)
-    public @ResponseBody List<String> getAvailableRoom(@RequestParam("id") int roomId) {
-        List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.findAll());
-        return availableRooms;
-    }
-
-
-    @RequestMapping(value="/resolve", method = RequestMethod.POST)
-    public @ResponseBody ResultDTO resolveReport() {
-        ResultDTO result = new ResultDTO();
-        return result;
     }
 
 }

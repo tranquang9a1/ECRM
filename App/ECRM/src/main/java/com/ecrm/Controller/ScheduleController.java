@@ -50,6 +50,7 @@ public class ScheduleController {
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
         request.setAttribute("CLASSROOMS", tblClassroomEntities);
         request.setAttribute("ACTIVETAB", activeTab);
+        request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
         return "Staff_MappingSchedule";
     }
 

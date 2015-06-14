@@ -240,29 +240,29 @@ function setChooseEquipment(map){
                 document.getElementById("equipment-type-" + category).className = "check-damaged";
             }
 
-            message.style.visibility = "hidden";
-            var valueE = document.getElementById("category-"+id).value;
-            if(inputT != undefined && parseInt(valueE) == 1) {
-                inputT.className = "description-equipment";
+            message.style.visibility = "visible";
+            if(inputT != undefined) {
+                inputT.className += " hidden";
             }
         } else {
             $(this).addClass("choose");
             $(this).attr("data-choose", "true");
 
-            damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category, element: $(this)};
+            damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category};
             if(noDamagedEquipments[category] != undefined) {
                 noDamagedEquipments[category].size++;
             } else {
-                noDamagedEquipments[category] = {size: 1, evaluate: 3};
+                noDamagedEquipments[category] = {size: 1, evaluate: 4};
             }
 
             document.getElementById("category-" + category).style.display = "block";
             document.getElementById("equipment-type-" + category).setAttribute("data-check", "true");
             document.getElementById("equipment-type-" + category).className = "check-damaged check";
 
-            message.style.visibility = "visible";
-            if(inputT != undefined) {
-                inputT.className += " hidden";
+            message.style.visibility = "hidden";
+            var valueE = document.getElementById("category-"+category).value;
+            if(inputT != undefined && parseInt(valueE) == 1) {
+                inputT.className = "description-equipment";
             }
         }
     });
@@ -274,6 +274,7 @@ function setChooseEquipment(map){
 function sentReport(){
     var listEquipment = "";
     var listEvaluate = "";
+    var listDesc = [];
 
     for (var key in damagedEquipments) {
         if (damagedEquipments.hasOwnProperty(key)){
@@ -285,6 +286,12 @@ function sentReport(){
     for (var key in noDamagedEquipments) {
         if (noDamagedEquipments.hasOwnProperty(key) && noDamagedEquipments[key].size > 0){
             listEvaluate += key + "-" + noDamagedEquipments[key].evaluate + ",";
+            if(noDamagedEquipments[key].evaluate == 1) {
+                var desc = document.getElementById("category-"+key).parentNode.getElementsByClassName("description-equipment")[0];
+                listDesc.push(desc.value);
+            } else {
+                listDesc.push("");
+            }
         }
     }
     listEvaluate = listEvaluate.substring(0, listEvaluate.length-1);
@@ -292,13 +299,14 @@ function sentReport(){
     var room = document.getElementById("roomId");
 
     $.ajax({
-        method: "GET",
+        method: "POST",
         headers: {
             Accept : "text/plain; charset=utf-8",
-            "Content-Type": "text/plain; charset=utf-8"
+            "Content-Type": "application/json; charset=utf-8"
         },
+        dataType: 'json',
         url: "sentReport",
-        data: {RoomId: room.value, Evaluate: $("report-evaluate").val(), ListDamaged: listEquipment, ListEvaluate: listEvaluate},
+        data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate").val(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
             var data = result.split('-');
             var html = "<div class='width-10'><div>" + data[1] + "</div></div>";
@@ -431,14 +439,23 @@ function changeDamaged(id) {
     var inputT = document.getElementById("category-"+id).parentNode.getElementsByClassName("description-equipment")[0];
 
     if(element.getAttribute("data-check") == "false") {
+        if(id < 7) {
+            damagedEquipments["[" + id + "]"] = {position: "[" + id + "]", category: id};
+        }
         if(noDamagedEquipments[id] == undefined) {
-            noDamagedEquipments[id] = {size: 1, evaluate: 4, decs: ""};
+            noDamagedEquipments[id] = {size: 1, evaluate: 4};
         } else {
             noDamagedEquipments[id].size = 1;
         }
         document.getElementById("category-" + id).style.display = "block";
         element.setAttribute("data-check", "true");
         element.className += " check";
+
+        if(id < 7) {
+            var thisEquip = $(".equipment[data-position='[" + id + "]']");
+            $(thisEquip).addClass("choose");
+            $(thisEquip).attr("data-choose", "true");
+        }
 
         message.style.visibility = "hidden";
         var valueE = document.getElementById("category-"+id).value;

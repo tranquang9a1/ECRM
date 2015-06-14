@@ -1,10 +1,86 @@
 package com.ecrm.DTO;
 
+import java.util.List;
+
 /**
  * Created by Thuy_Tien on 6/12/2015.
  */
 public class ReportClassDTO {
 
-    private int classId;
+    private int roomId;
+    private String timeReport;
+    private int damageLevel;
+    private String evaluate;
+    private String userReport;
+    private int systemEvaluate;
+    private List<EquipmentDTO> equipments;
 
+    public ReportClassDTO(int roomId, String timeReport, int damageLevel, String evaluate, String userReport, int systemEvaluate, List<EquipmentDTO> equipments) {
+        this.roomId = roomId;
+        this.timeReport = timeReport;
+        this.damageLevel = damageLevel;
+        this.evaluate = evaluate;
+        this.userReport = userReport;
+        this.systemEvaluate = systemEvaluate;
+        this.equipments = equipments;
+    }
+
+    public ReportClassDTO() {
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getTimeReport() {
+        return timeReport;
+    }
+
+    public void setTimeReport(String timeReport) {
+        this.timeReport = timeReport;
+    }
+
+    public int getDamageLevel() {
+        return damageLevel;
+    }
+
+    public void setDamageLevel(int damageLevel) {
+        this.damageLevel = damageLevel;
+    }
+
+    public String getEvaluate() {
+        return evaluate;
+    }
+
+    public void setEvaluate(String evaluate) {
+        this.evaluate = evaluate;
+    }
+
+    public String getUserReport() {
+        return userReport;
+    }
+
+    public void setUserReport(String userReport) {
+        this.userReport = userReport;
+    }
+
+    public int getSystemEvaluate() {
+        return systemEvaluate;
+    }
+
+    public void setSystemEvaluate(int systemEvaluate) {
+        this.systemEvaluate = systemEvaluate;
+    }
+
+    public List<EquipmentDTO> getEquipments() {
+        return equipments;
+    }
+
+    public void setEquipments(List<EquipmentDTO> equipments) {
+        this.equipments = equipments;
+    }
 }

@@ -26,5 +26,5 @@ public interface ReportDAO {
 
     public boolean createReport();
 
-    public List<TblReportEntity> getReportByClassId();
+    public List<String> getReportByClassId();
 }

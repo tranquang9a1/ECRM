@@ -18,6 +18,7 @@ public class TblScheduleEntity {
     private Time timeFrom;
     private int slots;
     private Date date;
+    private boolean isActive;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblUserEntity tblUserByUserId;
 
@@ -102,6 +103,16 @@ public class TblScheduleEntity {
         this.date = date;
     }
 
+    @Basic
+    @Column(name = "IsActive")
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -157,7 +168,8 @@ public class TblScheduleEntity {
     public TblScheduleEntity() {
     }
 
-    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, Time timeFrom, int slots, Date date) {
+    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, Time timeFrom,
+                             int slots, Date date, boolean isActive) {
         this.username = username;
         this.classroomId = classroomId;
         this.numberOfStudents = numberOfStudents;
@@ -165,5 +177,6 @@ public class TblScheduleEntity {
         this.timeFrom = timeFrom;
         this.slots = slots;
         this.date = date;
+        this.isActive = isActive;
     }
 }

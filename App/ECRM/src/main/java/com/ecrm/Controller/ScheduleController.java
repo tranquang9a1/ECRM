@@ -109,7 +109,7 @@ public class ScheduleController {
 
             //Get iterator to all the rows in current sheet
             Iterator<Row> rowIterator = sheet.iterator();
-            DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String mon = "";
             String tue = "";
             String wed = "";
@@ -230,7 +230,7 @@ public class ScheduleController {
                 }
                 if (temp) {
                     tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
-                            teachingDate);
+                            teachingDate, true);
                     scheduleDAO.persist(tblScheduleEntity);
                 }
 
@@ -284,7 +284,7 @@ public class ScheduleController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
         TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
-                teachingDate);
+                teachingDate, true);
         if(all.equals("0")){
             scheduleDAO.persist(tblScheduleEntity);
         }else{

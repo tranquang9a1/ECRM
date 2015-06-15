@@ -11,18 +11,12 @@
 <c:set var="room" value="${requestScope.DAMAGEDROOM}"/>
 <c:set var="rt" value="${room.roomtype}" />
 <script>
-  <%--var positionEquipments = {};--%>
-<%--//  var damageEquip = {};--%>
-  <%--<c:forEach items="${equip}" var="item">--%>
-    <%--positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};--%>
-    <%--<c:if test="${item.status == true}">--%>
-    <%--if(damageEquip[${item.categoryId}] == undefined) {--%>
-      <%--damageEquip[${item.categoryId}] = {name: ${item.tblEquipmentCategoryByCategoryId.name}, status: ${item.status}, size: 1};--%>
-    <%--} else {--%>
-      <%--damageEquip[${item.categoryId}].size += 1;--%>
-    <%--}--%>
-    <%--</c:if>--%>
-  <%--</c:forEach>--%>
+  var positionEquipments = {};
+  <c:forEach items="${room.equipments}" var="item">
+    <c:if test="${item.position != null && item.status == true}">
+      positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
+    </c:if>
+  </c:forEach>
 </script>
 <div class="modal modal-medium" id="modal-1">
   <div class="content-modal">
@@ -31,35 +25,72 @@
       <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
     </div>
     <div class="body-modal">
-      <div class="group-control">
-        <div class="name">Phòng</div>
-        <div class="value">${room.roomName}</div>
-      </div>
-      <div class="group-control">
-        <div class="name">Người báo cáo</div>
-        <div class="value">${room.reporters}</div>
-      </div>
-      <div class="group-control">
-        <div class="name">Báo cáo mới nhất</div>
-        <div class="value"><fmt:formatDate value="${room.reportDate}" pattern="HH:mm dd/MM/yyyy" /></div>
-      </div>
-      <div class="group-control line">
-        <div class="name">Mức độ hư hại</div>
-        <div class="value">${room.evaluate}</div>
-      </div>
-      <c:if test="${room.damagedLevel >= 50 && room.suggestRooms != null}" >
-        <div class="group-control">
-          <div class="name">Đề xuất</div>
-          <div class="value">Đổi sang phòng <b>${room.suggestRooms[0]}</b></div>
-          <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng" />
+      <div class="tab">
+        <div class="tab-medium">
+          <ul>
+            <li class="active" onclick="changeTab('tab4', this)">Thông tin</li>
+            <li onclick="changeTab('tab5', this)">Sơ đồ</li>
+          </ul>
         </div>
-      </c:if>
-      <div class="group-control">
-        <div class="name">Hư hại của phòng</div>
-        <div class="control">
-          <div class="process">
-            <p>${room.damagedLevel}%</p>
-            <div class="percent" style="left:${room.damagedLevel}%"></div>
+        <div class="content-tab">
+          <div id="tab4" class="body-tab active">
+            <div class="group-control">
+              <div class="name">Phòng</div>
+              <div class="value">${room.roomName}</div>
+            </div>
+            <div class="group-control">
+              <div class="name">Người báo cáo</div>
+              <div class="value">${room.reporters}</div>
+            </div>
+            <div class="group-control">
+              <div class="name">Báo cáo mới nhất</div>
+              <div class="value"><fmt:formatDate value="${room.reportDate}" pattern="HH:mm dd/MM/yyyy" /></div>
+            </div>
+            <div class="group-control line">
+              <div class="name">Đánh giá của bạn</div>
+              <div class="value">
+                <c:if test="${room.evaluate == 1}">
+                  <c:out value="Phải đổi phòng"/>
+                </c:if>
+                <c:if test="${room.evaluate == 2}">
+                  <c:out value="Cần sửa ngay"/>
+                </c:if>
+                <c:if test="${room.evaluate == 3}">
+                  <c:out value="Vẫn dạy được"/>
+                </c:if>
+              </div>
+            </div>
+            <c:if test="${room.damagedLevel >= 50 && room.suggestRooms != null}" >
+              <div class="group-control">
+                <div class="name">Đề xuất đổi phòng</div>
+                <div class="value">Phòng <b>${room.suggestRooms[0]}</b> đang trống </div>
+                <input type="button" style="float: right" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng" />
+              </div>
+            </c:if>
+            <c:if test="${room.damagedLevel >= 50 && room.suggestRooms == null}" >
+              <div class="group-control">
+                <div class="name">Đề xuất đổi phòng</div>
+                <div class="value">Đổi phòng, không tìm thấy phòng trống</div>
+              </div>
+            </c:if>
+            <c:if test="${room.damagedLevel < 50 && room.suggestRooms == null}" >
+              <div class="group-control">
+                <div class="name">Đề xuất đổi phòng</div>
+                <div class="value">Không có</div>
+              </div>
+            </c:if>
+            <div class="group-control">
+              <div class="name">Hư hại của phòng</div>
+              <div class="control">
+                <div class="process">
+                  <p>${room.damagedLevel}%</p>
+                  <div class="percent" style="left:${room.damagedLevel}%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="tab5" class="body-tab">
+            <div id="room-map"></div>
           </div>
         </div>
       </div>
@@ -67,23 +98,6 @@
     <div class="footer-modal">
       <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1')" value="Thoát" />
       <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-1', 'modal-4')" value="Khắc phục" />
-    </div>
-  </div>
-  <div class="black-background"></div>
-</div>
-<div class="modal modal-medium" id="modal-2">
-  <div class="content-modal">
-    <div class="header-modal title">
-      <p>Sơ đồ phòng học</p>
-      <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1')"></i>
-    </div>
-    <div class="body-modal">
-      <div class="map-container" id="idContainer" style="margin: 15px 0 0">
-
-      </div>
-    </div>
-    <div class="footer-modal">
-      <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-2','modal-1')" value="Thoát" />
     </div>
   </div>
   <div class="black-background"></div>
@@ -130,7 +144,7 @@
         <input type="hidden" value="${room.roomId}" name="RoomId"/>
         <input type="hidden" id="ListResolve" value="" name="ListResolve">
       </form>
-        <c:forEach items="${room.equipments}" var="item" >
+        <c:forEach items="${room.equipmentCategory}" var="item" >
           <div class="group-equipment">
             <input type="checkbox" class="equipment-type" value="${item.id}"/>
             <div class="equip ${item.className}"></div>
@@ -157,6 +171,6 @@
     }
   });
 
-  <%--showMap('idContainer', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},--%>
-            <%--${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});--%>
+  showMap('room-map', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
+            ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
 </script>

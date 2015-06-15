@@ -304,18 +304,16 @@ function sentReport(){
             Accept : "text/plain; charset=utf-8",
             "Content-Type": "application/json; charset=utf-8"
         },
-        dataType: 'json',
         url: "sentReport",
         data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate").val(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
             var data = result.split('-');
             var html = "<div class='width-10'><div>" + data[1] + "</div></div>";
-            html += "<div class='width-25'><div id='list-20'>" + data[2] + "</div></div>";
+            html += "<div class='width-35'><div id='list-" + data[0] + "'>" + data[2] + "</div></div>";
             var createDate = new Date(parseInt(data[3]));
             html += "<div class='width-20'><div>" + (createDate.getDate()<10?("0"+createDate.getDate()):createDate.getDate())  + "/" + ((createDate.getMonth()+1)<10?("0" + (createDate.getMonth()+1)):(createDate.getMonth()+1)) + "/" + createDate.getFullYear() + "</div></div>";
-            html += "<div class='width-15'><div>0%</div></div>";
-            html += "<div class='width-15'><div><p class='label red'>Chưa sửa</p></div></div>";
-            html += "<div class='width-15'><div class='group-button'><div onclick='loadReportHistory(" + data[0]+ ", " + data[1] + ")' class='btn btn-detail'><i class='fa fa-file'></i></div><div class='btn btn-remove'><i class='fa fa-times'></i></div></div></div>";
+            html += "<div class='width-20'><div><p class='label red'>Chưa sửa</p></div></div>";
+            html += "<div class='width-15'><div class='group-button'><div onclick='loadReportHistory(" + data[0]+ ", " + data[1] + ")' class='btn btn-detail'><i class='fa fa-file'></i></div></div></div>";
             html += "<p class='clear'></p>";
             var row = document.createElement("div");
             row.className = "row";
@@ -326,6 +324,9 @@ function sentReport(){
             for (var key in noDamagedEquipments) {
                 if (noDamagedEquipments.hasOwnProperty(key) && key < 7){
                     $("#row-type-" + key + " .width-50 p").text("Đã được báo cáo");
+                }
+                if(noDamagedEquipments[key].evaluate == 1) {
+                    $("#row-type-" + key + " .width-50 p").addClass("hidden");
                 }
             }
 
@@ -514,13 +515,20 @@ function changeEvaluate(category) {
 
 
 function loadReportHistory(reportId, roomId){
-    $.ajax({
-        method: "GET",
-        url: "/giang-vien/viewHistory",
-        data: { ReportId: reportId, RoomId: roomId },
-        success: function (result) {
-            $("#report-history").html(result);
-            $("#list-equipment-history").text($("#list-"+reportId).html());
-        }
-    });
+    var report = $("#report-history").attr("data-report");
+    if(report != reportId) {
+        $.ajax({
+            method: "GET",
+            url: "/giang-vien/viewHistory",
+            data: {ReportId: reportId, RoomId: roomId},
+            success: function (result) {
+                $("#report-history").html(result);
+                $("#list-equipment-history").text($("#list-" + reportId).html());
+                $("#report-history").attr("data-report", reportId);
+                showModal(1, 'modal-3');
+            }
+        });
+    } else {
+        showModal(1, 'modal-3');
+    }
 }

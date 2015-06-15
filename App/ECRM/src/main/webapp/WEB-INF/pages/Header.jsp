@@ -10,7 +10,7 @@
 <c:set var="user" value="${sessionScope.USER}"/>
 <c:set var="tab" value="${requestScope.ACTIVELEFTTAB}"/>
 <div class="header-bar">
-    <div class="logo">Equipment Classroom Management</div>
+    <div class="logo">Quản lý thiết bị phòng học</div>
     <div class="account-notify">
         <div class="account-control">
             <!--<img src="img/user.png" />-->
@@ -51,7 +51,7 @@
                 </a>
             </li>
             <li id="STAFF_CLASSROOM">
-                <a href="/staff/classroom?ACTIVETAB=1">
+                <a href="/staff/classroom?ACTIVETAB=tab1">
                     <img src=""/>
                     <p>Phòng Học</p>
                 </a>

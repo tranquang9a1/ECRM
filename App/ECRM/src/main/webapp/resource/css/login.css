@@ -1,0 +1,122 @@
+body{
+    margin: 0;
+    font-family: Cambria;
+    font-size: 15px;
+    height: 100%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.clear{
+    clear: both!important;
+    border: 0!important;
+    padding: 0!important;
+    margin: 0!important;
+}
+
+.top{
+    width: 100%;
+    height: 128px;
+    overflow: hidden;
+    background-image: url("/resource/img/header_right.png");
+    border-bottom: 1px solid #999;
+    box-shadow: 4px 4px #888;
+}
+
+.top img{
+    float: left;
+    height: 98px;
+    margin: 15px 15px 15px 0;
+    display: none;
+}
+
+.top p{
+    color: white;
+    font-size: 25px;
+    line-height: 129px;
+    margin: 0 0 0 30px;
+    font-weight: bold;
+}
+
+.mid {
+    width: 100%;
+    height: 800px;
+    background-color: white;
+}
+
+.mid img{
+    width: 650px;
+    height: 300px;
+    padding: 50px 0 0 340px;
+}
+
+.bottom{
+    position: fixed;
+    width: 100%;
+    height: 65px;
+    padding: 15px 0 0;
+    bottom: 0;
+    left: 0;
+    background-image: url("/resource/img/sidebar.png");
+    border-top: 2px solid #CBCBCB;
+}
+
+.bottom p{
+    margin: 5px 0 0 30px;
+    color: #444;
+}
+
+.login-form{
+    width: 280px;
+    height: 330px;
+    position: fixed;
+    top: 50%;
+    left: 30px;
+    margin: -175px 0 0 ;
+    padding: 10px;
+}
+
+.login-form p{
+    width: 270px;
+    margin: 10px auto 25px;
+    color: #555;
+}
+
+.login-form p.old{
+    margin: 0 auto;
+    color: black;
+}
+
+.login-form p:first-child{
+    font-size: 25px;
+    font-weight: bold;
+    color: #083357;
+    padding: 0 0 30px;;
+}
+
+.login-form p input[type='text'], .login-form p input[type='password']{
+    padding: 8px 6px;
+    width: 270px;
+    border: 1px solid #999;
+    font-family: Cambria;
+    font-size: 15px;
+    color: #666666;
+}
+
+.login-form p input[type='checkbox']{
+    margin: 7px 5px 7px 0;
+}
+
+.login-form button{
+    width: 150px;
+    height: 35px;
+    margin: 0 5px;
+    border: 0;
+    outline: none;
+    background-color: #083357;
+    color: white;
+    font-size: 15px;
+    font-family: Cambria;
+    cursor: pointer;
+}
+

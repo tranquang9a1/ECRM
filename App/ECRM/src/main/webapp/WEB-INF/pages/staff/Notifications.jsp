@@ -224,7 +224,7 @@
         </div>
     </div>
 </div>
-<div class="content-all-modal"></div>
+<div class="content-all-modal" data-room="0"></div>
 <script>
     function doAction(choose, object) {
         closeConform();

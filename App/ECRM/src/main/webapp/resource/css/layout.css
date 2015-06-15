@@ -28,7 +28,7 @@ body{
     top: 0;
     left: 0;
     border-bottom: 1px solid #ddd;
-    background-color: #1B4057;
+    background-color: rgb(9,111,210);
     color: #ffffff;
 }
 
@@ -146,7 +146,7 @@ body{
     color: #ffffff;
     padding: 0;
     margin: 0;
-    background-color: #404040;
+    background-image: url("/resource/img/sidebar.png");
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
     -moz-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
     -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
@@ -173,7 +173,7 @@ body{
 .list-category > ul > li:hover, .list-category > ul > .active{
     padding: 15px 30px;
     font-weight: bold;
-    background-color: #1B4057;
+    background-color: rgb(9,111,210);
 }
 
 .list-category > ul > li a{
@@ -182,7 +182,12 @@ body{
 
 .list-category > ul > li p{
     margin: 0;
-    color: #ffffff!important;
+    color: #5E5E5E;
+}
+
+.list-category > ul > li.active p, .list-category > ul > li:hover p{
+    margin: 0;
+    color: #fff!important;
 }
 
 .container {
@@ -193,61 +198,3 @@ body{
 .body-content {
     margin: 0 20px;
 }
-
-/*LOGIN FORM*/
-.login-form{
-    width: 280px;
-    height: 330px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin: -175px 0 0 -150px;
-    background-color: white;
-    padding: 10px;
-    border: 1px solid #bdc1c9;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    -moz-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.login-form p{
-    width: 270px;
-    margin: 10px auto 25px;
-    color: #666666;
-}
-
-.login-form p:first-child{
-    font-size: 22px;
-    font-weight: bold;
-    color: #083357;
-    text-align: center;
-    margin: 0 auto;
-    padding: 45px 0 20px;
-}
-
-.login-form p input[type='text'], .login-form p input[type='password']{
-    padding: 8px 6px;
-    width: 270px;
-    border: 1px solid #999;
-    font-family: Cambria;
-    font-size: 15px;
-    color: #666666;
-}
-
-.login-form p input[type='checkbox']{
-    margin: 7px 5px 7px 0;
-}
-
-.login-form button{
-    width: 270px;
-    height: 35px;
-    margin: 0 5px;
-    border: 0;
-    outline: none;
-    background-color: #083357;
-    color: white;
-    font-size: 15px;
-    font-family: Cambria;
-    cursor: pointer;
-}
-

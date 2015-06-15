@@ -145,14 +145,14 @@
 }
 
 .modal .body-modal .row div select.small{
-    height: 25px;
+    height: 29px;
     padding: 0 8px;
     margin: 0;
 }
 
 .modal .body-modal .row div .description-equipment{
     float: right;
-    margin: 6px 0 0;
+    margin: 2px 0 0;
     padding: 5px 8px;
     z-index: 1;
     transition: 0.2s all ease-in;

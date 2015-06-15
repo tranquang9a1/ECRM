@@ -12,63 +12,84 @@
 <c:set var="report" value="${requestScope.REPORT}"/>
 <c:set var="rt" value="${requestScope.ROOMTYPE}"/>
 <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
+<script>
+    var roomEquipments = {};
+    <c:forEach items="${equipments}" var="item">
+        <c:if test="${item.position != null && item.status == true}">
+            roomEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
+        </c:if>
+    </c:forEach>
+</script>
 <div class="tab">
     <div class="tab-medium">
         <ul>
-            <li class="active" onclick="changeTab('tab1', this)">Sơ đồ</li>
-            <li onclick="changeTab('tab2', this)">Chi tiết</li>
+            <li class="active" onclick="changeTab('tab1', this)">Chi tiết</li>
+            <li onclick="changeTab('tab2', this)">Sơ đồ</li>
         </ul>
     </div>
     <div class="content-tab">
         <div id="tab1" class="body-tab active">
-            <div id="room-map"></div>
-        </div>
-        <div id="tab2" class="body-tab">
             <div class="group-control">
                 <div class="name">Phòng</div>
                 <div class="value">${room.name}</div>
             </div>
             <div class="group-control">
-                <div class="name">Ngày báo cáo</div>
-                <div class="value"><fmt:formatDate value="${report.createTime}" pattern="HH:mm dd/MM/yyyy" /></div>
-            </div>
-            <div class="group-control">
-                <div class="name">Thiết bị</div>
-                <div class="value" id="list-equipment-history"></div>
-            </div>
-            <div class="group-control">
-                <div class="name">Mức độ hư hại</div>
-                <div class="value">0%</div>
-            </div>
-            <div class="group-control">
                 <div class="name">Trạng thái</div>
                 <div class="value">
-                    <c:if test="${report.status == true}">
+                    <c:if test="${report.status == 1}">
                         <p class="label red">Chưa sửa</p>
                     </c:if>
-                    <c:if test="${report.status == false}">
+                    <c:if test="${report.status == 2}">
+                        <p class="label blue">Đang sửa</p>
+                    </c:if>
+                    <c:if test="${report.status == 3}">
                         <p class="label green">Đã sửa</p>
+                    </c:if>
+                    <c:if test="${report.status == 4}">
+                        <p class="label">Đã hủy</p>
                     </c:if>
                 </div>
             </div>
             <div class="group-control">
-                <div class="name">Mô tả hư hại</div>
-                <div class="value">${report.description}</div>
+                <div class="name">Danh sách thiết bị</div>
+                <div class="value" id="list-equipment-history"></div>
             </div>
+            <div class="group-control">
+                <div class="name">Ngày báo cáo</div>
+                <div class="value"><fmt:formatDate value="${report.createTime}" pattern="HH:mm dd/MM/yyyy" /></div>
+            </div>
+            <div class="group-control line">
+                <div class="name">Đánh giá của bạn</div>
+                <div class="value">
+                    <c:if test="${report.evaluate == 1}">
+                        <c:out value="Phải đổi phòng"/>
+                    </c:if>
+                    <c:if test="${report.evaluate == 2}">
+                        <c:out value="Cần sửa ngay"/>
+                    </c:if>
+                    <c:if test="${report.evaluate == 3}">
+                        <c:out value="Vẫn dạy được"/>
+                    </c:if>
+                </div>
+            </div>
+            <c:if test="${report.status < 3}">
+                <div class="group-control">
+                    <div class="name">Hư hại của phòng</div>
+                    <div class="control">
+                        <div class="process">
+                            <p>${room.damagedLevel}%</p>
+                            <div class="percent" style="left:${room.damagedLevel}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+        <div id="tab2" class="body-tab">
+            <div id="room-map"></div>
         </div>
     </div>
 </div>
 <script>
-    var roomEquipments = {};
-    <c:forEach var="i" begin="0" end="${equipments.size()-1}">
-    roomEquipments["${equipments[i].position.trim()}"] = {
-        "id": ${equipments[i].id},
-        "category": ${equipments[i].categoryId},
-        "status": "${equipments[i].status}"
-    };
-    </c:forEach>
-
-    showMapForReport('room-map', roomEquipments, ${rt.id}, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
+    showMap('room-map', roomEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
             ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
-    showModal(1, 'modal-3');
 </script>

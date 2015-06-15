@@ -55,19 +55,19 @@ function conform(choose, object){
 
     var titleDiv = document.createElement("div");
     titleDiv.className = "title-conform";
-    titleDiv.innerHTML = "ARE YOU SURE?";
+    titleDiv.innerHTML = "BẠN CÓ CHẮC KHÔNG?";
     var controlDiv = document.createElement("div");
     controlDiv.className = "control-button";
 
     var btnYes = document.createElement("input");
     btnYes.className = "btn btn-orange";
     btnYes.type = "button";
-    btnYes.value = "Yes! I'm sure";
+    btnYes.value = "CÓ! TÔI CHẮC";
     btnYes.addEventListener("click", function() { doAction(choose, object)}, false);
     var btnNo = document.createElement("input");
     btnNo.className = "btn btn-normal";
     btnNo.type = "button";
-    btnNo.value = "No";
+    btnNo.value = "KHÔNG";
     btnNo.addEventListener("click", closeConform, false);
     controlDiv.appendChild(btnYes);
     controlDiv.appendChild(btnNo);

@@ -113,7 +113,7 @@
                                     <p class="label red">Chưa sửa</p>
                                 </c:if>
                                 <c:if test="${notifies[i].status == 2}">
-                                    <p class="label yellow">Đang sửa</p>
+                                    <p class="label blue">Đang sửa</p>
                                 </c:if>
                                 <c:if test="${notifies[i].status == 3}">
                                     <p class="label green">Đã sửa</p>
@@ -128,7 +128,7 @@
                                 <div onclick="loadReportHistory(${notifies[i].reportId}, ${notifies[i].room})" class="btn btn-detail"><i
                                         class="fa fa-file"></i>
                                 </div>
-                                <div href="javascript:void(0)" class="btn btn-remove"><i class="fa fa-times"></i></div>
+                                <%--<div href="javascript:void(0)" class="btn btn-remove"><i class="fa fa-times"></i></div>--%>
                             </div>
                         </div>
                         <p class="clear"></p>
@@ -152,8 +152,8 @@
                     <div class="control" style="width: 300px">
                         <select id="report-evaluate" style="width: 200px; float: right">
                             <option value="1">Phải đổi phòng</option>
-                            <option value="2" selected="selected">Cẫn sửa ngay</option>
-                            <option value="3">Vẫn dạy được</option>
+                            <%--<option value="2">Cẫn sửa ngay</option>--%>
+                            <option value="3" selected="selected">Vẫn dạy được</option>
                         </select>
                     </div>
                 </div>
@@ -188,7 +188,7 @@
                 <p>Lịch sử báo cáo</p>
                 <i class="fa fa-times" onclick="showModal(0, 'modal-3')"></i>
             </div>
-            <div class="body-modal" id="report-history"></div>
+            <div class="body-modal" id="report-history" data-report="0"></div>
             <div class="footer-modal">
                 <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-3')" value="Thoát"/>
             </div>

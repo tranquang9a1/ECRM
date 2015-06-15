@@ -60,4 +60,22 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
         return rows > 0 ? true : false;
 
     }
+
+    @Override
+    public TblClassroomEntity getClassroomById(int id) {
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblClassroomEntity c " +
+                "WHERE c.id = :id");
+        query.setParameter("id", id);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()){
+            return (TblClassroomEntity)queryResult.get(0);
+        }
+
+        return null;
+    }
+
+
 }

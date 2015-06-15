@@ -76,7 +76,7 @@ public class Utils {
         reportDTO.setEvaluate(reportEntity.getEvaluate());
         reportDTO.setReportId(reportEntity.getId());
         reportDTO.setStatus(reportEntity.getStatus());
-        reportDTO.setDamageLevel(reportEntity.getDamagedLevel());
+        reportDTO.setDamageLevel(reportEntity.getClassRoomId());
 
         return reportDTO;
     }

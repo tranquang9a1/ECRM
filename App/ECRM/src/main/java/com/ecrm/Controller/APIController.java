@@ -6,6 +6,7 @@ import com.ecrm.DAO.ReportDetailDAO;
 import com.ecrm.DAO.RoomTypeDAO;
 import com.ecrm.DTO.*;
 import com.ecrm.Entity.*;
+import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.Utils;
 import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ public class APIController {
 
         try {
             TblClassroomEntity classroomEntity = classroomDAO.find(roomId);
-            TblReportEntity report = new TblReportEntity(username, roomId, 0, evaluate);
+            TblReportEntity report = new TblReportEntity(username, roomId, evaluate);
             reportDAO.insert(report);
             int reportId = report.getId();
 
@@ -119,7 +120,7 @@ public class APIController {
                 TblEquipmentEntity entity = new TblEquipmentEntity(equipmentCategoryDAO.findEquipmentId(equipments[i]),
                         roomId, "", "", positions[i], 0, true);
                 equipmentDAO.insert(entity);
-                TblReportDetailEntity detailEntity = new TblReportDetailEntity(entity.getId(), reportId,mapEquipment.get(equipments[i]), false, positions[i]);
+                TblReportDetailEntity detailEntity = new TblReportDetailEntity(entity.getId(), reportId,mapEquipment.get(equipments[i]), "1", positions[i]);
                 reportDetailDAO.insert(detailEntity);
 
             }
@@ -359,6 +360,54 @@ public class APIController {
             damagedLevel = 100;
         }
         return damagedLevel;
+    }
+
+
+
+    @RequestMapping(value = "/schedule", method = RequestMethod.GET)
+    public @ResponseBody List<ScheduleDTO> getSchedule(@RequestParam("username") String username) {
+        List<ScheduleDTO> result = new ArrayList<ScheduleDTO>();
+        List<TblScheduleEntity> listSchedule = scheduleDAO.getSchedulesOfUser(username);
+        for (TblScheduleEntity scheduleEntity : listSchedule) {
+            ScheduleDTO dto = new ScheduleDTO();
+            dto.setClassId(scheduleEntity.getClassroomId());
+            dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
+            dto.setTimeFrom(scheduleEntity.getTimeFrom().getTime() + "");
+            dto.setTimeTo(scheduleEntity.getTimeFrom().getTime() + (scheduleEntity.getSlots()* Constant.TIME_ONE_SLOT*1000) + "");
+            result.add(dto);
+        }
+        return result;
+    }
+
+
+    @RequestMapping(value = "/getEquipments", method = RequestMethod.GET)
+    public @ResponseBody List<String> getEquipment(@RequestParam("classId") int classId) {
+        List<EquipmentClassDTO> result = new ArrayList<EquipmentClassDTO>();
+        TblClassroomEntity classroomEntity = classroomDAO.find(classId);
+        TblRoomTypeEntity roomType = classroomEntity.getTblRoomTypeByRoomTypeId();
+        List<String> list = new ArrayList<String>();
+        if (roomType.getAirConditioning() > 0) {
+            list.add("Máy Lạnh");
+        }
+        if(roomType.getBulb() > 0) {
+            list.add("Bóng Đèn");
+        }
+        if (roomType.getFan() > 0) {
+            list.add("Quạt");
+        }
+        if (roomType.getProjector() > 0) {
+            list.add("Máy Chiếu");
+        }
+        if (roomType.getTelevision() > 0) {
+            list.add("Tivi");
+        }
+        if (roomType.getSpeaker() > 0) {
+            list.add("Loa");
+        }
+        list.add("Bàn");
+        list.add("Ghế");
+
+        return list;
     }
 
 }

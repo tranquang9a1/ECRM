@@ -14,4 +14,5 @@ public interface ClassroomDAO {
 
     public boolean updateDamageLevel(int damageLevel, int classId);
 
+    public TblClassroomEntity getClassroomById(int id);
 }

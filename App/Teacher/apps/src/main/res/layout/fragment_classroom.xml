@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="top"
-              android:background="@color/background">
+              android:background="#ffffff"
+              >
 
 
     <LinearLayout
             android:id="@+id/classroommap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:layout_gravity="center" android:orientation="vertical" android:weightSum="1">
+
+
         <WebView
                 android:id="@+id/classmap"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="480dp"
+                android:background="#fff"
+                android:layout_weight="0.09"/>
+
 
 
     </LinearLayout>
-</LinearLayout>
+
+    <Button android:id="@+id/create_report_button" style="?android:textAppearanceSmall"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/action_create_report"
+            android:textStyle="bold"
+            android:layout_gravity="bottom" android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"/>
+</RelativeLayout>

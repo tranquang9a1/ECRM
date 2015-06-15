@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="top"
+              android:background="@android:color/background_light">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+        <EditText
+                android:layout_width="300sp"
+                android:layout_height="50sp"
+                android:inputType="text"
+                android:id="@+id/txtKeyword"
+                android:hint="Tìm lớp học"
+                android:singleLine="true" />
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnSearch"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@android:drawable/ic_menu_search" />
+
+
+    </LinearLayout>
+
+    <com.fu.group10.apps.staff.component.InfinityListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView"
+            android:paddingTop="20dp"
+            android:paddingBottom="@dimen/ad_height"
+            android:clipToPadding="false"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+
+    <LinearLayout
+            android:id="@+id/empty_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+        <ProgressBar
+                android:id="@+id/loadingImg"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/emptyMessage"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#949494"
+                android:layout_marginTop="60dp"
+                android:textSize="@dimen/empty_list_text_size"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:gravity="center"
+                android:text="@string/no_report_found"/>
+    </LinearLayout>
+</LinearLayout>

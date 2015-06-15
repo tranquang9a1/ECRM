@@ -5,8 +5,17 @@
     <color name="tabDelimiter">#ff53a3ff</color>
     <color name="tab">#ff53a3ff</color>
     <color name="font">#323232</color>
+    <color name="resolved">#ffd0d0d0</color>
     <color name="live_item_bg">#ffffff</color>
     <color name="itemPressed">#ccc</color>
     <color name="evenRow">#ffffff</color>
     <color name="oddRow">#f2f2f2</color>
+
+    <color name="primary">#8BC34A</color>
+    <color name="primaryDark">#689F38</color>
+    <color name="primaryLight">#DCEDC8</color>
+    <color name="accent">#FF4081</color>
+    <color name="textPrimary">#212121</color>
+    <color name="textSecondary">#727272</color>
+    <color name="divider">#B6B6B6</color>
 </resources>

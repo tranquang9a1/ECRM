@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:layout_height="match_parent"
+              android:gravity="top"
+        >
+    <LinearLayout
+            android:layout_width="@dimen/thumbnail_width"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <ImageView
+                android:id="@+id/equipmentImg"
+                android:layout_width="@dimen/thumbnail_width"
+                android:layout_height="@dimen/thumbnail_height"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher"
+                android:contentDescription="@string/highlight_image"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/equipmentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="Bàn"/>
+            <TextView
+                    android:id="@+id/quantityView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text=" - Số lượng: "/>
+
+            <TextView
+                    android:id="@+id/quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="2"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+            <TextView
+                    android:id="@+id/damaged"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="Mức độ hư hỏng: "/>
+
+            <TextView
+                    android:id="@+id/damagedLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="Trung Bình "/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/resolve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+            <TextView
+                    android:id="@+id/resolveDes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="Mua phụ kiện thay mới!"
+                    android:visibility="invisible"/>
+
+
+
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

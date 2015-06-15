@@ -1,6 +1,5 @@
 package com.fu.group10.apps.teacher.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import com.fu.group10.apps.teacher.R;
 import com.fu.group10.apps.teacher.fragment.AccountFragment;
-import com.fu.group10.apps.teacher.fragment.ClassroomFragment;
+import com.fu.group10.apps.teacher.fragment.ListClassroomFragment;
 
 
 public class MainActivity extends FragmentActivity {
@@ -19,14 +18,14 @@ public class MainActivity extends FragmentActivity {
     LinearLayout tabClassroomArrow;
     LinearLayout tabAccountArrow;
 
-    ClassroomFragment classroomFragment;
+    ListClassroomFragment classroomFragment;
     AccountFragment accountFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_backup_main);
         tabClassroom = (LinearLayout) findViewById(R.id.tabClassroom);
         tabAccount = (LinearLayout) findViewById(R.id.tabAccount);
 
@@ -47,12 +46,10 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        classroomFragment = new ClassroomFragment();
+        classroomFragment = new ListClassroomFragment();
         accountFragment = new AccountFragment();
 
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", 123);
-        classroomFragment.setArguments(bundle);
+
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, classroomFragment).commit();
 
         setActiveTab(0);

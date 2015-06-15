@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="suggestItems">
+        <item>Không cần đổi phòng</item>
+        <item>Cần phải đổi phòng</item>
+    </string-array>
+
+    <string-array name="levelItems">
+        <item>Nhẹ</item>
+        <item>Trung Bình</item>
+        <item>Nặng</item>
+    </string-array>
+</resources>

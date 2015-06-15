@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\classes-f79547cf74de8865d4699b831b653df6790d273c.jar" />
+    </item>
+    <item
+        jar="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\libs\internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-1e8d932f62200647694b4671566a36dc7e87718e.jar" />
+    </item>
+    <item
+        jar="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\libs\google-play-services.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\google-play-services-bda9fcc3779035c882a04a186e8d611080eee3b2.jar" />
+    </item>
+    <item
+        jar="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\libs\gson-2.2.4.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\gson-2.2.4-b55a482e8471fe8e4af2b431d793540137ea432f.jar" />
+    </item>
+    <item
+        jar="C:\Program Files\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\support-annotations-20.0.0-fbb2e0510715c6f423042e96284177ed0bcac391.jar" />
+    </item>
+    <item
+        jar="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\classes-98488a73514aadf58652813d46c33d3663f81388.jar" />
+    </item>
+    <item
+        jar="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\libs\aniqroid-2.1.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="ef7925e24443a60f103dc3137b40ecaecbbec470">
+        <dex dex="C:\Users\QuangTV\Desktop\ECRM\trunk\App\Staff\staff\build\intermediates\pre-dexed\debug\aniqroid-2.1-ba490bf5ba8171970d58a25e2cae93300856cb33.jar" />
+    </item>
+
+</items>

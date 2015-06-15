@@ -4,14 +4,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import com.fu.group10.apps.teacher.model.ClassroomInfo;
 import com.fu.group10.apps.teacher.model.User;
 import com.fu.group10.apps.teacher.R;
+import com.fu.group10.apps.teacher.utils.Constants;
+import com.fu.group10.apps.teacher.utils.NetworkUtils;
 import com.fu.group10.apps.teacher.utils.ParseUtils;
+import com.fu.group10.apps.teacher.utils.RequestSender;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -19,7 +28,7 @@ import com.fu.group10.apps.teacher.utils.ParseUtils;
  */
 public class LoginActivity extends Activity{
 
-    private static final String result =  "{'username':'quangtv','phone': '1123123', 'classId':2, 'role': true}";
+    private static final String result ="";
     private static final String defaultPassword = "123ecrm";
     private AutoCompleteTextView usernameTextView;
     private EditText passwordTextView;
@@ -92,35 +101,37 @@ public class LoginActivity extends Activity{
             focusView.requestFocus();
         } else {
             // show progress spinner, and start background task to login
-//            Map<String, String> params = new HashMap<String, String>();
-//            params.put("username", username);
-//            params.put("password", password);
-//            RequestSender sender = new RequestSender();
-//            String url = Constants.API_LOGIN;
-//            Log.d("API Call", "Send API" + url );
-//
-//            sender.method = "POST";
-//            sender.param = params;
-//
-//            sender.start(url, new RequestSender.IRequestSenderComplete() {
-//                @Override
-//                public void onRequestComplete(String result) {
-//                    result = result == null ? "" : result;
-//
-//
-//                }
-//            });
+            //Map<String, String> params = new HashMap<String, String>();
+            //params.put("username", username);
+            //params.put("password", password);
+            String url = Constants.API_LOGIN + "?username="+username+"&password="+password;
+            RequestSender sender = new RequestSender();
+            sender.start(url, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                    user = ParseUtils.parseUserJson(result);
+                    if (user != null ) {
+                        if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {
+                            firstLogin(user.getPassword());
+                        } else {
+
+                            ArrayList<ClassroomInfo> listClassroom = new ArrayList<ClassroomInfo>();
+                            for (int i = 0; i < user.getClassrooms().size(); i++) {
+                                listClassroom.add(user.getClassrooms().get(i));
+                            }
+                            openMainActivity(listClassroom);
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            });
 
 
-            user = ParseUtils.parseUserJson(result);
-            if (user.role && password.equals(defaultPassword)) {
-                firstLogin(defaultPassword);
-            } else if (user.role && !password.equals(defaultPassword)) {
-                openMainActivity();
-            } else {
-                Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG);
 
-            }
+
 
 
         }
@@ -137,9 +148,10 @@ public class LoginActivity extends Activity{
 
 
 
-    void openMainActivity() {
+    void openMainActivity(ArrayList<ClassroomInfo> listClassroom) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("id", 123);
+        intent.putParcelableArrayListExtra("listClass", listClassroom);
+        intent.putExtra("username", user.getUsername());
         startActivity(intent);
         finish();
     }

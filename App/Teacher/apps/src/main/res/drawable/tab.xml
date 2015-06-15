@@ -5,5 +5,7 @@
     <item android:state_selected="true" android:drawable="@drawable/tab_active">
     </item>
 
-    <item android:drawable="@drawable/tab_inactive"></item>
+    <item android:drawable="@drawable/tab_inactive">
+
+    </item>
 </selector>

@@ -94,7 +94,7 @@ public class NetworkUtils {
              *  UrlEncodedFormEntity is an entity composed of a list of url-encoded pairs.
              *  This is typically useful while sending an HTTP POST request.
              */
-            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
+            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList, "UTF-8");
 
             /** setEntity() hands the entity (here it is urlEncodedFormEntity) to the request. */
             httpPost.setEntity(urlEncodedFormEntity);

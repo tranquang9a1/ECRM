@@ -26,32 +26,34 @@ public class DamagedRoomDTO {
 
     private List<String> suggestRooms;
     private TblRoomTypeEntity roomtype;
-    private List<EquipmentDamaged> equipments;
+    private List<EquipmentDamaged> equipmentCategory;
+    private List<TblEquipmentEntity> equipments;
 
     public DamagedRoomDTO(TblClassroomEntity room, TblReportEntity report, List<TblEquipmentEntity> equipments) {
         this.roomId = room.getId();
         this.roomName = room.getName();
         this.reportDate = report.getCreateTime();
         this.evaluate = report.getEvaluate();
+        this.equipments = equipments;
 
-        this.equipments = new ArrayList<EquipmentDamaged>();
+        this.equipmentCategory = new ArrayList<EquipmentDamaged>();
         int position = -1;
         String[] className = {"","projector","tivi","air-condition","fan","speaker","bulb","table-icon","chair"};
 
         for (TblEquipmentEntity item: equipments) {
             position = checkContain(item.getCategoryId());
             if (position != -1) {
-                this.equipments.get(position).addSize();
+                this.equipmentCategory.get(position).addSize();
             } else {
-                this.equipments.add(new EquipmentDamaged(item.getCategoryId(), item.getTblEquipmentCategoryByCategoryId().getName(), className[item.getCategoryId()]));
+                this.equipmentCategory.add(new EquipmentDamaged(item.getCategoryId(), item.getTblEquipmentCategoryByCategoryId().getName(), className[item.getCategoryId()]));
             }
         }
      }
 
     private int checkContain(int cate) {
 
-        for (int i = 0; i < this.equipments.size(); i++){
-            if(this.equipments.get(i).getId() == cate) {
+        for (int i = 0; i < this.equipmentCategory.size(); i++){
+            if(this.equipmentCategory.get(i).getId() == cate) {
                 return i;
             }
         }
@@ -123,12 +125,20 @@ public class DamagedRoomDTO {
         this.roomtype = roomtype;
     }
 
-    public List<EquipmentDamaged> getEquipments() {
+    public List<TblEquipmentEntity> getEquipments() {
         return equipments;
     }
 
-    public void setEquipments(List<EquipmentDamaged> equipments) {
+    public void setEquipments(List<TblEquipmentEntity> equipments) {
         this.equipments = equipments;
+    }
+
+    public List<EquipmentDamaged> getEquipmentCategory() {
+        return equipmentCategory;
+    }
+
+    public void setEquipmentCategory(List<EquipmentDamaged> equipmentCategory) {
+        this.equipmentCategory = equipmentCategory;
     }
 
     public class EquipmentDamaged {

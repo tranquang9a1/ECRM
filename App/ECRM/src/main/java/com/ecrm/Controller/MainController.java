@@ -45,7 +45,7 @@ public class MainController {
                 return "redirect:/admin/account?ACTIVETAB=tab1";
             }
             if (user.getTblRoleByRoleId().getName().equals("Staff")) {
-                return "redirect:/staff/classroom?ACTIVETAB=tab1";
+                return "redirect:/thong-bao";
             }
             if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
                 return "redirect:/giang-vien/thong-bao";

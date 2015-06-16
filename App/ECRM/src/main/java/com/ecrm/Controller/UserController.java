@@ -48,7 +48,7 @@ public class UserController {
         List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
         List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
         for(int i = 0; i < list.size(); i++) {
-            List<TblReportDetailEntity> reportDetails = reportDetailDAO.getReportDetailsInReport(list.get(i).getId());
+            List<TblReportDetailEntity> reportDetails = list.get(i).getTblReportDetailsById();
             ReportResponseObject report = new ReportResponseObject(list.get(i),reportDetails);
             listReport.add(report);
         }
@@ -125,20 +125,19 @@ public class UserController {
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);
 
-        return reportRequest.getRoomId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
+        return report.getId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
     }
 
     @RequestMapping(value = "viewHistory")
     public String viewReportByUser(HttpServletRequest request, @RequestParam("ReportId") int reportId, @RequestParam("RoomId") String roomId){
         TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomId);
-        TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
         List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(classroom.getId());
         TblReportEntity report = reportDAO.find(reportId);
 
         request.setAttribute("ROOM", classroom);
         request.setAttribute("REPORT", report);
         request.setAttribute("EQUIPMENTS", listEquipment);
-        request.setAttribute("ROOMTYPE", roomType);
+        request.setAttribute("ROOMTYPE", classroom.getTblRoomTypeByRoomTypeId());
 
         return "user/ReportHistory";
     }

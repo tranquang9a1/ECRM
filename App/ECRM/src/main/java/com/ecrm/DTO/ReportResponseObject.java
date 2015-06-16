@@ -34,15 +34,14 @@ public class ReportResponseObject {
         this.status = report.getStatus();
         this.damagedLevel = 0;
 
-        List<String> equipmentName = new ArrayList<String>();
+        List<Integer> equipmentName = new ArrayList<Integer>();
         boolean flag = false;
         for(int i = 0; i < reportDetails.size(); i++) {
-            TblEquipmentEntity equip = reportDetails.get(i).getTblEquipmentByEquipmentId();
-            TblEquipmentCategoryEntity category = equip.getTblEquipmentCategoryByCategoryId();
+            TblEquipmentCategoryEntity category = reportDetails.get(i).getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId();
 
-            if(!equipmentName.contains(category.getName())){
+            if(!equipmentName.contains(category.getId())){
                 this.listEquipment += category.getName() + ", ";
-                equipmentName.add(category.getName());
+                equipmentName.add(category.getId());
             }
         }
         this.listEquipment = this.listEquipment.substring(0, listEquipment.length()-2);

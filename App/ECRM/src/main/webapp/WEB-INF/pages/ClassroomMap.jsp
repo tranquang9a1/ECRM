@@ -34,7 +34,6 @@
 <body>
 <div style="width: 240px;">
     <div class="group-control">
-        <div class="name">Thiết bị</div>
         <div class="value" id="list-equipment"></div>
     </div>
     <div id="classroom-map">

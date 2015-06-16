@@ -47,6 +47,9 @@ public class ChangeRoomController {
                         tblScheduleEntity.getTblClassroomByClassroomId().getName()+".";
             }
         }
+        for (int i=0; i<messages.size(); i++){
+            System.out.println(messages.get(i));
+        }
         return messages;
     }
 }

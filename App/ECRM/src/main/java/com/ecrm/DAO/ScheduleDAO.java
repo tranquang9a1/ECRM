@@ -16,5 +16,5 @@ public interface ScheduleDAO {
     public List<TblScheduleEntity> getSchedulesOfUser(String username);
 
     public List<TblScheduleEntity> findScheduleWithDate(String username, java.util.Date date, String timeFrom);
-    public TblScheduleEntity findSpecificSchedule(java.util.Date date, String timeFrom, int classroomId);
+    public List<TblScheduleEntity> findSpecificSchedule(java.util.Date date, String timeFrom);
 }

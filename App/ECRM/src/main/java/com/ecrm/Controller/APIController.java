@@ -50,7 +50,7 @@ public class APIController {
 
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id") int classroomId) {
-        TblClassroomEntity classroomEntity = new TblClassroomEntity();
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         Collection<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
 
         request.setAttribute("CLASSROOM", classroomEntity);

@@ -24,7 +24,7 @@
     <script>
         $(function () {
             $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
-            $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
+            $("#datepickeTo").datepicker({dateFormat: "yy-mm-dd"});
             $("#datefrom").datepicker({dateFormat: "yy-mm-dd"});
             $("#dateto").datepicker({dateFormat: "yy-mm-dd"});
         });
@@ -152,7 +152,7 @@
     </div>
 
     <div class="modal modal-medium" id="Manual">
-        <div class="content-modal" style="height: 480px">
+        <div class="content-modal" style="height: 530px">
             <div class="header-modal title">
                 <p>Nhập Lịch Bằng Tay</p>
                 <i class="fa fa-times" onclick="showModal(0, 'Manual')"></i>

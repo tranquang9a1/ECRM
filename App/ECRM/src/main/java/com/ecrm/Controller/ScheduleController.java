@@ -46,6 +46,7 @@ public class ScheduleController {
     ClassroomDAOImpl classroomDAO;
     @Autowired
     UserDAOImpl userDAO;
+
     @RequestMapping(value = "schedule")
     public String mappingSchedule(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
@@ -269,52 +270,55 @@ public class ScheduleController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate dateF = new LocalDate(dateFrom);
         LocalDate dateT = new LocalDate(dateTo);
-        if(dateTo.trim().length()>0){
-            for(LocalDate date = dateF; date.isBefore(dateT); date.plusDays(1)){
+        if (dateTo.trim().length() > 0) {
+            for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
                 java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
                 TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
                         teachingDate, true);
                 if (all.equals("0")) {
                     scheduleDAO.persist(tblScheduleEntity);
                 } else {
-                    TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(all));
-                    if (tblScheduleEntity1 != null) {
-                        tblScheduleEntity1.setIsActive(false);
-                        scheduleDAO.merge(tblScheduleEntity1);
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom);
+                    if (!tblScheduleEntities.isEmpty()) {
+                        tblScheduleEntities.get(0).setIsActive(false);
+                        scheduleDAO.merge(tblScheduleEntities.get(0));
+                        tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                         scheduleDAO.persist(tblScheduleEntity);
                     } else {
+                        tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                         scheduleDAO.persist(tblScheduleEntity);
                     }
-
                 }
             }
-        }else {
+        } else {
             java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
             TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
                     teachingDate, true);
             if (all.equals("0")) {
                 scheduleDAO.persist(tblScheduleEntity);
             } else {
-                TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(all));
-                if (tblScheduleEntity1 != null) {
-                    tblScheduleEntity1.setIsActive(false);
-                    scheduleDAO.merge(tblScheduleEntity1);
+                List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom);
+                if (!tblScheduleEntities.isEmpty()) {
+                    tblScheduleEntities.get(0).setIsActive(false);
+                    scheduleDAO.merge(tblScheduleEntities.get(0));
+                    tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                     scheduleDAO.persist(tblScheduleEntity);
                 } else {
+                    tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                     scheduleDAO.persist(tblScheduleEntity);
                 }
-
             }
         }
 
 
         return "redirect:/staff/schedule?ACTIVETAB=tab2";
     }
+
     //Search
     @RequestMapping(value = "searchSchedule")
-    public String searchSchedule(HttpServletRequest request){
+    public String searchSchedule(HttpServletRequest request) {
         Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
-        request.setAttribute("SCHEDULES",scheduleEntity);
+        request.setAttribute("SCHEDULES", scheduleEntity);
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
         List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
         request.setAttribute("CLASSROOMS", tblClassroomEntities);

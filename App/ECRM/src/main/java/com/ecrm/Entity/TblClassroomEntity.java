@@ -186,6 +186,6 @@ public class TblClassroomEntity {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.isDelete = isDelete;
-        this.isAllInformation = getIsAllInformation();
+        this.isAllInformation = isAllInformation;
     }
 }

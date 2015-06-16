@@ -29,7 +29,7 @@ public class ChangeRoomController {
     public List<String> changeRoom(HttpServletRequest request, @RequestParam("classroomId")int classroomId){
         List<String> messages = new ArrayList<String>();
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
-        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
         for(TblScheduleEntity tblScheduleEntity: tblScheduleEntityList){
             List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
             if(!classroom.isEmpty()){
@@ -40,7 +40,8 @@ public class ChangeRoomController {
                         tblScheduleEntity.getNumberOfStudents(), "Thay doi phong",tblScheduleEntity.getTimeFrom(),
                         tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
                 String message = "Da doi phong cho giao vien " + tblScheduleEntity.getUsername()+" tu phong: "+
-                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phong: "+newSchedule.getTblClassroomByClassroomId().getName()+".";
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phong: "+classroomEntity.getName()+".";
+                scheduleDAO.persist(newSchedule);
                 messages.add(message);
             }else{
                 String message = "Khong con phong trong cho giao vien: "+ tblScheduleEntity.getUsername()+" cua phong: "+

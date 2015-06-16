@@ -58,7 +58,7 @@ public class StaffController {
             }
             Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
             for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                if (tblEquipmentEntity.getName() == null) {
+                if (tblEquipmentEntity.getName() == null && tblEquipmentEntity.getCategoryId()<4) {
                     classroomEntity.setIsAllInformation(false);
                 }
             }

@@ -36,6 +36,14 @@ public class TblReportEntity {
         this.status = Enumerable.ReportStatus.NEW.getValue();
     }
 
+    public TblReportEntity(String username, int classRoomId, Timestamp createTime, String evaluate, int status) {
+        this.username = username;
+        this.classRoomId = classRoomId;
+        this.createTime = createTime;
+        this.evaluate = evaluate;
+        this.status = status;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "Id")

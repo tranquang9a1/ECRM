@@ -23,7 +23,8 @@
     <script src="../../resource/js/jquery-ui.js"></script>
     <script>
         $(function () {
-            $("#datepicker").datepicker({dateFormat: "yy-mm-dd"});
+            $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
+            $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
             $("#datefrom").datepicker({dateFormat: "yy-mm-dd"});
             $("#dateto").datepicker({dateFormat: "yy-mm-dd"});
         });
@@ -200,9 +201,15 @@
                         </div>
                     </div>
                     <div class="group-control">
-                        <div class="name">Ngày:</div>
+                        <div class="name">Từ ngày:</div>
                         <div class="control">
-                            <input type="text" id="datepicker" name="date">
+                            <input type="text" id="datepickerFrom" name="dateF">
+                        </div>
+                    </div>
+                    <div class="group-control">
+                        <div class="name">Đến ngày:</div>
+                        <div class="control">
+                            <input type="text" id="datepickeTo" name="dateT">
                         </div>
                     </div>
                     <div class="group-control">

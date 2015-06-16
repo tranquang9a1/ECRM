@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -53,8 +54,8 @@ public class ScheduleController {
         request.setAttribute("TEACHERS", tblUserEntities);
         request.setAttribute("ACTIVETAB", activeTab);
         request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
-        Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
-        request.setAttribute("SCHEDULES",scheduleEntity);
+        /*Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
+        request.setAttribute("SCHEDULES",scheduleEntity);*/
         return "Staff_MappingSchedule";
     }
 
@@ -261,26 +262,52 @@ public class ScheduleController {
     @RequestMapping(value = "importManually")
     public String importManually(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("all") String all, @RequestParam("avai") String avai,
                                  @RequestParam("slot") String slot, @RequestParam("numberOfSlots") int numberOfSlots,
-                                 @RequestParam("numberOfStudent") int numberOfStudent, @RequestParam("date") String date) throws ParseException {
+                                 @RequestParam("numberOfStudent") int numberOfStudent, @RequestParam("dateF") String dateFrom,
+                                 @RequestParam("dateT") String dateTo) throws ParseException {
         slot = "Slot " + slot;
         String timeFrom = convertSlotToTime(slot);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
-        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
-                teachingDate, true);
-        if (all.equals("0")) {
-            scheduleDAO.persist(tblScheduleEntity);
-        } else {
-            TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(all));
-            if (tblScheduleEntity1 != null) {
-                tblScheduleEntity1.setUsername(username);
-                tblScheduleEntity1.setSlots(numberOfSlots);
-                scheduleDAO.merge(tblScheduleEntity1);
-            } else {
-                scheduleDAO.persist(tblScheduleEntity);
-            }
+        LocalDate dateF = new LocalDate(dateFrom);
+        LocalDate dateT = new LocalDate(dateTo);
+        if(dateTo.trim().length()>0){
+            for(LocalDate date = dateF; date.isBefore(dateT); date.plusDays(1)){
+                java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
+                TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
+                        teachingDate, true);
+                if (all.equals("0")) {
+                    scheduleDAO.persist(tblScheduleEntity);
+                } else {
+                    TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(all));
+                    if (tblScheduleEntity1 != null) {
+                        tblScheduleEntity1.setIsActive(false);
+                        scheduleDAO.merge(tblScheduleEntity1);
+                        scheduleDAO.persist(tblScheduleEntity);
+                    } else {
+                        scheduleDAO.persist(tblScheduleEntity);
+                    }
 
+                }
+            }
+        }else {
+            java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
+            TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
+                    teachingDate, true);
+            if (all.equals("0")) {
+                scheduleDAO.persist(tblScheduleEntity);
+            } else {
+                TblScheduleEntity tblScheduleEntity1 = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom, Integer.parseInt(all));
+                if (tblScheduleEntity1 != null) {
+                    tblScheduleEntity1.setIsActive(false);
+                    scheduleDAO.merge(tblScheduleEntity1);
+                    scheduleDAO.persist(tblScheduleEntity);
+                } else {
+                    scheduleDAO.persist(tblScheduleEntity);
+                }
+
+            }
         }
+
+
         return "redirect:/staff/schedule?ACTIVETAB=tab2";
     }
     //Search

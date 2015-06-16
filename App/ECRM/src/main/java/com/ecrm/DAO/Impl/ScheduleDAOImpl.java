@@ -2,6 +2,7 @@ package com.ecrm.DAO.Impl;
 
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.ScheduleDAO;
+import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
 import org.springframework.stereotype.Repository;
 
@@ -81,5 +82,13 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         q.setParameter("classroomId", classroomId);
         TblScheduleEntity tblScheduleEntity = (TblScheduleEntity) q.getSingleResult();
         return tblScheduleEntity;
+    }
+
+    public List<TblScheduleEntity> findAllScheduleInClassroom(int classroomId){
+        Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.classroomId = :classroomId and" +
+                " CONVERT (Date, CURRENT_TIMESTAMP) = s.date CONVERT (Time, CURRENT_TIMESTAMP) < DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) ");
+        q.setParameter("classroomId", classroomId);
+        List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+        return tblScheduleEntities;
     }
 }

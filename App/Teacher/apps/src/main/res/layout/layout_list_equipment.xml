@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:layout_height="match_parent"
+              android:gravity="top"
+              android:padding="16dp"
+        >
+    <LinearLayout
+            android:layout_width="@dimen/thumbnail_width"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <ImageView
+                android:id="@+id/equipmentImg"
+                android:layout_width="@dimen/thumbnail_width"
+                android:layout_height="@dimen/thumbnail_height"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher"
+                android:contentDescription="@string/highlight_image"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:orientation="vertical">
+
+        <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerItem" android:layout_gravity="right" android:layout_weight="0"
+                android:entries="@array/levelItems"
+                android:visibility="invisible"
+
+                />
+
+        <EditText android:layout_height="match_parent"
+                  android:layout_width="match_parent"
+                  android:id="@+id/txtDamaged"
+                  android:visibility="invisible">
+
+        </EditText>
+
+
+    </LinearLayout>
+
+</LinearLayout>

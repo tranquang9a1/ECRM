@@ -40,6 +40,45 @@ public class ParseUtils {
         return new String[0];
     }
 
+    public static String[] parseEquipmentJson(String json){
+        try {
+            JSONArray jsonEquipment = new JSONArray(json);
+            String[] equipment = new String[jsonEquipment.length() + 1];
+            for (int i = 0; i < jsonEquipment.length(); i++){
+                equipment[i] = jsonEquipment.getString(i);
+            }
+            return equipment;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new String[0];
+    }
+
+
+    public static List<ClassroomInfo> parseClassroom(String json) {
+        List<ClassroomInfo> result = new ArrayList<ClassroomInfo>();
+        try {
+            if (json == null) {
+                return result;
+            }
+
+            JSONArray jsonClassroom = new JSONArray(json);
+
+            for (int i = 0 ; i< jsonClassroom.length(); i++) {
+                ClassroomInfo classroomInfo = new ClassroomInfo();
+                classroomInfo.setClassid(jsonClassroom.getJSONObject(i).getInt("classId"));
+                classroomInfo.setClassName(jsonClassroom.getJSONObject(i).getString("className"));
+                classroomInfo.setTimeFrom(jsonClassroom.getJSONObject(i).getString("timeFrom"));
+                classroomInfo.setTimeTo(jsonClassroom.getJSONObject(i).getString("timeTo"));
+                result.add(classroomInfo);
+            }
+        }catch (Exception e) {
+            Log.d("Wrong json", "Parse Class");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static User parseUserJson(String json) {
         User result = null;
         try {

@@ -11,11 +11,23 @@
     <color name="evenRow">#ffffff</color>
     <color name="oddRow">#f2f2f2</color>
 
-    <color name="primary">#8BC34A</color>
-    <color name="primaryDark">#689F38</color>
-    <color name="primaryLight">#DCEDC8</color>
-    <color name="accent">#FF4081</color>
-    <color name="textPrimary">#212121</color>
-    <color name="textSecondary">#727272</color>
-    <color name="divider">#B6B6B6</color>
+    <color name="colorPrimary">#607d8b</color>
+    <color name="colorPrimaryDark">#455a64</color>
+    <color name="colorPrimaryLight">#cfd8dc</color>
+    <color name="colorAccent">#ffc107</color>
+
+    <color name="green">#1DBF97</color>
+    <color name="red">#FF4B4B</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="black_light">#99444444</color>
+    <color name="gray_dark">#616161</color>
+    <color name="gray_light">#9e9e9e</color>
+    <color name="brown">#5d4037</color>
+
+    <color name="indicator_1">#55B3C2</color>
+    <color name="indicator_2">#64A4A4</color>
+    <color name="indicator_3">#66D7B9</color>
+    <color name="indicator_4">#FDBC7D</color>
 </resources>

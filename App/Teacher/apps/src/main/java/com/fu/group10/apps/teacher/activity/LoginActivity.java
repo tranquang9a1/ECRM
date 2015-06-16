@@ -3,6 +3,7 @@ package com.fu.group10.apps.teacher.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,7 +27,7 @@ import java.util.Map;
 /**
  * Created by QuangTV on 5/30/2015.
  */
-public class LoginActivity extends Activity{
+public class LoginActivity  extends ActionBarActivity {
 
     private static final String result ="";
     private static final String defaultPassword = "123ecrm";
@@ -104,37 +105,37 @@ public class LoginActivity extends Activity{
             //Map<String, String> params = new HashMap<String, String>();
             //params.put("username", username);
             //params.put("password", password);
-            String url = Constants.API_LOGIN + "?username="+username+"&password="+password;
-            RequestSender sender = new RequestSender();
-            sender.start(url, new RequestSender.IRequestSenderComplete() {
-                @Override
-                public void onRequestComplete(String result) {
-                    user = ParseUtils.parseUserJson(result);
-                    if (user != null ) {
-                        if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {
-                            firstLogin(user.getPassword());
-                        } else {
+            //String url = Constants.API_LOGIN + "?username="+username+"&password="+password;
+            //RequestSender sender = new RequestSender();
+            //sender.start(url, new RequestSender.IRequestSenderComplete() {
+                //@Override
+                //public void onRequestComplete(String result) {
+                   // user = ParseUtils.parseUserJson(result);
+                   // if (user != null ) {
+                    //    if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {
+                     //       firstLogin(user.getPassword());
+                       // } else {
 
-                            ArrayList<ClassroomInfo> listClassroom = new ArrayList<ClassroomInfo>();
-                            for (int i = 0; i < user.getClassrooms().size(); i++) {
-                                listClassroom.add(user.getClassrooms().get(i));
-                            }
-                            openMainActivity(listClassroom);
+                      //      ArrayList<ClassroomInfo> listClassroom = new ArrayList<ClassroomInfo>();
+                     //       for (int i = 0; i < user.getClassrooms().size(); i++) {
+                      //          listClassroom.add(user.getClassrooms().get(i));
+                      //      }
+                            openMainActivity();
                         }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG).show();
-                    }
+                   // } else {
+                   //     Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG).show();
+                   // }
 
-                }
+               // }
 
-            });
-
-
+           // });
 
 
 
 
-        }
+
+
+        //}
     }
 
     private boolean isPasswordValid(String password) {
@@ -148,10 +149,10 @@ public class LoginActivity extends Activity{
 
 
 
-    void openMainActivity(ArrayList<ClassroomInfo> listClassroom) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putParcelableArrayListExtra("listClass", listClassroom);
-        intent.putExtra("username", user.getUsername());
+    void openMainActivity() {
+        Intent intent = new Intent(this, ListRoomActivity.class);
+        //intent.putParcelableArrayListExtra("listClass", listClassroom);
+        //intent.putExtra("username", user.getUsername());
         startActivity(intent);
         finish();
     }

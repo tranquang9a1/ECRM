@@ -20,6 +20,10 @@ public class ClassroomInfo  implements Parcelable{
         this.timeTo = timeTo;
     }
 
+    public ClassroomInfo() {
+        
+    }
+
     public ClassroomInfo(Parcel in) {
         this.classid = in.readInt();
         this.className = in.readString();

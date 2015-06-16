@@ -15,6 +15,7 @@ import com.fu.group10.apps.teacher.R;
 import android.webkit.WebViewClient;
 import com.fu.group10.apps.teacher.activity.CreateReportActivity;
 import com.fu.group10.apps.teacher.activity.MainActivity;
+import com.fu.group10.apps.teacher.model.ClassroomInfo;
 import com.fu.group10.apps.teacher.model.DamagedEquipment;
 import com.fu.group10.apps.teacher.utils.JsInterface;
 
@@ -92,6 +93,7 @@ public class ClassroomFragment extends Fragment {
             refreshMap();
         }
     }
+
 
 
 

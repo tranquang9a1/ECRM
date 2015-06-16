@@ -49,8 +49,8 @@ public class ReportDetailDAOImpl extends BaseDAO<TblReportDetailEntity, Integer>
     }
 
     public List<TblReportDetailEntity> getReportByClassId(int classId) {
-        Query query = entityManager.createQuery("Select rd from TblReportDetailEntity rd join TblReportEntity re " +
-                "where re.id = rd.reportId and rd.status = false and rd.classId= :classId ");
+        Query query = entityManager.createQuery("Select rd from TblReportDetailEntity rd join rd.tblReportByReportId re " +
+                "where rd.status = false and re.classRoomId= :classId ");
         query.setParameter("classId", classId);
 
         return query.getResultList();

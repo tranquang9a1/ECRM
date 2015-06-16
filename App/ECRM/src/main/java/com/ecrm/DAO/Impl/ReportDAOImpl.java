@@ -136,7 +136,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     @Override
     public List<Integer> getReportByClassId() {
         Query query  = entityManager.createQuery("Select u.classRoomId from TblReportEntity u where u.status = :statusnew " +
-                "order by u.createTime DESC");
+                "group by u.classRoomId ");
         query.setParameter("statusnew", ReportStatus.NEW.getValue());
         return query.getResultList();
 

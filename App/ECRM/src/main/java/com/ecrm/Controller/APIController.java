@@ -243,25 +243,43 @@ public class APIController {
         for (int classId : listClass) {
             //int id = Integer.parseInt(classId);
             List<TblReportDetailEntity> details = reportDetailDAO.getReportByClassId(classId);
+            if (details.size() == 0) {
+                continue;
+            }
+
             TblClassroomEntity classroomEntity = classroomDAO.find(classId);
             List<EquipmentDTO> equipments = new ArrayList<EquipmentDTO>();
             int reportId = 0;
+            Map<String , Integer> mapCount = new HashMap<String, Integer>();
+
+            for (TblReportDetailEntity detail : details) {
+                if (mapCount.get(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName()) != null) {
+                    mapCount.put(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName(),
+                            mapCount.get(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName()) + 1);
+                } else {
+                    mapCount.put(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName(), 1);
+                }
+            }
+            Map<String, Boolean> mapManage = new HashMap<String, Boolean>();
             for (TblReportDetailEntity entity : details) {
-                EquipmentDTO detailDTO = new EquipmentDTO();
-                detailDTO.setEquipmentName(entity.getTblEquipmentByEquipmentId().getName());
-                detailDTO.setDamage(entity.getDamagedLevel());
-                detailDTO.setEvaluate(entity.getSolution());
-                detailDTO.setReportId(entity.getReportId());
-                detailDTO.setStatus(entity.isStatus());
-                detailDTO.setQuantity(1);
-                reportId = entity.getReportId();
-                equipments.add(detailDTO);
+                    EquipmentDTO detailDTO = new EquipmentDTO();
+
+                    detailDTO.setEquipmentName(entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName());
+                    detailDTO.setDamage(entity.getDamagedLevel());
+                    detailDTO.setEvaluate(entity.getDescription());
+                    detailDTO.setReportId(entity.getReportId());
+                    detailDTO.setStatus(entity.isStatus());
+                    detailDTO.setQuantity(1);
+                    reportId = entity.getReportId();
+                    equipments.add(detailDTO);
+
+
             }
             TblReportEntity reportEntity = reportDAO.find(reportId);
             ReportClassDTO reportClassDTO = new ReportClassDTO();
             reportClassDTO.setRoomId(classId);
             reportClassDTO.setEquipments(equipments);
-            reportClassDTO.setUserReport(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName());
+            reportClassDTO.setUserReport(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername());
             reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
             reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
             reportClassDTO.setEvaluate(reportEntity.getEvaluate());
@@ -485,10 +503,42 @@ public class APIController {
             dto.setClassId(scheduleEntity.getClassroomId());
             dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
             dto.setTimeFrom(scheduleEntity.getTimeFrom().getTime() + "");
-            dto.setTimeTo(scheduleEntity.getTimeFrom().getTime() + (scheduleEntity.getSlots() * Constant.TIME_ONE_SLOT * 1000) + "");
+            dto.setTimeTo(scheduleEntity.getTimeFrom().getTime() + (scheduleEntity.getSlots() * Constant.TIME_ONE_SLOT * 60 * 1000) + "");
             result.add(dto);
         }
         return result;
+    }
+
+    @RequestMapping(value = "/getChangeRoom", method = RequestMethod.GET)
+    public @ResponseBody ResultDTO getChangeRoom(@RequestParam("classId") int classId) {
+        ResultDTO dto = new ResultDTO();
+        List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classId);
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
+        for(TblScheduleEntity tblScheduleEntity: tblScheduleEntityList){
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            if(!classroom.isEmpty()){
+                TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroom.get(0));
+                tblScheduleEntity.setIsActive(false);
+                scheduleDAO.merge(tblScheduleEntity);
+                TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), classroomEntity.getId(),
+                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng",tblScheduleEntity.getTimeFrom(),
+                        tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
+                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername()+" từ phòng: "+
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phòng: "+classroomEntity.getName()+".";
+                scheduleDAO.persist(newSchedule);
+                dto.setError(message);
+                dto.setError_code(100);
+                return dto;
+            }else{
+                String message = "Không còn phòng trống: "+ tblScheduleEntity.getUsername()+" của phòng: "+
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+".";
+                dto.setError(message);
+                dto.setError_code(101);
+                return  dto;
+            }
+        }
+        return new ResultDTO(101, "Không có thời khóa biểu");
+
     }
 
 
@@ -507,7 +557,7 @@ public class APIController {
             list.add("Bóng Đèn");
         }
         if (roomType.getFan() > 0) {
-            list.add("Quạt");
+            list.add("Máy Quạt");
         }
         if (roomType.getProjector() > 0) {
             list.add("Máy Chiếu");
@@ -525,4 +575,8 @@ public class APIController {
     }
 
 
+
+
 }
+
+

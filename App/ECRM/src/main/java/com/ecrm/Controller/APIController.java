@@ -12,12 +12,11 @@ import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
@@ -48,8 +47,9 @@ public class APIController {
 
     @Autowired
     ScheduleDAOImpl scheduleDAO;
+
     @RequestMapping(value = "/map")
-    public String generateMap(HttpServletRequest request, @RequestParam("id")int classroomId){
+    public String generateMap(HttpServletRequest request, @RequestParam("id") int classroomId) {
         TblClassroomEntity classroomEntity = new TblClassroomEntity();
         Collection<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
 
@@ -60,8 +60,10 @@ public class APIController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public @ResponseBody AccountDTO login(@RequestParam("username")String username, @RequestParam("password") String password,
-                                          HttpServletRequest request) {
+    public
+    @ResponseBody
+    AccountDTO login(@RequestParam("username") String username, @RequestParam("password") String password,
+                     HttpServletRequest request) {
         AccountDTO accountDTO = new AccountDTO();
 
         TblUserEntity userEntity = userDAO.login(username, password);
@@ -74,76 +76,130 @@ public class APIController {
     }
 
     @RequestMapping(value = "/getReportByUsername", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     List<ReportDTO> getReport(@RequestParam("username") String username) {
         List<TblReportEntity> entities = reportDAO.getReportByUserId(username);
         return Utils.convertFromListEntityToListDTO(entities);
     }
 
-    @RequestMapping(value="/getAllReport", method = RequestMethod.GET)
-    public @ResponseBody List<ReportDTO> getAllReport(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+    @RequestMapping(value = "/getAllReport", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<ReportDTO> getAllReport(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
         List<TblReportEntity> entities = reportDAO.getAllReport(limit, offset);
         return Utils.convertFromListEntityToListDTO(entities);
     }
 
-    @RequestMapping(value="/createReport", method = RequestMethod.POST)
-    public @ResponseBody
-    ResultDTO createReport( @RequestParam("username") String username,@RequestParam("RoomId") int roomId,
-                            @RequestParam("Evaluate") String evaluate, @RequestParam("Description") String desc,
-                            @RequestParam("ListDamaged") String listDamaged,
-                            @RequestParam("ListPosition") String listPosition,
-                            @RequestParam("ListEvaluate") String listEvaluate
-                            ) {
+    @RequestMapping(value = "/createReport", method = RequestMethod.POST)
+    @Transactional
+    public
+    @ResponseBody
+    ResultDTO createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest) {
         ResultDTO resultDTO = new ResultDTO();
 
         try {
-            TblClassroomEntity classroomEntity = classroomDAO.find(roomId);
-            TblReportEntity report = new TblReportEntity(username, roomId, evaluate);
-            reportDAO.insert(report);
-            int reportId = report.getId();
+            HttpSession session = request.getSession();
+            TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+            TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
 
-            String[] equipments = listDamaged.split(",");
-            String[] evaluates = listEvaluate.split(",");
-            String[] positions = listPosition.split("-");
-            List<Integer> listId = new ArrayList<Integer>();
+            TblReportEntity report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
+            reportDAO.persist(report);
 
-            Map<String, String> mapEquipment = new HashMap<String, String>();
-            int flag =0;
-            for(int j = 0; j < equipments.length; j++) {
-                if (mapEquipment.get(equipments[j]) == null) {
-                    mapEquipment.put(equipments[j], evaluates[flag]);
-                    flag++;
+            String[] evaluates = reportRequest.getListEvaluate().split(",");
+            int category = 0;
+            String equipmentNames = "";
+            TblEquipmentEntity equip;
+            TblEquipmentCategoryEntity categoryName;
+
+            if ("".equals(reportRequest.getListDamaged())) {
+                for (int i = 0; i < evaluates.length; i++) {
+                    category = Integer.parseInt(evaluates[i].split("-")[0]);
+
+                    equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
+                    equipmentNames += categoryName.getName() + ", ";
+                }
+            } else {
+                String[] equipments = reportRequest.getListDamaged().split("--");
+                for (int i = 0; i < evaluates.length; i++) {
+                    category = Integer.parseInt(evaluates[i].split("-")[0]);
+                    List<String> equipsInCate = getEquipmentsInCategory(equipments, category);
+
+                    if (equipsInCate.size() == 0) {
+                        equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+
+                        categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
+                        equipmentNames += categoryName.getName() + ", ";
+                    } else {
+                        for (int j = 0; j < equipsInCate.size(); j++) {
+                            equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+
+                            if (j == 0) {
+                                categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
+                                equipmentNames += categoryName.getName() + ", ";
+                            }
+                        }
+                    }
                 }
             }
 
-            for(int i = 0; i < equipments.length; i++) {
-                TblEquipmentEntity entity = new TblEquipmentEntity(equipmentCategoryDAO.findEquipmentId(equipments[i]),
-                        roomId, "", "", positions[i], 0, true);
-                equipmentDAO.insert(entity);
-                TblReportDetailEntity detailEntity = new TblReportDetailEntity(entity.getId(), reportId,mapEquipment.get(equipments[i]), "1", positions[i]);
-                reportDetailDAO.insert(detailEntity);
-
-            }
-
-            reportDAO.updateDamageLevel(checkDamagedLevel(classroomEntity), reportId);
-            classroomDAO.updateDamageLevel(checkDamagedLevel(classroomEntity), roomId);
+            int damagedLevel = checkDamagedLevel(room);
+            room.setDamagedLevel(damagedLevel);
+            classroomDAO.merge(room);
 
             resultDTO.setError_code(100);
             resultDTO.setError("OK");
             return resultDTO;
-        }catch (Exception e) {
+        } catch (Exception e) {
             resultDTO.setError_code(101);
             e.printStackTrace();
             return resultDTO;
         }
+    }
 
+    private TblEquipmentEntity insertEquipment(int reportId, int roomId, int category, String pos, String evaluate, String description) {
+        String position = null;
+        if (category < 7) {
+            position = "[" + category + "]";
+        } else if (pos != null && "".equals(pos) == false) {
+            position = pos;
+        }
 
+        TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, category, position);
 
+        if (equip != null) {
+            equip.setStatus(true);
+            equipmentDAO.merge(equip);
+        } else {
+            equip = new TblEquipmentEntity(category, roomId, null, null, position, 0, true);
+            equipmentDAO.persist(equip);
+        }
 
+        TblReportDetailEntity reportDetail = new TblReportDetailEntity(equip.getId(), reportId, evaluate, description, equip.getPosition());
+        reportDetailDAO.persist(reportDetail);
+
+        return equip;
+    }
+
+    //  PRIVATE METHOD
+    private List<String> getEquipmentsInCategory(String[] equipments, int category) {
+
+        List<String> result = new ArrayList<String>();
+        for (int i = 0; i < equipments.length; i++) {
+            String[] equip = equipments[i].split("-");
+            if (Integer.parseInt(equip[0]) == category) {
+                result.add(equip[1]);
+            }
+        }
+
+        return result;
     }
 
     @RequestMapping(value = "/getReportStaff", method = RequestMethod.GET)
-    public @ResponseBody List<ReportClassDTO> getReportStaff() {
+    public
+    @ResponseBody
+    List<ReportClassDTO> getReportStaff() {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
         List<Integer> listClass = reportDAO.getReportByClassId();
         for (int classId : listClass) {
@@ -179,23 +235,27 @@ public class APIController {
 
     }
 
-    @RequestMapping(value = "/getAvailableRoom", method=RequestMethod.GET)
-    public @ResponseBody List<String> getAvailableRoom(@RequestParam("id") int roomId) {
+    @RequestMapping(value = "/getAvailableRoom", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<String> getAvailableRoom(@RequestParam("id") int roomId) {
         List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.findAll());
         return availableRooms;
     }
 
 
-    @RequestMapping(value="/resolve", method = RequestMethod.POST)
-    public @ResponseBody ResultDTO resolveReport(@RequestParam("reportId") int reportId,
-                                                 @RequestParam("equipmentId") int equipmentId,
-                                                 @RequestParam("solution") String solution) {
+    @RequestMapping(value = "/resolve", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResultDTO resolveReport(@RequestParam("reportId") int reportId,
+                            @RequestParam("equipmentId") int equipmentId,
+                            @RequestParam("solution") String solution) {
         ResultDTO result = new ResultDTO();
         try {
             reportDAO.resolveReport(reportId, equipmentId, solution);
             result.setError_code(100);
             result.setError("OK");
-        }catch (Exception e) {
+        } catch (Exception e) {
             result.setError_code(101);
             result.setError(e.getMessage());
         }
@@ -303,7 +363,7 @@ public class APIController {
                             loaDamagedLevel = 1;
                         } else if (loa.getDamagedLevel().equals("2")) {
                             loaDamagedLevel = 3;
-                        } else if (loa.getDamagedLevel().equals("1")){
+                        } else if (loa.getDamagedLevel().equals("1")) {
                             loaDamagedLevel = 5;
                         }
                     }
@@ -315,7 +375,7 @@ public class APIController {
                             denDamagedLevel = 10;
                         } else if (den.getDamagedLevel().equals("2")) {
                             denDamagedLevel = 20;
-                        } else if (den.getDamagedLevel().equals("1")){
+                        } else if (den.getDamagedLevel().equals("1")) {
                             denDamagedLevel = 50;
                         }
                     }
@@ -330,7 +390,7 @@ public class APIController {
                                 banDamagedLevel += 2;
                             } else if (ban.getDamagedLevel().equals("2")) {
                                 banDamagedLevel += 3;
-                            } else if (ban.getDamagedLevel().equals("1")){
+                            } else if (ban.getDamagedLevel().equals("1")) {
                                 banDamagedLevel += 5;
                             }
                         }
@@ -346,7 +406,7 @@ public class APIController {
                                 gheDamagedLevel += 1;
                             } else if (ghe.getDamagedLevel().equals("2")) {
                                 gheDamagedLevel += 2;
-                            } else if (ghe.getDamagedLevel().equals("1")){
+                            } else if (ghe.getDamagedLevel().equals("1")) {
                                 gheDamagedLevel += 3;
                             }
                         }
@@ -363,9 +423,10 @@ public class APIController {
     }
 
 
-
     @RequestMapping(value = "/schedule", method = RequestMethod.GET)
-    public @ResponseBody List<ScheduleDTO> getSchedule(@RequestParam("username") String username) {
+    public
+    @ResponseBody
+    List<ScheduleDTO> getSchedule(@RequestParam("username") String username) {
         List<ScheduleDTO> result = new ArrayList<ScheduleDTO>();
         List<TblScheduleEntity> listSchedule = scheduleDAO.getSchedulesOfUser(username);
         for (TblScheduleEntity scheduleEntity : listSchedule) {
@@ -373,7 +434,7 @@ public class APIController {
             dto.setClassId(scheduleEntity.getClassroomId());
             dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
             dto.setTimeFrom(scheduleEntity.getTimeFrom().getTime() + "");
-            dto.setTimeTo(scheduleEntity.getTimeFrom().getTime() + (scheduleEntity.getSlots()* Constant.TIME_ONE_SLOT*1000) + "");
+            dto.setTimeTo(scheduleEntity.getTimeFrom().getTime() + (scheduleEntity.getSlots() * Constant.TIME_ONE_SLOT * 1000) + "");
             result.add(dto);
         }
         return result;
@@ -381,7 +442,9 @@ public class APIController {
 
 
     @RequestMapping(value = "/getEquipments", method = RequestMethod.GET)
-    public @ResponseBody List<String> getEquipment(@RequestParam("classId") int classId) {
+    public
+    @ResponseBody
+    List<String> getEquipment(@RequestParam("classId") int classId) {
         List<EquipmentClassDTO> result = new ArrayList<EquipmentClassDTO>();
         TblClassroomEntity classroomEntity = classroomDAO.find(classId);
         TblRoomTypeEntity roomType = classroomEntity.getTblRoomTypeByRoomTypeId();
@@ -389,7 +452,7 @@ public class APIController {
         if (roomType.getAirConditioning() > 0) {
             list.add("Máy Lạnh");
         }
-        if(roomType.getBulb() > 0) {
+        if (roomType.getBulb() > 0) {
             list.add("Bóng Đèn");
         }
         if (roomType.getFan() > 0) {

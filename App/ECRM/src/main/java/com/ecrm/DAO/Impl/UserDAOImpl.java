@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by QuangTV on 5/18/2015.
@@ -34,6 +35,13 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         query.setParameter("username", username);
         TblUserEntity tblUserEntity = (TblUserEntity) query.getSingleResult();
         return tblUserEntity;
+    }
+
+    public List<TblUserEntity> findTeacher(){
+        Query q = entityManager.createQuery("SELECT u from TblUserEntity u where u.roleId =:roleId");
+        q.setParameter("roleId", 3);
+        List<TblUserEntity> tblUserEntities = q.getResultList();
+        return tblUserEntities;
     }
 
     @Transactional

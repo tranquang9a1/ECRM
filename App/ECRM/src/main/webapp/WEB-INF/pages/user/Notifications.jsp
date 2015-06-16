@@ -202,29 +202,26 @@
 
 <script>
     <c:if test="${room.id != 0}">
-    <c:set var="rt" value="${requestScope.ROOMTYPE}" />
-    <c:set var="equip" value="${requestScope.EQUIPMENTS}" />
-    var positionEquipments = {};
-    var damageEquip = {};
-    <c:if test="${equip.size() > 0}" >
-        <c:forEach begin="0" end="${equip.size() -1}" var="i">
-            <c:if test="${equip[i].position != null && equip[i].status == true}">
-                positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
-            </c:if>
-            if(damageEquip[${equip[i].categoryId}] == undefined) {
-                damageEquip[${equip[i].categoryId}] = ${equip[i].status};
-            } else if(damageEquip[${equip[i].categoryId}] == false) {
-                damageEquip[${equip[i].categoryId}] = ${equip[i].status};
-            }
-        </c:forEach>
-    </c:if>
-
-    window.onload = function () {
+        <c:set var="rt" value="${requestScope.ROOMTYPE}" />
+        <c:set var="equip" value="${requestScope.EQUIPMENTS}" />
+        var positionEquipments = {};
+        var damageEquip = {};
+        <c:if test="${equip.size() > 0}" >
+            <c:forEach begin="0" end="${equip.size() -1}" var="i">
+                <c:if test="${equip[i].position != null && equip[i].status == false}">
+                    positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
+                </c:if>
+                if(damageEquip[${equip[i].categoryId}] == undefined) {
+                    damageEquip[${equip[i].categoryId}] = ${equip[i].status};
+                } else if(damageEquip[${equip[i].categoryId}] == false) {
+                    damageEquip[${equip[i].categoryId}] = ${equip[i].status};
+                }
+            </c:forEach>
+        </c:if>
         loadEquipment(damageEquip, ${rt.airConditioning}, ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
         showMap('classroom-map', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
                 ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
         setChooseEquipment('classroom-map');
-    }
     </c:if>
     <c:if test="${room.id == 0}">
         document.getElementById("report-btn").className += " disable";

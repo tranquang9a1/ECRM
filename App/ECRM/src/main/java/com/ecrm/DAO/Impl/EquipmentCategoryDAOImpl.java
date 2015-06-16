@@ -26,10 +26,10 @@ public class EquipmentCategoryDAOImpl extends BaseDAO<TblEquipmentCategoryEntity
         Query query = entityManager.createQuery("SELECT c " +
                 "FROM TblEquipmentCategoryEntity c " +
                 "WHERE c.id IN (SELECT e.categoryId " +
-                "FROM TblEquipmentEntity e " +
-                "WHERE e.classroomId = :roomId " +
-                "AND e.status = true " +
-                "GROUP BY e.categoryId)");
+                    "FROM TblEquipmentEntity e " +
+                    "WHERE e.classroomId = :roomId " +
+                    "AND e.status = false " +
+                    "GROUP BY e.categoryId)");
         query.setParameter("roomId", room);
 
         List queryResult = query.getResultList();

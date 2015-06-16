@@ -106,7 +106,7 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         Query query = entityManager.createQuery("SELECT c " +
                 "FROM TblEquipmentEntity c " +
                 "WHERE c.classroomId = :roomId " +
-                "AND c.status = true");
+                "AND c.status = false");
         query.setParameter("roomId", roomId);
 
         List queryResult = query.getResultList();
@@ -127,7 +127,7 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         Query query = entityManager.createQuery("SELECT c " +
                 "FROM TblEquipmentEntity c " +
                 "WHERE c.classroomId = :roomId " +
-                "AND c.status = true " +
+                "AND c.status = false " +
                 "And c.categoryId = :category");
         query.setParameter("roomId", roomId);
         query.setParameter("category", category);

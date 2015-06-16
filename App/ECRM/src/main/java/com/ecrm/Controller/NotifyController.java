@@ -118,12 +118,12 @@ public class NotifyController {
         //Change Equipment status and ReportDetail status
         List<TblEquipmentEntity> equips = equipmentDAO.getDamagedEquipmentsByCategory(room, category);
         for (int i = 0; i < equips.size(); i++) {
-            equips.get(i).setStatus(false);
+            equips.get(i).setStatus(true);
             equipmentDAO.merge(equips.get(i));
 
             List<TblReportDetailEntity> reportDetails = reportDetailDAO.getUnresolveReportDetail(equips.get(i).getId());
             for (int j = 0; j < reportDetails.size(); j++) {
-                reportDetails.get(j).setStatus(false);
+                reportDetails.get(j).setStatus(true);
                 reportDetails.get(j).setResolveTime(new Timestamp(new Date().getTime()));
                 reportDetailDAO.merge(reportDetails.get(j));
             }

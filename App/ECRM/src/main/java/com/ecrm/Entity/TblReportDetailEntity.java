@@ -29,7 +29,7 @@ public class TblReportDetailEntity {
         this.damagedLevel = damagedLevel;
         this.description = description;
         this.position = position;
-        this.status = true;
+        this.status = false;
     }
 
     public TblReportDetailEntity(int equipmentId, int reportId, boolean status, String position) {

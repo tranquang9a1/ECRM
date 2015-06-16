@@ -100,7 +100,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
                     var divBanGV = document.createElement('div');
                     position = '[' + i + ',' + j + ']';
 
-                    if(equipments[position] != undefined && equipments[position].status == true) {
+                    if(equipments[position] != undefined && equipments[position].status == false) {
                         divBanGV.className = 'banGV damaged';
                     } else {
                         divBanGV.className = 'equipment banGV';
@@ -114,7 +114,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
                     var divGheGV = document.createElement('div');
                     position = '[' + i + ',' + j + ',0]';
 
-                    if(equipments[position] != undefined && equipments[position].status == true) {
+                    if(equipments[position] != undefined && equipments[position].status == false) {
                         divGheGV.className = 'ghe damaged';
                     } else {
                         divGheGV.className = 'equipment ghe';
@@ -138,7 +138,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
                 var divBan = document.createElement('div');
                 position = '[' + i + ',' + j + ']';
 
-                if(equipments[position] != undefined && equipments[position].status == true) {
+                if(equipments[position] != undefined && equipments[position].status == false) {
                     divBan.className = 'ban damaged';
                 } else {
                     divBan.className = 'equipment ban';
@@ -158,7 +158,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
                     var divGhe = document.createElement('div');
                     position = '[' + i + ',' + j + ',' + k + ']';
 
-                    if(equipments[position] != undefined && equipments[position].status == true) {
+                    if(equipments[position] != undefined && equipments[position].status == false) {
                         divGhe.className = 'ghe damaged';
                     } else {
                         divGhe.className = 'equipment ghe';
@@ -187,7 +187,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
     //projector
     if(projector>0){
         var divProjector = document.createElement('div');
-        if(equipments["[1]"] != undefined && equipments["[1]"].status == true) {
+        if(equipments["[1]"] != undefined && equipments["[1]"].status == false) {
             divProjector.className = 'subThietBi projector damaged';
         } else {
             divProjector.className = 'equipment subThietBi projector';
@@ -201,7 +201,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
     //tivi
     if(tivi>0){
         var divTivi = document.createElement('div');
-        if(equipments["[2]"] != undefined && equipments["[2]"].status == true) {
+        if(equipments["[2]"] != undefined && equipments["[2]"].status == false) {
             divTivi.className = 'subThietBi tivi damaged';
         } else {
             divTivi.className = 'equipment subThietBi tivi';
@@ -215,7 +215,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
     //may lanh
     if(mayLanh>0){
         var divMayLanh = document.createElement('div');
-        if(equipments["[3]"] != undefined && equipments["[3]"].status == true) {
+        if(equipments["[3]"] != undefined && equipments["[3]"].status == false) {
             divMayLanh.className = 'subThietBi mayLanh damaged';
         } else {
             divMayLanh.className = 'equipment subThietBi mayLanh';
@@ -229,7 +229,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
     //quat
     if(quat>0){
         var divQuat = document.createElement('div');
-        if(equipments["[4]"] != undefined && equipments["[4]"].status == true) {
+        if(equipments["[4]"] != undefined && equipments["[4]"].status == false) {
             divQuat.className = 'subThietBi quat damaged';
         } else {
             divQuat.className = 'equipment subThietBi quat';
@@ -244,7 +244,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
     //loa
     if(loa>0){
         var divLoa = document.createElement('div');
-        if(equipments["[5]"] != undefined && equipments["[5]"].status == true) {
+        if(equipments["[5]"] != undefined && equipments["[5]"].status == false) {
             divLoa.className = 'subThietBi loa damaged';
         } else {
             divLoa.className = 'equipment subThietBi loa';

@@ -180,10 +180,10 @@ public class UserController {
         TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, category, position);
 
         if (equip != null) {
-            equip.setStatus(true);
+            equip.setStatus(false);
             equipmentDAO.merge(equip);
         } else {
-            equip = new TblEquipmentEntity(category, roomId, null, null, position, 0, true);
+            equip = new TblEquipmentEntity(category, roomId, null, null, position, 0, false);
             equipmentDAO.persist(equip);
         }
 
@@ -223,7 +223,7 @@ public class UserController {
         Collection<TblEquipmentEntity> damagedEquipment = new ArrayList<TblEquipmentEntity>();
         Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
         for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            if (tblEquipmentEntity.isStatus()) {
+            if (!tblEquipmentEntity.isStatus()) {
                 damagedEquipment.add(tblEquipmentEntity);
             }
         }

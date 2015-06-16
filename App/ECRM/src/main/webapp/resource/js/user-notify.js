@@ -353,22 +353,22 @@ function sentReport(){
 function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
     var listEquipment = new Array();
     if(listDamage[1] != undefined && projector > 0) {
-        listEquipment.push({id: 1, classname: "projector", name: "Projector", message: (listDamage[1]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 1, classname: "projector", name: "Projector", message: (listDamage[1]==false?"Đã được báo cáo":"")});
     }
     if(listDamage[3] != undefined && mayLanh > 0) {
-        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[3]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[3]==false?"Đã được báo cáo":"")});
     }
     if(listDamage[5] != undefined && loa > 0) {
-        listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[5]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[5]==false?"Đã được báo cáo":"")});
     }
     if(listDamage[2] != undefined && tivi > 0) {
-        listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[2]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[2]==false?"Đã được báo cáo":"")});
     }
     if(listDamage[4] != undefined && quat > 0) {
-        listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[4]?"Đã được báo cáo":"")});
+        listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[4]==false?"Đã được báo cáo":"")});
     }
-    listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: (listDamage[7]?"Đã được báo cáo":"")});
-    listEquipment.push({id: 8, classname: "chair", name: "Chair", message: (listDamage[8]?"Đã được báo cáo":"")});
+    listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: (listDamage[7]==false?"Đã được báo cáo":"")});
+    listEquipment.push({id: 8, classname: "chair", name: "Chair", message: (listDamage[8]==false?"Đã được báo cáo":"")});
 
     var contentDiv = document.getElementById("modal-1").getElementsByClassName("body-modal")[0];
     for(var i = 0; i < listEquipment.length; i++) {

@@ -18,14 +18,14 @@ public class Enumerable {
     }
 
     public enum DamagedLevel {
-        HIGH(1), MEDIUM(2), LOW(3), UNKNOWN(4);
+        HIGH("1"), MEDIUM("2"), LOW("3"), UNKNOWN("4");
 
-        private int value;
-        private DamagedLevel(int value){
+        private String value;
+        private DamagedLevel(String value){
             this.value = value;
         }
 
-        public int getValue() {
+        public String getValue() {
             return value;
         }
     }

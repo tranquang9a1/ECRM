@@ -213,7 +213,7 @@
                 </c:if>
                 if(damageEquip[${equip[i].categoryId}] == undefined) {
                     damageEquip[${equip[i].categoryId}] = ${equip[i].status};
-                } else if(damageEquip[${equip[i].categoryId}] == false) {
+                } else if(damageEquip[${equip[i].categoryId}] == true) {
                     damageEquip[${equip[i].categoryId}] = ${equip[i].status};
                 }
             </c:forEach>

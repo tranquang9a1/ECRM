@@ -248,7 +248,7 @@ function setChooseEquipment(map){
             $(this).addClass("choose");
             $(this).attr("data-choose", "true");
 
-            damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category};
+            damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category, element: $(this)};
             if(noDamagedEquipments[category] != undefined) {
                 noDamagedEquipments[category].size++;
             } else {
@@ -322,12 +322,13 @@ function sentReport(){
             content.appendChild(row);
 
             for (var key in noDamagedEquipments) {
-                if (noDamagedEquipments.hasOwnProperty(key) && key < 7){
+                if (noDamagedEquipments.hasOwnProperty(key)){
                     $("#row-type-" + key + " .width-50 p").text("Đã được báo cáo");
+                    $("#row-type-" + key + " .width-50 p").css("visibility", "visible");
                 }
-                if(noDamagedEquipments[key].evaluate == 1) {
-                    $("#row-type-" + key + " .width-50 p").addClass("hidden");
-                }
+                //if(noDamagedEquipments[key].evaluate == 1) {
+                //    $("#row-type-" + key + " .width-50 p").addClass("hidden");
+                //}
             }
 
             for (var key in damagedEquipments) {
@@ -344,27 +345,29 @@ function sentReport(){
             damagedEquipments = {};
             $(".check-damaged").attr("data-check","false");
             $(".check-damaged").removeClass("check");
-            $("#modal-1 select").css("display", "none");
-            $("#modal-1 select").val(4);
+            $("#modal-1 .width-50 select").css("display", "none");
+            $("#modal-1 .width-50 select").val(4);
+            $("#modal-1 .width-50 input").addClass("hidden");
+            $("#modal-1 .width-50 input").val("");
         }
     });
 }
 
 function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
     var listEquipment = new Array();
-    if(listDamage[1] != undefined && projector > 0) {
+    if(projector > 0) {
         listEquipment.push({id: 1, classname: "projector", name: "Projector", message: (listDamage[1]==false?"Đã được báo cáo":"")});
     }
-    if(listDamage[3] != undefined && mayLanh > 0) {
+    if(mayLanh > 0) {
         listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[3]==false?"Đã được báo cáo":"")});
     }
-    if(listDamage[5] != undefined && loa > 0) {
+    if(loa > 0) {
         listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[5]==false?"Đã được báo cáo":"")});
     }
-    if(listDamage[2] != undefined && tivi > 0) {
+    if(tivi > 0) {
         listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[2]==false?"Đã được báo cáo":"")});
     }
-    if(listDamage[4] != undefined && quat > 0) {
+    if(quat > 0) {
         listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[4]==false?"Đã được báo cáo":"")});
     }
     listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: (listDamage[7]==false?"Đã được báo cáo":"")});

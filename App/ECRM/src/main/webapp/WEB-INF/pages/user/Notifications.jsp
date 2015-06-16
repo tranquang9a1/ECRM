@@ -146,8 +146,8 @@
                 <p>Tạo báo cáo</p>
                 <i class="fa fa-times" onclick="showModal(0, 'modal-1')"></i>
             </div>
-            <div class="body-modal">
-                <div class="group-control" style="margin: 20px 0">
+            <div class="body-modal" style="height: 480px; padding-top: 10px; overflow-y: overlay">
+                <div class="group-control" style="margin: 0 0 20px">
                     <div class="name">Đánh giá của bạn</div>
                     <div class="control" style="width: 300px">
                         <select id="report-evaluate" style="width: 200px; float: right">

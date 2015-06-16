@@ -65,6 +65,7 @@ public class NotifyController {
             }
 
             group.setListEquipments(equipmentNames.substring(0, equipmentNames.length()-2));
+            equipmentNames = "";
             group.setReporters(reportDAO.getReportersInRoom(room.getId()));
 
             groups.add(group);

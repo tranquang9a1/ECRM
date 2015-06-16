@@ -18,8 +18,10 @@
     <link rel="stylesheet" href="../resource/css/notify.css"/>
     <link rel="stylesheet" href="../resource/css/roomtype-2.css"/>
 
+    <%--<script src="../resource/js/socket.io.js"></script>--%>
     <script src="../resource/js/jquery-1.11.3.js"></script>
     <script src="../resource/js/script.js"></script>
+    <%--<script src="../resource/js/socket-io.js"></script>--%>
     <script src="../resource/js/staff-notify.js"></script>
 </head>
 <body>
@@ -226,6 +228,8 @@
 </div>
 <div class="content-all-modal" data-room="0"></div>
 <script>
+    <%--connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});--%>
+
     function doAction(choose, object) {
         closeConform();
         switch (choose) {

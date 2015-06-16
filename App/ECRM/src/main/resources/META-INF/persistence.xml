@@ -6,7 +6,7 @@
             <property name="hibernate.connection.url" value="jdbc:sqlserver://localhost:1433;DatabaseName=ecrm" />
             <property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
             <property name="hibernate.connection.username" value="sa" />
-            <property name="hibernate.connection.password" value="123456" />
+            <property name="hibernate.connection.password" value="doannguyenminhchi" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
         </properties>
     </persistence-unit>

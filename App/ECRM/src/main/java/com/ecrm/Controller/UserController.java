@@ -5,7 +5,6 @@ import com.ecrm.DTO.ReportRequestDTO;
 import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable.*;
-import com.ecrm.Utils.SocketIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,7 +126,7 @@ public class UserController {
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);
 
-      SocketIO.SentNotifyToStaff(user.getUsername() + " vừa báo cáo hư hại phòng " + room.getName());
+      /*SocketIO.SentNotifyToStaff(user.getUsername() + " vừa báo cáo hư hại phòng " + room.getName());*/
 
 
         return report.getId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();

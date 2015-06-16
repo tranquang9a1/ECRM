@@ -331,7 +331,7 @@ public class APIController {
         Collection<TblEquipmentEntity> damagedEquipment = new ArrayList<TblEquipmentEntity>();
         Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
         for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            if (tblEquipmentEntity.isStatus()) {
+            if (!tblEquipmentEntity.isStatus()) {
                 damagedEquipment.add(tblEquipmentEntity);
             }
         }
@@ -340,11 +340,13 @@ public class APIController {
                 if (tblEquipmentEntity.getCategoryId() == 1) {
                     List<TblReportDetailEntity> projectors = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity project : projectors) {
-                        if (project.getDamagedLevel().equals("3")) {
+                        if (project.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                             projectorDamagedLevel = 20;
-                        } else if (project.getDamagedLevel().equals("2")) {
+                        } else if (project.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                             projectorDamagedLevel = 30;
-                        } else if (project.getDamagedLevel().equals("1")) {
+                        } else if (project.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
+                            projectorDamagedLevel = 50;
+                        }else{
                             projectorDamagedLevel = 50;
                         }
                     }
@@ -352,29 +354,29 @@ public class APIController {
                 if (tblEquipmentEntity.getCategoryId() == 2) {
                     List<TblReportDetailEntity> tivis = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity tivi : tivis) {
-                        if (tivi.getDamagedLevel().equals("3")) {
+                        if (tivi.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                             tiviDamagedLevel = 20;
-                        } else if (tivi.getDamagedLevel().equals("2")) {
+                        } else if (tivi.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                             tiviDamagedLevel = 30;
-                        } else if (tivi.getDamagedLevel().equals("1")) {
+                        } else if (tivi.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                             tiviDamagedLevel = 50;
+                        }else{
+                            tiviDamagedLevel = 20;
                         }
-
                     }
                 }
                 if (tblEquipmentEntity.getCategoryId() == 3) {
                     List<TblReportDetailEntity> mayLanhs = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity mayLanh : mayLanhs) {
-                        if (mayLanh.isStatus()) {
-                            if (mayLanh.getDamagedLevel().equals("3")) {
-                                mayLanhDamagedLevel += 10;
-                            } else if (mayLanh.getDamagedLevel().equals("2")) {
-                                mayLanhDamagedLevel += 15;
-                            } else if (mayLanh.getDamagedLevel().equals("1")) {
-                                mayLanhDamagedLevel += 25;
-                            }
+                        if (mayLanh.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
+                            mayLanhDamagedLevel += 10;
+                        } else if (mayLanh.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
+                            mayLanhDamagedLevel += 15;
+                        } else if (mayLanh.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
+                            mayLanhDamagedLevel += 25;
+                        }else{
+                            mayLanhDamagedLevel +=25;
                         }
-
                     }
                 }
                 if (tblEquipmentEntity.getCategoryId() == 4) {
@@ -385,11 +387,13 @@ public class APIController {
                         }
                     } else {
                         for (TblReportDetailEntity quat : quats) {
-                            if (quat.getDamagedLevel().equals("3")) {
+                            if (quat.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                                 quatDamagedLevel += 1;
-                            } else if (quat.getDamagedLevel().equals("2")) {
+                            } else if (quat.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                                 quatDamagedLevel += 3;
-                            } else if (quat.getDamagedLevel().equals("1")) {
+                            } else if (quat.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
+                                quatDamagedLevel += 5;
+                            }else{
                                 quatDamagedLevel += 5;
                             }
                         }
@@ -398,11 +402,13 @@ public class APIController {
                 if (tblEquipmentEntity.getCategoryId() == 5) {
                     List<TblReportDetailEntity> loas = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity loa : loas) {
-                        if (loa.getDamagedLevel().equals("3")) {
+                        if (loa.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                             loaDamagedLevel = 1;
-                        } else if (loa.getDamagedLevel().equals("2")) {
+                        } else if (loa.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                             loaDamagedLevel = 3;
-                        } else if (loa.getDamagedLevel().equals("1")) {
+                        } else if (loa.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                            loaDamagedLevel = 5;
+                        }else{
                             loaDamagedLevel = 5;
                         }
                     }
@@ -410,12 +416,14 @@ public class APIController {
                 if (tblEquipmentEntity.getCategoryId() == 6) {
                     List<TblReportDetailEntity> dens = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
                     for (TblReportDetailEntity den : dens) {
-                        if (den.getDamagedLevel().equals("3")) {
+                        if (den.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                             denDamagedLevel = 10;
-                        } else if (den.getDamagedLevel().equals("2")) {
+                        } else if (den.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                             denDamagedLevel = 20;
-                        } else if (den.getDamagedLevel().equals("1")) {
+                        } else if (den.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
                             denDamagedLevel = 50;
+                        }else{
+                            denDamagedLevel = 10;
                         }
                     }
                 }
@@ -425,11 +433,13 @@ public class APIController {
                         banDamagedLevel = 50;
                     } else {
                         for (TblReportDetailEntity ban : bans) {
-                            if (ban.getDamagedLevel().equals("3")) {
+                            if (ban.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                                 banDamagedLevel += 2;
-                            } else if (ban.getDamagedLevel().equals("2")) {
+                            } else if (ban.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                                 banDamagedLevel += 3;
-                            } else if (ban.getDamagedLevel().equals("1")) {
+                            } else if (ban.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                                banDamagedLevel += 5;
+                            }else{
                                 banDamagedLevel += 5;
                             }
                         }
@@ -441,11 +451,13 @@ public class APIController {
                         gheDamagedLevel = 50;
                     } else {
                         for (TblReportDetailEntity ghe : ghes) {
-                            if (ghe.getDamagedLevel().equals("3")) {
+                            if (ghe.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                                 gheDamagedLevel += 1;
-                            } else if (ghe.getDamagedLevel().equals("2")) {
+                            } else if (ghe.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                                 gheDamagedLevel += 2;
-                            } else if (ghe.getDamagedLevel().equals("1")) {
+                            } else if (ghe.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                                gheDamagedLevel += 3;
+                            }else{
                                 gheDamagedLevel += 3;
                             }
                         }

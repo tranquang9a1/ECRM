@@ -37,14 +37,14 @@ public class ChangeRoomController {
                 tblScheduleEntity.setIsActive(false);
                 scheduleDAO.merge(tblScheduleEntity);
                 TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), classroomEntity.getId(),
-                        tblScheduleEntity.getNumberOfStudents(), "Thay doi phong",tblScheduleEntity.getTimeFrom(),
+                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng",tblScheduleEntity.getTimeFrom(),
                         tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
-                String message = "Da doi phong cho giao vien " + tblScheduleEntity.getUsername()+" tu phong: "+
-                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phong: "+classroomEntity.getName()+".";
+                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername()+" từ phòng: "+
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phòng: "+classroomEntity.getName()+".";
                 scheduleDAO.persist(newSchedule);
                 messages.add(message);
             }else{
-                String message = "Khong con phong trong cho giao vien: "+ tblScheduleEntity.getUsername()+" cua phong: "+
+                String message = "Không còn phòng trống: "+ tblScheduleEntity.getUsername()+" của phòng: "+
                         tblScheduleEntity.getTblClassroomByClassroomId().getName()+".";
             }
         }

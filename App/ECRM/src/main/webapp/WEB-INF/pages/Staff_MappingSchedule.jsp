@@ -78,7 +78,7 @@
     </div>
 
 
-    <form action="staff/searchSchedule">
+    <%--<form action="staff/searchSchedule">
         <div>Ngày bắt đầu: <input type="text" id="datefrom" name="datefrom"></div>
         <div>Ngày kết thúc: <input type="text" id="dateto" name="dateto"></div>
         <div>Phòng học:<select name="classroomId">
@@ -94,9 +94,9 @@
             </c:forEach>
         </select></div>
         <button type="submit">Search</button>
-    </form>
+    </form>--%>
 
-    <div id="result" style="width: 1000px; height: 300px; overflow: scroll; margin-left: 20px;">
+   <%-- <div id="result" style="width: 1000px; height: 300px; overflow: scroll; margin-left: 20px;">
         <div style="width: 100%">
             <div class="table">
                 <div class="header-table">
@@ -104,7 +104,7 @@
                         <div>Ngày</div>
                     </div>
                     <c:forEach var="c" items="${schedules}">
-                        <div class="room-number">
+                        <div class="room-number" style="width: 100px;">
                             <fmt:formatDate value="${c.date}" type="date" dateStyle="short"/>
                         </div>
                     </c:forEach>
@@ -122,7 +122,7 @@
             </div>
 
         </div>
-    </div>
+    </div>--%>
     <div class="modal modal-small" id="Upload">
         <div class="content-modal">
             <div class="header-modal title">

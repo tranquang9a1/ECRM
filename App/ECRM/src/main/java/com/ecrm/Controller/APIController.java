@@ -129,15 +129,7 @@ public class APIController {
                     description = descriptions[j];
                 }
 
-                if (category < 4) {
-                    TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId, category, positon);
-                    tblEquipmentEntity.setStatus(false);
-                    equipmentDAO.merge(tblEquipmentEntity);
-                    TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
-                            reportId, damagedLevel, description, positon);
-                    reportDetailDAO.persist(tblReportDetailEntity);
-                }
-                if (category > 3 && category < 7) {
+                if (category < 7) {
                     TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId, category, positon);
                     if (tblEquipmentEntity != null) {
                         tblEquipmentEntity = new TblEquipmentEntity(category, classroomId, null, null, positon, null, false);

@@ -55,8 +55,8 @@ public class ScheduleController {
         request.setAttribute("TEACHERS", tblUserEntities);
         request.setAttribute("ACTIVETAB", activeTab);
         request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
-        /*Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
-        request.setAttribute("SCHEDULES",scheduleEntity);*/
+        Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
+        request.setAttribute("SCHEDULES",scheduleEntity);
         return "Staff_MappingSchedule";
     }
 

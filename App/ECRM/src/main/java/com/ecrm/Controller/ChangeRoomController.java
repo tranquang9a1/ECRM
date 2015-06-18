@@ -46,6 +46,7 @@ public class ChangeRoomController {
             }else{
                 String message = "Không còn phòng trống: "+ tblScheduleEntity.getUsername()+" của phòng: "+
                         tblScheduleEntity.getTblClassroomByClassroomId().getName()+".";
+                messages.add(message);
             }
         }
         for (int i=0; i<messages.size(); i++){

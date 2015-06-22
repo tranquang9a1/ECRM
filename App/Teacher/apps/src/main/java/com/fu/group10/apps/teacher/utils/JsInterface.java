@@ -17,6 +17,7 @@ import java.util.List;
 public class JsInterface {
     Context context;
     List<DamagedEquipment> result = new ArrayList<DamagedEquipment>();
+    List<Integer> valueChoose = new ArrayList<Integer>();
     public JsInterface(Context context) {
         this.context = context;
     }
@@ -39,7 +40,6 @@ public class JsInterface {
     public void addEquipment(String name, String position) {
         DamagedEquipment damagedEquipment = new DamagedEquipment(name, position);
         result.add(damagedEquipment);
-        Toast.makeText(context, "List had been add 1 equipment " + name, Toast.LENGTH_SHORT).show();
     }
     @JavascriptInterface
     public void removeEquipment(String name, String position) {
@@ -51,7 +51,20 @@ public class JsInterface {
                 iter.remove();
             }
         }
-        Toast.makeText(context, "List had been remove 1 equipment " + name, Toast.LENGTH_SHORT).show();
+    }
+
+    public void removeEquipment(String name) {
+        if (name.isEmpty() || name == null) {
+            return;
+        }
+        Iterator<DamagedEquipment> iter = result.iterator();
+        int count = 0;
+        while (iter.hasNext()) {
+            if(iter.next().name.equalsIgnoreCase(name)) {
+                iter.remove();
+                count++;
+            }
+        }
     }
 
 
@@ -61,8 +74,15 @@ public class JsInterface {
         if (result != null) {
             return result;
         }
-        return null;
+        return new ArrayList<DamagedEquipment>();
 
+    }
+
+    public List<Integer> getListChoose() {
+        if (valueChoose != null) {
+            return valueChoose;
+        }
+        return new ArrayList<Integer>();
     }
 
 

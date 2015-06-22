@@ -80,9 +80,9 @@ public class DamagedEquipmentAdapter extends BaseAdapter implements InfinityList
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 position = position == position ? position : 0;
                 holder.spinner.setSelection(position);
-                //if (holder.spinner.getSelectedItem().toString().equalsIgnoreCase("Nặng")) {
-                //holder.evaluate.setVisibility(View.VISIBLE);
-                //}
+                if (holder.spinner.getSelectedItem().toString().equalsIgnoreCase("Nặng")) {
+                holder.evaluate.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

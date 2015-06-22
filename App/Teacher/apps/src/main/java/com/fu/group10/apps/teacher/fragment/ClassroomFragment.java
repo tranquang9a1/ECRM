@@ -17,6 +17,7 @@ import com.fu.group10.apps.teacher.activity.CreateReportActivity;
 import com.fu.group10.apps.teacher.activity.MainActivity;
 import com.fu.group10.apps.teacher.model.ClassroomInfo;
 import com.fu.group10.apps.teacher.model.DamagedEquipment;
+import com.fu.group10.apps.teacher.utils.Constants;
 import com.fu.group10.apps.teacher.utils.JsInterface;
 
 import java.util.ArrayList;
@@ -44,13 +45,14 @@ public class ClassroomFragment extends Fragment {
     @SuppressLint("SetJavaScriptEnabled")
     private void initView(final View rootView) {
         classmap = (WebView) rootView.findViewById(R.id.classmap);
-        final JsInterface jsInterface = new JsInterface(getActivity().getApplicationContext());
+        final JsInterface jsInterface = new JsInterface(DummyApplication.getAppContext());
         classmap.getSettings().setJavaScriptEnabled(true);
         classmap.setWebViewClient(new WebViewClient());
         classmap.addJavascriptInterface(jsInterface, "Android");
         classmap.setBackgroundColor(0);
         classmap.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        refreshMap();
+        int classId = getActivity().getIntent().getExtras().getInt("classId");
+        refreshMap(classId);
 
         createReport = (Button) rootView.findViewById(R.id.create_report_button);
         createReport.setOnClickListener(new View.OnClickListener() {
@@ -71,9 +73,10 @@ public class ClassroomFragment extends Fragment {
 
     }
 
-    private void refreshMap() {
+    private void refreshMap(int classId) {
         classmap.clearCache(true);
-        classmap.loadUrl("http://app.megahd.vn/api/capstone/test.html");
+        //classmap.loadUrl("http://app.megahd.vn/api/capstone/test.html");
+        classmap.loadUrl(Constants.API_LOAD_MAP + classId);
     }
 
     private void openCreateReport(ArrayList<DamagedEquipment> listEquipment) {
@@ -82,17 +85,17 @@ public class ClassroomFragment extends Fragment {
         startActivity(intent);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Bundle bundle = this.getArguments();
-
-        if (bundle != null) {
-            id = bundle.getInt("id");
-            refreshMap();
-        }
-    }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//        Bundle bundle = this.getArguments();
+//
+//        if (bundle != null) {
+//            id = bundle.getInt("id");
+//            refreshMap(id);
+//        }
+//    }
 
 
 

@@ -5,12 +5,13 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:gravity="top"
+              android:gravity="bottom"
               android:background="#ffffff"
               >
 
 
     <LinearLayout
+
             android:id="@+id/classroommap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -19,10 +20,12 @@
 
         <WebView
                 android:id="@+id/classmap"
+                android:paddingTop="20dp"
+                android:layout_marginTop="40dp"
                 android:layout_width="match_parent"
-                android:layout_height="480dp"
+                android:layout_height="match_parent"
                 android:background="#fff"
-                android:layout_weight="0.09"/>
+                />
 
 
 

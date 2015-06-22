@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.fu.group10.apps.teacher.R;
 import com.fu.group10.apps.teacher.utils.Utils;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 
 /**
@@ -21,6 +22,7 @@ public class SplashScreen extends Activity{
     Button btnTryAgain;
     final int CHECK_TIMEOUT = 1000;
     private boolean NO_NEED_INTERNET = false;
+
 
 
     @Override

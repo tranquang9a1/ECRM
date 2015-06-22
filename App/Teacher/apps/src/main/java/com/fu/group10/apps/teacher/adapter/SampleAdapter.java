@@ -9,7 +9,10 @@ import android.widget.TextView;
 import com.fu.group10.apps.teacher.model.ClassroomInfo;
 import com.fu.group10.apps.teacher.model.RoundedLetterView;
 import com.fu.group10.apps.teacher.R;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,11 +22,13 @@ public class SampleAdapter extends BaseAdapter {
     private List<ClassroomInfo> mEntries = new ArrayList<ClassroomInfo>();
     private LayoutInflater mLayoutInflater;
     private Context mContext;
+    private final SimpleDateFormat dateFormater;
 
     public SampleAdapter(Context context, List<ClassroomInfo> entries){
         this.mEntries = entries;
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
+        dateFormater = new SimpleDateFormat("HH:mm");
     }
 
     @Override
@@ -59,8 +64,10 @@ public class SampleAdapter extends BaseAdapter {
         ClassroomInfo items = getItem(position);
 
         if (items != null){
-            mViewHolder.timeFrom.setText(items.getTimeFrom());
-            mViewHolder.timeTo.setText(items.getTimeTo());
+            Date timeFrom = new Date(Long.parseLong(items.getTimeFrom()) /** - Constants.TIME_ZONE_DIFF * 1000 **/);
+            mViewHolder.timeFrom.setText(dateFormater.format(timeFrom));
+            Date timeTo = new Date(Long.parseLong(items.getTimeTo()) /** - Constants.TIME_ZONE_DIFF * 1000 **/);
+            mViewHolder.timeTo.setText(dateFormater.format(timeTo));
             mViewHolder.mRoundedLetterView.setTitleText(items.getClassName());
             if(position%2 == 0){
                 mViewHolder.mRoundedLetterView.setBackgroundColor(mContext.getResources().getColor(R.color.green));

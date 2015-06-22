@@ -16,7 +16,7 @@ public class User {
     private List<ClassroomInfo> classrooms;
 
     public User(String username, String password, String fullname, String phone, String role, Long lastLogin,
-                boolean status, List<ClassroomInfo> classrooms) {
+                boolean status) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
@@ -24,7 +24,7 @@ public class User {
         this.role = role;
         this.lastLogin = lastLogin;
         this.status = status;
-        this.classrooms = classrooms;
+
     }
 
     public String getUsername() {

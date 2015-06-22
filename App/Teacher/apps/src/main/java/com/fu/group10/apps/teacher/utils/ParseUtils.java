@@ -87,21 +87,11 @@ public class ParseUtils {
             }
 
             JSONObject user = new JSONObject(json);
-            List<ClassroomInfo> classroomInfos = new ArrayList<ClassroomInfo>();
-            JSONArray classroom = user.getJSONArray("classrooms");
-            for (int i = 0; i< classroom.length(); i++) {
-                ClassroomInfo classroomInfo = new ClassroomInfo(classroom.getJSONObject(i).getInt("classId"),
-                        classroom.getJSONObject(i).getString("classroomName"),
-                        classroom.getJSONObject(i).getString("timeFrom"),
-                        classroom.getJSONObject(i).getString("timeTo"));
 
-                classroomInfos.add(classroomInfo);
-            }
-            // Get movie object
             result = new User(
                     user.getString("username"), user.getString("password"), user.getString("fullname"),
                     user.getString("phone"), user.getString("role"), user.getLong("lastLogin"),
-                    user.getBoolean("status"), classroomInfos);
+                    user.getBoolean("status"));
 
         } catch (JSONException e) {
             Log.d("Parse User", "Wrong format");

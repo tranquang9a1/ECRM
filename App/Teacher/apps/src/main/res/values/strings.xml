@@ -31,6 +31,8 @@
     <string name="cancel">Hủy</string>
     <string name="placeholder_lorem_ipsum">Lorem ipsum dolor set it</string>
     <string name="action_about">About</string>
+    <string name="action_ok">Gửi</string>
+    <string name="sendreport_title">Bạn có muốn đổi phòng không?</string>
     <string name="license">
         Copyright 2015 chenupt
         \n\n

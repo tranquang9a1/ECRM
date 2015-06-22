@@ -71,7 +71,7 @@ public class TestActivity extends ActionBarActivity {
     }
 
     private List<String> getTitles(){
-        return Lists.newArrayList("Chọn phòng", "Chọn thiết bị", "Chọn thiết bị", "Gửi");
+        return Lists.newArrayList("Tổng quát", "Chi tiết", "Chọn thiết bị", "Gửi");
     }
 
     private List<Integer> getBgRes(){
@@ -80,11 +80,9 @@ public class TestActivity extends ActionBarActivity {
 
     private List<Fragment> getFragment() {
         List<Fragment> fragments = new ArrayList<Fragment>();
-        guideFragment = new GuideFragment();
         classroomFragment = new ClassroomFragment();
         equipmentFragment = new EquipmentFragment();
         fragments.add(equipmentFragment);
-        fragments.add(guideFragment);
         fragments.add(classroomFragment);
         return fragments;
     }

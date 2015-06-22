@@ -13,7 +13,7 @@ repositories {
 }
 
 android {
-    compileSdkVersion 17
+    compileSdkVersion 21
     buildToolsVersion "20.0.0"
 
     defaultConfig {
@@ -37,7 +37,14 @@ android {
 }
 
 dependencies {
-    compile 'com.r0adkll:slidableactivity:2.0.2'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.github.chenupt.android:springindicator:1.0.2@aar'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.github.chenupt.android:multiplemodel:1.1.0@aar'
+    compile 'com.github.pavlospt:roundedletterview:1.1'
+    compile 'com.android.support:recyclerview-v7:21.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:support-v4:20.0.+"
+
+
 }

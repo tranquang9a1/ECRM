@@ -1,9 +1,15 @@
 package com.fu.group10.apps.teacher.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -14,11 +20,15 @@ import android.widget.*;
 import com.fu.group10.apps.teacher.model.ClassroomInfo;
 import com.fu.group10.apps.teacher.model.User;
 import com.fu.group10.apps.teacher.R;
+import com.fu.group10.apps.teacher.service.RegisterActivity;
+import com.fu.group10.apps.teacher.service.ShareExternalServer;
 import com.fu.group10.apps.teacher.utils.Constants;
 import com.fu.group10.apps.teacher.utils.NetworkUtils;
 import com.fu.group10.apps.teacher.utils.ParseUtils;
 import com.fu.group10.apps.teacher.utils.RequestSender;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,14 +43,28 @@ public class LoginActivity  extends ActionBarActivity {
     private static final String defaultPassword = "123ecrm";
     private AutoCompleteTextView usernameTextView;
     private EditText passwordTextView;
+    Context context;
 
     private static User user;
+
+    GoogleCloudMessaging gcm;
+
+    public static final String REG_ID = "regId";
+    private static final String APP_VERSION = "appVersion";
+
+    static final String TAG = "Notify Activity";
+
+
+    ShareExternalServer appUtil;
+    String regId;
+    AsyncTask<Void, Void, String> shareRegidTask;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        context = getApplicationContext();
 
         usernameTextView = (AutoCompleteTextView) findViewById(R.id.username);
 
@@ -60,7 +84,7 @@ public class LoginActivity  extends ActionBarActivity {
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //sendSMS();
                 initLogin();
             }
         });
@@ -105,37 +129,41 @@ public class LoginActivity  extends ActionBarActivity {
             //Map<String, String> params = new HashMap<String, String>();
             //params.put("username", username);
             //params.put("password", password);
-            //String url = Constants.API_LOGIN + "?username="+username+"&password="+password;
-            //RequestSender sender = new RequestSender();
-            //sender.start(url, new RequestSender.IRequestSenderComplete() {
-                //@Override
-                //public void onRequestComplete(String result) {
-                   // user = ParseUtils.parseUserJson(result);
-                   // if (user != null ) {
-                    //    if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {
-                     //       firstLogin(user.getPassword());
-                       // } else {
-
-                      //      ArrayList<ClassroomInfo> listClassroom = new ArrayList<ClassroomInfo>();
-                     //       for (int i = 0; i < user.getClassrooms().size(); i++) {
-                      //          listClassroom.add(user.getClassrooms().get(i));
-                      //      }
+            String url = Constants.API_LOGIN + "?username="+username+"&password="+password;
+            RequestSender sender = new RequestSender();
+            sender.start(url, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                    user = ParseUtils.parseUserJson(result);
+                    if (user != null ) {
+                        if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {
+                            firstLogin(user.getPassword());
+                        } else {
+                            if (TextUtils.isEmpty(regId)) {
+                                regId = registerGCM();
+                                Log.d("RegisterActivity", "GCM RegId: " + regId);
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Already Registered with GCM Server!",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            registerWithServer(user.getUsername());
                             openMainActivity();
                         }
-                   // } else {
-                   //     Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG).show();
-                   // }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG).show();
+                    }
 
-               // }
+                }
 
-           // });
-
-
+            });
 
 
 
 
-        //}
+
+
+        }
     }
 
     private boolean isPasswordValid(String password) {
@@ -150,9 +178,9 @@ public class LoginActivity  extends ActionBarActivity {
 
 
     void openMainActivity() {
-        Intent intent = new Intent(this, ListRoomActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         //intent.putParcelableArrayListExtra("listClass", listClassroom);
-        //intent.putExtra("username", user.getUsername());
+        intent.putExtra("username", user.getUsername());
         startActivity(intent);
         finish();
     }
@@ -164,6 +192,124 @@ public class LoginActivity  extends ActionBarActivity {
         finish();
     }
 
+    public String registerGCM() {
+
+        gcm = GoogleCloudMessaging.getInstance(this);
+        regId = getRegistrationId(context);
+
+        if (TextUtils.isEmpty(regId)) {
+
+            registerInBackground();
+
+            Log.d("RegisterActivity",
+                    "registerGCM - successfully registered with GCM server - regId: "
+                            + regId);
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    "RegId already available. RegId: " + regId,
+                    Toast.LENGTH_LONG).show();
+        }
+        return regId;
+    }
+
+    private String getRegistrationId(Context context) {
+        final SharedPreferences prefs = getSharedPreferences(
+                NotifyActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+        String registrationId = prefs.getString(REG_ID, "");
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+        int registeredVersion = prefs.getInt(APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion) {
+            Log.i(TAG, "App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("RegisterActivity",
+                    "I never expected this! Going down, going down!" + e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regId = gcm.register(Constants.GOOGLE_PROJECT_ID);
+                    Log.d("RegisterActivity", "registerInBackground - regId: "
+                            + regId);
+                    msg = "Device registered, registration ID=" + regId;
+
+                    storeRegistrationId(context, regId);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    Log.d("RegisterActivity", "Error: " + msg);
+                }
+                Log.d("RegisterActivity", "AsyncTask completed: " + msg);
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Toast.makeText(getApplicationContext(),
+                        "Registered with GCM Server." + msg, Toast.LENGTH_LONG)
+                        .show();
+            }
+        }.execute(null, null, null);
+    }
+
+    private void storeRegistrationId(Context context, String regId) {
+        final SharedPreferences prefs = getSharedPreferences(
+                NotifyActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+        int appVersion = getAppVersion(context);
+        Log.i(TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(REG_ID, regId);
+        editor.putInt(APP_VERSION, appVersion);
+        editor.commit();
+    }
+
+    public void registerWithServer(final String username) {
+        appUtil = new ShareExternalServer();
+
+
+        Log.d("MainActivity", "regId: " + regId);
+
+        final Context context = this;
+        shareRegidTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String result = appUtil.shareRegIdWithAppServer(context, regId, username);
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                shareRegidTask = null;
+                Toast.makeText(getApplicationContext(), result,
+                        Toast.LENGTH_LONG).show();
+            }
+
+        };
+        shareRegidTask.execute(null, null, null);
+
+
+    }
 
 
 

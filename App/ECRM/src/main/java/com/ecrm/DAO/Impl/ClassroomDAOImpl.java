@@ -4,6 +4,7 @@ import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.ClassroomDAO;
 import com.ecrm.Entity.TblClassroomEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -50,6 +51,7 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
         return null;
     }
 
+    @Transactional
     @Override
     public boolean updateDamageLevel(int damageLevel, int classId) {
         Query query = entityManager.createQuery("Update TblClassroomEntity r set r.damagedLevel = :damageLevel where r.id = :classId");

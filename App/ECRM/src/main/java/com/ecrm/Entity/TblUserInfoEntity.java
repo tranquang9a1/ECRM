@@ -13,6 +13,7 @@ public class TblUserInfoEntity {
     private String fullName;
     private String phone;
     private Timestamp lastLogin;
+    private String deviceId;
     private TblUserEntity tblUserByUsername;
 
     @Id
@@ -55,6 +56,16 @@ public class TblUserInfoEntity {
         this.lastLogin = lastLogin;
     }
 
+    @Basic
+    @Column(name="DeviceId")
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +77,7 @@ public class TblUserInfoEntity {
         if (fullName != null ? !fullName.equals(that.fullName) : that.fullName != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
+        if (deviceId != null ? !deviceId.equals(that.deviceId) : that.deviceId != null) return false;
 
         return true;
     }
@@ -76,6 +88,7 @@ public class TblUserInfoEntity {
         result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
+        result = 31 * result + (deviceId != null ? deviceId.hashCode() : 0);
         return result;
     }
 

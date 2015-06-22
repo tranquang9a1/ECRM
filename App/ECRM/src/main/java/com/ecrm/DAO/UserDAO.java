@@ -15,4 +15,7 @@ import java.util.Date;
 public interface UserDAO {
     public TblUserEntity login(String username, String password);
     public boolean updateLastLogin(String username, Timestamp lastLogin);
+    public boolean updateDeviceId(String username, String deviceId);
+    public String getDeviceId(String username);
+
 }

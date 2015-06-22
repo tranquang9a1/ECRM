@@ -58,4 +58,27 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         return false;
 
     }
+
+    @Transactional
+    public boolean updateDeviceId(String username, String deviceId) {
+        Query query = entityManager.createQuery("UPDATE TblUserInfoEntity u set u.deviceId = :deviceId " +
+                "where u.username = :username");
+        query.setParameter("username", username);
+        query.setParameter("deviceId", deviceId);
+
+        int rows = query.executeUpdate();
+        if (rows > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getDeviceId(String username) {
+        Query query = entityManager.createQuery("SELECT u.deviceId FROM TblUserInfoEntity u " +
+                "where u.username = :username");
+        query.setParameter("username", username);
+
+       String result = query.getSingleResult().toString();
+        return result;
+    }
 }

@@ -5,14 +5,16 @@ package com.ecrm.DTO;
  */
 public class EquipmentDTO {
     private int reportId;
+    private int equipmentId;
     private String equipmentName;
     private int quantity;
     private boolean status;
     private String evaluate;
     private String damage;
 
-    public EquipmentDTO(int reportId, String equipmentName, int quantity, boolean status, String evaluate, String damage) {
+    public EquipmentDTO(int reportId, int equipmentId, String equipmentName, int quantity, boolean status, String evaluate, String damage) {
         this.reportId = reportId;
+        this.equipmentId = equipmentId;
         this.equipmentName = equipmentName;
         this.quantity = quantity;
         this.status = status;
@@ -21,6 +23,14 @@ public class EquipmentDTO {
     }
 
     public EquipmentDTO() {
+    }
+
+    public int getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(int equipmentId) {
+        this.equipmentId = equipmentId;
     }
 
     public int getReportId() {

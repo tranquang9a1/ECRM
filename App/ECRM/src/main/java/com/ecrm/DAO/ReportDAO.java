@@ -31,4 +31,6 @@ public interface ReportDAO {
     public boolean resolveReport(int reportId, int equipmentId, String solution);
 
     public boolean updateDamageLevel(int damageLevel, int reportId);
+
+    public boolean resolveAll(String solution);
 }

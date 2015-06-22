@@ -6,6 +6,7 @@ import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Entity.TblUserInfoEntity;
 import com.ecrm.Utils.Enumerable.ReportStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -151,11 +152,12 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         query.setParameter("reportId", reportId);
         query.setParameter("equipmentId", equipmentId);
 
-        Query query1 = entityManager.createQuery("Select u from TblReportDetailEntity u where u.reportId = :reportId and u.status = false ");
+        Query query1 = entityManager.createQuery("Select u from TblReportDetailEntity u where u.reportId = :reportId and u.status = true ");
         query1.setParameter("reportId", reportId);
 
         if (query1.getResultList().size() == 0) {
-            Query query2 = entityManager.createQuery("Update TblReportEntity u set u.status = true");
+            Query query2 = entityManager.createQuery("Update TblReportEntity u set u.status = true where u.reportId = :reportId");
+            query2.setParameter("reportId", reportId);
             query2.executeUpdate();
         }
 
@@ -163,14 +165,26 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         return rows > 0 ? true : false;
     }
 
+    @Transactional
     @Override
     public boolean updateDamageLevel(int damageLevel, int reportId) {
-        Query query = entityManager.createQuery("Update TblReportEntity r set r.damagedLevel = :damageLevel where r.reportId = :reportId");
+        Query query = entityManager.createQuery("Update TblReportEntity r set r.damagedLevel = :damageLevel where r.id = :reportId");
         query.setParameter("damageLevel", damageLevel);
         query.setParameter("reportId", reportId);
 
         int rows = query.executeUpdate();
         return rows > 0 ? true : false;
 
+    }
+
+    @Transactional
+    @Override
+    public boolean resolveAll(String solution) {
+        Query query = entityManager.createQuery("Update TblReportDetailEntity u set u.status = true, u.solution =:solution ");
+        int rows = query.executeUpdate();
+        Query query1 = entityManager.createQuery("Update TblReportEntity u set u.status = true");
+        query1.executeUpdate();
+
+        return rows > 0 ? true : false;
     }
 }

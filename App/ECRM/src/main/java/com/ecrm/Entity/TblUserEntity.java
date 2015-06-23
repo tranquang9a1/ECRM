@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Htang on 6/5/2015.
  */
 @Entity
-@Table(name = "tblUser", schema = "dbo", catalog = "ecrm")
+@Table(name = "tblUser")
 public class TblUserEntity {
     private int roleId;
     private String username;

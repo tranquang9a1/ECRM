@@ -11,7 +11,7 @@ import java.util.Collection;
  * Created by Htang on 6/5/2015.
  */
 @Entity
-@Table(name = "tblRoomType", schema = "dbo", catalog = "ecrm")
+@Table(name = "tblRoomType")
 public class TblRoomTypeEntity {
     private int id;
     private String name;

@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Htang on 6/5/2015.
  */
 @Entity
-@Table(name = "tblReport", schema = "dbo", catalog = "ecrm")
+@Table(name = "tblReport")
 public class TblReportEntity {
     private int id;
     private String username;

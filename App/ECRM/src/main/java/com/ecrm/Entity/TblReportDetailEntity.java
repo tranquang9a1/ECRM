@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * Created by Htang on 6/5/2015.
  */
 @Entity
-@Table(name = "tblReportDetail", schema = "dbo", catalog = "ecrm")
+@Table(name = "tblReportDetail")
 @IdClass(TblReportDetailEntityPK.class)
 public class TblReportDetailEntity {
     private int equipmentId;

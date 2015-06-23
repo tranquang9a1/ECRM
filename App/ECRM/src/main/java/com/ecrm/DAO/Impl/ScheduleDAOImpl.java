@@ -29,9 +29,9 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         Query query = entityManager.createQuery("SELECT s " +
                 "FROM TblScheduleEntity s " +
                 "WHERE (s.username = :username OR s.classroomId = :room)" +
-                "AND CONVERT (Time, CURRENT_TIMESTAMP) >= s.timeFrom " +
-                "AND CONVERT (Time, CURRENT_TIMESTAMP) < DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) " +
-                "AND CONVERT (Date, CURRENT_TIMESTAMP) = s.date");
+                "AND CONVERT (Time, CURRENT_TIMESTAMP()) >= s.timeFrom " +
+                "AND CONVERT (Time, CURRENT_TIMESTAMP()) < DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) " +
+                "AND CONVERT (Date, CURRENT_TIMESTAMP()) = s.date");
         query.setParameter("username", username);
         query.setParameter("room", room);
 
@@ -49,7 +49,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         Query query = entityManager.createQuery("SELECT s " +
                 "FROM TblScheduleEntity s " +
                 "WHERE s.username = :username " +
-                "AND CONVERT (Date, CURRENT_TIMESTAMP) = s.date");
+                "AND CONVERT (Date, CURRENT_TIMESTAMP()) = s.date");
         query.setParameter("username", username);
 
         List queryResult = query.getResultList();
@@ -85,7 +85,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
 
     public List<TblScheduleEntity> findAllScheduleInClassroom(int classroomId){
         Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.classroomId = :classroomId and" +
-                " CONVERT (Date, CURRENT_TIMESTAMP) = s.date and CONVERT (Time, CURRENT_TIMESTAMP) < DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) " +
+                " CONVERT (Date, CURRENT_TIMESTAMP()) = s.date and CONVERT (Time, CURRENT_TIMESTAMP()) < DATEADD(MINUTE, ((s.slots* 105) - 15), s.timeFrom) " +
                 "and s.isActive= true");
         q.setParameter("classroomId", classroomId);
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();

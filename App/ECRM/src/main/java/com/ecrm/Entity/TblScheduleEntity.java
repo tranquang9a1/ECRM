@@ -8,7 +8,7 @@ import java.sql.Time;
  * Created by Htang on 6/5/2015.
  */
 @Entity
-@Table(name = "tblSchedule", schema = "dbo", catalog = "ecrm")
+@Table(name = "tblSchedule")
 public class TblScheduleEntity {
     private int id;
     private String username;

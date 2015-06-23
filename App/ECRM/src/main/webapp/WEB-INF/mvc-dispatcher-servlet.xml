@@ -26,16 +26,16 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
-            <value>com.microsoft.sqlserver.jdbc.SQLServerDriver</value>
+            <value>com.mysql.jdbc.Driver</value>
         </property>
         <property name="url">
-            <value>jdbc:sqlserver://localhost:1433;DatabaseName=ecrm</value>
+            <value>jdbc:mysql://localhost:3306/ecrm</value>
         </property>
         <property name="username">
-            <value>sa</value>
+            <value>root</value>
         </property>
         <property name="password">
-            <value>doannguyenminhchi</value>
+            <value>123456</value>
         </property>
     </bean>
 

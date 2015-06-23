@@ -10,7 +10,7 @@ import java.util.Collection;
  * Created by Htang on 6/5/2015.
  */
 @Entity
-@Table(name = "tblRole", schema = "dbo", catalog = "ecrm")
+@Table(name = "tblRole")
 public class TblRoleEntity {
     private int id;
     private String name;

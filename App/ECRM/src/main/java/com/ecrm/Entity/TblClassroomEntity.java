@@ -179,7 +179,7 @@ public class TblClassroomEntity {
     }
 
     public TblClassroomEntity(int id, Integer roomTypeId, String name, Timestamp createTime,
-                              Timestamp updateTime, Boolean isDelete, Boolean isAllInformation) {
+                              Timestamp updateTime, Boolean isDelete, Boolean isAllInformation, Integer damagedLevel) {
         this.id = id;
         this.roomTypeId = roomTypeId;
         this.name = name;
@@ -187,5 +187,6 @@ public class TblClassroomEntity {
         this.updateTime = updateTime;
         this.isDelete = isDelete;
         this.isAllInformation = isAllInformation;
+        this.damagedLevel = damagedLevel;
     }
 }

@@ -131,11 +131,11 @@ public class StaffController {
                     equipmentDAO.merge(tblEquipmentEntity);
                 }
                 classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, classroom.getCreateTime(),
-                        new Timestamp(date.getTime()), false, true);
+                        new Timestamp(date.getTime()), false, true,0);
                 classroomDAO.merge(classroom);
                 insertEquipment(roomName);
             } else {
-                classroom = new TblClassroomEntity(0, roomTypeId, roomName, new Timestamp(date.getTime()), null, false, true);
+                classroom = new TblClassroomEntity(0, roomTypeId, roomName, new Timestamp(date.getTime()), null, false, true, 0);
                 classroomDAO.persist(classroom);
                 insertEquipment(roomName);
             }

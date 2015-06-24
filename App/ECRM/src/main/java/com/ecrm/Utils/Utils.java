@@ -115,6 +115,7 @@ public class Utils {
 
     //Tìm phòng trống
     public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, List<TblClassroomEntity> tblClassroomEntities) {
+
         //lay so cho ngoi
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
         //lay so tiet hoc

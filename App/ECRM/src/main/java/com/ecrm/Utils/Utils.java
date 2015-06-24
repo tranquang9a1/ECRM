@@ -125,16 +125,6 @@ public class Utils {
         String datetime = dateFrom.toString() + " " + timeFrom;
         //phân rã giờ theo số tiết, mỗi tiết 90 phút, trả về List
         List<Date> time = timeFraction(datetime, slots);
-        //Kiểm trả thời điểm hiện tại
-        //So sánh với từng múi giờ nếu từ thời điểm hiện tại đến cuối tiết ít hơn 20 phút thì bỏ
-        //Nếu nhiều hơn 20p thì vẫn lấy.
-        /*Date now = new Date();
-        for (int i = 0; i < time.size(); i++) {
-            long from = (now.getTime() - time.get(i).getTime()) / 60000;
-            if (from >= 70) {
-                time.remove(i);
-            }
-        }*/
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
         for (int i = 0; i < tblClassroomEntities.size(); i++) {
@@ -143,8 +133,6 @@ public class Utils {
                 fitClassroom.add(tblClassroomEntities.get(i));
             }
         }
-
-        tblClassroomEntities.clear();
 
         //So sánh ngày giờ với những schedule khác
         for (int i = 0; i < fitClassroom.size(); i++) {

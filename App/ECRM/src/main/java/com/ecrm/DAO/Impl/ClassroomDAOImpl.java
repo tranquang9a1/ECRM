@@ -86,4 +86,9 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
         return tblClassroomEntities;
     }
 
+    public List<TblClassroomEntity> getDamagedClassroom(){
+        Query q = entityManager.createQuery("SELECT  c from TblClassroomEntity c where c.isDelete = false  and c.damagedLevel >=50");
+        List<TblClassroomEntity> tblClassroomEntities = q.getResultList();
+        return tblClassroomEntities;
+    }
 }

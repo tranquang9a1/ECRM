@@ -143,4 +143,11 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
 
         return result;
     }
+
+    public List<TblEquipmentEntity> getProjector(int classroomId){
+        Query q = entityManager.createQuery("select e from TblEquipmentEntity e where e.categoryId = 1 and e.classroomId =:classroomId");
+        q.setParameter("classroomId", classroomId);
+        List<TblEquipmentEntity> tblEquipmentEntities = q.getResultList();
+        return tblEquipmentEntities;
+    }
 }

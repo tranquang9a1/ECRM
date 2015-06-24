@@ -208,7 +208,7 @@ public class UserController {
             equip.setStatus(false);
             equipmentDAO.merge(equip);
         } else {
-            equip = new TblEquipmentEntity(category, roomId, null, null, position, 0, false);
+            equip = new TblEquipmentEntity(category, roomId, null, null, position, null, false);
             equipmentDAO.persist(equip);
         }
 

@@ -16,7 +16,7 @@ public class TblEquipmentEntity {
     private int categoryId;
     private Integer classroomId;
     private String position;
-    private Integer timeRemain;
+    private Double timeRemain;
     private String name;
     private String serialNumber;
     private boolean status;
@@ -67,11 +67,11 @@ public class TblEquipmentEntity {
 
     @Basic
     @Column(name = "TimeRemain")
-    public Integer getTimeRemain() {
+    public Double getTimeRemain() {
         return timeRemain;
     }
 
-    public void setTimeRemain(Integer timeRemain) {
+    public void setTimeRemain(Double timeRemain) {
         this.timeRemain = timeRemain;
     }
 
@@ -170,7 +170,7 @@ public class TblEquipmentEntity {
     public TblEquipmentEntity() {
     }
 
-    public TblEquipmentEntity(int categoryId, Integer classroomId, String name, String serialNumber, String position, Integer timeRemain, boolean status) {
+    public TblEquipmentEntity(int categoryId, Integer classroomId, String name, String serialNumber, String position, Double timeRemain, boolean status) {
         this.categoryId = categoryId;
         this.classroomId = classroomId;
         this.name = name;

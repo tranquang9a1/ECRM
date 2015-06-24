@@ -202,7 +202,7 @@ public class APIController {
             equip.setStatus(true);
             equipmentDAO.merge(equip);
         } else {
-            equip = new TblEquipmentEntity(category, roomId, null, null, position, 0, true);
+            equip = new TblEquipmentEntity(category, roomId, null, null, position, null, true);
             equipmentDAO.persist(equip);
         }
 

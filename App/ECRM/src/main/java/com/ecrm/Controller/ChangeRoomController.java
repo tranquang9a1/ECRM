@@ -29,30 +29,30 @@ public class ChangeRoomController {
 
     @RequestMapping("/changeRoom")
     @ResponseBody
-    public List<String> changeRoom(HttpServletRequest request, @RequestParam("classroomId")int classroomId){
+    public List<String> changeRoom(HttpServletRequest request, @RequestParam("classroomId") int classroomId) {
         List<String> messages = new ArrayList<String>();
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
-        for(TblScheduleEntity tblScheduleEntity: tblScheduleEntityList){
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
             List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
-            if(!classroom.isEmpty()){
+            if (!classroom.isEmpty()) {
                 TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroom.get(0));
                 tblScheduleEntity.setIsActive(false);
                 scheduleDAO.merge(tblScheduleEntity);
                 TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), classroomEntity.getId(),
-                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng",tblScheduleEntity.getTimeFrom(),
+                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng", tblScheduleEntity.getTimeFrom(),
                         tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
-                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername()+" từ phòng: "+
-                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phòng: "+classroomEntity.getName()+".";
+                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + classroomEntity.getName() + ".";
                 scheduleDAO.persist(newSchedule);
                 messages.add(message);
-            }else{
-                String message = "Không còn phòng trống: "+ tblScheduleEntity.getUsername()+" của phòng: "+
-                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+".";
+            } else {
+                String message = "Không còn phòng trống: " + tblScheduleEntity.getUsername() + " của phòng: " +
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName() + ".";
                 messages.add(message);
             }
         }
-        for (int i=0; i<messages.size(); i++){
+        for (int i = 0; i < messages.size(); i++) {
             System.out.println(messages.get(i));
         }
         return messages;

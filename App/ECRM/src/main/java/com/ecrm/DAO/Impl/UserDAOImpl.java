@@ -81,4 +81,13 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
        String result = query.getSingleResult().toString();
         return result;
     }
+
+    public String getPhoneNumber(String username) {
+        Query query = entityManager.createQuery("SELECT u.phone FROM TblUserInfoEntity u " +
+                "where u.username = :username");
+        query.setParameter("username", username);
+
+        String result = query.getSingleResult().toString();
+        return result;
+    }
 }

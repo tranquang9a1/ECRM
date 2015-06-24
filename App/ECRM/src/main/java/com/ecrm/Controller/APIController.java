@@ -8,6 +8,7 @@ import com.ecrm.DTO.*;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.Enumerable;
+import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +132,7 @@ public class APIController {
 
                 if (category < 7) {
                     TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId, category, positon);
-                    if (tblEquipmentEntity != null) {
+                    if (tblEquipmentEntity == null) {
                         tblEquipmentEntity = new TblEquipmentEntity(category, classroomId, null, null, positon, null, false);
                         equipmentDAO.insert(tblEquipmentEntity);
                         TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
@@ -149,7 +150,7 @@ public class APIController {
                     if (positon.equals("[0]")) {
                         positon = null;
                         TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId, category, positon);
-                        if (tblEquipmentEntity != null) {
+                        if (tblEquipmentEntity == null) {
                             tblEquipmentEntity = new TblEquipmentEntity(category, classroomId, null, null, "[0]", null, false);
                             equipmentDAO.insert(tblEquipmentEntity);
                             TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
@@ -564,6 +565,20 @@ public class APIController {
         list.add("Ghế");
 
         return list;
+    }
+
+    @RequestMapping(value = "/sendSMS", method = RequestMethod.GET)
+    public void sendSMS(@RequestParam("message") String message, @RequestParam("ListUser") String listUsers) {
+        String[] users = listUsers.split(",");
+        try {
+            for (int i = 0; i < users.length; i++) {
+                String phoneNumber = userDAO.getPhoneNumber(users[i]);
+                SmsUtils.sendMessage(phoneNumber, message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 

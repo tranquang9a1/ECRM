@@ -60,8 +60,8 @@ public class GCMController {
                String deviceId = userDAO.getDeviceId(users[i]);
 
                Sender sender = new Sender(GOOGLE_SERVER_KEY);
-               Message message = new Message.Builder().timeToLive(30)
-                       .delayWhileIdle(true).addData(MESSAGE_KEY, msg).build();
+               Message message = new Message.Builder().timeToLive(120)
+                       .delayWhileIdle(false).addData(MESSAGE_KEY, msg).build();
                System.out.println("User: " + users[i] + " - regId: " + deviceId);
                result = sender.send(message, deviceId, 1);
            }

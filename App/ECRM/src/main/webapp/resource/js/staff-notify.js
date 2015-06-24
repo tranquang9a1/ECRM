@@ -3,6 +3,7 @@
  */
 
 function showReportDetail(roomId){
+    waitLoading();
     var room = $(".content-all-modal").attr("data-room");
 
     if(room != roomId) {
@@ -13,10 +14,12 @@ function showReportDetail(roomId){
             success: function(result) {
                 $(".content-all-modal").html(result);
                 $(".content-all-modal").attr("data-room", roomId);
+                closeLoading();
                 showModal(1,'modal-1');
             }
         });
     } else {
+        closeLoading();
         showModal(1,'modal-1');
     }
 }
@@ -36,6 +39,19 @@ function sendResolve() {
     } else {
         alert("Bạn cần chọn thiết bị!");
     }
+}
+
+function changeRoom(roomId) {
+    waitLoading();
+    $.ajax({
+        method: "GET",
+        url: "/staff/changeRoom",
+        data: {classroomId: roomId},
+        success: function(result) {
+            closeLoading();
+            alert(result[0]);
+        }
+    });
 }
 
 function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {

@@ -349,6 +349,8 @@ function sentReport(){
             $("#modal-1 .width-50 select").val(4);
             $("#modal-1 .width-50 input").addClass("hidden");
             $("#modal-1 .width-50 input").val("");
+
+            closeLoading();
         }
     });
 }
@@ -515,9 +517,28 @@ function changeEvaluate(category) {
 }
 
 
+function getRoom(select) {
+    var room = $(select).val();
+    waitLoading();
+
+    $.ajax({
+        method: "GET",
+        url: "/giang-vien/mau-phong",
+        data: {RoomId: room},
+        success: function(data) {
+            $(".content-all-modal").html(data);
+            $(".content-all-modal script").remove();
+            $("#roomId").val(room);
+            noDamagedEquipments = {};
+            damagedEquipments = {};
+            closeLoading();
+        }
+    });
+}
 
 
 function loadReportHistory(reportId, roomId){
+    waitLoading();
     var report = $("#report-history").attr("data-report");
     if(report != reportId) {
         $.ajax({
@@ -528,10 +549,13 @@ function loadReportHistory(reportId, roomId){
                 $("#report-history").html(result);
                 $("#list-equipment-history").text($("#list-" + reportId).html());
                 $("#report-history").attr("data-report", reportId);
+                closeLoading();
                 showModal(1, 'modal-3');
             }
         });
     } else {
+        closeLoading();
         showModal(1, 'modal-3');
     }
 }
+

@@ -90,3 +90,30 @@ function closeConform(){
     var conformDiv = document.getElementsByClassName("conform")[0];
     conformDiv.parentNode.removeChild(conformDiv);
 }
+
+function waitLoading() {
+    var body = document.getElementsByTagName("body").item(0);
+    var loadingDiv = document.createElement("div");
+    loadingDiv.className = "loading";
+
+    var contentDiv = document.createElement("div");
+    contentDiv.className = "loading-content";
+    var imgP = document.createElement("img");
+    imgP.setAttribute("src", "/resource/img/loadingAnimation.gif");
+    contentDiv.appendChild(imgP);
+
+    var bgDiv = document.createElement("div");
+    bgDiv.className = "black-background";
+    loadingDiv.appendChild(contentDiv);
+    loadingDiv.appendChild(bgDiv);
+    body.appendChild(loadingDiv);
+
+    setTimeout(function(){
+        contentDiv.className += " active";
+    }, 10);
+}
+
+function closeLoading(){
+    var loadingDiv = document.getElementsByClassName("loading")[0];
+    loadingDiv.parentNode.removeChild(loadingDiv);
+}

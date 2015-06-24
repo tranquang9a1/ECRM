@@ -32,11 +32,14 @@
                 <div class="width-20">
                     <div>Giờ bắt đầu</div>
                 </div>
-                <div class="width-15">
+                <div class="width-20">
                     <div>Số tiết</div>
                 </div>
                 <div class="width-25">
-                    <div>Bắt đầu</div>
+                    <div>Ngày</div>
+                </div>
+                <div class="width-20">
+                    <div>Báo cáo</div>
                 </div>
                 <p class="clear"></p>
             </div>
@@ -49,11 +52,19 @@
                         <div class="width-20">
                             <div><fmt:formatDate value="${schedule[i].timeFrom}" pattern="HH:mm" /></div>
                         </div>
-                        <div class="width-15">
+                        <div class="width-20">
                             <div>${schedule[i].slots}</div>
                         </div>
                         <div class="width-25">
                             <div><fmt:formatDate value="${schedule[i].date}" pattern="dd/MM/yyyy" /></div>
+                        </div>
+                        <div class="width-20">
+                            <jsp:useBean id="currentDate" class="java.util.Date" />
+                            <fmt:formatDate value="${currentDate}" pattern="HH:mm" var="formattedDate" />
+                            <fmt:formatDate value="${schedule[i].timeFrom}" pattern="HH:mm" var="timeF" />
+                            <div>
+                                <c:if test="${formattedDate ge timeF}"><span style="color: #35b83a; font-weight: bold">Có thể báo cáo</span></c:if>
+                            </div>
                         </div>
                         <p class="clear"></p>
                     </div>

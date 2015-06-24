@@ -173,7 +173,7 @@ body{
 .list-category > ul > li:hover, .list-category > ul > .active{
     padding: 15px 30px;
     font-weight: bold;
-    background-color: rgb(9,111,210);
+    background-color: rgb(197,197,197);
 }
 
 .list-category > ul > li a{

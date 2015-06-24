@@ -24,6 +24,7 @@
 <body>
 <c:set var="room" value="${requestScope.ROOM}"/>
 <c:set var="notifies" value="${requestScope.NOTIFICATIONS}"/>
+<c:set var="schedules" value="${requestScope.LISTSCHEDULE}"/>
 <input type="hidden" id="roomId" value="${room.id}"/>
 <div class="contain-layout">
     <jsp:include page="../Header.jsp"/>
@@ -31,51 +32,20 @@
 <div class="container">
     <div class="title page-title right-button">
         <p>Lịch sử báo cáo</p>
-        <input type="button" id="report-btn" class="btn btn-orange" onclick="showModal(1, 'modal-1')"
-               value="Tạo báo cáo"/>
-
+        <input type="button" id="report-btn" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo báo cáo"/>
+        <c:if test="${schedules.size() > 0}">
+            <p style="float: right; margin-right: 15px; padding: 0;"> Phòng
+                <select onchange="getRoom(this)" style="background-color: white">
+                    <c:forEach items="${schedules}" var="item">
+                       <option value="${item.classId}">${item.className}</option>
+                    </c:forEach>
+                </select>
+            </p>
+        </c:if>
         <div class="clear"></div>
     </div>
     <div class="body-content">
-        <div class="search">
-            <div class="control">
-                <select>
-                    <option>Phòng</option>
-                    <option>101</option>
-                    <option>102</option>
-                    <option>103</option>
-                    <option>205</option>
-                    <option>213</option>
-                </select>
-            </div>
-            <div class="control">
-                <select>
-                    <option>Thiết bị</option>
-                    <option>Ghế</option>
-                    <option>Bàn</option>
-                    <option>Đèn</option>
-                    <option>Máy chiếu</option>
-                    <option>Máy lạnh</option>
-                    <option>Máy quạt</option>
-                </select>
-            </div>
-            <div class="control">
-                <select>
-                    <option>Trạng thái</option>
-                    <option>Đã sửa</option>
-                    <option>Mới báo cáo</option>
-                </select>
-            </div>
-            <div class="control">
-                <select>
-                    <option>Ngày báo cáo</option>
-                    <option>02/03/2015</option>
-                </select>
-            </div>
-            <div class="clear"></div>
-        </div>
-
-        <div class="table">
+        <div class="table" style="margin-top: 15px">
             <div class="header-table">
                 <div class="width-10">
                     <div>Phòng</div>
@@ -236,9 +206,9 @@
         closeConform();
         switch (choose) {
             case 1:
-                sentReport();
                 showModal(0, 'modal-1');
-                //location.reload();
+                waitLoading();
+                sentReport();
                 break;
         }
     }

@@ -22,6 +22,8 @@ public interface ReportDAO {
 
     public TblReportEntity getReportNewest(int room);
 
+    public List<TblReportEntity> getFinishReport(int limit, int offset);
+
     public List<TblReportEntity> getAllReport(int limit, int offset);
 
     public boolean createReport();

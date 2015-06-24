@@ -64,6 +64,29 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         return result;
     }
 
+    @Override
+    public List<TblScheduleEntity> getSchedulesFinishOfUser(String username) {
+        Query query = entityManager.createQuery("SELECT s " +
+                "FROM TblScheduleEntity s " +
+                "WHERE s.username = :username " +
+                "AND CONVERT (Time, CURRENT_TIMESTAMP) >= s.timeFrom " +
+                "AND CONVERT (Date, CURRENT_TIMESTAMP) = s.date " +
+                "AND s.isActive = true " +
+                "ORDER BY s.timeFrom DESC");
+        query.setParameter("username", username);
+
+        List list = query.getResultList();
+        List<TblScheduleEntity> result = new ArrayList<TblScheduleEntity>();
+        if(!list.isEmpty()){
+            for(Iterator i = list.iterator(); i.hasNext();) {
+                TblScheduleEntity schedule = (TblScheduleEntity) i.next();
+                result.add(schedule);
+            }
+        }
+
+        return result;
+    }
+
     public List<TblScheduleEntity> findScheduleWithDate(String username, java.util.Date date, String timeFrom){
         Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.username = :username and" +
                 " s.date = :date and s.timeFrom = CONVERT (time, :timeFrom)");

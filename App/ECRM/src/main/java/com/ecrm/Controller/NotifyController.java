@@ -3,9 +3,11 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.DamagedRoomDTO;
 import com.ecrm.DTO.GroupReportsDTO;
+import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Enumerable.ReportStatus;
+import com.ecrm.Utils.socket.SocketIO;
 import com.ecrm.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -50,7 +50,6 @@ public class NotifyController {
 
         List<Integer> rooms = reportDAO.getDamagedRoom();
         List<GroupReportsDTO> groups = new ArrayList<GroupReportsDTO>();
-        String reporter = "";
         String equipmentNames = "";
 
         for(int i = 0; i < rooms.size(); i++){
@@ -59,17 +58,23 @@ public class NotifyController {
             group.setRoomId(room.getId());
             group.setRoomName(room.getName());
 
-            List<TblEquipmentCategoryEntity> equipments = equipmentCategoryDAO.getCategoriesInRoom(room.getId());
-            for(int j = 0; j < equipments.size(); j++) {
-                equipmentNames += equipments.get(j).getName() + ", ";
-            }
-
+            equipmentNames = equipmentCategoryDAO.getCategoriesInRoom(room.getId());
             group.setListEquipments(equipmentNames.substring(0, equipmentNames.length()-2));
             equipmentNames = "";
             group.setReporters(reportDAO.getReportersInRoom(room.getId()));
 
             groups.add(group);
         }
+        List<TblReportEntity> finishReport = reportDAO.getFinishReport(0,0);
+        List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
+        for(int i = 0; i < finishReport.size(); i++) {
+            List<TblReportDetailEntity> reportDetails = finishReport.get(i).getTblReportDetailsById();
+            ReportResponseObject report = new ReportResponseObject(finishReport.get(i),reportDetails);
+            report.setReporter(finishReport.get(i).getTblUserByUserId().getTblUserInfoByUsername().getFullName());
+            listReport.add(report);
+        }
+
+        request.setAttribute("FINISHREPORT", listReport);
         request.setAttribute("NEWREPORT", groups);
 
         request.setAttribute("ACTIVELEFTTAB","STAFF_NOTIFY");
@@ -89,13 +94,13 @@ public class NotifyController {
         resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
         resultObject.setDamagedLevel(classroom.getDamagedLevel());
 
-        if(classroom.getDamagedLevel() >= 50) {
-            TblScheduleEntity schedule = scheduleDAO.getScheduleInTime(null, roomId);
-            if (schedule != null) {
-                List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.findAll());
-                resultObject.setSuggestRooms(availableRooms);
-            }
-        }
+//        if(classroom.getDamagedLevel() >= 50) {
+//            TblScheduleEntity schedule = scheduleDAO.getScheduleInTime(null, roomId);
+//            if (schedule != null) {
+//                List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.findAll());
+//                resultObject.setSuggestRooms(availableRooms);
+//            }
+//        }
         request.setAttribute("DAMAGEDROOM", resultObject);
         return "staff/ReportDetail";
     }
@@ -114,6 +119,45 @@ public class NotifyController {
         classroomDAO.merge(room);
 
         return "redirect:/thong-bao";
+    }
+
+    @RequestMapping(value = "sua-het")
+    @Transactional
+    public String resolveAllReportInRoom(HttpServletRequest request, @RequestParam(value = "roomId") int roomId){
+        TblClassroomEntity room = classroomDAO.find(roomId);
+        Collection<TblEquipmentEntity> equips = room.getTblEquipmentsById();
+        for(TblEquipmentEntity equip: equips) {
+            if(!equip.isStatus()){
+                equip.setStatus(true);
+                equipmentDAO.merge(equip);
+            }
+        }
+
+        List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(roomId);
+        int flag = 0;
+        for (TblReportEntity report: reports) {
+            List<TblReportDetailEntity> details = report.getTblReportDetailsById();
+            for (TblReportDetailEntity detail: details) {
+                if(!detail.isStatus()){
+                    detail.setStatus(true);
+                    reportDetailDAO.merge(detail);
+                }
+            }
+
+            report.setStatus(ReportStatus.FINISH.getValue());
+            reportDAO.merge(report);
+        }
+
+        room.setDamagedLevel(0);
+        classroomDAO.merge(room);
+        return "redirect:/thong-bao";
+    }
+
+    @RequestMapping(value = "doi-phong")
+    @ResponseBody
+    public String changeRoom(HttpServletRequest request, @RequestParam(value = "roomId") int roomId){
+
+        return  "";
     }
 
     private boolean resolve(int room, int category){
@@ -155,7 +199,6 @@ public class NotifyController {
         return true;
     }
 
-    //Check damaged level
     public int checkDamagedLevel(TblClassroomEntity classroomEntity) {
         int damagedLevel = 0;
         int projectorDamagedLevel = 0;

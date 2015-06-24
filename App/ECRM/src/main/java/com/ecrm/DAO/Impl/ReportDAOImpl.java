@@ -76,8 +76,13 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         Query query = entityManager.createQuery("SELECT i " +
                 "FROM TblUserEntity u, TblUserInfoEntity i " +
                 "WHERE u.username = i.username " +
-                "AND u.username IN (SELECT r.username FROM TblReportEntity r WHERE r.classRoomId = :room GROUP BY r.username)");
+                "AND u.username IN (SELECT r.username FROM TblReportEntity r " +
+                                    "WHERE r.classRoomId = :room " +
+                                    "AND (r.status = :status1 OR r.status = :status2) " +
+                                    "GROUP BY r.username)");
         query.setParameter("room", room);
+        query.setParameter("status1", ReportStatus.NEW.getValue());
+        query.setParameter("status2", ReportStatus.GOING.getValue());
 
         List queryResult = query.getResultList();
         String result = "";
@@ -118,6 +123,22 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         query.setParameter("username", username);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<TblReportEntity> getFinishReport(int limit, int offset) {
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.status = :status");
+        query.setParameter("status", ReportStatus.FINISH.getValue());
+
+        List queryResult = query.getResultList();
+        List<TblReportEntity> result = new ArrayList<TblReportEntity>();
+        if(!queryResult.isEmpty()){
+            for(Iterator i = queryResult.iterator(); i.hasNext();){
+                result.add((TblReportEntity)i.next());
+            }
+        }
+
+        return result;
     }
 
     @Override

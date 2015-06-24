@@ -189,5 +189,10 @@ public class DamagedRoomDTO {
         public void setClassName(String className) {
             this.className = className;
         }
+
+        @Override
+        public String toString() {
+            return " " + this.name;
+        }
     }
 }

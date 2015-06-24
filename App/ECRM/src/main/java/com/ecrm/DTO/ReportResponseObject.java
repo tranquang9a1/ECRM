@@ -25,6 +25,7 @@ public class ReportResponseObject {
     private String createDate;
     private int status;
     private int damagedLevel;
+    private String reporter;
 
     public ReportResponseObject(TblReportEntity report, List<TblReportDetailEntity> reportDetails){
         this.reportId = report.getId();
@@ -45,6 +46,18 @@ public class ReportResponseObject {
             }
         }
         this.listEquipment = this.listEquipment.substring(0, listEquipment.length()-2);
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public String getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
     }
 
     public int getReportId() {

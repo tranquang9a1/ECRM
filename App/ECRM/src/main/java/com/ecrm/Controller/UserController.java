@@ -3,8 +3,10 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.ReportRequestDTO;
 import com.ecrm.DTO.ReportResponseObject;
+import com.ecrm.DTO.ScheduleDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable.*;
+import com.ecrm.Utils.socket.SocketIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,12 +57,18 @@ public class UserController {
         }
         request.setAttribute("NOTIFICATIONS", listReport);
 
-        TblScheduleEntity schedule = scheduleDAO.getScheduleInTime(user.getUsername(), 0);
-        if(schedule != null) {
-            TblClassroomEntity classroom = classroomDAO.find(schedule.getClassroomId());
+        List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
+        if(schedules.size() > 0) {
+            TblClassroomEntity classroom = classroomDAO.find(schedules.get(0).getClassroomId());
             TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
-            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedule.getClassroomId());
+            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedules.get(0).getClassroomId());
 
+            List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
+            for (TblScheduleEntity schedule: schedules) {
+                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null));
+            }
+
+            request.setAttribute("LISTSCHEDULE", listSchedule);
             request.setAttribute("ROOM", classroom);
             request.setAttribute("EQUIPMENTS", listEquipment);
             request.setAttribute("ROOMTYPE", roomType);
@@ -126,10 +134,23 @@ public class UserController {
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);
 
-      /*SocketIO.SentNotifyToStaff(user.getUsername() + " vừa báo cáo hư hại phòng " + room.getName());*/
+        SocketIO socketIO = new SocketIO();
+        socketIO.SentNotifyToStaff(user.getUsername() + " vừa báo cáo hư hại phòng " + room.getName());
 
 
         return report.getId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
+    }
+
+    @RequestMapping(value = "mau-phong")
+    public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
+        TblClassroomEntity classroom = classroomDAO.find(roomId);
+        TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
+        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(roomId);
+
+        request.setAttribute("ROOM", classroom);
+        request.setAttribute("EQUIPMENTS", listEquipment);
+        request.setAttribute("ROOMTYPE", roomType);
+        return "user/ReportRoom";
     }
 
     @RequestMapping(value = "viewHistory")
@@ -155,7 +176,7 @@ public class UserController {
         List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
 
         request.setAttribute("SCHEDULE", list);
-        request.setAttribute("ACTIVETAB","USER_SCHEDULE");
+        request.setAttribute("ACTIVELEFTTAB", "USER_SCHEDULE");
         return "user/Schedule";
     }
 

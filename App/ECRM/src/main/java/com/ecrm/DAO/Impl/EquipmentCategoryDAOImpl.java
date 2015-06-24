@@ -21,9 +21,9 @@ public class EquipmentCategoryDAOImpl extends BaseDAO<TblEquipmentCategoryEntity
     }
 
     @Override
-    public List<TblEquipmentCategoryEntity> getCategoriesInRoom(int room) {
+    public String getCategoriesInRoom(int room) {
 
-        Query query = entityManager.createQuery("SELECT c " +
+        Query query = entityManager.createQuery("SELECT c.name " +
                 "FROM TblEquipmentCategoryEntity c " +
                 "WHERE c.id IN (SELECT e.categoryId " +
                     "FROM TblEquipmentEntity e " +
@@ -33,11 +33,10 @@ public class EquipmentCategoryDAOImpl extends BaseDAO<TblEquipmentCategoryEntity
         query.setParameter("roomId", room);
 
         List queryResult = query.getResultList();
-        List<TblEquipmentCategoryEntity> result = new ArrayList<TblEquipmentCategoryEntity>();
+        String result = "";
         if (!queryResult.isEmpty()) {
             for (Iterator i = queryResult.iterator(); i.hasNext(); ) {
-                TblEquipmentCategoryEntity item = (TblEquipmentCategoryEntity) i.next();
-                result.add(item);
+                result += (String)i.next() + ", ";
             }
         }
 

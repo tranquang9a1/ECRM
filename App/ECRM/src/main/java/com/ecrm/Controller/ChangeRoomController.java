@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,7 +49,17 @@ public class ChangeRoomController {
             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
                 List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
                 if(!classroom.isEmpty()){
-                    availableClassroom = classroom;
+                    if(availableClassroom.isEmpty()){
+                        availableClassroom = classroom;
+                    }else{
+                        Iterator<String> it = availableClassroom.iterator();
+                        while (it.hasNext()) {
+                            String room = it.next();
+                            if (!classroom.contains(room)) {
+                                it.remove();
+                            }
+                        }
+                    }
                 }
             }
             return availableClassroom;

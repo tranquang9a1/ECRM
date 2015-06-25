@@ -39,40 +39,39 @@ public class CheckDamagedClassroomSchedule {
         for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
             int classroomId = classroomEntity.getId();
             List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleInClassroom(classroomId);
+            List<String> availableClassroom = new ArrayList<String>();
             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
-                List<String> avaiClassroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
-                if (!avaiClassroom.isEmpty()) {
-                    String username = tblScheduleEntity.getUsername();
-                    TblUserEntity user = userDAO.findUser(username);
-                    TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(avaiClassroom.get(0));
+                List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+                if(!classroom.isEmpty()){
+                    if(availableClassroom.isEmpty()){
+                        availableClassroom = classroom;
+                    }else{
+                        Iterator<String> it = availableClassroom.iterator();
+                        while (it.hasNext()) {
+                            String room = it.next();
+                            if (!classroom.contains(room)) {
+                                it.remove();
+                            }
+                        }
+                    }
+                }
+            }
+            if(!availableClassroom.isEmpty()){
+                TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+                for(TblScheduleEntity tblScheduleEntity:tblScheduleEntities){
                     tblScheduleEntity.setIsActive(false);
                     scheduleDAO.merge(tblScheduleEntity);
-                    TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), newClassroom.getId(),
+                    TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
                             tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng", tblScheduleEntity.getTimeFrom(),
                             tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
-                    String message = "Đã đổi phòng cho giáo viên " + username + " từ phòng: " +
-                            tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + newClassroom.getName() + ".";
+                    String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
+                            tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + ".";
                     scheduleDAO.persist(newSchedule);
-                    System.out.println("Đã đổi phòng cho giáo viên " + username + " từ phòng: " +
-                            tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + newClassroom.getName() + ".");
-                    SmsUtils.sendMessage(user.getTblUserInfoByUsername().getPhone(), message);
+                    SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
                 }
             }
         }
 
-
-        /*System.out.println("Task check time using run!!! Current time is: "+ new Date());
-        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
-        for(TblScheduleEntity tblScheduleEntity: tblScheduleEntities){
-            double slots = tblScheduleEntity.getSlots();
-            TblClassroomEntity classroomEntity = tblScheduleEntity.getTblClassroomByClassroomId();
-            List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
-            if(!tblEquipmentEntities.isEmpty()){
-                TblEquipmentEntity equipmentEntity = tblEquipmentEntities.get(0);
-                equipmentEntity.setTimeRemain(equipmentEntity.getTimeRemain()-(slots*1.5));
-                equipmentDAO.merge(equipmentEntity);
-            }
-        }*/
     }
 
     @Scheduled(cron = "0 0 7 ? * MON-SAT")

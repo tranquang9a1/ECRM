@@ -75,10 +75,12 @@ public class ChangeRoomController {
             tblScheduleEntity.setIsActive(false);
             scheduleDAO.merge(tblScheduleEntity);
             TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
-                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng", tblScheduleEntity.getTimeFrom(),
+                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng "+tblScheduleEntity.getTblClassroomByClassroomId().getName()
+                    +" sang phòng "+ changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
                     tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
             String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
-                    tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + ".";
+                    tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
+                    + tblScheduleEntity.getTimeFrom() + " ngày "+tblScheduleEntity.getDate();
             scheduleDAO.persist(newSchedule);
             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
         }

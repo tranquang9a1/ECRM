@@ -32,55 +32,48 @@ public class ChangeRoomController {
 
 
     @RequestMapping(value = "getAvailableRoom")
-    public @ResponseBody
-    List<String> getAvailableRoom(HttpServletRequest request, @RequestParam("classroomId")int classroomId){
+    public
+    @ResponseBody
+    List<String> getAvailableRoom(HttpServletRequest request, @RequestParam("classroomId") int classroomId) {
         List<String> availableClassroom = new ArrayList<String>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
-        for(TblClassroomEntity classroomEntity:tblClassroomEntities){
-            List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleInClassroom(classroomEntity.getId());
-            if(tblScheduleEntities.isEmpty()){
-                availableClassroom.add(classroomEntity.getName());
-            }
-        }
-        if(!availableClassroom.isEmpty()){
-            return availableClassroom;
-        }else{
-            List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
-            for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
-                List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
-                if(!classroom.isEmpty()){
-                    if(availableClassroom.isEmpty()){
-                        availableClassroom = classroom;
-                    }else{
-                        Iterator<String> it = availableClassroom.iterator();
-                        while (it.hasNext()) {
-                            String room = it.next();
-                            if (!classroom.contains(room)) {
-                                it.remove();
-                            }
+        List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            if (!classroom.isEmpty()) {
+                if (availableClassroom.isEmpty()) {
+                    availableClassroom = classroom;
+                } else {
+                    Iterator<String> it = availableClassroom.iterator();
+                    while (it.hasNext()) {
+                        String room = it.next();
+                        if (!classroom.contains(room)) {
+                            it.remove();
                         }
                     }
                 }
             }
-            return availableClassroom;
         }
+        return availableClassroom;
     }
 
     @RequestMapping(value = "changeRoom")
-    public @ResponseBody Boolean changeRoom(String currentClassroom, String changeClassroom) throws TwilioRestException {
+    public
+    @ResponseBody
+    Boolean changeRoom(String currentClassroom, String changeClassroom) throws TwilioRestException {
         TblClassroomEntity currentClassroomEntity = classroomDAO.getClassroomByName(currentClassroom);
         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(changeClassroom);
         List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleInClassroom(currentClassroomEntity.getId());
-        for(TblScheduleEntity tblScheduleEntity:currentSchedule){
+        for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
             tblScheduleEntity.setIsActive(false);
             scheduleDAO.merge(tblScheduleEntity);
             TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
-                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng "+tblScheduleEntity.getTblClassroomByClassroomId().getName()
-                    +" sang phòng "+ changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
+                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
+                    + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
                     tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
             String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                     tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
-                    + tblScheduleEntity.getTimeFrom() + " ngày "+tblScheduleEntity.getDate();
+                    + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
             scheduleDAO.persist(newSchedule);
             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
         }

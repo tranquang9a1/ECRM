@@ -7,6 +7,7 @@ import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
 import com.ecrm.Entity.TblUserEntity;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -33,7 +36,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/staff")
-public class ScheduleController {
+public class ScheduleController{
     @Autowired
     ScheduleDAOImpl scheduleDAO;
     @Autowired
@@ -56,22 +59,23 @@ public class ScheduleController {
 
     @RequestMapping(value = "import")
     public String importFile(HttpServletRequest request) throws IOException, InvalidFormatException, ParseException {
+        String fileName="";
         File file;
         int maxFileSize = 5000 * 1024;
         int maxMemSize = 5000 * 1024;
-        String filePath = "D:\\";
+        String filePath = "/path/to/uploads";
         String contentType = request.getContentType();
-        String fileName = "";
         if ((contentType.indexOf("multipart/form-data") >= 0)) {
             DiskFileItemFactory factory = new DiskFileItemFactory();
             // maximum size that will be stored in memory
             factory.setSizeThreshold(maxMemSize);
             // Location to save data that is larger than maxMemSize.
-            factory.setRepository(new File("D:\\"));
+            factory.setRepository(new File("/path/to/uploads"));
             // Create a new file upload handler
             ServletFileUpload upload = new ServletFileUpload(factory);
             // maximum file size to be uploaded.
             upload.setSizeMax(maxFileSize);
+
             try {
                 // Parse the request to get file items.
                 List fileItems = upload.parseRequest(request);
@@ -84,13 +88,13 @@ public class ScheduleController {
                     if (!fi.isFormField()) {
                         // Get the uploaded file parameters
                         fileName = fi.getName();
+                        ServletContext servletContext = request.getSession().getServletContext();
+                       filePath  =  servletContext.getRealPath(fileName);
                         // Write the file
                         if (fileName.lastIndexOf("\\") >= 0) {
-                            file = new File(filePath +
-                                    fileName.substring(fileName.lastIndexOf("\\")));
+                            file = new File(filePath);
                         } else {
-                            file = new File(filePath +
-                                    fileName.substring(fileName.lastIndexOf("\\") + 1));
+                            file = new File(filePath);
                         }
                         fi.write(file);
                     }
@@ -99,8 +103,9 @@ public class ScheduleController {
             } catch (Exception ex) {
                 System.out.println(ex);
             }
+
             //Read file excel
-            FileInputStream fileInputStream = new FileInputStream(new File(filePath + fileName));
+            FileInputStream fileInputStream = new FileInputStream(new File(filePath));
             //Get the workbook instance for XLS file
             Workbook workbook = WorkbookFactory.create(fileInputStream);
 

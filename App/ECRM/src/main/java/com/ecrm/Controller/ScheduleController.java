@@ -166,8 +166,7 @@ public class ScheduleController{
             }
             fileInputStream.close();
             FileOutputStream out =
-                    new FileOutputStream(new File(filePath + fileName));
-            workbook.write(out);
+                    new FileOutputStream(new File(filePath));
             out.close();
 
         }
@@ -200,7 +199,7 @@ public class ScheduleController{
         Date timeFrom1;
         Date timeFrom2;
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
-        if (checkValidSchedule(teacher, teachingDate, timeFrom)) {
+        if (checkValidSchedule(teacher, date, timeFrom)) {
             Collection<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
             for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                 if (tblScheduleEntity1.getUsername().equals(teacher) &&
@@ -223,7 +222,7 @@ public class ScheduleController{
 
     }
 
-    public boolean checkValidSchedule(String teacher, java.sql.Date teachingDate, String teachingTime) {
+    public boolean checkValidSchedule(String teacher, String teachingDate, String teachingTime) {
         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(teacher, teachingDate, teachingTime);
         if (!tblScheduleEntities.isEmpty()) {
             return false;
@@ -277,7 +276,7 @@ public class ScheduleController{
                 if (all.equals("0")) {
                     scheduleDAO.persist(tblScheduleEntity);
                 } else {
-                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom);
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom);
                     if (!tblScheduleEntities.isEmpty()) {
                         tblScheduleEntities.get(0).setIsActive(false);
                         scheduleDAO.merge(tblScheduleEntities.get(0));
@@ -296,7 +295,7 @@ public class ScheduleController{
             if (all.equals("0")) {
                 scheduleDAO.persist(tblScheduleEntity);
             } else {
-                List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(teachingDate, timeFrom);
+                List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom);
                 if (!tblScheduleEntities.isEmpty()) {
                     tblScheduleEntities.get(0).setIsActive(false);
                     scheduleDAO.merge(tblScheduleEntities.get(0));

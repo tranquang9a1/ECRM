@@ -61,6 +61,8 @@
 <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
 <c:set var="classrooms" value="${requestScope.CLASSROOMS}"/>
 <c:set var="teachers" value="${requestScope.TEACHERS}"/>
+<c:set var="teachingDate" value="${requestScope.TEACHINGDATE}"/>
+<c:set var="classroomId" value="${requestScope.CLASSROOMID}"/>
 <c:set var="schedules" value="${requestScope.SCHEDULES}"/>
 
 <div class="contain-layout">
@@ -78,51 +80,158 @@
     </div>
 
 
-    <%--<form action="staff/searchSchedule">
-        <div>Ngày bắt đầu: <input type="text" id="datefrom" name="datefrom"></div>
-        <div>Ngày kết thúc: <input type="text" id="dateto" name="dateto"></div>
-        <div>Phòng học:<select name="classroomId">
-            <option value="0">---</option>
-            <c:forEach items="${classrooms}" var="c">
-                <option value="${c.id}">Phòng ${c.name}</option>
-            </c:forEach>
-        </select></div>
-        <div>Giáo viên:<select name="username">
-            <option value="0">---</option>
-            <c:forEach items="${teachers}" var="t">
-                <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-            </c:forEach>
-        </select></div>
-        <button type="submit">Search</button>
-    </form>--%>
+    <form action="/staff/searchSchedule">
+        <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 511px;">
+            <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;">
+                TÌM KIẾM LỊCH
+            </header>
+        </div>
+        <div style="margin-left: 20px; background-color: #ffffff; width: 511px;">
+            <table>
+                <tr>
+                    <td><label>Ngày: </label></td>
+                    <td><input type="text" id="datefrom" name="datefrom"><label> ~ </label><input type="text"
+                                                                                                  id="dateto"
+                                                                                                  name="dateto"></td>
+                </tr>
+                <tr>
+                    <td><label>Phòng học: </label></td>
+                    <td><select name="classroomId" style="width: 100px">
+                        <option value="0">---</option>
+                        <c:forEach items="${classrooms}" var="c">
+                            <option value="${c.id}">Phòng ${c.name}</option>
+                        </c:forEach>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label>Giáo viên: </label></td>
+                    <td><select name="username" style="width: 100px">
+                        <option value="0">---</option>
+                        <c:forEach items="${teachers}" var="t">
+                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                        </c:forEach>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="padding: 10px 0px 5px 0px;">
+                        <button type="submit" class="btn btn-orange" style="float: right">Search</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
 
-   <%-- <div id="result" style="width: 1000px; height: 300px; overflow: scroll; margin-left: 20px;">
-        <div style="width: 100%">
-            <div class="table">
-                <div class="header-table">
-                    <div class="room-number">
-                        <div>Ngày</div>
-                    </div>
-                    <c:forEach var="c" items="${schedules}">
-                        <div class="room-number" style="width: 100px;">
-                            <fmt:formatDate value="${c.date}" type="date" dateStyle="short"/>
-                        </div>
+    <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 1000px;">
+        <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;">
+            LỊCH
+        </header>
+    </div>
+    <div id="result"
+         style="width: 1000px; height: 300px; overflow: scroll; margin-left: 20px; background-color: #ffffff">
+        <c:if test="${not empty schedules}">
+            <table border="1px">
+                <tr>
+
+                    <th bgcolor="yellow">Phòng</th>
+                    <th bgcolor="yellow">Ngày</th>
+
+                    <c:forEach items="${teachingDate}" var="td">
+                        <th bgcolor="#32cd32">${td}</th>
                     </c:forEach>
 
-                    <p class="clear"></p>
-                </div>
-                <div class="body-table">
-                    <div class="row">
+                </tr>
+                <c:forEach var="ci" items="${classroomId}">
+                    <tr>
+                        <td rowspan="6">${ci}</td>
+                        <td bgcolor="yellow">7:00-8:30</td>
+                        <c:forEach items="${teachingDate}" var="td">
+                            <td>
+                                <c:forEach var="s" items="${schedules}">
+                                    <c:choose>
+                                        <c:when test="${s.timeFrom=='07:00:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
+                                            ${s.username}
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
 
-
-                        <p class="clear"></p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>--%>
+                    </tr>
+                    <tr>
+                        <td bgcolor="yellow">8:45-10:15</td>
+                        <c:forEach items="${teachingDate}" var="td">
+                            <td>
+                                <c:forEach var="s" items="${schedules}">
+                                    <c:choose>
+                                        <c:when test="${s.timeFrom=='08:45:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
+                                            ${s.username}
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                    <tr>
+                        <td bgcolor="yellow">10:30-12:00</td>
+                        <c:forEach items="${teachingDate}" var="td">
+                            <td>
+                                <c:forEach var="s" items="${schedules}">
+                                    <c:choose>
+                                        <c:when test="${s.timeFrom=='10:30:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
+                                            ${s.username}
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                    <tr>
+                        <td bgcolor="yellow">12:30-14:00</td>
+                        <c:forEach items="${teachingDate}" var="td">
+                            <td>
+                                <c:forEach var="s" items="${schedules}">
+                                    <c:choose>
+                                        <c:when test="${s.timeFrom=='12:30:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
+                                            ${s.username}
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                    <tr>
+                        <td bgcolor="yellow">14:15-15:45</td>
+                        <c:forEach items="${teachingDate}" var="td">
+                            <td>
+                                <c:forEach var="s" items="${schedules}">
+                                    <c:choose>
+                                        <c:when test="${s.timeFrom=='14:15:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
+                                            ${s.username}
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                    <tr>
+                        <td bgcolor="yellow">16:00-17:30</td>
+                        <c:forEach items="${teachingDate}" var="td">
+                            <td>
+                                <c:forEach var="s" items="${schedules}">
+                                    <c:choose>
+                                        <c:when test="${s.timeFrom=='16:00:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
+                                            ${s.username}
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:if>
+    </div>
     <div class="modal modal-small" id="Upload">
         <div class="content-modal">
             <div class="header-modal title">

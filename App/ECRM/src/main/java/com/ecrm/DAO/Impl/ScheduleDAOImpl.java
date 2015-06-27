@@ -122,4 +122,16 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         return tblScheduleEntities;
     }
+
+    public List<TblScheduleEntity> advanceSearch(String dateFrom, String dateTo, String classroomId, String username){
+        Query q = entityManager.createQuery("select s from TblScheduleEntity s where " +
+                "s.date between Date(:dateFrom) and Date(:dateTo) and s.isActive=true and s.username like :username and " +
+                "CONVERT(s.classroomId, CHAR(16)) like :classroomId");
+        q.setParameter("dateFrom", dateFrom);
+        q.setParameter("dateTo", dateTo);
+        q.setParameter("username", "%"+username+"%");
+        q.setParameter("classroomId", "%"+classroomId+"%");
+        List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+        return tblScheduleEntities;
+    }
 }

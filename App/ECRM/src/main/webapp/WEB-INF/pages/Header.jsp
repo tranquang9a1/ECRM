@@ -61,7 +61,7 @@
                 <p>Thống Kê</p>
             </li>
             <li id="STAFF_SCHEDULE">
-                <a href="/staff/schedule?ACTIVETAB=tab1">
+                <a href="/staff/schedule">
                     <img src=""/>
                     <p>Xếp Lịch</p>
                 </a>

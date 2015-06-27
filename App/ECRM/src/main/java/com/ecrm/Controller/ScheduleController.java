@@ -36,7 +36,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/staff")
-public class ScheduleController{
+public class ScheduleController {
     @Autowired
     ScheduleDAOImpl scheduleDAO;
     @Autowired
@@ -45,21 +45,18 @@ public class ScheduleController{
     UserDAOImpl userDAO;
 
     @RequestMapping(value = "schedule")
-    public String mappingSchedule(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
+    public String mappingSchedule(HttpServletRequest request) {
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
         List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
         request.setAttribute("CLASSROOMS", tblClassroomEntities);
         request.setAttribute("TEACHERS", tblUserEntities);
-        request.setAttribute("ACTIVETAB", activeTab);
         request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
-        Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
-        request.setAttribute("SCHEDULES",scheduleEntity);
         return "Staff_MappingSchedule";
     }
 
     @RequestMapping(value = "import")
     public String importFile(HttpServletRequest request) throws IOException, InvalidFormatException, ParseException {
-        String fileName="";
+        String fileName = "";
         File file;
         int maxFileSize = 5000 * 1024;
         int maxMemSize = 5000 * 1024;
@@ -89,7 +86,7 @@ public class ScheduleController{
                         // Get the uploaded file parameters
                         fileName = fi.getName();
                         ServletContext servletContext = request.getSession().getServletContext();
-                       filePath  =  servletContext.getRealPath(fileName);
+                        filePath = servletContext.getRealPath(fileName);
                         // Write the file
                         if (fileName.lastIndexOf("\\") >= 0) {
                             file = new File(filePath);
@@ -314,14 +311,42 @@ public class ScheduleController{
 
     //Search
     @RequestMapping(value = "searchSchedule")
-    public String searchSchedule(HttpServletRequest request) {
-        Collection<TblScheduleEntity> scheduleEntity = scheduleDAO.findAll();
-        request.setAttribute("SCHEDULES", scheduleEntity);
+    public String searchSchedule(HttpServletRequest request, @RequestParam("datefrom") String datefrom, @RequestParam("dateto") String dateto
+            , @RequestParam("classroomId") String classroomId, @RequestParam("username") String username) {
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
         List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
         request.setAttribute("CLASSROOMS", tblClassroomEntities);
         request.setAttribute("TEACHERS", tblUserEntities);
         request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
+        List<LocalDate> teachingDate = new ArrayList<LocalDate>();
+        //
+        if(datefrom.trim().length()>0 && dateto.trim().length()>0){
+            LocalDate dateFrom = new LocalDate(datefrom);
+            LocalDate dateTo = new LocalDate(dateto);
+            for (LocalDate date = dateFrom; date.isBefore(dateTo.plusDays(1)); date = date.plusDays(1)) {
+                teachingDate.add(date);
+            }
+        }
+        if(classroomId.equals("0")){
+            classroomId = "";
+        }
+        if(username.equals("0")){
+            username = "";
+        }
+        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.advanceSearch(datefrom,dateto, classroomId, username);
+        List<String> classroomName = new ArrayList<String>();
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
+            if (classroomName.isEmpty()) {
+                classroomName.add(tblScheduleEntity.getTblClassroomByClassroomId().getName());
+            } else {
+                if (!classroomName.contains(tblScheduleEntity.getTblClassroomByClassroomId().getName())) {
+                    classroomName.add(tblScheduleEntity.getTblClassroomByClassroomId().getName());
+                }
+            }
+        }
+        request.setAttribute("TEACHINGDATE", teachingDate);
+        request.setAttribute("CLASSROOMID", classroomName);
+        request.setAttribute("SCHEDULES", tblScheduleEntities);
         return "Staff_MappingSchedule";
     }
 }

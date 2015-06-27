@@ -12,7 +12,6 @@
     <title></title>
     <link rel="stylesheet" href="../../resource/css/roomtype-2.css"/>
     <script src="../resource/js/jquery-1.11.3.js"></script>
-    <script src="../../resource/js/quang.js"></script>
 
     <style>
         .subDIv {

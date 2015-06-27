@@ -80,7 +80,7 @@
     </div>
 
 
-    <form action="/staff/searchSchedule">
+    <form action="/staff/searchSchedule" onsubmit="return validateForm()" name="searchForm">
         <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 511px;">
             <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;">
                 TÌM KIẾM LỊCH
@@ -368,6 +368,18 @@
             case 2:
                 document.getElementById('importManually').submit();
                 break;
+        }
+    }
+    function validateForm(){
+        var dateFrom = document.forms["searchForm"]["datefrom"].value;
+        var dateTo = document.forms["searchForm"]["dateto"].value;
+        if (dateFrom == null || dateFrom == "") {
+            alert("Phải nhập ngày bắt đầu!");
+            return false;
+        }
+        if (dateTo == null || dateTo == "") {
+            alert("Phải nhập ngày kết thúc!");
+            return false;
         }
     }
 </script>

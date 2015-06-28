@@ -8,6 +8,7 @@ import java.util.List;
 public class ReportClassDTO {
 
     private int roomId;
+    private String roomName;
     private String timeReport;
     private int damageLevel;
     private String evaluate;
@@ -15,8 +16,9 @@ public class ReportClassDTO {
     private int systemEvaluate;
     private List<EquipmentDTO> equipments;
 
-    public ReportClassDTO(int roomId, String timeReport, int damageLevel, String evaluate, String userReport, int systemEvaluate, List<EquipmentDTO> equipments) {
+    public ReportClassDTO(int roomId, String roomName, String timeReport, int damageLevel, String evaluate, String userReport, int systemEvaluate, List<EquipmentDTO> equipments) {
         this.roomId = roomId;
+        this.roomName = roomName;
         this.timeReport = timeReport;
         this.damageLevel = damageLevel;
         this.evaluate = evaluate;
@@ -34,6 +36,14 @@ public class ReportClassDTO {
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public String getTimeReport() {

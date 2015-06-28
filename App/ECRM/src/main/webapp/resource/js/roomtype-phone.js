@@ -229,11 +229,13 @@ function setChooseEquipment(map){
             $(this).removeAttr("data-choose");
 
             delete damagedEquipments[$(this).attr("data-position")];
+            Android.removeEquipment($(this).attr("data-equipmentname"), $(this).attr("data-position"));
         } else {
             $(this).addClass("choose");
             $(this).attr("data-choose", "true");
 
             damagedEquipments[$(this).attr("data-position")] = {position: $(this).attr("data-position"), category: category};
+            Android.addEquipment($(this).attr("data-equipmentname"), $(this).attr("data-position"));
         }
     });
 }

@@ -176,6 +176,7 @@ public class APIController {
             }
             room = classroomDAO.find(classroomId);
             int damagedLevel = checkDamagedLevel(room);
+
             room.setDamagedLevel(damagedLevel);
             classroomDAO.merge(room);
 
@@ -255,6 +256,7 @@ public class APIController {
             }
             Map<String, Boolean> mapManage = new HashMap<String, Boolean>();
             for (TblReportDetailEntity entity : details) {
+                if (mapManage.get(entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName()) == null) {
                     EquipmentDTO detailDTO = new EquipmentDTO();
 
                     detailDTO.setEquipmentName(entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName());
@@ -262,14 +264,16 @@ public class APIController {
                     detailDTO.setEvaluate(entity.getDescription());
                     detailDTO.setReportId(entity.getReportId());
                     detailDTO.setStatus(entity.isStatus());
-                    detailDTO.setQuantity(1);
+                    detailDTO.setQuantity(mapCount.get(detailDTO.getEquipmentName()));
                     reportId = entity.getReportId();
+                    mapManage.put(detailDTO.getEquipmentName(), true);
                     equipments.add(detailDTO);
-
+                }
 
             }
             TblReportEntity reportEntity = reportDAO.find(reportId);
             ReportClassDTO reportClassDTO = new ReportClassDTO();
+            reportClassDTO.setRoomName(reportEntity.getTblClassroomByClassRoomId().getName());
             reportClassDTO.setRoomId(classId);
             reportClassDTO.setEquipments(equipments);
             reportClassDTO.setUserReport(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername());

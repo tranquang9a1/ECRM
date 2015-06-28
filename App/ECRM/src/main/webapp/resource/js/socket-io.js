@@ -1,7 +1,7 @@
 /**
  * Created by ChiDNMSE60717 on 6/16/2015.
  */
-var socket = io.connect('http://192.168.1.107:3000');
+var socket = io.connect('http://128.199.208.93:3000');
 
 function connectToSocket(username, role) {
     var jsonObject = {socketId: "", username: username, role: role, deviceType: 1};

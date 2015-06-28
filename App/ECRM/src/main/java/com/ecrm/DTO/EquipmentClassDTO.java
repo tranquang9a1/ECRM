@@ -5,24 +5,17 @@ package com.ecrm.DTO;
  */
 public class EquipmentClassDTO {
 
-    private int equipmentId;
+
     private String equipmentName;
+    private String timeRemain;
+    private String company;
+    private boolean damaged;
 
-    public EquipmentClassDTO(int equipmentId, String equipmentName) {
-        this.equipmentId = equipmentId;
+    public EquipmentClassDTO(String equipmentName, String timeRemain, String company, boolean damaged) {
         this.equipmentName = equipmentName;
-    }
-
-    public EquipmentClassDTO() {
-
-    }
-
-    public int getEquipmentId() {
-        return equipmentId;
-    }
-
-    public void setEquipmentId(int equipmentId) {
-        this.equipmentId = equipmentId;
+        this.timeRemain = timeRemain;
+        this.company = company;
+        this.damaged = damaged;
     }
 
     public String getEquipmentName() {
@@ -31,5 +24,30 @@ public class EquipmentClassDTO {
 
     public void setEquipmentName(String equipmentName) {
         this.equipmentName = equipmentName;
+    }
+
+    public String getTimeRemain() {
+        return timeRemain;
+    }
+
+    public void setTimeRemain(String timeRemain) {
+        this.timeRemain = timeRemain;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+
+    public boolean isDamaged() {
+        return damaged;
+    }
+
+    public void setDamaged(boolean damaged) {
+        this.damaged = damaged;
     }
 }

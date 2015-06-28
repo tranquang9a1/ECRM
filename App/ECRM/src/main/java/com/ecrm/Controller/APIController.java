@@ -53,7 +53,7 @@ public class APIController {
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id") int classroomId) {
         TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
-        Collection<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
+        List<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
 
         request.setAttribute("CLASSROOM", classroomEntity);
         request.setAttribute("EQUIPMENTS", equipmentEntities);
@@ -542,33 +542,75 @@ public class APIController {
     @RequestMapping(value = "/getEquipments", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<String> getEquipment(@RequestParam("classId") int classId) {
+    List<EquipmentClassDTO> getEquipment(@RequestParam("classId") int classId) {
         List<EquipmentClassDTO> result = new ArrayList<EquipmentClassDTO>();
         TblClassroomEntity classroomEntity = classroomDAO.find(classId);
+        List<TblEquipmentEntity> listEquipments = classroomEntity.getTblEquipmentsById();
         TblRoomTypeEntity roomType = classroomEntity.getTblRoomTypeByRoomTypeId();
         List<String> list = new ArrayList<String>();
         if (roomType.getAirConditioning() > 0) {
-            list.add("Máy Lạnh");
+            TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 3);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Máy Lạnh", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Máy Lạnh", null, null, true));
+            }
+
         }
         if (roomType.getBulb() > 0) {
-            list.add("Bóng Đèn");
+            TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 6);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Bóng Đèn", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Bóng Đèn", null, null, true));
+            }
         }
         if (roomType.getFan() > 0) {
-            list.add("Máy Quạt");
+            TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 4);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Máy Quạt", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Máy Quạt", null, null, true));
+            }
         }
         if (roomType.getProjector() > 0) {
-            list.add("Máy Chiếu");
+            TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 1);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Máy Chiếu", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Máy Chiếu", null, null, true));
+            }
         }
         if (roomType.getTelevision() > 0) {
-            list.add("Tivi");
+            TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 2);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Tivi", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Tivi", null, null, true));
+            }
         }
         if (roomType.getSpeaker() > 0) {
-            list.add("Loa");
+            TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 5);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Loa", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Loa", null, null, true));
+            }
         }
-        list.add("Bàn");
-        list.add("Ghế");
+        result.add(new EquipmentClassDTO("Bàn", null, null, true));
+        result.add(new EquipmentClassDTO("Ghế", null, null, true));
 
-        return list;
+        return result;
+    }
+
+
+    public TblEquipmentEntity getEquipment(List<TblEquipmentEntity> listEquipments, int id) {
+        for (int i = 0; i< listEquipments.size(); i++) {
+            if (listEquipments.get(i).getCategoryId() == id) {
+                return listEquipments.get(i);
+            }
+        }
+        return null;
     }
 
     @RequestMapping(value = "/sendSMS", method = RequestMethod.GET)

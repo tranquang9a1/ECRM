@@ -5,4 +5,12 @@ package com.ecrm.Utils;
  */
 public class Constant {
     public static int TIME_ONE_SLOT=90;
+    public static int PROJECTOR= 1;
+    public static int TIVI= 2;
+    public static int AIR= 3;
+    public static int FAN= 4;
+    public static int SPEAKER= 5;
+    public static int BULB= 6;
+    public static int TABLE= 7;
+    public static int CHAIR=8;
 }

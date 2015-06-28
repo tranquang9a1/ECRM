@@ -77,4 +77,27 @@ public class GCMController {
         return "notify";
     }
 
+    public void sendNotification(String msg, String listUser) {
+        Result result = null;
+        String[] users = listUser.split(",");
+        try {
+            for (int  i = 0; i < users.length; i++) {
+                String deviceId = userDAO.getDeviceId(users[i]);
+
+                Sender sender = new Sender(GOOGLE_SERVER_KEY);
+                Message message = new Message.Builder().timeToLive(120)
+                        .delayWhileIdle(false).addData(MESSAGE_KEY, msg).build();
+                System.out.println("User: " + users[i] + " - regId: " + deviceId);
+                result = sender.send(message, deviceId, 1);
+            }
+            System.out.println(result.toString());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.out.println(ioe.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.toString());
+        }
+    }
+
 }

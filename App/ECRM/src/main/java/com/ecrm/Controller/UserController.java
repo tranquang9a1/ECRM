@@ -89,7 +89,7 @@ public class UserController {
     @Transactional
     @ResponseBody
     public String createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest){
-
+        GCMController gcm = new GCMController();
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
         TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
@@ -160,6 +160,8 @@ public class UserController {
                 if (!check) {
                     SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
                 }
+                //Send notification to mobile
+                gcm.sendNotification(message, staff.getUsername());
             }
         } catch (TwilioRestException e) {
             System.out.println("Khong the gui SMS!");

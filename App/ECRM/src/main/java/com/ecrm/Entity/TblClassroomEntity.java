@@ -6,6 +6,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Htang on 6/5/2015.
@@ -22,9 +23,9 @@ public class TblClassroomEntity {
     private Boolean isAllInformation;
     private Integer damagedLevel;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
-    private Collection<TblEquipmentEntity> tblEquipmentsById;
-    private Collection<TblReportEntity> tblReportsById;
-    private Collection<TblScheduleEntity> tblSchedulesById;
+    private List<TblEquipmentEntity> tblEquipmentsById;
+    private List<TblReportEntity> tblReportsById;
+    private List<TblScheduleEntity> tblSchedulesById;
 
     @Id
     @GeneratedValue
@@ -147,31 +148,31 @@ public class TblClassroomEntity {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassroomId")
-    public Collection<TblEquipmentEntity> getTblEquipmentsById() {
+    public List<TblEquipmentEntity> getTblEquipmentsById() {
         return tblEquipmentsById;
     }
 
-    public void setTblEquipmentsById(Collection<TblEquipmentEntity> tblEquipmentsById) {
+    public void setTblEquipmentsById(List<TblEquipmentEntity> tblEquipmentsById) {
         this.tblEquipmentsById = tblEquipmentsById;
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassRoomId")
-    public Collection<TblReportEntity> getTblReportsById() {
+    public List<TblReportEntity> getTblReportsById() {
         return tblReportsById;
     }
 
-    public void setTblReportsById(Collection<TblReportEntity> tblReportsById) {
+    public void setTblReportsById(List<TblReportEntity> tblReportsById) {
         this.tblReportsById = tblReportsById;
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblClassroomByClassroomId")
-    public Collection<TblScheduleEntity> getTblSchedulesById() {
+    public List<TblScheduleEntity> getTblSchedulesById() {
         return tblSchedulesById;
     }
 
-    public void setTblSchedulesById(Collection<TblScheduleEntity> tblSchedulesById) {
+    public void setTblSchedulesById(List<TblScheduleEntity> tblSchedulesById) {
         this.tblSchedulesById = tblSchedulesById;
     }
 

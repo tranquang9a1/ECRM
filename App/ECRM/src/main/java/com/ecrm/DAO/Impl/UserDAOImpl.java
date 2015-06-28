@@ -90,4 +90,5 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         String result = query.getSingleResult().toString();
         return result;
     }
+
 }

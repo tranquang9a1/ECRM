@@ -42,7 +42,7 @@ public class MainController {
             session.setAttribute("USER", user);
 
             if (user.getTblRoleByRoleId().getName().equals("Admin")) {
-                return "redirect:/admin/account?ACTIVETAB=tab1";
+                return "redirect:/admin/account";
             }
             if (user.getTblRoleByRoleId().getName().equals("Staff")) {
                 return "redirect:/thong-bao";

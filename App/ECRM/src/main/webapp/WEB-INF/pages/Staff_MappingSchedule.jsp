@@ -103,45 +103,51 @@
                     <td><label>Phòng học: </label></td>
                     <td><select name="classroomId" style="width: 100px">
                         <option value="0">---</option>
-                        <c:if test="${not empty classroom}">
-                            <c:forEach items="${classrooms}" var="c">
-                                <c:if test="${classroom == c.id}">
-                                    <option value="${c.id}" selected>Phòng ${c.name}</option>
-                                </c:if>
-                                <c:if test="${classroom != c.id}">
+                        <c:choose>
+                            <c:when test="${not empty classroom}">
+                                <c:forEach items="${classrooms}" var="c">
+                                    <c:choose>
+                                        <c:when test="${classroom == c.id}">
+                                            <option value="${c.id}" selected>Phòng ${c.name}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${c.id}">Phòng ${c.name}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${classrooms}" var="c">
                                     <option value="${c.id}">Phòng ${c.name}</option>
-                                </c:if>
-                            </c:forEach>
-                        </c:if>
-                        <c:if test="${empty classroom}">
-                            <c:forEach items="${classrooms}" var="c">
-                                <option value="${c.id}">Phòng ${c.name}</option>
-                            </c:forEach>
-                        </c:if>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </select></td>
                 </tr>
                 <tr>
                     <td><label>Giáo viên: </label></td>
-                    <td><select name="username" style="width: 100px">
+                    <td><select name="username" style="width: 150px">
                         <option value="0">---</option>
-                        <c:forEach items="${teachers}" var="t">
-                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                        </c:forEach>
-                        <c:if test="${empty teacher}">
-                            <c:forEach items="${teachers}" var="t">
-                                <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                            </c:forEach>
-                        </c:if>
-                        <c:if test="${not empty teacher}">
-                            <c:forEach items="${teachers}" var="t">
-                                <c:if test="${teacher == t.username}">
-                                    <option value="${t.username}" selected>${t.tblUserInfoByUsername.fullName}</option>
-                                </c:if>
-                                <c:if test="${teacher != t.username}">
+                        <c:choose>
+                            <c:when test="${not empty teacher}">
+                                <c:forEach items="${teachers}" var="t">
+                                    <c:choose>
+                                        <c:when test="${teacher == t.username}">
+                                            <option value="${t.username}"
+                                                    selected>${t.tblUserInfoByUsername.fullName}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${teachers}" var="t">
                                     <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                </c:if>
-                            </c:forEach>
-                        </c:if>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </select></td>
                 </tr>
                 <tr>

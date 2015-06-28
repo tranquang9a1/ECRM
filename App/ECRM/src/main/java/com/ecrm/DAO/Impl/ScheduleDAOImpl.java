@@ -91,7 +91,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
     @Override
     public List<TblScheduleEntity> getScheduleNoFinishOfRoom(int room) {
         Query query = entityManager.createQuery("SELECT s FROM TblScheduleEntity s WHERE s.classroomId = :classroomId " +
-                "AND CURDATE() = s.date AND s.isActive = true AND s.timeFrom >= CURTIME()");
+                "AND CURDATE() = s.date AND s.isActive = true AND ADDTIME(s.timeFrom,'01:30:00') >= CURTIME()");
         query.setParameter("classroomId", room);
 
         List list = query.getResultList();

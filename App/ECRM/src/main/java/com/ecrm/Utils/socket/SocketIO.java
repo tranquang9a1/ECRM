@@ -26,7 +26,7 @@ public class SocketIO{
     public SocketIOServer setup(){
 
         Configuration config = new Configuration();
-        config.setHostname("192.168.1.106");
+        config.setHostname("192.168.1.107");
         config.setPort(3000);
         config.setOrigin("http://localhost:8080");
 

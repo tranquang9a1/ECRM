@@ -3,6 +3,7 @@ package com.ecrm.DAO.Impl;
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.NotificationDAO;
 import com.ecrm.Entity.TblNotificationEntity;
+import com.ecrm.Utils.Enumerable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -31,6 +32,24 @@ public class NotificationDAOImp extends BaseDAO<TblNotificationEntity, Integer> 
                                 "GROUP BY s.classroomId)");
         query.setParameter("username", username);
         query.setParameter("mType", messageType);
+
+        List queryResult = query.getResultList();
+        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
+        if(!queryResult.isEmpty()) {
+            for (Iterator i = queryResult.iterator(); i.hasNext();){
+                result.add((TblNotificationEntity) i.next());
+            }
+        }
+
+        return result;
+    }
+
+    public List<TblNotificationEntity> getAllNotifyOfStaff() {
+        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
+                "WHERE DATE(n.createTime) = CURDATE() " +
+                "AND n.status = true " +
+                "AND n.messageType = :mType ");
+        query.setParameter("mType", Enumerable.MessageType.NEWREPORT.getValue());
 
         List queryResult = query.getResultList();
         List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();

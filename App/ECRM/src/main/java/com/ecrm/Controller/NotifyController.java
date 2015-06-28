@@ -50,29 +50,29 @@ public class NotifyController {
     NotificationDAOImp notificationDAOImp;
 
     @RequestMapping(value = "")
-    public String notifications(HttpServletRequest request){
+    public String notifications(HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         List<Integer> rooms = reportDAO.getDamagedRoom();
         List<GroupReportsDTO> groups = new ArrayList<GroupReportsDTO>();
         String equipmentNames = "";
 
-        for(int i = 0; i < rooms.size(); i++){
+        for (int i = 0; i < rooms.size(); i++) {
             TblClassroomEntity room = classroomDAO.find(rooms.get(i));
             GroupReportsDTO group = new GroupReportsDTO();
             group.setRoomId(room.getId());
             group.setRoomName(room.getName());
 
             equipmentNames = equipmentCategoryDAO.getCategoriesInRoom(room.getId());
-            group.setListEquipments(equipmentNames.substring(0, equipmentNames.length()-2));
+            group.setListEquipments(equipmentNames.substring(0, equipmentNames.length() - 2));
             equipmentNames = "";
             group.setReporters(reportDAO.getReportersInRoom(room.getId()));
 
             groups.add(group);
         }
-        List<TblReportEntity> finishReport = reportDAO.getFinishReport(0,0);
+        List<TblReportEntity> finishReport = reportDAO.getFinishReport(0, 0);
         List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
-        for(int i = 0; i < finishReport.size(); i++) {
+        for (int i = 0; i < finishReport.size(); i++) {
 //            List<TblReportDetailEntity> reportDetails = finishReport.get(i).getTblReportDetailsById();
             ReportResponseObject report = new ReportResponseObject(finishReport.get(i)/*,reportDetails*/);
             report.setReporter(finishReport.get(i).getTblUserByUserId().getTblUserInfoByUsername().getFullName());
@@ -84,12 +84,12 @@ public class NotifyController {
         request.setAttribute("FINISHREPORT", listReport);
         request.setAttribute("NEWREPORT", groups);
 
-        request.setAttribute("ACTIVELEFTTAB","STAFF_NOTIFY");
+        request.setAttribute("ACTIVELEFTTAB", "STAFF_NOTIFY");
         return "staff/Notifications";
     }
 
     @RequestMapping(value = "chi-tiet")
-    public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId){
+    public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
 //        HttpSession session = request.getSession();
 //        TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
 
@@ -109,7 +109,7 @@ public class NotifyController {
     @RequestMapping(value = "sua-chua")
     @Transactional
     public String resolveReport(HttpServletRequest request, @RequestParam(value = "RoomId") int roomId,
-                                @RequestParam(value = "ListResolve") String listResolve){
+                                @RequestParam(value = "ListResolve") String listResolve) {
         String[] categories = listResolve.split(",");
         for (int i = 0; i < categories.length; i++) {
             resolve(roomId, Integer.parseInt(categories[i]));
@@ -124,11 +124,11 @@ public class NotifyController {
 
     @RequestMapping(value = "sua-het")
     @Transactional
-    public String resolveAllReportInRoom(HttpServletRequest request, @RequestParam(value = "roomId") int roomId){
+    public String resolveAllReportInRoom(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
         TblClassroomEntity room = classroomDAO.find(roomId);
         Collection<TblEquipmentEntity> equips = room.getTblEquipmentsById();
-        for(TblEquipmentEntity equip: equips) {
-            if(!equip.isStatus()){
+        for (TblEquipmentEntity equip : equips) {
+            if (!equip.isStatus()) {
                 equip.setStatus(true);
                 equipmentDAO.merge(equip);
             }
@@ -136,10 +136,10 @@ public class NotifyController {
 
         List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(roomId);
         int flag = 0;
-        for (TblReportEntity report: reports) {
+        for (TblReportEntity report : reports) {
             List<TblReportDetailEntity> details = report.getTblReportDetailsById();
-            for (TblReportDetailEntity detail: details) {
-                if(!detail.isStatus()){
+            for (TblReportDetailEntity detail : details) {
+                if (!detail.isStatus()) {
                     detail.setStatus(true);
                     reportDetailDAO.merge(detail);
                 }
@@ -150,7 +150,7 @@ public class NotifyController {
         }
 
         TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(roomId, MessageType.NEWREPORT.getValue());
-        if(notify != null) {
+        if (notify != null) {
             notify.setStatus(false);
             notificationDAOImp.merge(notify);
         }
@@ -162,16 +162,16 @@ public class NotifyController {
 
     @RequestMapping(value = "doi-phong")
     @ResponseBody
-    public String changeRoom(HttpServletRequest request,@RequestParam("currentClassroom") String currentRoom, @RequestParam("changeClassroom") String changeRoom) throws TwilioRestException {
+    public String changeRoom(HttpServletRequest request, @RequestParam("currentClassroom") String currentRoom, @RequestParam("changeClassroom") String changeRoom) throws TwilioRestException {
         TblClassroomEntity currentClassroom = classroomDAO.getClassroomByName(currentRoom);
         TblClassroomEntity changeClassroom = classroomDAO.getClassroomByName(changeRoom);
 
         List<TblScheduleEntity> currentSchedule = scheduleDAO.getScheduleNoFinishOfRoom(currentClassroom.getId());
 
         List<GroupUser> groupUsers = new ArrayList<GroupUser>();
-        for(TblScheduleEntity schedule: currentSchedule){
+        for (TblScheduleEntity schedule : currentSchedule) {
             GroupUser group = GroupUser.checkContainIn(groupUsers, schedule.getUsername());
-            if(group == null) {
+            if (group == null) {
                 group = new GroupUser(schedule.getUsername(), schedule.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), currentRoom, changeRoom);
                 groupUsers.add(group);
             }
@@ -190,13 +190,13 @@ public class NotifyController {
 
         String message = "Đổi phòng " + currentRoom + " sang phòng " + changeRoom;
         TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(currentClassroom.getId(), MessageType.CHANGEROOM.getValue());
-        if(notify == null) {
+        if (notify == null) {
             notify = new TblNotificationEntity(currentClassroom.getId(), message, null, MessageType.CHANGEROOM.getValue());
             notificationDAOImp.persist(notify);
         }
 
         SocketIO socket = new SocketIO();
-        for (GroupUser user: groupUsers) {
+        for (GroupUser user : groupUsers) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("currentRoom", currentRoom);
             jsonObject.put("currentRoomId", currentClassroom.getId());
@@ -205,25 +205,23 @@ public class NotifyController {
             jsonObject.put("listTime", user.getListTime());
 
             boolean check = socket.sendNotifyObjectToStaff(user.getUsername(), NotifyType.TEACHERCHANGEROOM.getValue(), jsonObject);
+            SmsUtils.sendMessage(user.getPhone(), user.toString());
 
-            if(!check) {
-                SmsUtils.sendMessage(user.getPhone(), user.toString());
-            }
         }
 
         return "Đổi phòng thành công!";
     }
 
     @RequestMapping(value = "all-notify")
-    public String getAllNotify(HttpServletRequest request){
+    public String getAllNotify(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
         String role = user.getTblRoleByRoleId().getName();
         List<TblNotificationEntity> listNotify;
-        if(role.equals("Teacher")) {
+        if (role.equals("Teacher")) {
             listNotify = notificationDAOImp.getAllNotifyOfUser(user.getUsername(), MessageType.CHANGEROOM.getValue());
         } else {
-            listNotify = notificationDAOImp.getAllNotifyOfUser(user.getUsername(), MessageType.NEWREPORT.getValue());
+            listNotify = notificationDAOImp.getAllNotifyOfStaff();
         }
 
         request.setAttribute("LISTNOTIFY", listNotify);
@@ -231,7 +229,7 @@ public class NotifyController {
         return "ListNotification";
     }
 
-    private boolean resolve(int room, int category){
+    private boolean resolve(int room, int category) {
         //Change Equipment status and ReportDetail status
         List<TblEquipmentEntity> equips = equipmentDAO.getDamagedEquipmentsByCategory(room, category);
         for (int i = 0; i < equips.size(); i++) {
@@ -249,18 +247,18 @@ public class NotifyController {
         //Change Report status
         List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(room);
         int flag = 0;
-        for (TblReportEntity report: reports) {
+        for (TblReportEntity report : reports) {
             List<TblReportDetailEntity> details = report.getTblReportDetailsById();
             for (int i = 0; i < details.size(); i++) {
-                if(!details.get(i).isStatus()){
+                if (!details.get(i).isStatus()) {
                     flag++;
                 }
             }
 
-            if(flag == details.size()){
+            if (flag == details.size()) {
                 report.setStatus(ReportStatus.FINISH.getValue());
                 reportDAO.merge(report);
-            } else if(flag > 0) {
+            } else if (flag > 0) {
                 report.setStatus(ReportStatus.GOING.getValue());
                 reportDAO.merge(report);
             }
@@ -314,7 +312,7 @@ public class NotifyController {
                             projectorDamagedLevel = 30;
                         } else if (project.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                             projectorDamagedLevel = 50;
-                        }else{
+                        } else {
                             projectorDamagedLevel = 50;
                         }
                     }
@@ -328,7 +326,7 @@ public class NotifyController {
                             tiviDamagedLevel = 30;
                         } else if (tivi.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                             tiviDamagedLevel = 50;
-                        }else{
+                        } else {
                             tiviDamagedLevel = 20;
                         }
                     }
@@ -342,8 +340,8 @@ public class NotifyController {
                             mayLanhDamagedLevel += 15;
                         } else if (mayLanh.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                             mayLanhDamagedLevel += 25;
-                        }else{
-                            mayLanhDamagedLevel +=25;
+                        } else {
+                            mayLanhDamagedLevel += 25;
                         }
                     }
                 }
@@ -361,7 +359,7 @@ public class NotifyController {
                                 quatDamagedLevel += 3;
                             } else if (quat.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                                 quatDamagedLevel += 5;
-                            }else{
+                            } else {
                                 quatDamagedLevel += 5;
                             }
                         }
@@ -374,9 +372,9 @@ public class NotifyController {
                             loaDamagedLevel = 1;
                         } else if (loa.getDamagedLevel().equals(DamagedLevel.MEDIUM.getValue())) {
                             loaDamagedLevel = 3;
-                        } else if (loa.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())){
+                        } else if (loa.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                             loaDamagedLevel = 5;
-                        }else{
+                        } else {
                             loaDamagedLevel = 5;
                         }
                     }
@@ -388,9 +386,9 @@ public class NotifyController {
                             denDamagedLevel = 10;
                         } else if (den.getDamagedLevel().equals(DamagedLevel.MEDIUM.getValue())) {
                             denDamagedLevel = 20;
-                        } else if (den.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())){
+                        } else if (den.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                             denDamagedLevel = 50;
-                        }else{
+                        } else {
                             denDamagedLevel = 10;
                         }
                     }
@@ -405,9 +403,9 @@ public class NotifyController {
                                 banDamagedLevel += 2;
                             } else if (ban.getDamagedLevel().equals(DamagedLevel.MEDIUM.getValue())) {
                                 banDamagedLevel += 3;
-                            } else if (ban.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())){
+                            } else if (ban.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                                 banDamagedLevel += 5;
-                            }else{
+                            } else {
                                 banDamagedLevel += 5;
                             }
                         }
@@ -423,9 +421,9 @@ public class NotifyController {
                                 gheDamagedLevel += 1;
                             } else if (ghe.getDamagedLevel().equals(DamagedLevel.MEDIUM.getValue())) {
                                 gheDamagedLevel += 2;
-                            } else if (ghe.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())){
+                            } else if (ghe.getDamagedLevel().equals(DamagedLevel.HIGH.getValue())) {
                                 gheDamagedLevel += 3;
-                            }else{
+                            } else {
                                 gheDamagedLevel += 3;
                             }
                         }
@@ -441,26 +439,26 @@ public class NotifyController {
         return damagedLevel;
     }
 
-    private List<String> getAvailableRoom(int classroomId){
+    private List<String> getAvailableRoom(int classroomId) {
         List<String> availableClassroom = new ArrayList<String>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
-        for(TblClassroomEntity classroomEntity:tblClassroomEntities){
+        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
             List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleInClassroom(classroomEntity.getId());
-            if(tblScheduleEntities.isEmpty()){
+            if (tblScheduleEntities.isEmpty()) {
                 availableClassroom.add(classroomEntity.getName());
             }
         }
 
-        if(!availableClassroom.isEmpty()){
+        if (!availableClassroom.isEmpty()) {
             return availableClassroom;
-        }else{
+        } else {
             List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
                 List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
-                if(!classroom.isEmpty()){
-                    if(availableClassroom.isEmpty()){
+                if (!classroom.isEmpty()) {
+                    if (availableClassroom.isEmpty()) {
                         availableClassroom = classroom;
-                    }else{
+                    } else {
                         Iterator<String> it = availableClassroom.iterator();
                         while (it.hasNext()) {
                             String room = it.next();

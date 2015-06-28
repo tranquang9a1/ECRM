@@ -100,5 +100,6 @@
     </ul>
     <script>
         document.getElementById("${tab}").className += " active";
+        connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
     </script>
 </div>

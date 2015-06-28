@@ -5,6 +5,7 @@
 function showReportDetail(roomId){
     waitLoading();
     var room = $(".content-all-modal").attr("data-room");
+    window.history.pushState({},"", "/thong-bao/hu-hai?phong=" + roomId);
 
     if(room != roomId) {
         $.ajax({
@@ -22,6 +23,10 @@ function showReportDetail(roomId){
         closeLoading();
         showModal(1,'modal-1');
     }
+}
+
+function resetURL() {
+    window.history.pushState({},"", "/thong-bao");
 }
 
 function sendResolve() {

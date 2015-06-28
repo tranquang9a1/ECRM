@@ -22,7 +22,7 @@
   <div class="content-modal">
     <div class="header-modal title">
       <p>Chi tiết báo cáo</p>
-      <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+      <i class="fa fa-times" onclick="showModal(0,'modal-1');resetURL();"></i>
     </div>
     <div class="body-modal">
       <div class="tab">
@@ -52,17 +52,7 @@
             </div>
             <div class="group-control line">
               <div class="name">Giảng viên đánh giá</div>
-              <div class="value">
-                <c:if test="${room.evaluate == 1}">
-                  <c:out value="Phải đổi phòng"/>
-                </c:if>
-                <c:if test="${room.evaluate == 2}">
-                  <c:out value="Cần sửa ngay"/>
-                </c:if>
-                <c:if test="${room.evaluate == 3}">
-                  <c:out value="Vẫn dạy được"/>
-                </c:if>
-              </div>
+              <div class="value">${room.evaluate}</div>
             </div>
             <div class="group-control">
               <div class="name">Đổi phòng</div>

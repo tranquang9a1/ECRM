@@ -173,7 +173,7 @@
 </div>
 
 <script>
-    connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
+    <%--connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});--%>
     <c:if test="${room.id != 0}">
         <c:set var="rt" value="${requestScope.ROOMTYPE}" />
         <c:set var="equip" value="${requestScope.EQUIPMENTS}" />
@@ -199,10 +199,6 @@
     <c:if test="${room.id == 0}">
         document.getElementById("report-btn").className += " disable";
         document.getElementById("modal-1").setAttribute("data-lock", "true");
-    </c:if>
-
-    <c:if test="${requestScope.MESSAGE != null}">
-        alert("${requestScope.MESSAGE}");
     </c:if>
 
     function doAction(choose, object) {

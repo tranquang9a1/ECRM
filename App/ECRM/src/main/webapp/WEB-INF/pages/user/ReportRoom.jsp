@@ -22,9 +22,8 @@
         <div class="name">Đánh giá của bạn</div>
         <div class="control" style="width: 300px">
           <select id="report-evaluate" style="width: 200px; float: right">
-            <option value="1">Phải đổi phòng</option>
-            <%--<option value="2">Cẫn sửa ngay</option>--%>
-            <option value="3" selected="selected">Vẫn dạy được</option>
+            <option value="1">Đổi phòng</option>
+            <option value="2" selected="selected">Không cần đổi phòng</option>
           </select>
         </div>
       </div>

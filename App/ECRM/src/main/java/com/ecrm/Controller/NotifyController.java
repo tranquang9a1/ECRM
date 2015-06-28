@@ -73,7 +73,6 @@ public class NotifyController {
         List<TblReportEntity> finishReport = reportDAO.getFinishReport(0, 0);
         List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
         for (int i = 0; i < finishReport.size(); i++) {
-//            List<TblReportDetailEntity> reportDetails = finishReport.get(i).getTblReportDetailsById();
             ReportResponseObject report = new ReportResponseObject(finishReport.get(i)/*,reportDetails*/);
             report.setReporter(finishReport.get(i).getTblUserByUserId().getTblUserInfoByUsername().getFullName());
             report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
@@ -90,9 +89,6 @@ public class NotifyController {
 
     @RequestMapping(value = "chi-tiet")
     public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
-//        HttpSession session = request.getSession();
-//        TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
-
         TblClassroomEntity classroom = classroomDAO.find(roomId);
         List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(classroom.getId());
 
@@ -104,6 +100,18 @@ public class NotifyController {
 
         request.setAttribute("DAMAGEDROOM", resultObject);
         return "staff/ReportDetail";
+    }
+
+    @RequestMapping(value = "hu-hai")
+    public String showReportDetail(HttpServletRequest request, @RequestParam(value = "phong") int roomId){
+        HttpSession session = request.getSession();
+        List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
+
+        if(equipments.size() > 0) {
+            session.setAttribute("SHOWDETAIL", roomId);
+        }
+
+        return "redirect:/thong-bao";
     }
 
     @RequestMapping(value = "sua-chua")
@@ -191,7 +199,7 @@ public class NotifyController {
         String message = "Đổi phòng " + currentRoom + " sang phòng " + changeRoom;
         TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(currentClassroom.getId(), MessageType.CHANGEROOM.getValue());
         if (notify == null) {
-            notify = new TblNotificationEntity(currentClassroom.getId(), message, null, MessageType.CHANGEROOM.getValue());
+            notify = new TblNotificationEntity(currentClassroom.getId(), message, "/giang-vien/lich-day", MessageType.CHANGEROOM.getValue());
             notificationDAOImp.persist(notify);
         }
 

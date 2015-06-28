@@ -175,7 +175,9 @@
 </div>
 <div class="content-all-modal" data-room="0"></div>
 <script>
-    connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
+    <c:if test="${sessionScope.SHOWDETAIL != null}">
+        showReportDetail(${sessionScope.SHOWDETAIL});
+    </c:if>
 
     function doAction(choose, object) {
         closeConform();

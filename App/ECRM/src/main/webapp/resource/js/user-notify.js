@@ -305,7 +305,7 @@ function sentReport(){
             "Content-Type": "application/json; charset=utf-8"
         },
         url: "sentReport",
-        data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate").val(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
+        data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate option:selected").text(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
             var data = result.split('-');
             var html = "<div class='width-10'><div>" + data[1] + "</div></div>";

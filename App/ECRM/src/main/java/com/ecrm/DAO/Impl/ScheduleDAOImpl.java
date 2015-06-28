@@ -132,6 +132,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         q.setParameter("username", "%"+username+"%");
         q.setParameter("classroomId", "%"+classroomId+"%");
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+        
         return tblScheduleEntities;
     }
 }

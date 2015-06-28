@@ -347,6 +347,10 @@ public class ScheduleController {
         request.setAttribute("TEACHINGDATE", teachingDate);
         request.setAttribute("CLASSROOMID", classroomName);
         request.setAttribute("SCHEDULES", tblScheduleEntities);
+        request.setAttribute("TEACHER", username);
+        request.setAttribute("CLASSROOM", classroomId);
+        request.setAttribute("DATEFROM", datefrom);
+        request.setAttribute("DATETO", dateto);
         return "Staff_MappingSchedule";
     }
 }

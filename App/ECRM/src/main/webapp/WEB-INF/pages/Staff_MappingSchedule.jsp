@@ -64,6 +64,10 @@
 <c:set var="teachingDate" value="${requestScope.TEACHINGDATE}"/>
 <c:set var="classroomId" value="${requestScope.CLASSROOMID}"/>
 <c:set var="schedules" value="${requestScope.SCHEDULES}"/>
+<c:set var="datefrom" value="${requestScope.DATEFROM}"/>
+<c:set var="dateto" value="${requestScope.DATETO}"/>
+<c:set var="teacher" value="${requestScope.TEACHER}"/>
+<c:set var="classroom" value="${requestScope.CLASSROOM}"/>
 
 <div class="contain-layout">
     <jsp:include flush="true" page="Header.jsp"/>
@@ -90,17 +94,30 @@
             <table>
                 <tr>
                     <td><label>Ngày: </label></td>
-                    <td><input type="text" id="datefrom" name="datefrom"><label> ~ </label><input type="text"
-                                                                                                  id="dateto"
-                                                                                                  name="dateto"></td>
+                    <td><input type="text" id="datefrom" name="datefrom" value="${datefrom}"><label> ~ </label><input
+                            type="text"
+                            id="dateto"
+                            name="dateto" value="${dateto}"></td>
                 </tr>
                 <tr>
                     <td><label>Phòng học: </label></td>
                     <td><select name="classroomId" style="width: 100px">
                         <option value="0">---</option>
-                        <c:forEach items="${classrooms}" var="c">
-                            <option value="${c.id}">Phòng ${c.name}</option>
-                        </c:forEach>
+                        <c:if test="${not empty classroom}">
+                            <c:forEach items="${classrooms}" var="c">
+                                <c:if test="${classroom == c.id}">
+                                    <option value="${c.id}" selected>Phòng ${c.name}</option>
+                                </c:if>
+                                <c:if test="${classroom != c.id}">
+                                    <option value="${c.id}">Phòng ${c.name}</option>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${empty classroom}">
+                            <c:forEach items="${classrooms}" var="c">
+                                <option value="${c.id}">Phòng ${c.name}</option>
+                            </c:forEach>
+                        </c:if>
                     </select></td>
                 </tr>
                 <tr>
@@ -110,6 +127,21 @@
                         <c:forEach items="${teachers}" var="t">
                             <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
                         </c:forEach>
+                        <c:if test="${empty teacher}">
+                            <c:forEach items="${teachers}" var="t">
+                                <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${not empty teacher}">
+                            <c:forEach items="${teachers}" var="t">
+                                <c:if test="${teacher == t.username}">
+                                    <option value="${t.username}" selected>${t.tblUserInfoByUsername.fullName}</option>
+                                </c:if>
+                                <c:if test="${teacher != t.username}">
+                                    <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
                     </select></td>
                 </tr>
                 <tr>
@@ -370,7 +402,7 @@
                 break;
         }
     }
-    function validateForm(){
+    function validateForm() {
         var dateFrom = document.forms["searchForm"]["datefrom"].value;
         var dateTo = document.forms["searchForm"]["dateto"].value;
         if (dateFrom == null || dateFrom == "") {

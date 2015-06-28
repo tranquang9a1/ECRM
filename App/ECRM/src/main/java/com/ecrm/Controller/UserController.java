@@ -6,7 +6,9 @@ import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.DTO.ScheduleDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable.*;
+import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.socket.SocketIO;
+import com.twilio.sdk.TwilioRestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,8 @@ public class UserController {
     EquipmentDAOImpl equipmentDAO;
     @Autowired
     EquipmentCategoryDAOImpl equipmentCategoryDAO;
+    @Autowired
+    NotificationDAOImp notificationDAOImp;
 
 
     @RequestMapping(value = "thong-bao")
@@ -51,8 +55,9 @@ public class UserController {
         List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
         List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
         for(int i = 0; i < list.size(); i++) {
-            List<TblReportDetailEntity> reportDetails = list.get(i).getTblReportDetailsById();
-            ReportResponseObject report = new ReportResponseObject(list.get(i),reportDetails);
+            ReportResponseObject report = new ReportResponseObject(list.get(i));
+            report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
+
             listReport.add(report);
         }
         request.setAttribute("NOTIFICATIONS", listReport);
@@ -89,8 +94,14 @@ public class UserController {
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
         TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
 
-        TblReportEntity report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
-        reportDAO.persist(report);
+        TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
+        if(report == null){
+            report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
+            reportDAO.persist(report);
+        } else if(report.getStatus() == ReportStatus.FINISH.getValue()){
+            report.setStatus(ReportStatus.GOING.getValue());
+            reportDAO.merge(report);
+        }
 
         String[] evaluates = reportRequest.getListEvaluate().split(",");
         int category = 0;
@@ -134,9 +145,25 @@ public class UserController {
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);
 
-        SocketIO socketIO = new SocketIO();
-        socketIO.SentNotifyToStaff(user.getUsername() + " vừa báo cáo hư hại phòng " + room.getName());
+        String message = user.getTblUserInfoByUsername().getFullName() + " vừa báo cáo hư hại phòng " + room.getName();
+        TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
+        if(notify == null) {
+            notify = new TblNotificationEntity(reportRequest.getRoomId(), message, null, MessageType.NEWREPORT.getValue());
+            notificationDAOImp.persist(notify);
+        }
 
+        SocketIO socketIO = new SocketIO();
+        List<TblUserEntity> staffs = userDAO.getAllStaff();
+        try {
+            for (TblUserEntity staff : staffs) {
+                boolean check = socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/notify?roomId=" + reportRequest.getRoomId());
+                if (!check) {
+                    SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
+                }
+            }
+        } catch (TwilioRestException e) {
+            System.out.println("Khong the gui SMS!");
+        }
 
         return report.getId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
     }
@@ -207,13 +234,24 @@ public class UserController {
         if (equip != null) {
             equip.setStatus(false);
             equipmentDAO.merge(equip);
+
+            TblReportDetailEntity reportDetail = reportDetailDAO.getReportDetail(reportId, equip.getId());
+            if(reportDetail != null && reportDetail.isStatus()) {
+                reportDetail.setStatus(false);
+                reportDetailDAO.merge(reportDetail);
+            } else if(reportDetail == null) {
+                reportDetail = new TblReportDetailEntity(equip.getId(), reportId, evaluate, description, equip.getPosition());
+                reportDetailDAO.persist(reportDetail);
+            }
         } else {
             equip = new TblEquipmentEntity(category, roomId, null, null, position, null, false);
             equipmentDAO.persist(equip);
+
+            TblReportDetailEntity reportDetail = new TblReportDetailEntity(equip.getId(), reportId, evaluate, description, equip.getPosition());
+            reportDetailDAO.persist(reportDetail);
         }
 
-        TblReportDetailEntity reportDetail = new TblReportDetailEntity(equip.getId(), reportId, evaluate, description, equip.getPosition());
-        reportDetailDAO.persist(reportDetail);
+
 
         return equip;
     }

@@ -97,13 +97,26 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
+    public TblReportEntity getReportOfUsernameInDay(String username, int roomId) {
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username AND DATE(r.createTime) = CURDATE() AND r.classRoomId = :room");
+        query.setParameter("username", username);
+        query.setParameter("room", roomId);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return (TblReportEntity) queryResult.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
     public TblReportEntity getReportNewest(int room) {
 
         Query query = entityManager.createQuery("SELECT r " +
                 "FROM TblReportEntity r " +
                 "WHERE r.classRoomId = :room " +
-                "AND (r.status = :status1 " +
-                "OR r.status = :status2) " +
+                "AND (r.status = :status1 OR r.status = :status2) " +
                 "ORDER BY r.createTime DESC");
         query.setParameter("room", room);
         query.setParameter("status1", ReportStatus.NEW.getValue());
@@ -119,7 +132,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
 
     @Override
     public List<TblReportEntity> getReportByUserId(String username) {
-        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username");
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username ORDER BY r.createTime DESC");
         query.setParameter("username", username);
 
         return query.getResultList();
@@ -161,8 +174,6 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
                 "group by u.classRoomId ");
         query.setParameter("statusnew", ReportStatus.NEW.getValue());
         return query.getResultList();
-
-
     }
 
     @Override

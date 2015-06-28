@@ -15,6 +15,8 @@ public interface ScheduleDAO {
 
     public List<TblScheduleEntity> getSchedulesOfUser(String username);
 
+    public List<TblScheduleEntity> getScheduleNoFinishOfRoom(int room);
+
     public List<TblScheduleEntity> getSchedulesFinishOfUser(String username);
 
     public List<TblScheduleEntity> findScheduleWithDate(String username, String date, String timeFrom);

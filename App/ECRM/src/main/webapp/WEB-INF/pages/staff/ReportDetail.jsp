@@ -64,7 +64,11 @@
                 </c:if>
               </div>
             </div>
-
+            <div class="group-control">
+              <div class="name">Đổi phòng</div>
+              <div class="value">Phòng <b>${room.suggestRooms.get(0)}</b> được đề xuất</div>
+              <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng">
+          </div>
             <div class="group-control">
               <div class="name">Hư hại của phòng</div>
               <div class="control">
@@ -74,7 +78,7 @@
                 </div>
               </div>
             </div>
-          </div>
+            </div>
           <div id="tab5" class="body-tab">
             <div id="room-map"></div>
           </div>
@@ -83,42 +87,42 @@
     </div>
     <div class="footer-modal">
       <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-1', 'modal-4')" value="Khắc phục" />
-      <input type="button" class="btn btn-normal" onclick="changeRoom(${room.roomId})" value="Đổi phòng" />
     </div>
   </div>
   <div class="black-background"></div>
 </div>
-<%--<div class="modal modal-small" id="modal-3">--%>
-  <%--<div class="content-modal">--%>
-    <%--<div class="header-modal title">--%>
-      <%--<p>Đổi phòng</p>--%>
-      <%--<i class="fa fa-times" onclick="showModal(2, 'modal-3','modal-1')"></i>--%>
-    <%--</div>--%>
-    <%--<div class="body-modal">--%>
-      <%--<div class="group-control">--%>
-        <%--<div class="name">Phòng hiện tại</div>--%>
-        <%--<div class="value">${room.roomName}</div>--%>
-      <%--</div>--%>
-      <%--<div class="group-control">--%>
-        <%--<div class="name">Phòng trống</div>--%>
-        <%--<div class="control">--%>
-          <%--<c:if test="${room.suggestRooms != null}">--%>
-            <%--<select>--%>
-              <%--<c:forEach items="${room.suggestRooms}" var="item" >--%>
-                <%--<option value="${item}">${item}</option>--%>
-              <%--</c:forEach>--%>
-            <%--</select>--%>
-          <%--</c:if>--%>
-        <%--</div>--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="footer-modal">--%>
-      <%--<input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-3','modal-1')" value="Thoát" />--%>
-      <%--<input type="button" class="btn btn-orange" onclick="conform(3)" value="Đổi phòng" />--%>
-    <%--</div>--%>
-  <%--</div>--%>
-  <%--<div class="black-background"></div>--%>
-<%--</div>--%>
+<div class="modal modal-small" id="modal-3">
+  <div class="content-modal">
+    <div class="header-modal title">
+      <p>Đổi phòng</p>
+      <i class="fa fa-times" onclick="showModal(2, 'modal-3','modal-1')"></i>
+    </div>
+    <div class="body-modal">
+      <div class="group-control">
+        <input type="hidden" id="current-room" value="${room.roomName}" />
+        <div class="name">Phòng hiện tại</div>
+        <div class="value">${room.roomName}</div>
+      </div>
+      <div class="group-control">
+        <div class="name">Phòng trống</div>
+        <div class="control">
+          <c:if test="${room.suggestRooms != null}">
+            <select id="new-room">
+              <c:forEach items="${room.suggestRooms}" var="item" >
+                <option value="${item}">${item}</option>
+              </c:forEach>
+            </select>
+          </c:if>
+        </div>
+      </div>
+    </div>
+    <div class="footer-modal">
+      <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-3','modal-1')" value="Trở lại" />
+      <input type="button" class="btn btn-orange" onclick="conform(3)" value="Đổi phòng" />
+    </div>
+  </div>
+  <div class="black-background"></div>
+</div>
 <div class="modal modal-medium" id="modal-4">
   <div class="content-modal">
     <div class="header-modal title">
@@ -161,3 +165,4 @@
   showMap('room-map', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
             ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
 </script>
+

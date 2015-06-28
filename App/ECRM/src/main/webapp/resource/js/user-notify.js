@@ -326,9 +326,6 @@ function sentReport(){
                     $("#row-type-" + key + " .width-50 p").text("Đã được báo cáo");
                     $("#row-type-" + key + " .width-50 p").css("visibility", "visible");
                 }
-                //if(noDamagedEquipments[key].evaluate == 1) {
-                //    $("#row-type-" + key + " .width-50 p").addClass("hidden");
-                //}
             }
 
             for (var key in damagedEquipments) {

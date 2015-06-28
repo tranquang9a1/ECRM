@@ -1,13 +1,16 @@
 package com.ecrm.Utils.socket;
 
-import com.corundumstudio.socketio.AckRequest;
-import com.corundumstudio.socketio.Configuration;
-import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIOServer;
+import com.corundumstudio.socketio.*;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import com.corundumstudio.socketio.protocol.AckArgs;
+import com.corundumstudio.socketio.protocol.JsonSupport;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +24,11 @@ public class SocketIO{
     private static SocketIOServer server;
 
     public SocketIOServer setup(){
+
         Configuration config = new Configuration();
-        config.setHostname("192.168.43.163");
-        config.setPort(8000);
+        config.setHostname("192.168.1.106");
+        config.setPort(3000);
+        config.setOrigin("http://localhost:8080");
 
         server = new SocketIOServer(config);
 
@@ -37,11 +42,11 @@ public class SocketIO{
         server.addEventListener("connectServer", UserOnline.class, new DataListener<UserOnline>() {
             @Override
             public void onData(SocketIOClient client, UserOnline user, AckRequest ackRequest) throws Exception {
-                UserOnline checkUser = UserOnline.checkContainIn(onlineUser, user.getUsername(), null);
+                UserOnline checkUser = UserOnline.checkContainIn(onlineUser, user.getUsername(), null, user.getDeviceType());
                 if(checkUser == null) {
-                    checkUser = new UserOnline(client.getSessionId().toString(), user.getUsername(), user.getRole());
+                    checkUser = new UserOnline(client.getSessionId().toString(), user.getUsername(), user.getDeviceType(), user.getRole());
                     onlineUser.add(checkUser);
-                    System.out.println(user.getUsername() + " connect! " + onlineUser.size());
+                    System.out.println(user.getUsername() + " connect by " + user.getDeviceType() + "! " + onlineUser.size());
                 } else {
                     checkUser.setSocketId(client.getSessionId().toString());
                 }
@@ -53,10 +58,10 @@ public class SocketIO{
             @Override
             public void onDisconnect(SocketIOClient client) {
                 String id = client.getSessionId().toString();
-                UserOnline user = UserOnline.checkContainIn(onlineUser, null, id);
+                UserOnline user = UserOnline.checkContainIn(onlineUser, null, id, 0);
                 if (user != null) {
                     onlineUser.remove(user);
-                    System.out.println(user + " disconnect!");
+                    System.out.println(user.getUsername() + " disconnect!");
                 }
             }
         });
@@ -69,19 +74,44 @@ public class SocketIO{
         server.stop();
     }
 
-    public void SentNotifyToStaff(String message){
-        List<UserOnline> staffs = UserOnline.getUserByRole(onlineUser, 2);
-        System.out.println("Send " + onlineUser.size());
-        if(staffs.size() > 0) {
-            for (UserOnline staff: staffs) {
-                SocketIOClient receiver = server.getClient(UUID.fromString(staff.getSocketId()));
-                receiver.sendEvent("NewReport", new TransferNotifyObject(message));
-                System.out.println("Sent");
-            }
-        }
-    }
-
     public boolean serverExit() {
         return server != null;
+    }
+
+    public boolean sendNotifyObjectToStaff(String username, String eventType, JSONObject jsonObject){
+        List<UserOnline> users = UserOnline.getUserByUsername(onlineUser, username);
+
+        if(users.size() > 0) {
+            for (UserOnline user: users) {
+                SocketIOClient receiver = server.getClient(UUID.fromString(user.getSocketId()));
+
+                receiver.sendEvent(eventType, jsonObject);
+                System.out.println("Sent message to " + user.getUsername());
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean sendNotifyMessageToUser(String username, String eventType, String message, String redirectLink) {
+        List<UserOnline> users = UserOnline.getUserByUsername(onlineUser, username);
+
+        if(users.size() > 0) {
+            for (UserOnline user: users) {
+                SocketIOClient receiver = server.getClient(UUID.fromString(user.getSocketId()));
+
+                JSONObject returnObject = new JSONObject();
+                returnObject.put("message", message);
+                returnObject.put("redirectLink", redirectLink);
+
+                receiver.sendEvent(eventType, returnObject);
+
+                System.out.println("Sent message to " + user.getUsername());
+            }
+            return true;
+        }
+
+        return false;
     }
 }

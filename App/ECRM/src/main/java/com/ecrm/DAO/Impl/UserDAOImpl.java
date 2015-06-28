@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,6 +44,20 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         q.setParameter("roleId", 3);
         List<TblUserEntity> tblUserEntities = q.getResultList();
         return tblUserEntities;
+    }
+
+    public List<TblUserEntity> getAllStaff(){
+        Query query = entityManager.createQuery("SELECT u FROM TblUserEntity u WHERE u.roleId = 2 AND u.status = true");
+
+        List queryResult = query.getResultList();
+        List<TblUserEntity> result = new ArrayList<TblUserEntity>();
+        if(!queryResult.isEmpty()) {
+            for (Iterator i = queryResult.iterator(); i.hasNext();) {
+                result.add((TblUserEntity) i.next());
+            }
+        }
+
+        return result;
     }
 
     @Transactional

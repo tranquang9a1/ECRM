@@ -20,6 +20,8 @@ public interface ReportDAO {
 
     public String getReportersInRoom(int room);
 
+    public TblReportEntity getReportOfUsernameInDay(String username, int roomId);
+
     public TblReportEntity getReportNewest(int room);
 
     public List<TblReportEntity> getFinishReport(int limit, int offset);

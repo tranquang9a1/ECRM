@@ -24,28 +24,14 @@ public class ReportResponseObject {
     private String listEquipment = "";
     private String createDate;
     private int status;
-    private int damagedLevel;
     private String reporter;
 
-    public ReportResponseObject(TblReportEntity report, List<TblReportDetailEntity> reportDetails){
+    public ReportResponseObject(TblReportEntity report){
         this.reportId = report.getId();
         this.room = report.getTblClassroomByClassRoomId().getName();
         SimpleDateFormat formatter = new SimpleDateFormat ("dd/MM/yyy");
         this.createDate = formatter.format(report.getCreateTime().getTime());
         this.status = report.getStatus();
-        this.damagedLevel = 0;
-
-        List<Integer> equipmentName = new ArrayList<Integer>();
-        boolean flag = false;
-        for(int i = 0; i < reportDetails.size(); i++) {
-            TblEquipmentCategoryEntity category = reportDetails.get(i).getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId();
-
-            if(!equipmentName.contains(category.getId())){
-                this.listEquipment += category.getName() + ", ";
-                equipmentName.add(category.getId());
-            }
-        }
-        this.listEquipment = this.listEquipment.substring(0, listEquipment.length()-2);
     }
 
     public void setRoom(String room) {
@@ -98,13 +84,5 @@ public class ReportResponseObject {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public int getDamagedLevel() {
-        return damagedLevel;
-    }
-
-    public void setDamagedLevel(int damagedLevel) {
-        this.damagedLevel = damagedLevel;
     }
 }

@@ -41,15 +41,16 @@ function sendResolve() {
     }
 }
 
-function changeRoom(roomId) {
+function changeRoom() {
     waitLoading();
     $.ajax({
         method: "GET",
-        url: "/staff/changeRoom",
-        data: {classroomId: roomId},
+        url: "/thong-bao/doi-phong",
+        data: {currentClassroom: $("#current-room").val(), changeClassroom: $("#new-room").val()},
         success: function(result) {
             closeLoading();
-            alert(result[0]);
+            showModal(2, 'modal-3', 'modal-1');
+            alert("Đổi phòng thành công!");
         }
     });
 }

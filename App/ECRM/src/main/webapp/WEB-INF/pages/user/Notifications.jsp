@@ -19,6 +19,8 @@
 
     <script src="../resource/js/jquery-1.11.3.js"></script>
     <script src="../resource/js/script.js"></script>
+    <script src="../resource/js/socket.io.js"></script>
+    <script src="../resource/js/socket-io.js"></script>
     <script src="../resource/js/user-notify.js"></script>
 </head>
 <body>
@@ -35,7 +37,7 @@
         <input type="button" id="report-btn" class="btn btn-orange" onclick="showModal(1, 'modal-1')" value="Tạo báo cáo"/>
         <c:if test="${schedules.size() > 0}">
             <p style="float: right; margin-right: 15px; padding: 0;"> Phòng
-                <select onchange="getRoom(this)" style="background-color: white">
+                <select id="list-active-room" onchange="getRoom(this)" style="background-color: white">
                     <c:forEach items="${schedules}" var="item">
                        <option value="${item.classId}">${item.className}</option>
                     </c:forEach>
@@ -67,7 +69,7 @@
             <div class="body-table" id="content-report">
                 <c:if test="${notifies.size() > 0}">
                      <c:forEach var="i" begin="0" end="${notifies.size()-1}">
-                    <div class="row">
+                    <div class="row" id="report-${notifies[i].reportId}">
                         <div class="width-10">
                             <div>${notifies[i].room}</div>
                         </div>
@@ -171,6 +173,7 @@
 </div>
 
 <script>
+    connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
     <c:if test="${room.id != 0}">
         <c:set var="rt" value="${requestScope.ROOMTYPE}" />
         <c:set var="equip" value="${requestScope.EQUIPMENTS}" />

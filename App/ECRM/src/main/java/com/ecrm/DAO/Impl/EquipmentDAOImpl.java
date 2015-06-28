@@ -2,6 +2,7 @@ package com.ecrm.DAO.Impl;
 
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.EquipmentDAO;
+import com.ecrm.Entity.TblEquipmentCategoryEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
 import org.springframework.stereotype.Repository;
 
@@ -74,6 +75,31 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         List queryResult = query.getResultList();
         if (!queryResult.isEmpty()) {
             return (TblEquipmentEntity) queryResult.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getDamagedEquipmentNames(int reportId) {
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblEquipmentCategoryEntity c " +
+                "WHERE c.id IN (SELECT e.categoryId " +
+                                "FROM TblEquipmentEntity e " +
+                                "WHERE e.id IN (SELECT rd.equipmentId " +
+                                                "FROM TblReportDetailEntity rd " +
+                                                "WHERE rd.reportId = :reportId " +
+                                                "GROUP BY rd.equipmentId))");
+        query.setParameter("reportId", reportId);
+
+        List queryResult = query.getResultList();
+        String result = "";
+        if (!queryResult.isEmpty()){
+            for (Iterator i = queryResult.iterator(); i.hasNext();){
+                result += ((TblEquipmentCategoryEntity) i.next()).getName() + ", ";
+            }
+            return result.substring(0, result.length()-2);
         }
 
         return null;

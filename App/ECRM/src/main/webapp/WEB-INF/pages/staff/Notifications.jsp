@@ -189,8 +189,7 @@
                 window.location.href = "/thong-bao/sua-het?roomId="+object;
                 break;
             case 3:
-                showModal(2, 'modal-3', 'modal-1');
-                alert("Đổi phòng thành công!");
+                changeRoom();
                 break;
         }
     }

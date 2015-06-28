@@ -1,3 +1,4 @@
+<%@ page import="com.ecrm.Controller.UserController" %>
 <%--
   Created by IntelliJ IDEA.
   User: Htang
@@ -13,10 +14,8 @@
     <div class="logo">Quản lý thiết bị phòng học</div>
     <div class="account-notify">
         <div class="account-control">
-            <!--<img src="img/user.png" />-->
             <p>${user.tblUserInfoByUsername.fullName}</p>
             <img src="../../resource/img/gears.png"/>
-
             <div class="clear"></div>
             <div class="account-setting">
                 <img src="../../resource/img/pointer.png"/>
@@ -27,6 +26,7 @@
                 </ul>
             </div>
         </div>
+        <c:import url="/thong-bao/all-notify" />
     </div>
 </div>
 <div class="list-category">

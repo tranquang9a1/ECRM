@@ -60,17 +60,7 @@
             </div>
             <div class="group-control line">
                 <div class="name">Đánh giá của bạn</div>
-                <div class="value">
-                    <c:if test="${report.evaluate == 1}">
-                        <c:out value="Phải đổi phòng"/>
-                    </c:if>
-                    <c:if test="${report.evaluate == 2}">
-                        <c:out value="Cần sửa ngay"/>
-                    </c:if>
-                    <c:if test="${report.evaluate == 3}">
-                        <c:out value="Vẫn dạy được"/>
-                    </c:if>
-                </div>
+                <div class="value">${report.evaluate}</div>
             </div>
             <c:if test="${report.status < 3}">
                 <div class="group-control">

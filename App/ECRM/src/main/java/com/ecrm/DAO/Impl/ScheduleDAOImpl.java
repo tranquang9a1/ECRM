@@ -49,7 +49,8 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         Query query = entityManager.createQuery("SELECT s " +
                 "FROM TblScheduleEntity s " +
                 "WHERE s.username = :username " +
-                "AND current_date() = s.date");
+                "AND current_date() = s.date " +
+                "AND s.isActive = true");
         query.setParameter("username", username);
 
         List queryResult = query.getResultList();
@@ -69,11 +70,29 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         Query query = entityManager.createQuery("SELECT s " +
                 "FROM TblScheduleEntity s " +
                 "WHERE s.username = :username " +
-                "AND CONVERT (Time, CURRENT_TIMESTAMP) >= s.timeFrom " +
-                "AND CONVERT (Date, CURRENT_TIMESTAMP) = s.date " +
+                "AND CURTIME() >= s.timeFrom " +
+                "AND CURDATE() = s.date " +
                 "AND s.isActive = true " +
-                "ORDER BY s.timeFrom DESC");
+                "GROUP BY s.classroomId");
         query.setParameter("username", username);
+
+        List list = query.getResultList();
+        List<TblScheduleEntity> result = new ArrayList<TblScheduleEntity>();
+        if(!list.isEmpty()){
+            for(Iterator i = list.iterator(); i.hasNext();) {
+                TblScheduleEntity schedule = (TblScheduleEntity) i.next();
+                result.add(schedule);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<TblScheduleEntity> getScheduleNoFinishOfRoom(int room) {
+        Query query = entityManager.createQuery("SELECT s FROM TblScheduleEntity s WHERE s.classroomId = :classroomId " +
+                "AND CURDATE() = s.date AND s.isActive = true AND s.timeFrom >= CURTIME()");
+        query.setParameter("classroomId", room);
 
         List list = query.getResultList();
         List<TblScheduleEntity> result = new ArrayList<TblScheduleEntity>();

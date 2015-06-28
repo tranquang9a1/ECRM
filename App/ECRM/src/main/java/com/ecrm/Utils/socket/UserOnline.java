@@ -9,45 +9,25 @@ import java.util.List;
 public class UserOnline {
     private String socketId;
     private String username;
+    private int deviceType;
     private int role;
 
     public UserOnline(){}
 
-    public UserOnline(String socketId, String username, int role) {
+    public UserOnline(String socketId, String username, int deviceType, int role) {
         super();
         this.socketId = socketId;
         this.username = username;
+        this.deviceType = deviceType;
         this.role = role;
     }
 
-    public static UserOnline checkContainIn(List<UserOnline> list, String username, String socketId) {
-
-        if(username == null) {
-            for (UserOnline item: list) {
-                if(item.getSocketId().equals(socketId)) {
-                    return item;
-                }
-            }
-        }
-
-        for (UserOnline item: list) {
-            if(item.getUsername().equals(username)) {
-                return item;
-            }
-        }
-
-        return null;
+    public int getDeviceType() {
+        return deviceType;
     }
 
-    public static List<UserOnline> getUserByRole(List<UserOnline> list, int role){
-        List<UserOnline> result = new ArrayList<UserOnline>();
-        for (UserOnline user: list) {
-            if(user.getRole() == role) {
-                result.add(user);
-            }
-        }
-
-        return result;
+    public void setDeviceType(int deviceType) {
+        this.deviceType = deviceType;
     }
 
     public String getSocketId() {
@@ -72,5 +52,49 @@ public class UserOnline {
 
     public void setRole(int role) {
         this.role = role;
+    }
+
+
+    public static UserOnline checkContainIn(List<UserOnline> list, String username, String socketId, int deviceType) {
+
+        if(username == null) {
+            for (UserOnline item: list) {
+                if(item.getSocketId().equals(socketId)) {
+                    return item;
+                }
+            }
+        }
+
+        for (UserOnline item: list) {
+            if(item.getUsername().equals(username) && item.getDeviceType() == deviceType) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    public static List<UserOnline> getUserByRole(List<UserOnline> list, int role){
+        List<UserOnline> result = new ArrayList<UserOnline>();
+
+        for (UserOnline user: list) {
+            if(user.getRole() == role) {
+                result.add(user);
+            }
+        }
+
+        return result;
+    }
+
+    public static List<UserOnline> getUserByUsername(List<UserOnline> list, String username) {
+        List<UserOnline> result = new ArrayList<UserOnline>();
+
+        for (UserOnline item: list) {
+            if(item.getUsername().equals(username)){
+                result.add(item);
+            }
+        }
+
+        return result;
     }
 }

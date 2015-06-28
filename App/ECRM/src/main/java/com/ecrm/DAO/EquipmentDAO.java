@@ -17,6 +17,8 @@ public interface EquipmentDAO {
 
     public List<TblEquipmentEntity> getActiveEquipments(int roomId);
 
+    public String getDamagedEquipmentNames(int reportId);
+
     public List<TblEquipmentEntity> getDamagedEquipments(int roomId);
 
     public List<TblEquipmentEntity> getDamagedEquipmentsByCategory(int roomId, int category);

@@ -40,6 +40,7 @@ public class ReportDetailDAOImpl extends BaseDAO<TblReportDetailEntity, Integer>
         return result;
     }
 
+    @Override
     public List<TblReportDetailEntity> getUnresolveReportDetail(int equipmentId){
         Query q = entityManager.createQuery("Select rd from TblReportDetailEntity rd where rd.equipmentId = :equipmentId " +
                 "and rd.status = false");
@@ -48,11 +49,26 @@ public class ReportDetailDAOImpl extends BaseDAO<TblReportDetailEntity, Integer>
         return tblReportDetailEntities;
     }
 
+    @Override
     public List<TblReportDetailEntity> getReportByClassId(int classId) {
         Query query = entityManager.createQuery("Select rd from TblReportDetailEntity rd join rd.tblReportByReportId re " +
                 "where rd.status = false and re.classRoomId= :classId ");
         query.setParameter("classId", classId);
 
         return query.getResultList();
+    }
+
+    @Override
+    public TblReportDetailEntity getReportDetail(int reportId, int equipmentId) {
+        Query query = entityManager.createQuery("SELECT rd FROM TblReportDetailEntity rd WHERE rd.reportId = :report AND rd.equipmentId = :equipment");
+        query.setParameter("report", reportId);
+        query.setParameter("equipment", equipmentId);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return (TblReportDetailEntity) queryResult.get(0);
+        }
+
+        return null;
     }
 }

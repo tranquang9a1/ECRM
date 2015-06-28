@@ -29,4 +29,30 @@ public class Enumerable {
             return value;
         }
     }
+
+    public enum NotifyType {
+        ADMIN(""), STAFFNOTIFYREPORT("NewReport"), TEACHERCHANGEROOM("ChangeRoom");
+
+        private String value;
+        private NotifyType(String value){
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum MessageType {
+        NEWREPORT(1), CHANGEROOM(2);
+
+        private int value;
+        private MessageType(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 }

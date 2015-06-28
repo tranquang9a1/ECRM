@@ -12,7 +12,10 @@ import java.util.List;
 public interface ReportDetailDAO {
 
     public List<TblReportDetailEntity> getReportDetailsInReport(int reportId);
+
     public List<TblReportDetailEntity> getUnresolveReportDetail(int equipmentId);
+
     public List<TblReportDetailEntity> getReportByClassId(int classId);
 
+    public TblReportDetailEntity getReportDetail(int reportId, int equipmentId);
 }

@@ -70,7 +70,7 @@
 
         <c:if test="${user.tblRoleByRoleId.name == 'Admin'}">
             <li>
-                <a href="../HTML/Account.html">
+                <a href="/Admin_Account.jsp">
                     <img src=""/>
                     <p>Tài Khoản</p>
                 </a>

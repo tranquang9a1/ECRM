@@ -10,6 +10,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="user" value="${sessionScope.USER}"/>
 <c:set var="tab" value="${requestScope.ACTIVELEFTTAB}"/>
+<script src="../resource/js/socket.io.js"></script>
+<script src="../resource/js/socket-io.js"></script>
 <div class="header-bar">
     <div class="logo">Quản lý thiết bị phòng học</div>
     <div class="account-notify">

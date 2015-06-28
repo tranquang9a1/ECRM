@@ -51,39 +51,7 @@ public class NotifyController {
 
     @RequestMapping(value = "")
     public String notifications(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        List<Integer> rooms = reportDAO.getDamagedRoom();
-        List<GroupReportsDTO> groups = new ArrayList<GroupReportsDTO>();
-        String equipmentNames = "";
-
-        for (int i = 0; i < rooms.size(); i++) {
-            TblClassroomEntity room = classroomDAO.find(rooms.get(i));
-            GroupReportsDTO group = new GroupReportsDTO();
-            group.setRoomId(room.getId());
-            group.setRoomName(room.getName());
-
-            equipmentNames = equipmentCategoryDAO.getCategoriesInRoom(room.getId());
-            group.setListEquipments(equipmentNames.substring(0, equipmentNames.length() - 2));
-            equipmentNames = "";
-            group.setReporters(reportDAO.getReportersInRoom(room.getId()));
-
-            groups.add(group);
-        }
-        List<TblReportEntity> finishReport = reportDAO.getFinishReport(0, 0);
-        List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
-        for (int i = 0; i < finishReport.size(); i++) {
-            ReportResponseObject report = new ReportResponseObject(finishReport.get(i)/*,reportDetails*/);
-            report.setReporter(finishReport.get(i).getTblUserByUserId().getTblUserInfoByUsername().getFullName());
-            report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
-
-            listReport.add(report);
-        }
-
-        request.setAttribute("FINISHREPORT", listReport);
-        request.setAttribute("NEWREPORT", groups);
-
-        request.setAttribute("ACTIVELEFTTAB", "STAFF_NOTIFY");
+        getListReport(request);
         return "staff/Notifications";
     }
 
@@ -91,24 +59,29 @@ public class NotifyController {
     public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
         TblClassroomEntity classroom = classroomDAO.find(roomId);
         List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(classroom.getId());
+        List<TblScheduleEntity> schedules = scheduleDAO.getScheduleNoFinishOfRoom(roomId);
 
         DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId), equipments);
         resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
         resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
         resultObject.setDamagedLevel(classroom.getDamagedLevel());
-        resultObject.setSuggestRooms(getAvailableRoom(roomId));
-
+        if(schedules.size() > 0) {
+            resultObject.setSuggestRooms(getAvailableRoom(roomId));
+        } else {
+            resultObject.setFree(true);
+        }
         request.setAttribute("DAMAGEDROOM", resultObject);
         return "staff/ReportDetail";
     }
 
     @RequestMapping(value = "hu-hai")
     public String showReportDetail(HttpServletRequest request, @RequestParam(value = "phong") int roomId){
-        HttpSession session = request.getSession();
         List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
 
         if(equipments.size() > 0) {
-            session.setAttribute("SHOWDETAIL", roomId);
+            getListReport(request);
+            request.setAttribute("SHOWDETAIL", roomId);
+            return "staff/Notifications";
         }
 
         return "redirect:/thong-bao";
@@ -481,4 +454,38 @@ public class NotifyController {
         }
     }
 
+    private void getListReport(HttpServletRequest request) {
+
+        List<Integer> rooms = reportDAO.getDamagedRoom();
+        List<GroupReportsDTO> groups = new ArrayList<GroupReportsDTO>();
+        String equipmentNames = "";
+
+        for (int i = 0; i < rooms.size(); i++) {
+            TblClassroomEntity room = classroomDAO.find(rooms.get(i));
+            GroupReportsDTO group = new GroupReportsDTO();
+            group.setRoomId(room.getId());
+            group.setRoomName(room.getName());
+
+            equipmentNames = equipmentCategoryDAO.getCategoriesInRoom(room.getId());
+            group.setListEquipments(equipmentNames.substring(0, equipmentNames.length() - 2));
+            equipmentNames = "";
+            group.setReporters(reportDAO.getReportersInRoom(room.getId()));
+
+            groups.add(group);
+        }
+        List<TblReportEntity> finishReport = reportDAO.getFinishReport(0, 0);
+        List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
+        for (int i = 0; i < finishReport.size(); i++) {
+            ReportResponseObject report = new ReportResponseObject(finishReport.get(i)/*,reportDetails*/);
+            report.setReporter(finishReport.get(i).getTblUserByUserId().getTblUserInfoByUsername().getFullName());
+            report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
+
+            listReport.add(report);
+        }
+
+        request.setAttribute("FINISHREPORT", listReport);
+        request.setAttribute("NEWREPORT", groups);
+
+        request.setAttribute("ACTIVELEFTTAB", "STAFF_NOTIFY");
+    }
 }

@@ -105,7 +105,7 @@ public class UserController {
 
         String[] evaluates = reportRequest.getListEvaluate().split(",");
         int category = 0;
-        String equipmentNames = "";
+//        String equipmentNames = "";
         TblEquipmentEntity equip;
         TblEquipmentCategoryEntity categoryName;
 
@@ -114,8 +114,8 @@ public class UserController {
                 category = Integer.parseInt(evaluates[i].split("-")[0]);
 
                 equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
-                categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
-                equipmentNames += categoryName.getName() + ", ";
+//                categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
+//                equipmentNames += categoryName.getName() + ", ";
             }
         } else {
             String[] equipments = reportRequest.getListDamaged().split("--");
@@ -125,17 +125,17 @@ public class UserController {
 
                 if(equipsInCate.size() == 0) {
                     equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
-
-                    categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
-                    equipmentNames += categoryName.getName() + ", ";
+//
+//                    categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
+//                    equipmentNames += categoryName.getName() + ", ";
                 } else {
                     for(int j = 0; j < equipsInCate.size(); j++){
                         equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
 
-                        if(j == 0) {
-                            categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
-                            equipmentNames += categoryName.getName() + ", ";
-                        }
+//                        if(j == 0) {
+//                            categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
+//                            equipmentNames += categoryName.getName() + ", ";
+//                        }
                     }
                 }
             }
@@ -167,7 +167,8 @@ public class UserController {
             System.out.println("Khong the gui SMS!");
         }
 
-        return report.getId() + "-" + room.getName() + "-" + equipmentNames.substring(0, equipmentNames.length()-2) + "-" + report.getCreateTime().getTime();
+        String equipmentNames = equipmentDAO.getDamagedEquipmentNames(report.getId());
+        return report.getId() + "-" + room.getName() + "-" + equipmentNames + "-" + report.getCreateTime().getTime();
     }
 
     @RequestMapping(value = "mau-phong")

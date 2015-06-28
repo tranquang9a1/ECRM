@@ -53,9 +53,13 @@ function changeRoom() {
         url: "/thong-bao/doi-phong",
         data: {currentClassroom: $("#current-room").val(), changeClassroom: $("#new-room").val()},
         success: function(result) {
+            $(".change-room-text").html("<div class='value' style='color:darkorange'><span>Đổi phòng thành công!</span> Không còn lớp trong ngày</div>");
+            setTimeout(function(){
+                $(".change-room-text .value").css("color", "black");
+                $(".change-room-text .value span").remove();
+            }, 10000);
             closeLoading();
             showModal(2, 'modal-3', 'modal-1');
-            alert("Đổi phòng thành công!");
         }
     });
 }

@@ -308,18 +308,29 @@ function sentReport(){
         data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate option:selected").text(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
             var data = result.split('-');
-            var html = "<div class='width-10'><div>" + data[1] + "</div></div>";
-            html += "<div class='width-35'><div id='list-" + data[0] + "'>" + data[2] + "</div></div>";
-            var createDate = new Date(parseInt(data[3]));
-            html += "<div class='width-20'><div>" + (createDate.getDate()<10?("0"+createDate.getDate()):createDate.getDate())  + "/" + ((createDate.getMonth()+1)<10?("0" + (createDate.getMonth()+1)):(createDate.getMonth()+1)) + "/" + createDate.getFullYear() + "</div></div>";
-            html += "<div class='width-20'><div><p class='label red'>Chưa sửa</p></div></div>";
-            html += "<div class='width-15'><div class='group-button'><div onclick='loadReportHistory(" + data[0]+ ", " + data[1] + ")' class='btn btn-detail'><i class='fa fa-file'></i></div></div></div>";
-            html += "<p class='clear'></p>";
-            var row = document.createElement("div");
-            row.className = "row";
-            row.innerHTML = html;
-            var content = document.getElementById("content-report");
-            content.appendChild(row);
+            var oldRow = document.getElementById("report-" + data[0]);
+
+            if(oldRow == undefined) {
+                var html = "<div class='width-10'><div>" + data[1] + "</div></div>";
+                html += "<div class='width-35'><div id='list-" + data[0] + "'>" + data[2] + "</div></div>";
+                var createDate = new Date(parseInt(data[3]));
+                html += "<div class='width-20'><div>" + (createDate.getDate()<10?("0"+createDate.getDate()):createDate.getDate())  + "/" + ((createDate.getMonth()+1)<10?("0" + (createDate.getMonth()+1)):(createDate.getMonth()+1)) + "/" + createDate.getFullYear() + "</div></div>";
+                html += "<div class='width-20'><div><p class='label red'>Chưa sửa</p></div></div>";
+                html += "<div class='width-15'><div class='group-button'><div onclick='loadReportHistory(" + data[0]+ ", " + data[1] + ")' class='btn btn-detail'><i class='fa fa-file'></i></div></div></div>";
+                html += "<p class='clear'></p>";
+
+                var row = document.createElement("div");
+                row.className = "row";
+                row.setAttribute("id", "report-" + data[0]);
+                row.innerHTML = html;
+
+                var content = document.getElementById("content-report").innerHTML;
+                document.getElementById("content-report").innerHTML = "";
+                document.getElementById("content-report").appendChild(row);
+                document.getElementById("content-report").innerHTML += content;
+            } else {
+                document.getElementById("list-" + data[0]).innerHTML = data[2];
+            }
 
             for (var key in noDamagedEquipments) {
                 if (noDamagedEquipments.hasOwnProperty(key)){

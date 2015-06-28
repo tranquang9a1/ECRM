@@ -56,8 +56,15 @@
             </div>
             <div class="group-control">
               <div class="name">Đổi phòng</div>
-              <div class="value">Phòng <b>${room.suggestRooms.get(0)}</b> được đề xuất</div>
-              <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng">
+              <c:if test="${room.free == false}">
+                <div class="change-room-text">
+                  <div class="value">Phòng <b>${room.suggestRooms.get(0)}</b> được đề xuất</div>
+                  <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-3')" value="Đổi phòng">
+                </div>
+              </c:if>
+              <c:if test="${room.free == true}">
+                <div class="value">Phòng hiện đang trống</div>
+              </c:if>
           </div>
             <div class="group-control">
               <div class="name">Hư hại của phòng</div>
@@ -81,7 +88,8 @@
   </div>
   <div class="black-background"></div>
 </div>
-<div class="modal modal-small" id="modal-3">
+<c:if test="${room.free == false}">
+  <div class="modal modal-small" id="modal-3">
   <div class="content-modal">
     <div class="header-modal title">
       <p>Đổi phòng</p>
@@ -113,6 +121,7 @@
   </div>
   <div class="black-background"></div>
 </div>
+</c:if>
 <div class="modal modal-medium" id="modal-4">
   <div class="content-modal">
     <div class="header-modal title">

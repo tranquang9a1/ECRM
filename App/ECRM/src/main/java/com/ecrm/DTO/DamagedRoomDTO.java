@@ -22,6 +22,7 @@ public class DamagedRoomDTO {
     private String reporters;
     private Date reportDate;
     private int damagedLevel;
+    private boolean free;
     private String evaluate;
 
     private List<String> suggestRooms;
@@ -35,6 +36,7 @@ public class DamagedRoomDTO {
         this.reportDate = report.getCreateTime();
         this.evaluate = report.getEvaluate();
         this.equipments = equipments;
+        this.free = false;
 
         this.equipmentCategory = new ArrayList<EquipmentDamaged>();
         int position = -1;
@@ -99,6 +101,14 @@ public class DamagedRoomDTO {
 
     public void setDamagedLevel(int damagedLevel) {
         this.damagedLevel = damagedLevel;
+    }
+
+    public boolean isFree() {
+        return free;
+    }
+
+    public void setFree(boolean free) {
+        this.free = free;
     }
 
     public String getEvaluate() {

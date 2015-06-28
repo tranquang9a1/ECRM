@@ -234,6 +234,7 @@ public class APIController {
     List<ReportClassDTO> getReportStaff() {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
         List<Integer> listClass = reportDAO.getReportByClassId();
+        List<Integer> listReport = new ArrayList<Integer>();
         for (int classId : listClass) {
             //int id = Integer.parseInt(classId);
             List<TblReportDetailEntity> details = reportDetailDAO.getReportByClassId(classId);
@@ -266,20 +267,25 @@ public class APIController {
                     detailDTO.setStatus(entity.isStatus());
                     detailDTO.setQuantity(mapCount.get(detailDTO.getEquipmentName()));
                     reportId = entity.getReportId();
+                    listReport.add(reportId);
                     mapManage.put(detailDTO.getEquipmentName(), true);
                     equipments.add(detailDTO);
                 }
 
             }
-            TblReportEntity reportEntity = reportDAO.find(reportId);
             ReportClassDTO reportClassDTO = new ReportClassDTO();
-            reportClassDTO.setRoomName(reportEntity.getTblClassroomByClassRoomId().getName());
-            reportClassDTO.setRoomId(classId);
-            reportClassDTO.setEquipments(equipments);
-            reportClassDTO.setUserReport(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername());
-            reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
-            reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
-            reportClassDTO.setEvaluate(reportEntity.getEvaluate());
+            for (int report : listReport) {
+                TblReportEntity reportEntity = reportDAO.find(report);
+                reportClassDTO.setRoomName(reportEntity.getTblClassroomByClassRoomId().getName());
+                reportClassDTO.setRoomId(classId);
+                reportClassDTO.setEquipments(equipments);
+                reportClassDTO.setUserReport(reportClassDTO.getUserReport() + reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername() + ", ");
+                reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
+                reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
+                reportClassDTO.setEvaluate(reportEntity.getEvaluate());
+
+            }
+            reportClassDTO.setUserReport(reportClassDTO.getUserReport().substring(0, reportClassDTO.getUserReport().length() - 2));
             result.add(reportClassDTO);
 
         }

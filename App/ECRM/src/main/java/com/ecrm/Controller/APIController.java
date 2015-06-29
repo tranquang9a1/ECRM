@@ -168,11 +168,20 @@ public class APIController {
                         }
                     } else {
                         TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId, category, positon);
-                        tblEquipmentEntity.setStatus(false);
-                        equipmentDAO.merge(tblEquipmentEntity);
-                        TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
+						if (tblEquipmentEntity == null) {
+                            tblEquipmentEntity = new TblEquipmentEntity(category, classroomId, null, null, positon, null, false);
+                            equipmentDAO.insert(tblEquipmentEntity);
+                            TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
+                                    reportId, damagedLevel, description, positon);
+                            reportDetailDAO.persist(tblReportDetailEntity);
+                        } else {
+                            tblEquipmentEntity.setStatus(false);
+							equipmentDAO.merge(tblEquipmentEntity);
+							TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                 reportId, damagedLevel, description, positon);
-                        reportDetailDAO.persist(tblReportDetailEntity);
+							reportDetailDAO.persist(tblReportDetailEntity);
+                        }
+                        
                     }
                 }
             }

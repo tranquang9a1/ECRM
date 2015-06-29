@@ -10,6 +10,8 @@ import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
+import com.ecrm.Utils.socket.SocketIO;
+import com.twilio.sdk.TwilioRestException;
 import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -182,6 +184,15 @@ public class APIController {
 
             resultDTO.setError_code(100);
             resultDTO.setError("OK");
+            SocketIO socketIO = new SocketIO();
+            List<TblUserEntity> staffs = userDAO.getAllStaff();
+            String message = username + "  vừa báo cáo hư hại phòng " + room.getName();
+            for (TblUserEntity staff : staffs) {
+
+                boolean check = socketIO.sendNotifyMessageToUser(staff.getUsername(),
+                        Enumerable.NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/hu-hai?phong=" + report.getClassRoomId());
+            }
+
             return resultDTO;
         } catch (Exception e) {
             resultDTO.setError_code(101);
@@ -245,7 +256,7 @@ public class APIController {
             TblClassroomEntity classroomEntity = classroomDAO.find(classId);
             List<EquipmentDTO> equipments = new ArrayList<EquipmentDTO>();
             int reportId = 0;
-            Map<String , Integer> mapCount = new HashMap<String, Integer>();
+            Map<String, Integer> mapCount = new HashMap<String, Integer>();
 
             for (TblReportDetailEntity detail : details) {
                 if (mapCount.get(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName()) != null) {
@@ -367,7 +378,7 @@ public class APIController {
                             projectorDamagedLevel = 30;
                         } else if (project.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                             projectorDamagedLevel = 50;
-                        }else{
+                        } else {
                             projectorDamagedLevel = 50;
                         }
                     }
@@ -381,7 +392,7 @@ public class APIController {
                             tiviDamagedLevel = 30;
                         } else if (tivi.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                             tiviDamagedLevel = 50;
-                        }else{
+                        } else {
                             tiviDamagedLevel = 20;
                         }
                     }
@@ -395,8 +406,8 @@ public class APIController {
                             mayLanhDamagedLevel += 15;
                         } else if (mayLanh.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                             mayLanhDamagedLevel += 25;
-                        }else{
-                            mayLanhDamagedLevel +=25;
+                        } else {
+                            mayLanhDamagedLevel += 25;
                         }
                     }
                 }
@@ -414,7 +425,7 @@ public class APIController {
                                 quatDamagedLevel += 3;
                             } else if (quat.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                                 quatDamagedLevel += 5;
-                            }else{
+                            } else {
                                 quatDamagedLevel += 5;
                             }
                         }
@@ -427,9 +438,9 @@ public class APIController {
                             loaDamagedLevel = 1;
                         } else if (loa.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                             loaDamagedLevel = 3;
-                        } else if (loa.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                        } else if (loa.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                             loaDamagedLevel = 5;
-                        }else{
+                        } else {
                             loaDamagedLevel = 5;
                         }
                     }
@@ -441,9 +452,9 @@ public class APIController {
                             denDamagedLevel = 10;
                         } else if (den.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                             denDamagedLevel = 20;
-                        } else if (den.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                        } else if (den.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                             denDamagedLevel = 50;
-                        }else{
+                        } else {
                             denDamagedLevel = 10;
                         }
                     }
@@ -458,9 +469,9 @@ public class APIController {
                                 banDamagedLevel += 2;
                             } else if (ban.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                                 banDamagedLevel += 3;
-                            } else if (ban.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                            } else if (ban.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                                 banDamagedLevel += 5;
-                            }else{
+                            } else {
                                 banDamagedLevel += 5;
                             }
                         }
@@ -476,9 +487,9 @@ public class APIController {
                                 gheDamagedLevel += 1;
                             } else if (ghe.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
                                 gheDamagedLevel += 2;
-                            } else if (ghe.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())){
+                            } else if (ghe.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                                 gheDamagedLevel += 3;
-                            }else{
+                            } else {
                                 gheDamagedLevel += 3;
                             }
                         }
@@ -513,31 +524,33 @@ public class APIController {
     }
 
     @RequestMapping(value = "/getChangeRoom", method = RequestMethod.GET)
-    public @ResponseBody ResultDTO getChangeRoom(@RequestParam("classId") int classId) {
+    public
+    @ResponseBody
+    ResultDTO getChangeRoom(@RequestParam("classId") int classId) {
         ResultDTO dto = new ResultDTO();
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classId);
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
-        for(TblScheduleEntity tblScheduleEntity: tblScheduleEntityList){
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
             List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
-            if(!classroom.isEmpty()){
+            if (!classroom.isEmpty()) {
                 TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroom.get(0));
                 tblScheduleEntity.setIsActive(false);
                 scheduleDAO.merge(tblScheduleEntity);
                 TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), classroomEntity.getId(),
-                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng",tblScheduleEntity.getTimeFrom(),
+                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng", tblScheduleEntity.getTimeFrom(),
                         tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
-                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername()+" từ phòng: "+
-                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+" sang phòng: "+classroomEntity.getName()+".";
+                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + classroomEntity.getName() + ".";
                 scheduleDAO.persist(newSchedule);
                 dto.setError(message);
                 dto.setError_code(100);
                 return dto;
-            }else{
-                String message = "Không còn phòng trống: "+ tblScheduleEntity.getUsername()+" của phòng: "+
-                        tblScheduleEntity.getTblClassroomByClassroomId().getName()+".";
+            } else {
+                String message = "Không còn phòng trống: " + tblScheduleEntity.getUsername() + " của phòng: " +
+                        tblScheduleEntity.getTblClassroomByClassroomId().getName() + ".";
                 dto.setError(message);
                 dto.setError_code(101);
-                return  dto;
+                return dto;
             }
         }
         return new ResultDTO(101, "Không có thời khóa biểu");
@@ -557,7 +570,7 @@ public class APIController {
         if (roomType.getAirConditioning() > 0) {
             TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 3);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Máy Lạnh", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                result.add(new EquipmentClassDTO("Máy Lạnh", equipmentEntity.getTimeRemain() + "", equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Máy Lạnh", null, null, true));
             }
@@ -566,7 +579,7 @@ public class APIController {
         if (roomType.getBulb() > 0) {
             TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 6);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Bóng Đèn", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                result.add(new EquipmentClassDTO("Bóng Đèn", equipmentEntity.getTimeRemain() + "", equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Bóng Đèn", null, null, true));
             }
@@ -574,7 +587,7 @@ public class APIController {
         if (roomType.getFan() > 0) {
             TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 4);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Máy Quạt", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                result.add(new EquipmentClassDTO("Máy Quạt", equipmentEntity.getTimeRemain() + "", equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Máy Quạt", null, null, true));
             }
@@ -582,7 +595,7 @@ public class APIController {
         if (roomType.getProjector() > 0) {
             TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 1);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Máy Chiếu", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                result.add(new EquipmentClassDTO("Máy Chiếu", equipmentEntity.getTimeRemain() + "", equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Máy Chiếu", null, null, true));
             }
@@ -590,7 +603,7 @@ public class APIController {
         if (roomType.getTelevision() > 0) {
             TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 2);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Tivi", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                result.add(new EquipmentClassDTO("Tivi", equipmentEntity.getTimeRemain() + "", equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Tivi", null, null, true));
             }
@@ -598,7 +611,7 @@ public class APIController {
         if (roomType.getSpeaker() > 0) {
             TblEquipmentEntity equipmentEntity = getEquipment(listEquipments, 5);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Loa", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                result.add(new EquipmentClassDTO("Loa", equipmentEntity.getTimeRemain() + "", equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Loa", null, null, true));
             }
@@ -611,7 +624,7 @@ public class APIController {
 
 
     public TblEquipmentEntity getEquipment(List<TblEquipmentEntity> listEquipments, int id) {
-        for (int i = 0; i< listEquipments.size(); i++) {
+        for (int i = 0; i < listEquipments.size(); i++) {
             if (listEquipments.get(i).getCategoryId() == id) {
                 return listEquipments.get(i);
             }
@@ -632,8 +645,6 @@ public class APIController {
         }
 
     }
-
-
 
 
 }

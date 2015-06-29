@@ -1,9 +1,12 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
+import com.ecrm.DAO.Impl.UserDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
+import com.ecrm.Entity.TblUserEntity;
 import com.ecrm.Utils.Utils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,9 @@ import java.util.*;
 public class AjaxController {
     @Autowired
     ClassroomDAOImpl classroomDAO;
+    @Autowired
+    UserDAOImpl userDAO;
+
     @RequestMapping(value = "findClassroom")
     public @ResponseBody
     void findClassroom(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
@@ -52,7 +58,7 @@ public class AjaxController {
         List<Date> time = Utils.timeFraction(dateTime, Integer.parseInt(numberOfSlot));
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
-        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
         for (int i = 0; i < tblClassroomEntities.size(); i++) {
              int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
             if (numberOfStudent >= Integer.parseInt(currentSlots)) {
@@ -68,7 +74,7 @@ public class AjaxController {
             if (tblScheduleEntities != null) {
                 for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                     //So sanh ngay
-                    if (tblScheduleEntity1.getDate().getTime()==format.parse(date).getTime()) {
+                    if (tblScheduleEntity1.getDate().getTime()==format.parse(date).getTime() && tblScheduleEntity1.getIsActive()) {
                         //So sanh gio
                         String t = tblScheduleEntity1.getDate().toString()+" "+tblScheduleEntity1.getTimeFrom();
                         List<Date> listTimeToCompare = Utils.timeFraction(t, tblScheduleEntity1.getSlots());
@@ -93,5 +99,16 @@ public class AjaxController {
         }
     }
 
+    //check username
+    @RequestMapping(value="checkUsername")
+    public @ResponseBody
+    String checkUsername(HttpServletRequest request, HttpServletResponse response){
+        String username = request.getParameter("Username");
+        List<TblUserEntity> tblUserEntities = userDAO.checkUsername(username);
+        if(tblUserEntities.isEmpty()){
+            return "OK";
+        }
+        return "NO";
+    }
 
 }

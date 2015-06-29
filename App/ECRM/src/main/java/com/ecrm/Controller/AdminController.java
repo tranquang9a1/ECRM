@@ -34,7 +34,7 @@ public class AdminController {
 
     @RequestMapping(value = "editAccount")
     public String activateAccount(HttpServletRequest request, @RequestParam("Action") String action,
-                                  @RequestParam("username") String username) {
+                                  @RequestParam("Username") String username) {
         TblUserEntity tblUserEntity = userDAO.findUser(username);
         if(action.equals("Activate")){
             tblUserEntity.setStatus(true);

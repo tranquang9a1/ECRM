@@ -47,7 +47,7 @@ public class ScheduleController {
 
     @RequestMapping(value = "schedule")
     public String mappingSchedule(HttpServletRequest request) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
             List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
@@ -62,7 +62,7 @@ public class ScheduleController {
 
     @RequestMapping(value = "import")
     public String importFile(HttpServletRequest request) throws IOException, InvalidFormatException, ParseException {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             String fileName = "";
             File file;
@@ -93,7 +93,7 @@ public class ScheduleController {
                         if (!fi.isFormField()) {
                             // Get the uploaded file parameters
                             fileName = fi.getName();
-                            ServletContext servletContext = request.getSession(false).getServletContext();
+                            ServletContext servletContext = request.getSession().getServletContext();
                             filePath = servletContext.getRealPath(fileName);
                             // Write the file
                             if (fileName.lastIndexOf("\\") >= 0) {
@@ -271,7 +271,7 @@ public class ScheduleController {
                                  @RequestParam("slot") String slot, @RequestParam("numberOfSlots") int numberOfSlots,
                                  @RequestParam("numberOfStudent") int numberOfStudent, @RequestParam("dateF") String dateFrom,
                                  @RequestParam("dateT") String dateTo) throws ParseException {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             slot = "Slot " + slot;
             String timeFrom = convertSlotToTime(slot);
@@ -329,7 +329,7 @@ public class ScheduleController {
     @RequestMapping(value = "searchSchedule")
     public String searchSchedule(HttpServletRequest request, @RequestParam("datefrom") String datefrom, @RequestParam("dateto") String dateto
             , @RequestParam("classroomId") String classroomId, @RequestParam("username") String username) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
             List<TblUserEntity> tblUserEntities = userDAO.findTeacher();

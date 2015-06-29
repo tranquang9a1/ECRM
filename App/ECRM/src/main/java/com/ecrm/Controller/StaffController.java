@@ -39,7 +39,7 @@ public class StaffController {
 
     @RequestMapping(value = "classroom")
     public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
             List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
@@ -82,7 +82,7 @@ public class StaffController {
                                  @RequestParam("AirConditioning") int airConditioning, @RequestParam("Fan") int fan,
                                  @RequestParam("Projector") int projectors, @RequestParam("Speaker") int speaker,
                                  @RequestParam("Television") int television, @RequestParam("Bulb") int bulb, @RequestParam("RoomtypeName") String roomtypeName) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblRoomTypeEntity roomType = new TblRoomTypeEntity();
             horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
@@ -110,7 +110,7 @@ public class StaffController {
     @RequestMapping(value = "removeRoomType")
     @Transactional
     public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
             Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
@@ -137,7 +137,7 @@ public class StaffController {
     @RequestMapping(value = "createClassroom")
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
                                   @RequestParam("RoomName") String roomName) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             Date date = new Date();
             if (roomName != null) {
@@ -168,7 +168,7 @@ public class StaffController {
     @RequestMapping(value = "removeClassroom")
     @Transactional
     public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
             classroomEntity.setIsDelete(true);
@@ -187,7 +187,7 @@ public class StaffController {
     //Tạo Trang cập nhật những equipment chưa có thông tin
     @RequestMapping(value = "EquipmentInformation")
     public String createEquipmentInformation(HttpServletRequest request, @RequestParam("ClassroomId") int classroomId) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
             Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
@@ -264,7 +264,7 @@ public class StaffController {
     public String updateInformation(HttpServletRequest request, @RequestParam("projector") int projector,
                                     @RequestParam("tivi") int tivi, @RequestParam("airConditioning") String airConditioning,
                                     @RequestParam("classroomId") int classroomId) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
             Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();

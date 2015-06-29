@@ -27,7 +27,7 @@ public class EquipmentController {
 
     @RequestMapping("/equipment")
     public String equipment(HttpServletRequest request){
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.findAll();
             List<TblEquipmentEntity> fitEquipment = new ArrayList<TblEquipmentEntity>();
@@ -56,7 +56,7 @@ public class EquipmentController {
     @RequestMapping("/createEquipment")
     public String createEquipment(HttpServletRequest request, @RequestParam("categoryId") int categoryId
             , @RequestParam("name") String name, @RequestParam("serialNumber") String serialNumber){
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, name, serialNumber, null, null, true);
             equipmentDAO.persist(tblEquipmentEntity);

@@ -28,7 +28,7 @@ public class AdminController {
     UserInfoDAOImpl userInfoDAO;
     @RequestMapping(value = "account")
     public String init(HttpServletRequest request) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null){
             List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
             request.setAttribute("LSTUSERS", tblUserEntities);
@@ -42,7 +42,7 @@ public class AdminController {
     @RequestMapping(value = "editAccount")
     public String activateAccount(HttpServletRequest request, @RequestParam("Action") String action,
                                   @RequestParam("Username") String username) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null){
             TblUserEntity tblUserEntity = userDAO.findUser(username);
             if(action.equals("Activate")){
@@ -62,7 +62,7 @@ public class AdminController {
     @RequestMapping(value = "createAccount")
     public String createAccount(HttpServletRequest request, @RequestParam("Username") String username,
                                 @RequestParam("FullName") String fullName, @RequestParam("Phone") String phone){
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null){
             TblUserEntity tblUserEntity = new TblUserEntity();
             tblUserEntity.setUsername(username);

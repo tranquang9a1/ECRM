@@ -49,7 +49,7 @@ public class UserController {
 
     @RequestMapping(value = "thong-bao")
     public String notifications(HttpServletRequest request){
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
         if(user!=null) {
             List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
@@ -93,7 +93,7 @@ public class UserController {
     @ResponseBody
     public String createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest){
         GCMController gcm = new GCMController();
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
         if(user!=null) {
             TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
@@ -180,7 +180,7 @@ public class UserController {
 
     @RequestMapping(value = "mau-phong")
     public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         if(session!=null) {
             TblClassroomEntity classroom = classroomDAO.find(roomId);
             TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
@@ -197,7 +197,7 @@ public class UserController {
 
     @RequestMapping(value = "viewHistory")
     public String viewReportByUser(HttpServletRequest request, @RequestParam("ReportId") int reportId, @RequestParam("RoomId") String roomId){
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         if(session!=null) {
             TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomId);
             List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(classroom.getId());
@@ -217,7 +217,7 @@ public class UserController {
     @RequestMapping(value = "lich-day")
     public String viewSchedule(HttpServletRequest request){
 
-        HttpSession session= request.getSession(false);
+        HttpSession session= request.getSession();
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
         if(user!=null) {
             List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());

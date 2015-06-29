@@ -57,7 +57,7 @@ public class NotifyController {
 
     @RequestMapping(value = "chi-tiet")
     public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             TblClassroomEntity classroom = classroomDAO.find(roomId);
             List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(classroom.getId());
@@ -81,7 +81,7 @@ public class NotifyController {
 
     @RequestMapping(value = "hu-hai")
     public String showReportDetail(HttpServletRequest request, @RequestParam(value = "phong") int roomId){
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
 
@@ -102,7 +102,7 @@ public class NotifyController {
     @Transactional
     public String resolveReport(HttpServletRequest request, @RequestParam(value = "RoomId") int roomId,
                                 @RequestParam(value = "ListResolve") String listResolve) {
-        HttpSession session  =  request.getSession(false);
+        HttpSession session  =  request.getSession();
         if(session!=null) {
             String[] categories = listResolve.split(",");
             for (int i = 0; i < categories.length; i++) {
@@ -211,7 +211,7 @@ public class NotifyController {
 
     @RequestMapping(value = "all-notify")
     public String getAllNotify(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
         String role = user.getTblRoleByRoleId().getName();
         List<TblNotificationEntity> listNotify;

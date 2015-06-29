@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,31 +27,42 @@ public class EquipmentController {
 
     @RequestMapping("/equipment")
     public String equipment(HttpServletRequest request){
-        List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.findAll();
-        List<TblEquipmentEntity> fitEquipment = new ArrayList<TblEquipmentEntity>();
-        for(TblEquipmentEntity tblEquipmentEntity: tblEquipmentEntities){
-            if(tblEquipmentEntity.getName()!= null && tblEquipmentEntity.getSerialNumber()!=null){
-                fitEquipment.add(tblEquipmentEntity);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.findAll();
+            List<TblEquipmentEntity> fitEquipment = new ArrayList<TblEquipmentEntity>();
+            for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                if (tblEquipmentEntity.getName() != null && tblEquipmentEntity.getSerialNumber() != null) {
+                    fitEquipment.add(tblEquipmentEntity);
+                }
             }
-        }
-        List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
-        List<TblEquipmentCategoryEntity> fitCategory = new ArrayList<TblEquipmentCategoryEntity>();
-        for(TblEquipmentCategoryEntity tblEquipmentCategoryEntity : tblEquipmentCategoryEntities){
-            if(tblEquipmentCategoryEntity.getId()<4){
-                fitCategory.add(tblEquipmentCategoryEntity);
+            List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
+            List<TblEquipmentCategoryEntity> fitCategory = new ArrayList<TblEquipmentCategoryEntity>();
+            for (TblEquipmentCategoryEntity tblEquipmentCategoryEntity : tblEquipmentCategoryEntities) {
+                if (tblEquipmentCategoryEntity.getId() < 4) {
+                    fitCategory.add(tblEquipmentCategoryEntity);
+                }
             }
+            request.setAttribute("EQUIPMENTS", fitEquipment);
+            request.setAttribute("ACTIVELEFTTAB", "STAFF_EQUIP");
+            request.setAttribute("CATEGORIES", fitCategory);
+            return "Staff_Equipment";
         }
-        request.setAttribute("EQUIPMENTS", fitEquipment);
-        request.setAttribute("ACTIVELEFTTAB", "STAFF_EQUIP");
-        request.setAttribute("CATEGORIES", fitCategory);
-        return "Staff_Equipment";
+        else{
+            return "Login";
+        }
     }
 
     @RequestMapping("/createEquipment")
     public String createEquipment(HttpServletRequest request, @RequestParam("categoryId") int categoryId
             , @RequestParam("name") String name, @RequestParam("serialNumber") String serialNumber){
-        TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, name, serialNumber,null, null, true);
-        equipmentDAO.persist(tblEquipmentEntity);
-        return "redirect:/staff/equipment";
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, name, serialNumber, null, null, true);
+            equipmentDAO.persist(tblEquipmentEntity);
+            return "redirect:/staff/equipment";
+        }else {
+            return "Login";
+        }
     }
 }

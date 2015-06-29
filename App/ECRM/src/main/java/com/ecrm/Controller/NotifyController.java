@@ -57,50 +57,66 @@ public class NotifyController {
 
     @RequestMapping(value = "chi-tiet")
     public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
-        TblClassroomEntity classroom = classroomDAO.find(roomId);
-        List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(classroom.getId());
-        List<TblScheduleEntity> schedules = scheduleDAO.getScheduleNoFinishOfRoom(roomId);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblClassroomEntity classroom = classroomDAO.find(roomId);
+            List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(classroom.getId());
+            List<TblScheduleEntity> schedules = scheduleDAO.getScheduleNoFinishOfRoom(roomId);
 
-        DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId), equipments);
-        resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
-        resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
-        resultObject.setDamagedLevel(classroom.getDamagedLevel());
-        if(schedules.size() > 0) {
-            resultObject.setSuggestRooms(getAvailableRoom(roomId));
-        } else {
-            resultObject.setFree(true);
+            DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId), equipments);
+            resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
+            resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
+            resultObject.setDamagedLevel(classroom.getDamagedLevel());
+            if (schedules.size() > 0) {
+                resultObject.setSuggestRooms(getAvailableRoom(roomId));
+            } else {
+                resultObject.setFree(true);
+            }
+            request.setAttribute("DAMAGEDROOM", resultObject);
+            return "staff/ReportDetail";
+        }else {
+            return "Login";
         }
-        request.setAttribute("DAMAGEDROOM", resultObject);
-        return "staff/ReportDetail";
     }
 
     @RequestMapping(value = "hu-hai")
     public String showReportDetail(HttpServletRequest request, @RequestParam(value = "phong") int roomId){
-        List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
 
-        if(equipments.size() > 0) {
-            getListReport(request);
-            request.setAttribute("SHOWDETAIL", roomId);
-            return "staff/Notifications";
+            if (equipments.size() > 0) {
+                getListReport(request);
+                request.setAttribute("SHOWDETAIL", roomId);
+                return "staff/Notifications";
+            }
+
+            return "redirect:/thong-bao";
         }
-
-        return "redirect:/thong-bao";
+        else {
+            return "Login";
+        }
     }
 
     @RequestMapping(value = "sua-chua")
     @Transactional
     public String resolveReport(HttpServletRequest request, @RequestParam(value = "RoomId") int roomId,
                                 @RequestParam(value = "ListResolve") String listResolve) {
-        String[] categories = listResolve.split(",");
-        for (int i = 0; i < categories.length; i++) {
-            resolve(roomId, Integer.parseInt(categories[i]));
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            String[] categories = listResolve.split(",");
+            for (int i = 0; i < categories.length; i++) {
+                resolve(roomId, Integer.parseInt(categories[i]));
+            }
+
+            TblClassroomEntity room = classroomDAO.find(roomId);
+            room.setDamagedLevel(checkDamagedLevel(room));
+            classroomDAO.merge(room);
+
+            return "redirect:/thong-bao";
+        }else {
+            return "Login";
         }
-
-        TblClassroomEntity room = classroomDAO.find(roomId);
-        room.setDamagedLevel(checkDamagedLevel(room));
-        classroomDAO.merge(room);
-
-        return "redirect:/thong-bao";
     }
 
     @RequestMapping(value = "sua-het")
@@ -195,7 +211,7 @@ public class NotifyController {
 
     @RequestMapping(value = "all-notify")
     public String getAllNotify(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
         String role = user.getTblRoleByRoleId().getName();
         List<TblNotificationEntity> listNotify;

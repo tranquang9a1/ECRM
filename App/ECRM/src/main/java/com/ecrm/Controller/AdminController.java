@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,41 +28,59 @@ public class AdminController {
     UserInfoDAOImpl userInfoDAO;
     @RequestMapping(value = "account")
     public String init(HttpServletRequest request) {
-        List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
-        request.setAttribute("LSTUSERS", tblUserEntities);
-        return "Admin_Account";
+        HttpSession session  =  request.getSession(false);
+        if(session!=null){
+            List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
+            request.setAttribute("LSTUSERS", tblUserEntities);
+            return "Admin_Account";
+        }else{
+            return "Login";
+        }
+
     }
 
     @RequestMapping(value = "editAccount")
     public String activateAccount(HttpServletRequest request, @RequestParam("Action") String action,
                                   @RequestParam("Username") String username) {
-        TblUserEntity tblUserEntity = userDAO.findUser(username);
-        if(action.equals("Activate")){
-            tblUserEntity.setStatus(true);
-            userDAO.merge(tblUserEntity);
-        }else{
-            tblUserEntity.setStatus(false);
-            userDAO.merge(tblUserEntity);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null){
+            TblUserEntity tblUserEntity = userDAO.findUser(username);
+            if(action.equals("Activate")){
+                tblUserEntity.setStatus(true);
+                userDAO.merge(tblUserEntity);
+            }else{
+                tblUserEntity.setStatus(false);
+                userDAO.merge(tblUserEntity);
+            }
+            return "redirect:/admin/account";
         }
-        return "redirect:/admin/account";
+        else{
+            return "Login";
+        }
     }
 
     @RequestMapping(value = "createAccount")
     public String createAccount(HttpServletRequest request, @RequestParam("Username") String username,
                                 @RequestParam("FullName") String fullName, @RequestParam("Phone") String phone){
-        TblUserEntity tblUserEntity = new TblUserEntity();
-        tblUserEntity.setUsername(username);
-        tblUserEntity.setPassword("123456");
-        tblUserEntity.setStatus(true);
-        tblUserEntity.setRoleId(3);
-        userDAO.persist(tblUserEntity);
-        TblUserInfoEntity tblUserInfoEntity = new TblUserInfoEntity();
-        tblUserInfoEntity.setUsername(username);
-        tblUserInfoEntity.setFullName(fullName);
-        tblUserInfoEntity.setPhone(phone);
-        tblUserInfoEntity.setDeviceId(null);
-        tblUserInfoEntity.setLastLogin(null);
-        userInfoDAO.persist(tblUserInfoEntity);
-        return "redirect:/admin/account";
+        HttpSession session  =  request.getSession(false);
+        if(session!=null){
+            TblUserEntity tblUserEntity = new TblUserEntity();
+            tblUserEntity.setUsername(username);
+            tblUserEntity.setPassword("123456");
+            tblUserEntity.setStatus(true);
+            tblUserEntity.setRoleId(3);
+            userDAO.persist(tblUserEntity);
+            TblUserInfoEntity tblUserInfoEntity = new TblUserInfoEntity();
+            tblUserInfoEntity.setUsername(username);
+            tblUserInfoEntity.setFullName(fullName);
+            tblUserInfoEntity.setPhone(phone);
+            tblUserInfoEntity.setDeviceId(null);
+            tblUserInfoEntity.setLastLogin(null);
+            userInfoDAO.persist(tblUserInfoEntity);
+            return "redirect:/admin/account";
+        }else{
+            return "Login";
+        }
+
     }
 }

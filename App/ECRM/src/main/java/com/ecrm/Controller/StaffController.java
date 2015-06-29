@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,35 +39,40 @@ public class StaffController {
 
     @RequestMapping(value = "classroom")
     public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
-        List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
-        List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
-        for (TblRoomTypeEntity roomTypeEntity : lstRoomType) {
-            if (!roomTypeEntity.getIsDelete()) {
-                tblRoomTypeEntities.add(roomTypeEntity);
-            }
-        }
-        request.setAttribute("ALLROOMTYPE", tblRoomTypeEntities);
-
-        boolean isProjector = false;
-        boolean tivi = false;
-        boolean airConditioning = false;
-        List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
-        List<TblClassroomEntity> tblClassroomEntities = new ArrayList<TblClassroomEntity>();
-        for (TblClassroomEntity classroomEntity : lstClassRoom) {
-            if (!classroomEntity.getIsDelete()) {
-                tblClassroomEntities.add(classroomEntity);
-            }
-            Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-            for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                if (tblEquipmentEntity.getName() == null && tblEquipmentEntity.getCategoryId()<4) {
-                    classroomEntity.setIsAllInformation(false);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            List<TblRoomTypeEntity> lstRoomType = roomTypeDAO.findAll();
+            List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
+            for (TblRoomTypeEntity roomTypeEntity : lstRoomType) {
+                if (!roomTypeEntity.getIsDelete()) {
+                    tblRoomTypeEntities.add(roomTypeEntity);
                 }
             }
+            request.setAttribute("ALLROOMTYPE", tblRoomTypeEntities);
+
+            boolean isProjector = false;
+            boolean tivi = false;
+            boolean airConditioning = false;
+            List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
+            List<TblClassroomEntity> tblClassroomEntities = new ArrayList<TblClassroomEntity>();
+            for (TblClassroomEntity classroomEntity : lstClassRoom) {
+                if (!classroomEntity.getIsDelete()) {
+                    tblClassroomEntities.add(classroomEntity);
+                }
+                Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                    if (tblEquipmentEntity.getName() == null && tblEquipmentEntity.getCategoryId() < 4) {
+                        classroomEntity.setIsAllInformation(false);
+                    }
+                }
+            }
+            request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
+            request.setAttribute("ACTIVETAB", activeTab);
+            request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
+            return "Staff_Classroom";
+        }else {
+            return "Login";
         }
-        request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
-        request.setAttribute("ACTIVETAB", activeTab);
-        request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
-        return "Staff_Classroom";
     }
 
     //create roomtype
@@ -76,134 +82,159 @@ public class StaffController {
                                  @RequestParam("AirConditioning") int airConditioning, @RequestParam("Fan") int fan,
                                  @RequestParam("Projector") int projectors, @RequestParam("Speaker") int speaker,
                                  @RequestParam("Television") int television, @RequestParam("Bulb") int bulb, @RequestParam("RoomtypeName") String roomtypeName) {
-        TblRoomTypeEntity roomType = new TblRoomTypeEntity();
-        horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
-        NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
-        java.util.Date date = new java.util.Date();
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblRoomTypeEntity roomType = new TblRoomTypeEntity();
+            horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
+            NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
+            java.util.Date date = new java.util.Date();
 
 
-        if (roomtypeId != "") {
-            roomType = roomTypeDAO.find(Integer.parseInt(roomtypeId));
-            roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
-                    speaker, bulb, television, roomType.getCreateTime(), false, new Timestamp(date.getTime()));
-            roomTypeDAO.merge(roomType);
-        } else {
-            roomType = new TblRoomTypeEntity(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
-                    speaker, bulb, television, new Timestamp(date.getTime()), false, null);
-            roomTypeDAO.persist(roomType);
+            if (roomtypeId != "") {
+                roomType = roomTypeDAO.find(Integer.parseInt(roomtypeId));
+                roomType = new TblRoomTypeEntity(Integer.parseInt(roomtypeId), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
+                        speaker, bulb, television, roomType.getCreateTime(), false, new Timestamp(date.getTime()));
+                roomTypeDAO.merge(roomType);
+            } else {
+                roomType = new TblRoomTypeEntity(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows, airConditioning, fan, projectors,
+                        speaker, bulb, television, new Timestamp(date.getTime()), false, null);
+                roomTypeDAO.persist(roomType);
+            }
+            return "redirect:/staff/classroom?ACTIVETAB=tab2";
+        }else {
+            return "Login";
         }
-        return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
 
     //remove roomtype
     @RequestMapping(value = "removeRoomType")
     @Transactional
     public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
-        TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
-        Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
-        if (tblClassroomEntities.size() > 0) {
-            for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
-                tblClassroomEntity.setIsDelete(true);
-                classroomDAO.merge(tblClassroomEntity);
-                Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
-                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                    tblEquipmentEntity.setClassroomId(null);
-                    equipmentDAO.merge(tblEquipmentEntity);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
+            Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
+            if (tblClassroomEntities.size() > 0) {
+                for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
+                    tblClassroomEntity.setIsDelete(true);
+                    classroomDAO.merge(tblClassroomEntity);
+                    Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
+                    for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                        tblEquipmentEntity.setClassroomId(null);
+                        equipmentDAO.merge(tblEquipmentEntity);
+                    }
                 }
             }
+            roomTypeEntity.setIsDelete(true);
+            roomTypeDAO.merge(roomTypeEntity);
+            return "redirect:/staff/classroom?ACTIVETAB=tab2";
+        }else {
+            return "Login";
         }
-        roomTypeEntity.setIsDelete(true);
-        roomTypeDAO.merge(roomTypeEntity);
-        return "redirect:/staff/classroom?ACTIVETAB=tab2";
     }
 
     //create classroom
     @RequestMapping(value = "createClassroom")
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
                                   @RequestParam("RoomName") String roomName) {
-        Date date = new Date();
-        if (roomName != null) {
-            TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
-            if (classroom != null) {
-                Collection<TblEquipmentEntity> tblEquipmentEntities = classroom.getTblEquipmentsById();
-                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                    tblEquipmentEntity.setClassroomId(null);
-                    equipmentDAO.merge(tblEquipmentEntity);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            Date date = new Date();
+            if (roomName != null) {
+                TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
+                if (classroom != null) {
+                    Collection<TblEquipmentEntity> tblEquipmentEntities = classroom.getTblEquipmentsById();
+                    for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                        tblEquipmentEntity.setClassroomId(null);
+                        equipmentDAO.merge(tblEquipmentEntity);
+                    }
+                    classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, classroom.getCreateTime(),
+                            new Timestamp(date.getTime()), false, true, 0);
+                    classroomDAO.merge(classroom);
+                    insertEquipment(roomName);
+                } else {
+                    classroom = new TblClassroomEntity(0, roomTypeId, roomName, new Timestamp(date.getTime()), null, false, true, 0);
+                    classroomDAO.persist(classroom);
+                    insertEquipment(roomName);
                 }
-                classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, classroom.getCreateTime(),
-                        new Timestamp(date.getTime()), false, true,0);
-                classroomDAO.merge(classroom);
-                insertEquipment(roomName);
-            } else {
-                classroom = new TblClassroomEntity(0, roomTypeId, roomName, new Timestamp(date.getTime()), null, false, true, 0);
-                classroomDAO.persist(classroom);
-                insertEquipment(roomName);
             }
+            return "redirect:/staff/classroom?ACTIVETAB=tab1";
+        }else {
+            return "Login";
         }
-        return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
     //remove classroom
     @RequestMapping(value = "removeClassroom")
     @Transactional
     public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
-        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
-        classroomEntity.setIsDelete(true);
-        classroomDAO.merge(classroomEntity);
-        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            tblEquipmentEntity.setClassroomId(null);
-            equipmentDAO.merge(tblEquipmentEntity);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroomName);
+            classroomEntity.setIsDelete(true);
+            classroomDAO.merge(classroomEntity);
+            Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+            for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                tblEquipmentEntity.setClassroomId(null);
+                equipmentDAO.merge(tblEquipmentEntity);
+            }
+            return "redirect:/staff/classroom?ACTIVETAB=tab1";
+        }else {
+            return "Login";
         }
-        return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
     //Tạo Trang cập nhật những equipment chưa có thông tin
     @RequestMapping(value = "EquipmentInformation")
     public String createEquipmentInformation(HttpServletRequest request, @RequestParam("ClassroomId") int classroomId) {
-        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
-        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-        List<TblEquipmentEntity> projector = new ArrayList<TblEquipmentEntity>();
-        List<TblEquipmentEntity> tivi = new ArrayList<TblEquipmentEntity>();
-        List<TblEquipmentEntity> air = new ArrayList<TblEquipmentEntity>();
-        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            if (tblEquipmentEntity.getCategoryId() == 1 && tblEquipmentEntity.getName() == null) {
-                projector.add(tblEquipmentEntity);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+            Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+            List<TblEquipmentEntity> projector = new ArrayList<TblEquipmentEntity>();
+            List<TblEquipmentEntity> tivi = new ArrayList<TblEquipmentEntity>();
+            List<TblEquipmentEntity> air = new ArrayList<TblEquipmentEntity>();
+            for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                if (tblEquipmentEntity.getCategoryId() == 1 && tblEquipmentEntity.getName() == null) {
+                    projector.add(tblEquipmentEntity);
+                }
+                if (tblEquipmentEntity.getCategoryId() == 2 && tblEquipmentEntity.getName() == null) {
+                    tivi.add(tblEquipmentEntity);
+                }
+                if (tblEquipmentEntity.getCategoryId() == 3 && tblEquipmentEntity.getName() == null) {
+                    air.add(tblEquipmentEntity);
+                }
             }
-            if (tblEquipmentEntity.getCategoryId() == 2 && tblEquipmentEntity.getName() == null) {
-                tivi.add(tblEquipmentEntity);
-            }
-            if (tblEquipmentEntity.getCategoryId() == 3 && tblEquipmentEntity.getName() == null) {
-                air.add(tblEquipmentEntity);
-            }
-        }
 
-        List<TblEquipmentEntity> availableProjector = new ArrayList<TblEquipmentEntity>();
-        List<TblEquipmentEntity> availableTivi = new ArrayList<TblEquipmentEntity>();
-        List<TblEquipmentEntity> availableAir = new ArrayList<TblEquipmentEntity>();
-        List<TblEquipmentEntity> availableEquipment = new ArrayList<TblEquipmentEntity>();
-        availableEquipment = equipmentDAO.findAll();
-        for (TblEquipmentEntity tblEquipmentEntity : availableEquipment) {
-            if (tblEquipmentEntity.getClassroomId() == null && tblEquipmentEntity.getName() != null) {
-                if (tblEquipmentEntity.getCategoryId() == 1) {
-                    availableProjector.add(tblEquipmentEntity);
-                }
-                if (tblEquipmentEntity.getCategoryId() == 2) {
-                    availableTivi.add(tblEquipmentEntity);
-                }
-                if (tblEquipmentEntity.getCategoryId() == 3) {
-                    availableAir.add(tblEquipmentEntity);
+            List<TblEquipmentEntity> availableProjector = new ArrayList<TblEquipmentEntity>();
+            List<TblEquipmentEntity> availableTivi = new ArrayList<TblEquipmentEntity>();
+            List<TblEquipmentEntity> availableAir = new ArrayList<TblEquipmentEntity>();
+            List<TblEquipmentEntity> availableEquipment = new ArrayList<TblEquipmentEntity>();
+            availableEquipment = equipmentDAO.findAll();
+            for (TblEquipmentEntity tblEquipmentEntity : availableEquipment) {
+                if (tblEquipmentEntity.getClassroomId() == null && tblEquipmentEntity.getName() != null) {
+                    if (tblEquipmentEntity.getCategoryId() == 1) {
+                        availableProjector.add(tblEquipmentEntity);
+                    }
+                    if (tblEquipmentEntity.getCategoryId() == 2) {
+                        availableTivi.add(tblEquipmentEntity);
+                    }
+                    if (tblEquipmentEntity.getCategoryId() == 3) {
+                        availableAir.add(tblEquipmentEntity);
+                    }
                 }
             }
+            request.setAttribute("PROJECTOR", projector);
+            request.setAttribute("AVAILABLEPROJECTOR", availableProjector);
+            request.setAttribute("TIVI", tivi);
+            request.setAttribute("AVAILABLETIVI", availableTivi);
+            request.setAttribute("AIR", air);
+            request.setAttribute("AVAILABLEAIR", availableAir);
+            request.setAttribute("CLASSROOMID", classroomId);
+            return "Staff_InformationEquipment";
+        }else {
+             return "Login";
         }
-        request.setAttribute("PROJECTOR", projector);
-        request.setAttribute("AVAILABLEPROJECTOR", availableProjector);
-        request.setAttribute("TIVI", tivi);
-        request.setAttribute("AVAILABLETIVI", availableTivi);
-        request.setAttribute("AIR", air);
-        request.setAttribute("AVAILABLEAIR", availableAir);
-        request.setAttribute("CLASSROOMID", classroomId);
-        return "Staff_InformationEquipment";
     }
 
     //Insert những equipment chưa có thông tin
@@ -233,23 +264,28 @@ public class StaffController {
     public String updateInformation(HttpServletRequest request, @RequestParam("projector") int projector,
                                     @RequestParam("tivi") int tivi, @RequestParam("airConditioning") String airConditioning,
                                     @RequestParam("classroomId") int classroomId) {
-        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
-        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-        if (projector != 0) {
-            executeUpdateInformation(tblEquipmentEntities, projector, 1);
-        }
-        if (tivi != 0) {
-            executeUpdateInformation(tblEquipmentEntities, tivi, 2);
-        }
-        if (airConditioning != "") {
-            String[] array = airConditioning.split("-");
-            for (int i = 0; i < array.length; i++) {
-                if (!array[i].equals("0")) {
-                    executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
+        HttpSession session  =  request.getSession(false);
+        if(session!=null) {
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+            Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+            if (projector != 0) {
+                executeUpdateInformation(tblEquipmentEntities, projector, 1);
+            }
+            if (tivi != 0) {
+                executeUpdateInformation(tblEquipmentEntities, tivi, 2);
+            }
+            if (airConditioning != "") {
+                String[] array = airConditioning.split("-");
+                for (int i = 0; i < array.length; i++) {
+                    if (!array[i].equals("0")) {
+                        executeUpdateInformation(tblEquipmentEntities, Integer.parseInt(array[i]), 3);
+                    }
                 }
             }
+            return "redirect:/staff/classroom?ACTIVETAB=tab1";
+        }else {
+            return "Login";
         }
-        return "redirect:/staff/classroom?ACTIVETAB=tab1";
     }
 
     //execute Update information

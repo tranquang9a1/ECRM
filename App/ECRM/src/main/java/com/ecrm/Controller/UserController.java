@@ -49,40 +49,43 @@ public class UserController {
 
     @RequestMapping(value = "thong-bao")
     public String notifications(HttpServletRequest request){
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
+        if(user!=null) {
+            List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
+            List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
+            for (int i = 0; i < list.size(); i++) {
+                ReportResponseObject report = new ReportResponseObject(list.get(i));
+                report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
 
-        List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
-        List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
-        for(int i = 0; i < list.size(); i++) {
-            ReportResponseObject report = new ReportResponseObject(list.get(i));
-            report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
+                listReport.add(report);
+            }
+            request.setAttribute("NOTIFICATIONS", listReport);
 
-            listReport.add(report);
-        }
-        request.setAttribute("NOTIFICATIONS", listReport);
+            List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
+            if (schedules.size() > 0) {
+                TblClassroomEntity classroom = classroomDAO.find(schedules.get(0).getClassroomId());
+                TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
+                List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedules.get(0).getClassroomId());
 
-        List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
-        if(schedules.size() > 0) {
-            TblClassroomEntity classroom = classroomDAO.find(schedules.get(0).getClassroomId());
-            TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
-            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedules.get(0).getClassroomId());
+                List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
+                for (TblScheduleEntity schedule : schedules) {
+                    listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null));
+                }
 
-            List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
-            for (TblScheduleEntity schedule: schedules) {
-                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null));
+                request.setAttribute("LISTSCHEDULE", listSchedule);
+                request.setAttribute("ROOM", classroom);
+                request.setAttribute("EQUIPMENTS", listEquipment);
+                request.setAttribute("ROOMTYPE", roomType);
+            } else {
+                request.setAttribute("ROOM", new TblClassroomEntity());
             }
 
-            request.setAttribute("LISTSCHEDULE", listSchedule);
-            request.setAttribute("ROOM", classroom);
-            request.setAttribute("EQUIPMENTS", listEquipment);
-            request.setAttribute("ROOMTYPE", roomType);
-        } else {
-            request.setAttribute("ROOM", new TblClassroomEntity());
+            request.setAttribute("ACTIVELEFTTAB", "USER_NOTIFY");
+            return "user/Notifications";
+        }else {
+            return "Login";
         }
-
-        request.setAttribute("ACTIVELEFTTAB", "USER_NOTIFY");
-        return "user/Notifications";
     }
 
     @RequestMapping(value = "sentReport", method = RequestMethod.POST)
@@ -90,124 +93,141 @@ public class UserController {
     @ResponseBody
     public String createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest){
         GCMController gcm = new GCMController();
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
-        TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
+        if(user!=null) {
+            TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
 
-        TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
-        if(report == null){
-            report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
-            reportDAO.persist(report);
-        } else if(report.getStatus() == ReportStatus.FINISH.getValue()){
-            report.setStatus(ReportStatus.GOING.getValue());
-            reportDAO.merge(report);
-        }
+            TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
+            if (report == null) {
+                report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
+                reportDAO.persist(report);
+            } else if (report.getStatus() == ReportStatus.FINISH.getValue()) {
+                report.setStatus(ReportStatus.GOING.getValue());
+                reportDAO.merge(report);
+            }
 
-        String[] evaluates = reportRequest.getListEvaluate().split(",");
-        int category = 0;
+            String[] evaluates = reportRequest.getListEvaluate().split(",");
+            int category = 0;
 //        String equipmentNames = "";
-        TblEquipmentEntity equip;
-        TblEquipmentCategoryEntity categoryName;
+            TblEquipmentEntity equip;
+            TblEquipmentCategoryEntity categoryName;
 
-        if("".equals(reportRequest.getListDamaged())) {
-            for (int i = 0; i < evaluates.length; i++) {
-                category = Integer.parseInt(evaluates[i].split("-")[0]);
+            if ("".equals(reportRequest.getListDamaged())) {
+                for (int i = 0; i < evaluates.length; i++) {
+                    category = Integer.parseInt(evaluates[i].split("-")[0]);
 
-                equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
 //                categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
 //                equipmentNames += categoryName.getName() + ", ";
-            }
-        } else {
-            String[] equipments = reportRequest.getListDamaged().split("--");
-            for (int i = 0; i < evaluates.length; i++) {
-                category = Integer.parseInt(evaluates[i].split("-")[0]);
-                List<String> equipsInCate = getEquipmentsInCategory(equipments, category);
+                }
+            } else {
+                String[] equipments = reportRequest.getListDamaged().split("--");
+                for (int i = 0; i < evaluates.length; i++) {
+                    category = Integer.parseInt(evaluates[i].split("-")[0]);
+                    List<String> equipsInCate = getEquipmentsInCategory(equipments, category);
 
-                if(equipsInCate.size() == 0) {
-                    equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    if (equipsInCate.size() == 0) {
+                        equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
 //
 //                    categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
 //                    equipmentNames += categoryName.getName() + ", ";
-                } else {
-                    for(int j = 0; j < equipsInCate.size(); j++){
-                        equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    } else {
+                        for (int j = 0; j < equipsInCate.size(); j++) {
+                            equip = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
 
 //                        if(j == 0) {
 //                            categoryName = equipmentCategoryDAO.find(equip.getCategoryId());
 //                            equipmentNames += categoryName.getName() + ", ";
 //                        }
+                        }
                     }
                 }
             }
-        }
 
-        int damagedLevel = checkDamagedLevel(room);
-        room.setDamagedLevel(damagedLevel);
-        classroomDAO.merge(room);
+            int damagedLevel = checkDamagedLevel(room);
+            room.setDamagedLevel(damagedLevel);
+            classroomDAO.merge(room);
 
-        String message = user.getTblUserInfoByUsername().getFullName() + " vừa báo cáo hư hại phòng " + room.getName();
-        TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
-        if(notify == null) {
-            notify = new TblNotificationEntity(reportRequest.getRoomId(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
-            notificationDAOImp.persist(notify);
-        }
-
-        SocketIO socketIO = new SocketIO();
-        List<TblUserEntity> staffs = userDAO.getAllStaff();
-        try {
-            for (TblUserEntity staff : staffs) {
-                boolean check = socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId());
-                if (!check) {
-                    SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
-                }
-                //Send notification to mobile
-                gcm.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
+            String message = user.getTblUserInfoByUsername().getFullName() + " vừa báo cáo hư hại phòng " + room.getName();
+            TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
+            if (notify == null) {
+                notify = new TblNotificationEntity(reportRequest.getRoomId(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
+                notificationDAOImp.persist(notify);
             }
-        } catch (TwilioRestException e) {
-            System.out.println("Khong the gui SMS!");
-        }
 
-        String equipmentNames = equipmentDAO.getDamagedEquipmentNames(report.getId());
-        return report.getId() + "-" + room.getName() + "-" + equipmentNames + "-" + report.getCreateTime().getTime();
+            SocketIO socketIO = new SocketIO();
+            List<TblUserEntity> staffs = userDAO.getAllStaff();
+            try {
+                for (TblUserEntity staff : staffs) {
+                    boolean check = socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId());
+                    if (!check) {
+                        SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
+                    }
+                    //Send notification to mobile
+                    gcm.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
+                }
+            } catch (TwilioRestException e) {
+                System.out.println("Khong the gui SMS!");
+            }
+
+            String equipmentNames = equipmentDAO.getDamagedEquipmentNames(report.getId());
+            return report.getId() + "-" + room.getName() + "-" + equipmentNames + "-" + report.getCreateTime().getTime();
+        }else {
+            return "Login";
+        }
     }
 
     @RequestMapping(value = "mau-phong")
     public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
-        TblClassroomEntity classroom = classroomDAO.find(roomId);
-        TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
-        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(roomId);
+        HttpSession session = request.getSession(false);
+        if(session!=null) {
+            TblClassroomEntity classroom = classroomDAO.find(roomId);
+            TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
+            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(roomId);
 
-        request.setAttribute("ROOM", classroom);
-        request.setAttribute("EQUIPMENTS", listEquipment);
-        request.setAttribute("ROOMTYPE", roomType);
-        return "user/ReportRoom";
+            request.setAttribute("ROOM", classroom);
+            request.setAttribute("EQUIPMENTS", listEquipment);
+            request.setAttribute("ROOMTYPE", roomType);
+            return "user/ReportRoom";
+        }else {
+            return "Login";
+        }
     }
 
     @RequestMapping(value = "viewHistory")
     public String viewReportByUser(HttpServletRequest request, @RequestParam("ReportId") int reportId, @RequestParam("RoomId") String roomId){
-        TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomId);
-        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(classroom.getId());
-        TblReportEntity report = reportDAO.find(reportId);
+        HttpSession session = request.getSession(false);
+        if(session!=null) {
+            TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomId);
+            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(classroom.getId());
+            TblReportEntity report = reportDAO.find(reportId);
 
-        request.setAttribute("ROOM", classroom);
-        request.setAttribute("REPORT", report);
-        request.setAttribute("EQUIPMENTS", listEquipment);
-        request.setAttribute("ROOMTYPE", classroom.getTblRoomTypeByRoomTypeId());
+            request.setAttribute("ROOM", classroom);
+            request.setAttribute("REPORT", report);
+            request.setAttribute("EQUIPMENTS", listEquipment);
+            request.setAttribute("ROOMTYPE", classroom.getTblRoomTypeByRoomTypeId());
 
-        return "user/ReportHistory";
+            return "user/ReportHistory";
+        }else {
+            return "Login";
+        }
     }
 
     @RequestMapping(value = "lich-day")
     public String viewSchedule(HttpServletRequest request){
 
-        HttpSession session= request.getSession();
+        HttpSession session= request.getSession(false);
         TblUserEntity user = (TblUserEntity)session.getAttribute("USER");
+        if(user!=null) {
+            List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
 
-        List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
-
-        request.setAttribute("SCHEDULE", list);
-        request.setAttribute("ACTIVELEFTTAB", "USER_SCHEDULE");
-        return "user/Schedule";
+            request.setAttribute("SCHEDULE", list);
+            request.setAttribute("ACTIVELEFTTAB", "USER_SCHEDULE");
+            return "user/Schedule";
+        }else {
+            return "Login";
+        }
     }
 
 //  PRIVATE METHOD

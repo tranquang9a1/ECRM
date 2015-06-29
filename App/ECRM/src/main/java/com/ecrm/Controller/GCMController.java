@@ -77,26 +77,24 @@ public class GCMController {
         return "notify";
     }
 
-    public void sendNotification(String msg, String listUser) {
+    public void sendNotification(String msg, String deviceId) {
+        System.out.println("Start send notification" + deviceId);
         Result result = null;
-        String[] users = listUser.split(",");
         try {
-            for (int  i = 0; i < users.length; i++) {
-                String deviceId = userDAO.getDeviceId(users[i]);
 
                 Sender sender = new Sender(GOOGLE_SERVER_KEY);
                 Message message = new Message.Builder().timeToLive(120)
                         .delayWhileIdle(false).addData(MESSAGE_KEY, msg).build();
-                System.out.println("User: " + users[i] + " - regId: " + deviceId);
                 result = sender.send(message, deviceId, 1);
-            }
-            System.out.println(result.toString());
+                System.out.println("Send Notification Success: " + result.toString());
+                System.out.println("RegID: " + deviceId);
+                System.out.println("End send notification");
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            System.out.println(ioe.toString());
+            System.out.println("Error when send notification " +ioe.toString());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.toString());
+            System.out.println("Error when send notification " + e.toString());
         }
     }
 

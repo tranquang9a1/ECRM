@@ -161,7 +161,7 @@ public class UserController {
                     SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
                 }
                 //Send notification to mobile
-                gcm.sendNotification(message, staff.getUsername());
+                gcm.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
             }
         } catch (TwilioRestException e) {
             System.out.println("Khong the gui SMS!");

@@ -43,7 +43,7 @@
                     <div class="statusS">
                     <c:if test="${ not cl.isAllInformation}">
 
-                            <a href="/staff/EquipmentInformation?ClassroomId=${cl.id}">cập nhật thiết bị!</a>
+                            <a href="/staff/EquipmentInformation?ClassroomId=${cl.id}">Cập nhật thiết bị!</a>
 
                     </c:if>
                     </div>

@@ -13,7 +13,7 @@
 <script src="../resource/js/socket.io.js"></script>
 <script src="../resource/js/socket-io.js"></script>
 <div class="header-bar">
-    <div class="logo">Quản lý thiết bị phòng học</div>
+    <div class="logo">Quản lý thiết bị phòng học - Trường Đại Học FPT</div>
     <div class="account-notify">
         <div class="account-control">
             <p>${user.tblUserInfoByUsername.fullName}</p>
@@ -33,12 +33,12 @@
 </div>
 <div class="list-category">
     <ul class="main-item">
-        <li>
-            <a href="/">
-                <img src=""/>
-                <p>Trang Chủ</p>
-            </a>
-        </li>
+        <%--<li>--%>
+            <%--<a href="">--%>
+                <%--<img src=""/>--%>
+                <%--<p>Trang Chủ</p>--%>
+            <%--</a>--%>
+        <%--</li>--%>
         <c:if test="${user.tblRoleByRoleId.name == 'Staff'}">
             <li id="STAFF_NOTIFY">
                 <a href="/thong-bao">
@@ -93,7 +93,7 @@
                 </a>
             </li>
             <li>
-                <a href="home.jsp">
+                <a href="#">
                     <img src="" />
                     <p>Tài khoản</p>
                 </a>

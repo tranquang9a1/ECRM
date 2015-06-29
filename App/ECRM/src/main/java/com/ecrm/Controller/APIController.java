@@ -187,11 +187,15 @@ public class APIController {
             SocketIO socketIO = new SocketIO();
             List<TblUserEntity> staffs = userDAO.getAllStaff();
             String message = username + "  vừa báo cáo hư hại phòng " + room.getName();
+            System.out.println("Send notification from mobile to web");
             for (TblUserEntity staff : staffs) {
 
-                boolean check = socketIO.sendNotifyMessageToUser(staff.getUsername(),
+                boolean res = socketIO.sendNotifyMessageToUser(staff.getUsername(),
                         Enumerable.NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/hu-hai?phong=" + report.getClassRoomId());
+
+                System.out.println("Send notification to " + staff.getUsername() + " - " + res);
             }
+            System.out.println("End send notification from mobile to web");
 
             return resultDTO;
         } catch (Exception e) {
@@ -290,13 +294,13 @@ public class APIController {
                 reportClassDTO.setRoomName(reportEntity.getTblClassroomByClassRoomId().getName());
                 reportClassDTO.setRoomId(classId);
                 reportClassDTO.setEquipments(equipments);
-                reportClassDTO.setUserReport(reportClassDTO.getUserReport() + reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername() + ", ");
+                reportClassDTO.setUserReport(reportClassDTO.getUserReport() + reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() + ", " : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername() + ", ");
                 reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
                 reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
                 reportClassDTO.setEvaluate(reportEntity.getEvaluate());
 
             }
-            reportClassDTO.setUserReport(reportClassDTO.getUserReport().substring(0, reportClassDTO.getUserReport().length() - 2));
+//            reportClassDTO.setUserReport(reportClassDTO.getUserReport().substring(0, reportClassDTO.getUserReport().length()));
             result.add(reportClassDTO);
 
         }

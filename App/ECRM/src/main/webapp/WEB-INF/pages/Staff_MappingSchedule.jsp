@@ -76,10 +76,10 @@
     <div class="title page-title right-button">
         <p>Xếp lịch</p>
 
-        <div><input type="button" class="btn btn-orange" onclick="showModal(1,'Upload');" value="Import Schedule"/>
+        <div><input type="button" class="btn btn-orange" onclick="showModal(1,'Upload');" value="Nhập File"/>
         </div>
         <div><input type="button" class="btn btn-orange" onclick="showModal(1,'Manual');"
-                    value="Import Schedule Manually"/></div>
+                    value="Tạo mới"/></div>
         <div class="clear"></div>
     </div>
 
@@ -154,7 +154,7 @@
                 <tr>
                     <td></td>
                     <td style="padding: 10px 0px 5px 0px;">
-                        <button type="submit" class="btn btn-orange" style="float: right">Search</button>
+                        <button type="submit" class="btn btn-orange" style="float: right">Tìm Kiếm</button>
                     </td>
                 </tr>
             </table>

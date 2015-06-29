@@ -115,7 +115,7 @@
                         </div>
                         <div class="control">
                             <select>
-                                <option>Ngày sửa chửa</option>
+                                <option>Ngày sửa chữa</option>
                                 <option>02/03/2015</option>
                             </select>
                         </div>

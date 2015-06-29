@@ -35,7 +35,6 @@
         <div class="clear"></div>
     </div>
     <div class="body-content">
-        <h3>Quản Lý thiết Bị</h3>
         <div id="tab1" class="body-tab">
             <div><input type="button" class="btn btn-orange" value="Tạo thiết bị" onclick="showModal(1, 'modal-1')"/></div>
 
@@ -59,7 +58,7 @@
                         <div>Thời gian sử dụng</div>
                     </div>
                     <div style="width:150px;">
-                        <div>Hạn bảo hành</div>
+                        <div>Thời gian còn lại</div>
                     </div>
                     <div style="width:50px;">
                         <div>Phòng</div>

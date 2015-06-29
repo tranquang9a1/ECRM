@@ -14,7 +14,7 @@
 <body>
   <div class="top">
     <img src="/resource/img/logo.png">
-    <p>Quản lý thiết bị phòng học - Trường FPT</p>
+    <p>Quản lý thiết bị phòng học - Trường Đại Học FPT</p>
   </div>
   <div class="mid">
     <form class="login-form" action="/login" method="post">
@@ -29,8 +29,8 @@
     <img src="/resource/img/img1.png">
   </div>
   <div class="bottom">
-    <p><b>Địa chỉ: </b> Tòa nhà Inovation, công viên PM Quang Trung, Q.12, Tp.HCM</p>
-    <p>Bảng quyền thuộc <b>BrandStorming Group</b></p>
+    <p><b>Địa chỉ: </b> Tòa nhà Inovation, công viên PM Quang Trung, Quận 12, TP Hồ Chí Minh</p>
+    <p><b>Group 10 - Capstone Project Summer 2015</b></p>
   </div>
 </body>
 </html>

@@ -294,6 +294,13 @@ function sentReport(){
             }
         }
     }
+    if(listEvaluate == "") {
+        alert("Vui lòng chọn 1 thiết bị trước khi báo cáo!");
+        showModal(1, 'modal-1');
+        closeLoading();
+        return;
+    }
+
     listEvaluate = listEvaluate.substring(0, listEvaluate.length-1);
 
     var room = document.getElementById("roomId");
@@ -333,7 +340,7 @@ function sentReport(){
             }
 
             for (var key in noDamagedEquipments) {
-                if (noDamagedEquipments.hasOwnProperty(key)){
+                if (noDamagedEquipments.hasOwnProperty(key) && noDamagedEquipments[key].size > 0){
                     $("#row-type-" + key + " .width-50 p").text("Đã được báo cáo");
                     $("#row-type-" + key + " .width-50 p").css("visibility", "visible");
                 }
@@ -393,17 +400,13 @@ function loadEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
 
         var damageDiv = document.createElement("div");
         damageDiv.className = "check-damaged";
-        damageDiv.innerText = "Hư hại";
+        damageDiv.innerHTML = "Hư hại";
         damageDiv.id = "equipment-type-" + listEquipment[i].id;
         damageDiv.setAttribute("data-check", "false");
         damageDiv.setAttribute("onclick", "changeDamaged(" + listEquipment[i].id + ")");
-        //var hiddenInput = document.createElement("input");
-        //hiddenInput.setAttribute("type", "hidden");
-        //hiddenInput.setAttribute("name", listEquipment[i].name);
         var div2 = document.createElement("div");
         div2.className = "width-20";
         div2.appendChild(damageDiv);
-        //div2.appendChild(hiddenInput);
 
         var div3 = document.createElement("div");
         div3.className = "width-50";

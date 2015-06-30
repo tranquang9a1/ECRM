@@ -18,6 +18,7 @@
         <div class="account-control">
             <p>${user.tblUserInfoByUsername.fullName}</p>
             <img src="../../resource/img/gears.png"/>
+
             <div class="clear"></div>
             <div class="account-setting">
                 <img src="../../resource/img/pointer.png"/>
@@ -28,43 +29,38 @@
                 </ul>
             </div>
         </div>
-        <c:import url="/thong-bao/all-notify" />
+        <c:import url="/thong-bao/all-notify"/>
     </div>
 </div>
 <div class="list-category">
     <ul class="main-item">
         <%--<li>--%>
-            <%--<a href="">--%>
-                <%--<img src=""/>--%>
-                <%--<p>Trang Chủ</p>--%>
-            <%--</a>--%>
+        <%--<a href="">--%>
+        <%--<img src=""/>--%>
+        <%--<p>Trang Chủ</p>--%>
+        <%--</a>--%>
         <%--</li>--%>
         <c:if test="${user.tblRoleByRoleId.name == 'Staff'}">
             <li id="STAFF_NOTIFY">
                 <a href="/thong-bao">
-                    <img src=""/>
                     <p>Thông Báo</p>
                 </a>
             </li>
             <li id="STAFF_EQUIP">
                 <a href="/staff/equipment">
-                    <img src=""/>
                     <p>Thiết Bị</p>
                 </a>
             </li>
             <li id="STAFF_CLASSROOM">
                 <a href="/staff/classroom?ACTIVETAB=tab1">
-                    <img src=""/>
                     <p>Phòng Học</p>
                 </a>
             </li>
             <li>
-                <img src=""/>
                 <p>Thống Kê</p>
             </li>
             <li id="STAFF_SCHEDULE">
                 <a href="/staff/schedule">
-                    <img src=""/>
                     <p>Xếp Lịch</p>
                 </a>
             </li>
@@ -73,7 +69,6 @@
         <c:if test="${user.tblRoleByRoleId.name == 'Admin'}">
             <li>
                 <a href="/Admin_Account.jsp">
-                    <img src=""/>
                     <p>Tài Khoản</p>
                 </a>
             </li>
@@ -82,19 +77,16 @@
         <c:if test="${user.tblRoleByRoleId.name == 'Teacher'}">
             <li id="USER_NOTIFY">
                 <a href="/giang-vien/thong-bao">
-                    <img src="" />
                     <p>Thông báo</p>
                 </a>
             </li>
             <li id="USER_SCHEDULE">
                 <a href="/giang-vien/lich-day">
-                    <img src="" />
                     <p>Lịch dạy</p>
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <img src="" />
                     <p>Tài khoản</p>
                 </a>
             </li>
@@ -102,6 +94,8 @@
     </ul>
     <script>
         document.getElementById("${tab}").className += " active";
+        <c:if test="${sessionScope.USER.roleId > 1}">
         connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
+        </c:if>
     </script>
 </div>

@@ -51,7 +51,8 @@ public class MainController {
                 return "redirect:/giang-vien/thong-bao";
             }
         }
-        return "error";
+        request.setAttribute("MESSAGE","Tài khoản hoặc mật khẩu không đúng!");
+        return "Login";
     }
 
     //Logout

@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
     <title>ECRM - Equipment Classroom Management</title>
@@ -19,6 +21,7 @@
   <div class="mid">
     <form class="login-form" action="/login" method="post">
       <p>Đăng nhập</p>
+      <c:if test="${requestScope.MESSAGE!=null}"><div style="color: #d9534f; margin: 0 5px">${requestScope.MESSAGE}</div></c:if>
       <p class="old">Tài khoản</p>
       <p><input type="text" value="" name="username" placeholder="Tài khoản"/></p>
       <p class="old">Mật khẩu</p>

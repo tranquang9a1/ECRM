@@ -53,7 +53,7 @@ function changeRoom() {
         url: "/thong-bao/doi-phong",
         data: {currentClassroom: $("#current-room").val(), changeClassroom: $("#new-room").val()},
         success: function(result) {
-            $(".change-room-text").html("<div class='value' style='color:darkorange'><span>Đổi phòng thành công!</span> Không còn lớp trong ngày</div>");
+            $(".change-room-text").html("<div class='value' style='color:darkorange'><span>Đã Đổi phòng!</span> Không còn lớp trong ngày</div>");
             setTimeout(function(){
                 $(".change-room-text .value").css("color", "black");
                 $(".change-room-text .value span").remove();

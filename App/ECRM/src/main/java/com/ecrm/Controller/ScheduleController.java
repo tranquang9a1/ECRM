@@ -47,23 +47,23 @@ public class ScheduleController {
 
     @RequestMapping(value = "schedule")
     public String mappingSchedule(HttpServletRequest request) {
-        HttpSession session  =  request.getSession();
-        if(session!=null) {
+        HttpSession session = request.getSession();
+        if (session != null) {
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
             List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
             request.setAttribute("CLASSROOMS", tblClassroomEntities);
             request.setAttribute("TEACHERS", tblUserEntities);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
             return "Staff_MappingSchedule";
-        }else {
+        } else {
             return "Login";
         }
     }
 
     @RequestMapping(value = "import")
     public String importFile(HttpServletRequest request) throws IOException, InvalidFormatException, ParseException {
-        HttpSession session  =  request.getSession();
-        if(session!=null) {
+        HttpSession session = request.getSession();
+        if (session != null) {
             String fileName = "";
             File file;
             int maxFileSize = 5000 * 1024;
@@ -176,7 +176,7 @@ public class ScheduleController {
 
             }
             return "redirect:/staff/schedule?ACTIVETAB=tab1";
-        }else {
+        } else {
             return "Login";
         }
     }
@@ -271,12 +271,15 @@ public class ScheduleController {
                                  @RequestParam("slot") String slot, @RequestParam("numberOfSlots") int numberOfSlots,
                                  @RequestParam("numberOfStudent") int numberOfStudent, @RequestParam("dateF") String dateFrom,
                                  @RequestParam("dateT") String dateTo) throws ParseException {
-        HttpSession session  =  request.getSession();
-        if(session!=null) {
+        HttpSession session = request.getSession();
+        if (session != null) {
             slot = "Slot " + slot;
             String timeFrom = convertSlotToTime(slot);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             LocalDate dateF = new LocalDate(dateFrom);
+            if (dateTo.trim().length() == 0) {
+                dateTo = dateFrom;
+            }
             LocalDate dateT = new LocalDate(dateTo);
             if (dateTo.trim().length() > 0) {
                 for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
@@ -320,7 +323,7 @@ public class ScheduleController {
 
 
             return "redirect:/staff/schedule?ACTIVETAB=tab2";
-        }else {
+        } else {
             return "Login";
         }
     }
@@ -329,8 +332,8 @@ public class ScheduleController {
     @RequestMapping(value = "searchSchedule")
     public String searchSchedule(HttpServletRequest request, @RequestParam("datefrom") String datefrom, @RequestParam("dateto") String dateto
             , @RequestParam("classroomId") String classroomId, @RequestParam("username") String username) {
-        HttpSession session  =  request.getSession();
-        if(session!=null) {
+        HttpSession session = request.getSession();
+        if (session != null) {
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
             List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
             request.setAttribute("CLASSROOMS", tblClassroomEntities);
@@ -370,7 +373,7 @@ public class ScheduleController {
             request.setAttribute("DATEFROM", datefrom);
             request.setAttribute("DATETO", dateto);
             return "Staff_MappingSchedule";
-        }else {
+        } else {
             return "Login";
         }
     }

@@ -63,7 +63,7 @@ public class ChangeRoomController {
     Boolean changeRoom(String currentClassroom, String changeClassroom) throws TwilioRestException {
         TblClassroomEntity currentClassroomEntity = classroomDAO.getClassroomByName(currentClassroom);
         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(changeClassroom);
-        List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleInClassroom(currentClassroomEntity.getId());
+        List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomEntity.getId());
         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
             tblScheduleEntity.setIsActive(false);
             scheduleDAO.merge(tblScheduleEntity);

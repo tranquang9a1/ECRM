@@ -155,4 +155,13 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         
         return tblScheduleEntities;
     }
+
+    public List<TblScheduleEntity> findAllScheduleMoreThan15MLeft(int classroomId){
+        Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.classroomId = :classroomId and " +
+                " current_date() = s.date  " +
+                " and s.isActive= true and SUBTIME(ADDTIME(s.timeFrom, '01:30:00'),CURTIME())>'00:15:00'");
+        q.setParameter("classroomId", classroomId);
+        List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+        return tblScheduleEntities;
+    }
 }

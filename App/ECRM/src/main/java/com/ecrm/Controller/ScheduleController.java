@@ -281,7 +281,7 @@ public class ScheduleController {
                 dateTo = dateFrom;
             }
             LocalDate dateT = new LocalDate(dateTo);
-            if (dateTo.trim().length() > 0) {
+            if (!dateTo.equals(dateFrom)) {
                 for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
                     java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
                     TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
@@ -289,7 +289,7 @@ public class ScheduleController {
                     if (all.equals("0")) {
                         scheduleDAO.persist(tblScheduleEntity);
                     } else {
-                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom);
+                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom, Integer.parseInt(all));
                         if (!tblScheduleEntities.isEmpty()) {
                             tblScheduleEntities.get(0).setIsActive(false);
                             scheduleDAO.merge(tblScheduleEntities.get(0));
@@ -308,7 +308,7 @@ public class ScheduleController {
                 if (all.equals("0")) {
                     scheduleDAO.persist(tblScheduleEntity);
                 } else {
-                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom);
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom,Integer.parseInt(all));
                     if (!tblScheduleEntities.isEmpty()) {
                         tblScheduleEntities.get(0).setIsActive(false);
                         scheduleDAO.merge(tblScheduleEntities.get(0));

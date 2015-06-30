@@ -12,13 +12,20 @@ import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
 
 /**
  * Created by Htang on 6/22/2015.
  */
+@EnableWebMvc
+@EnableAsync
+@EnableScheduling
 public class CheckDamagedClassroomSchedule {
     @Autowired
     ClassroomDAOImpl classroomDAO;
@@ -30,6 +37,7 @@ public class CheckDamagedClassroomSchedule {
     EquipmentDAOImpl equipmentDAO;
 
     @Scheduled(cron = "0 0 6 ? * MON-SAT")
+    @Async
     public void checkChangeClassroom() throws TwilioRestException {
         System.out.println("Task check change room run!!! Current time is : " + new Date());
         //tim nhung phong bi hu hai ma chua sua
@@ -77,6 +85,7 @@ public class CheckDamagedClassroomSchedule {
     }
 
     @Scheduled(cron = "0 0 7 ? * MON-SAT")
+    @Async
     public void checkTimeUsing(){
         System.out.println("Task check time using run!!! Current time is: "+ new Date());
         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();

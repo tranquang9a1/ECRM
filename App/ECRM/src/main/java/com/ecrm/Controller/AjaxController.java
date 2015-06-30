@@ -91,12 +91,12 @@ public class AjaxController {
             }
             response.setContentType("text/html");
             response.getWriter().write("<option value='0'>");
-            response.getWriter().write("---");
+            response.getWriter().write("");
             response.getWriter().write("</option>");
             if (!fitClassroom.isEmpty()) {
                 for (int j = 0; j < fitClassroom.size(); j++) {
                     response.getWriter().write("<option value='" + fitClassroom.get(j).getId() + "'>");
-                    response.getWriter().write("Phòng " + fitClassroom.get(j).getName());
+                    response.getWriter().write(fitClassroom.get(j).getName());
                     response.getWriter().write("</option>");
                 }
             }

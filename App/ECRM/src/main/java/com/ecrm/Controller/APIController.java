@@ -222,7 +222,12 @@ public class APIController {
             position = pos;
         }
 
-        TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, category, position);
+        String serialNumber = "";
+        if (category < 4) {
+            serialNumber = null;
+        }
+
+        TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, category, position, serialNumber);
 
         if (equip != null) {
             equip.setStatus(true);
@@ -657,6 +662,19 @@ public class APIController {
             e.printStackTrace();
         }
 
+    }
+
+    @RequestMapping(value = "/checkSchedule", method = RequestMethod.GET)
+    public @ResponseBody boolean checkSchedule(@RequestParam("classId") int classId) {
+        try {
+            int result = scheduleDAO.findScheduleAfterCurrentTime(classId);
+            if (result > 0) {
+                return true;
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

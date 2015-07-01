@@ -13,7 +13,6 @@ import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;

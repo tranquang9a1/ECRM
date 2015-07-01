@@ -164,4 +164,14 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         return tblScheduleEntities;
     }
+
+
+    @Override
+    public int findScheduleAfterCurrentTime(int classroomId) {
+        Query query = entityManager.createQuery("SELECT COUNT(*) FROM TblScheduleEntity  s WHERE s.classroomId = :classroomId " +
+                "AND s.timeFrom > current_time() AND s.date = current_date() AND s.isActive=true ");
+        query.setParameter("classroomId", classroomId);
+        Integer result = (Integer) query.getSingleResult();
+        return result;
+    }
 }

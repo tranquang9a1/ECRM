@@ -15,7 +15,7 @@
 <script>
     var roomEquipments = {};
     <c:forEach items="${equipments}" var="item">
-        <c:if test="${item.position != null && item.status == false}">
+        <c:if test="${(item.position != null || '[0]'.equals(item.position) != false) && item.status == false}">
             roomEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
         </c:if>
     </c:forEach>

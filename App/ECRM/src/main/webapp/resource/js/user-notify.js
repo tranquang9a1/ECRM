@@ -294,13 +294,13 @@ function sentReport(){
             }
         }
     }
+
     if(listEvaluate == "") {
-        alert("Vui lòng chọn 1 thiết bị trước khi báo cáo!");
-        showModal(1, 'modal-1');
+        alert("Bạn cần chọn 1 thiết bị trước khi gửi báo cáo!");
         closeLoading();
+        showModal(1, 'modal-1');
         return;
     }
-
     listEvaluate = listEvaluate.substring(0, listEvaluate.length-1);
 
     var room = document.getElementById("roomId");

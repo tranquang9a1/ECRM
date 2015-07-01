@@ -40,6 +40,7 @@
     border: 1px solid #ccc;
     padding: 8px;
     margin: 10px 0 0;
+    position: relative;
 }
 
 .group-equipment input{
@@ -206,4 +207,41 @@
     color: #d9534f;
     font-weight: bold;
     margin: 0;
+}
+
+.list-real-equipment {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    width: 430px;
+    height: 50px;
+    padding: 8px;
+    background-color: white;
+    opacity: 0;
+    z-index: -1;
+    transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+}
+
+.list-real-equipment .real-equipment {
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    padding: 5px;
+    background-color: #e5e5e5;
+    margin: 8px 10px 0 0;
+    cursor: pointer;
+}
+
+.list-real-equipment .real-equipment:first-child {
+    background-color: white;
+    font-weight: bold;
+    cursor: default;
+}
+
+.list-real-equipment .real-equipment.active {
+    background-color: #e1e1e1;
+    color: #d9534f;
+    font-weight: bold;
 }

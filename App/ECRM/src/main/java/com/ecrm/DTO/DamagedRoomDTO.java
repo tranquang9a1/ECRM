@@ -1,15 +1,11 @@
 package com.ecrm.DTO;
 
-import com.ecrm.DAO.Impl.EquipmentDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
 import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Entity.TblRoomTypeEntity;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -43,11 +39,26 @@ public class DamagedRoomDTO {
         String[] className = {"","projector","tivi","air-condition","fan","speaker","bulb","table-icon","chair"};
 
         for (TblEquipmentEntity item: equipments) {
+            if(item.isStatus() == false) {
+                position = checkContain(item.getCategoryId());
+                if (position == -1) {
+                    this.equipmentCategory.add(new EquipmentDamaged(item.getCategoryId(), item.getTblEquipmentCategoryByCategoryId().getName(), 0, className[item.getCategoryId()]));
+                }
+            }
+        }
+
+        for (TblEquipmentEntity item: equipments) {
             position = checkContain(item.getCategoryId());
             if (position != -1) {
-                this.equipmentCategory.get(position).addSize();
-            } else {
-                this.equipmentCategory.add(new EquipmentDamaged(item.getCategoryId(), item.getTblEquipmentCategoryByCategoryId().getName(), className[item.getCategoryId()]));
+                if (item.getSerialNumber() != null) {
+                    this.equipmentCategory.get(position).getSerialNumber().add(item.getSerialNumber());
+                }
+
+                if(item.isStatus() == false && item.getCategoryId() < 7) {
+                    this.equipmentCategory.get(position).setSize(1);
+                } else if("[0]".equals(item.getPosition()) == false) {
+                    this.equipmentCategory.get(position).addSize();
+                }
             }
         }
      }
@@ -156,12 +167,14 @@ public class DamagedRoomDTO {
         private int size;
         private String name;
         private String className;
+        private List<String> serialNumber;
 
-        public EquipmentDamaged(int id, String name, String className){
+        public EquipmentDamaged(int id, String name, int size, String className){
             this.id = id;
             this.name = name;
-            this.size = 1;
+            this.size = size;
             this.className = className;
+            this.serialNumber = new ArrayList<String>();
         }
 
         public int getId() {
@@ -198,6 +211,14 @@ public class DamagedRoomDTO {
 
         public void setClassName(String className) {
             this.className = className;
+        }
+
+        public List<String> getSerialNumber() {
+            return serialNumber;
+        }
+
+        public void setSerialNumber(List<String> serialNumber) {
+            this.serialNumber = serialNumber;
         }
 
         @Override

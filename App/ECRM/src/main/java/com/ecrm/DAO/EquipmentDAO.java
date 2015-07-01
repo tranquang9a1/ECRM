@@ -13,9 +13,11 @@ public interface EquipmentDAO {
 
     public List<TblEquipmentEntity> getEquipmentsInClassroom(int roomId);
 
-    public TblEquipmentEntity findEquipmentHavePosition(int roomId, int category, String position);
+    public TblEquipmentEntity findEquipmentHavePosition(int roomId, int category, String position, String serialNumber);
 
     public List<TblEquipmentEntity> getActiveEquipments(int roomId);
+
+    public TblEquipmentEntity getEquipmentBySerialNumber(int roomId, String serialNumber);
 
     public String getDamagedEquipmentNames(int reportId);
 

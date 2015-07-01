@@ -13,7 +13,7 @@
 <script>
   var positionEquipments = {};
   <c:forEach items="${room.equipments}" var="item">
-    <c:if test="${item.position != null && item.status == false}">
+    <c:if test="${item.position != null && '[0]'.equals(item.position) == false && item.status == false}">
       positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
     </c:if>
   </c:forEach>
@@ -132,14 +132,33 @@
       <form action="/thong-bao/sua-chua" id="resolveForm" method="post" style="margin: 0;">
         <input type="hidden" value="${room.roomId}" name="RoomId"/>
         <input type="hidden" id="ListResolve" value="" name="ListResolve">
+        <input type="hidden" id="ListEquip" value="" name="ListRealEquip">
       </form>
         <c:forEach items="${room.equipmentCategory}" var="item" >
           <div class="group-equipment">
-            <input type="checkbox" class="equipment-type" value="${item.id}"/>
+            <c:if test="${item.serialNumber.size() == 0}">
+              <input type="checkbox" class="equipment-type" value="${item.id}"/>
+            </c:if>
+            <c:if test="${item.serialNumber.size() > 0}">
+              <input type="checkbox" class="equipment-type" value="${item.id}"/>
+            </c:if>
             <div class="equip ${item.className}"></div>
             <div class="equipment">${item.name}</div>
-            <div class="quantity">Số lượng: ${item.size}</div>
+            <c:if test="${item.size == 0}">
+              <div class="quantity">Số lượng: Không xác định</div>
+            </c:if>
+            <c:if test="${item.size > 0}">
+              <div class="quantity">Số lượng: ${item.size}</div>
+            </c:if>
             <div class="clear"></div>
+            <c:if test="${item.serialNumber.size() > 0}">
+              <div class="list-real-equipment" id="real-equip-${item.id}">
+                <div class="real-equipment">${item.name}</div>
+                <c:forEach items="${item.serialNumber}" var="item2">
+                  <div class="real-equipment" onclick="chooseRealEquipment(${item2}, ${item.id}, this)">${item2}</div>
+                </c:forEach>
+              </div>
+            </c:if>
           </div>
         </c:forEach>
     </div>
@@ -154,10 +173,22 @@
 <script>
   var listResolve = {};
   $(".equipment-type").click(function(){
-    if(listResolve[$(this).attr("value")] != undefined) {
-      delete listResolve[$(this).attr("value")];
+    var element = document.getElementById("real-equip-" + $(this).attr("value"));
+
+    if(listResolve[$(this).attr("value")] != undefined && listResolve[$(this).attr("value")].status == true) {
+      listResolve[$(this).attr("value")].status = false;
+      if(element != undefined) {
+        element.style.opacity = 0;
+        element.style.zIndex = -1;
+        element.style.left = "0";
+      }
     } else {
-      listResolve[$(this).attr("value")] = true;
+      listResolve[$(this).attr("value")] = {cate: $(this).attr("value"), equips: {}, status: true};
+      if(element != undefined) {
+        element.style.opacity = 1;
+        element.style.zIndex = 1;
+        element.style.left = "31px";
+      }
     }
   });
 

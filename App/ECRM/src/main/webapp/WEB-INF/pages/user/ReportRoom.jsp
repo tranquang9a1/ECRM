@@ -69,8 +69,8 @@
   positionEquipments = {};
   damageEquip = {};
   <c:if test="${equip.size() > 0}" >
-    <c:forEach begin="0" end="${equip.size() -1}" var="i">
-      <c:if test="${equip[i].position != null && equip[i].status == false}">
+    <c:forEach begin="0" end="${equip.size()-1}" var="i">
+      <c:if test="${(equip[i].position != null || '[0]'.equals(equip[i].position) != false) && equip[i].status == false}">
         positionEquipments["${equip[i].position.trim()}"] = {id: ${equip[i].id}, status: ${equip[i].status}};
       </c:if>
       if(damageEquip[${equip[i].categoryId}] == undefined) {

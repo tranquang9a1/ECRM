@@ -49,32 +49,49 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
     }
 
     @Override
-    public TblEquipmentEntity findEquipmentHavePosition(int roomId, int category, String position) {
+    public TblEquipmentEntity findEquipmentHavePosition(int roomId, int category, String position, String serialNumber) {
 
         Query query;
 
-        if(position == null) {
+        if(serialNumber == null) {
             query = entityManager.createQuery("SELECT c " +
                     "FROM TblEquipmentEntity c " +
                     "WHERE c.classroomId = :roomId " +
                     "AND c.categoryId = :category " +
-                    "AND c.position IS NULL");
-
+                    "AND c.position = :position " +
+                    "AND c.serialNumber IS NULL");
         } else {
             query = entityManager.createQuery("SELECT c " +
                     "FROM TblEquipmentEntity c " +
                     "WHERE c.classroomId = :roomId " +
                     "AND c.categoryId = :category " +
                     "AND c.position = :position");
-            query.setParameter("position", position);
         }
-
+        query.setParameter("position", position);
         query.setParameter("roomId", roomId);
         query.setParameter("category", category);
 
         List queryResult = query.getResultList();
         if (!queryResult.isEmpty()) {
             return (TblEquipmentEntity) queryResult.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
+    public TblEquipmentEntity getEquipmentBySerialNumber(int roomId, String serialNumber) {
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM TblEquipmentEntity c " +
+                "WHERE c.classroomId = :roomId " +
+                "AND c.serialNumber = :serialNumber");
+        query.setParameter("roomId", roomId);
+        query.setParameter("serialNumber", serialNumber);
+
+        List queryResult = query.getResultList();
+        if (!queryResult.isEmpty()) {
+            return (TblEquipmentEntity)queryResult.get(0);
         }
 
         return null;

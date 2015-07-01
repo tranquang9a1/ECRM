@@ -14,6 +14,7 @@ function showReportDetail(roomId){
             data: {roomId: roomId},
             success: function(result) {
                 $(".content-all-modal").html(result);
+                $(".content-all-modal script").remove();
                 $(".content-all-modal").attr("data-room", roomId);
                 closeLoading();
                 showModal(1,'modal-1');
@@ -30,19 +31,39 @@ function resetURL() {
 }
 
 function sendResolve() {
-    var list = "";
+    var listCate = "";
+    var listEquip = "";
 
     for (var key in listResolve) {
-        if (listResolve.hasOwnProperty(key)){
-            list += key + ",";
+        if (listResolve.hasOwnProperty(key) && listResolve[key].status == true){
+            listCate += key + ",";
+
+            var equipInCate = listResolve[key].equips;
+            for(var key2 in equipInCate) {
+                if(equipInCate.hasOwnProperty(key2)) {
+                    listEquip += key + "-" + key2 + ",";
+                }
+            }
         }
     }
 
-    if(list.length > 0) {
-        document.getElementById("ListResolve").value = list.substring(0, list.length-1);
+    if(listCate.length > 0) {
+        document.getElementById("ListResolve").value = listCate.substring(0, listCate.length-1);
+        document.getElementById("ListEquip").value = listEquip.substring(0, listEquip.length-1);
         document.getElementById("resolveForm").submit();
     } else {
         alert("Bạn cần chọn thiết bị!");
+    }
+}
+
+function chooseRealEquipment(equip, cate, checkBox){
+    var category = listResolve[cate];
+    if(category.equips[equip] != undefined) {
+        delete category.equips[equip];
+        checkBox.className = "real-equipment";
+    } else {
+        category.equips[equip] = true;
+        checkBox.className += " active";
     }
 }
 

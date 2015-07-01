@@ -60,7 +60,7 @@ public class ChangeRoomController {
     @RequestMapping(value = "changeRoom")
     public
     @ResponseBody
-    Boolean changeRoom(String currentClassroom, String changeClassroom) throws TwilioRestException {
+    Boolean changeRoom(@RequestParam("from")String currentClassroom,@RequestParam("to") String changeClassroom) throws TwilioRestException {
         TblClassroomEntity currentClassroomEntity = classroomDAO.getClassroomByName(currentClassroom);
         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(changeClassroom);
         List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomEntity.getId());

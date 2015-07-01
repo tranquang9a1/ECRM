@@ -44,9 +44,9 @@ public class CheckDamagedClassroomSchedule {
     public void checkChangeClassroom() throws TwilioRestException {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
-        if(localDate.getDayOfWeek()!=7){
-            int time = localTime.getHourOfDay()+localTime.getMinuteOfHour()+localTime.getSecondOfMinute();
-            if(time==6){
+        if (localDate.getDayOfWeek() != 7) {
+            int time = localTime.getHourOfDay() + localTime.getMinuteOfHour() + localTime.getSecondOfMinute();
+            if (time == 6) {
                 System.out.println("Task check change room run!!! Current time is : " + new Date());
                 //tim nhung phong bi hu hai ma chua sua
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -58,10 +58,10 @@ public class CheckDamagedClassroomSchedule {
                     List<String> availableClassroom = new ArrayList<String>();
                     for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                         List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
-                        if(!classroom.isEmpty()){
-                            if(availableClassroom.isEmpty()){
+                        if (!classroom.isEmpty()) {
+                            if (availableClassroom.isEmpty()) {
                                 availableClassroom = classroom;
-                            }else{
+                            } else {
                                 Iterator<String> it = availableClassroom.iterator();
                                 while (it.hasNext()) {
                                     String room = it.next();
@@ -72,28 +72,28 @@ public class CheckDamagedClassroomSchedule {
                             }
                         }
                     }
-                    if(!availableClassroom.isEmpty()){
+                    if (!availableClassroom.isEmpty()) {
                         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
-                        for(TblScheduleEntity tblScheduleEntity:tblScheduleEntities){
+                        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                             tblScheduleEntity.setIsActive(false);
                             scheduleDAO.merge(tblScheduleEntity);
                             TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
-                                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng "+tblScheduleEntity.getTblClassroomByClassroomId().getName()
-                                    +" sang phòng "+ changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
+                                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
+                                    + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
                                     tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
                             String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                                     tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
-                                    + tblScheduleEntity.getTimeFrom() + " ngày "+tblScheduleEntity.getDate();
+                                    + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
                             scheduleDAO.persist(newSchedule);
                             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
                         }
                     }
                 }
             }
-            if(time==7){
-                System.out.println("Task check time using run!!! Current time is: "+ new Date());
+            if (time == 7) {
+                System.out.println("Task check time using run!!! Current time is: " + new Date());
                 List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
-                for(TblScheduleEntity tblScheduleEntity: tblScheduleEntities) {
+                for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                     double slots = tblScheduleEntity.getSlots();
                     TblClassroomEntity classroomEntity = tblScheduleEntity.getTblClassroomByClassroomId();
                     List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
@@ -106,28 +106,5 @@ public class CheckDamagedClassroomSchedule {
             }
         }
     }
-
-    /*@Scheduled(cron = "0 0 7 ? * MON-SAT")*//*
-    @Scheduled(cron = "${cron.expression}")
-    @Async
-    public void checkTimeUsing(){
-        LocalTime localTime = new LocalTime();
-        int time = localTime.getHourOfDay()+localTime.getMinuteOfHour()+localTime.getSecondOfMinute();
-        System.out.println(time);
-        if(time==7){
-            System.out.println("Task check time using run!!! Current time is: "+ new Date());
-            List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
-            for(TblScheduleEntity tblScheduleEntity: tblScheduleEntities) {
-                double slots = tblScheduleEntity.getSlots();
-                TblClassroomEntity classroomEntity = tblScheduleEntity.getTblClassroomByClassroomId();
-                List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
-                if (!tblEquipmentEntities.isEmpty()) {
-                    TblEquipmentEntity equipmentEntity = tblEquipmentEntities.get(0);
-                    equipmentEntity.setTimeRemain(equipmentEntity.getTimeRemain() - (slots * 1.5));
-                    equipmentDAO.merge(equipmentEntity);
-                }
-            }
-        }
-    }*/
 
 }

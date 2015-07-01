@@ -45,6 +45,7 @@
                 .custom-combobox-input {
                     margin: 0;
                     padding: 5px 10px;
+                    width: 170px;
                 }
             </style>
             <script>

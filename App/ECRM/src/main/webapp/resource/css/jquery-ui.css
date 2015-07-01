@@ -138,7 +138,7 @@
 }
 /* to make room for the icon, a width needs to be set here */
 .ui-button-icon-only {
-	width: 2.2em;
+	width: 30px;
 }
 /* button elements seem to need a little more width */
 button.ui-button-icon-only {
@@ -885,7 +885,7 @@ body .ui-tooltip {
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #999999;
 	background: #dadada url("images/ui-bg_glass_75_dadada_1x400.png") 50% 50% repeat-x;
-	font-weight: normal;
+	font-weight: bold;
 	color: #212121;
 }
 .ui-state-hover a,

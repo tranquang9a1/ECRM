@@ -49,7 +49,7 @@
 
             $("<a>")
                 .attr("tabIndex", -1)
-                .attr("title", "Show All Items")
+                .attr("title", "Hiện tất cả")
                 .tooltip()
                 .appendTo(this.wrapper)
                 .button({

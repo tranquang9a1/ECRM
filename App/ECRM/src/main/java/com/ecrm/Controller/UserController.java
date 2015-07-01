@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -101,6 +102,15 @@ public class UserController {
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
         TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
 
+        //List damagedLevel
+        List<TblEquipmentEntity>listDamamagedEquipment1 =  room.getTblEquipmentsById();
+        Iterator<TblEquipmentEntity> iterator1 = listDamamagedEquipment1.iterator();
+        while (iterator1.hasNext()){
+            TblEquipmentEntity tblEquipmentEntity = iterator1.next();
+            if(tblEquipmentEntity.isStatus()){
+                iterator1.remove();
+            }
+        }
         TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
         if (report == null) {
             report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
@@ -112,11 +122,12 @@ public class UserController {
 
         String[] evaluates = reportRequest.getListEvaluate().split(",");
         int category = 0;
-
+        List<TblEquipmentEntity> listDamamagedEquipment2 = new ArrayList<TblEquipmentEntity>();
         if ("".equals(reportRequest.getListDamaged())) {
             for (int i = 0; i < evaluates.length; i++) {
                 category = Integer.parseInt(evaluates[i].split("-")[0]);
-                insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                listDamamagedEquipment2.add(tblEquipmentEntity);
             }
         } else {
             String[] equipments = reportRequest.getListDamaged().split("--");
@@ -125,16 +136,30 @@ public class UserController {
                 List<String> equipsInCate = getEquipmentsInCategory(equipments, category);
 
                 if (equipsInCate.size() == 0) {
-                    insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    listDamamagedEquipment2.add(tblEquipmentEntity);
                 } else {
                     for (int j = 0; j < equipsInCate.size(); j++) {
-                        insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                        TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                        listDamamagedEquipment2.add(tblEquipmentEntity);
                     }
                 }
             }
         }
 
-        int damagedLevel = checkDamagedLevel(room);
+        List<TblEquipmentEntity> listDamamagedEquipment = new ArrayList<TblEquipmentEntity>();
+        listDamamagedEquipment = listDamamagedEquipment2;
+        for(int i = 0; i <listDamamagedEquipment1.size(); i++){
+            TblEquipmentEntity tblEquipmentEntity1 = listDamamagedEquipment1.get(i);
+            for(int j = 0; j< listDamamagedEquipment2.size(); j++){
+                TblEquipmentEntity tblEquipmentEntity2 = listDamamagedEquipment2.get(j);
+                if(tblEquipmentEntity1!=tblEquipmentEntity2){
+                    listDamamagedEquipment.add(tblEquipmentEntity1);
+                    break;
+                }
+            }
+        }
+        int damagedLevel = checkDamagedLevel(listDamamagedEquipment,room);
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);
 
@@ -266,7 +291,7 @@ public class UserController {
 
     //Check damaged level
 
-    public int checkDamagedLevel(TblClassroomEntity classroomEntity) {
+    public int checkDamagedLevel(List<TblEquipmentEntity> damagedEquipment, TblClassroomEntity tblClassroomEntity) {
         int damagedLevel = 0;
         int projectorDamagedLevel = 0;
         int mayLanhDamagedLevel = 0;
@@ -279,7 +304,7 @@ public class UserController {
         int MayLanh = 0;
         int Quat = 0;
 
-        TblRoomTypeEntity roomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
+        TblRoomTypeEntity roomTypeEntity = tblClassroomEntity.getTblRoomTypeByRoomTypeId();
         int chair = roomTypeEntity.getSlots();
         String[] row = roomTypeEntity.getHorizontalRows().split("-");
         int table = 0;
@@ -292,13 +317,7 @@ public class UserController {
         if (roomTypeEntity.getFan() > 0) {
             Quat = roomTypeEntity.getFan();
         }
-        Collection<TblEquipmentEntity> damagedEquipment = new ArrayList<TblEquipmentEntity>();
-        Collection<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-            if (!tblEquipmentEntity.isStatus()) {
-                damagedEquipment.add(tblEquipmentEntity);
-            }
-        }
+
         if (!damagedEquipment.isEmpty()) {
             for (TblEquipmentEntity tblEquipmentEntity : damagedEquipment) {
                 if (tblEquipmentEntity.getCategoryId() == 1) {
@@ -436,4 +455,5 @@ public class UserController {
         }
         return damagedLevel;
     }
+
 }

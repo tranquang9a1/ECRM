@@ -691,8 +691,8 @@ public class APIController {
     @RequestMapping(value = "/checkSchedule", method = RequestMethod.GET)
     public @ResponseBody boolean checkSchedule(@RequestParam("classId") int classId) {
         try {
-            int result = scheduleDAO.findScheduleAfterCurrentTime(classId);
-            if (result > 0) {
+            List<TblScheduleEntity> result = scheduleDAO.getScheduleNoFinishOfRoom(classId);
+            if (result.size() > 0) {
                 return true;
             }
         }catch (Exception e) {

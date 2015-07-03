@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>ECRM - Equipment Classroom Management</title>
-    <link href="resource/css/login.css" rel="stylesheet"/>
+    <link href="/resource/css/login.css" rel="stylesheet"/>
 </head>
 <body>
   <div class="top">
@@ -29,7 +29,7 @@
       <p><input type="checkbox" name="rememberAccount"/> Duy trì đăng nhập</p>
       <button type="submit">Đăng nhập</button>
     </form>
-    <img src="/resource/img/img1.png">
+    <img src="/resource/img/LogoNew.PNG">
   </div>
   <div class="bottom">
     <p><b>Địa chỉ: </b> Tòa nhà Inovation, công viên PM Quang Trung, Quận 12, TP Hồ Chí Minh</p>

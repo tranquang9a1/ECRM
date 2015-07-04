@@ -10,7 +10,11 @@ import com.ecrm.Entity.TblScheduleEntity;
 import com.ecrm.Entity.TblUserEntity;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
+import com.ecrm.hibernate.HibernateUtils;
 import com.twilio.sdk.TwilioRestException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
@@ -40,6 +45,7 @@ public class CheckDamagedClassroomSchedule {
 
     @Scheduled(cron = "${cron.expression}")
     @Async
+    @Transactional
     public void checkChangeClassroom() throws TwilioRestException {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
@@ -52,6 +58,9 @@ public class CheckDamagedClassroomSchedule {
                 //tim nhung phong chua hu hai
                 List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
                 for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+                    SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
+                    Session session = sessionFactory.openSession();
+                    Transaction tx = session.beginTransaction();
                     int classroomId = classroomEntity.getId();
                     List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleInClassroom(classroomId);
                     List<String> availableClassroom = new ArrayList<String>();
@@ -84,9 +93,11 @@ public class CheckDamagedClassroomSchedule {
                                     tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
                                     + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
                             scheduleDAO.persist(newSchedule);
-                            SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                            /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);*/
                         }
                     }
+                    tx.commit();
+                    session.close();
                 }
             }
             if (time == 7) {

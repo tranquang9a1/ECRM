@@ -1,6 +1,7 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
+import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
@@ -31,6 +32,8 @@ public class AjaxController {
     ClassroomDAOImpl classroomDAO;
     @Autowired
     UserDAOImpl userDAO;
+    @Autowired
+    ScheduleDAOImpl scheduleDAO;
 
     @RequestMapping(value = "findClassroom")
     public @ResponseBody
@@ -113,6 +116,19 @@ public class AjaxController {
             return "OK";
         }
         return "NO";
+    }
+
+    @RequestMapping(value = "checkClassroom")
+    public @ResponseBody
+    String checkClassroom(HttpServletRequest request, HttpServletResponse response){
+        int classroomId = Integer.parseInt(request.getParameter("classroomId"));
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
+        for(TblClassroomEntity classroomEntity:tblClassroomEntities){
+            if(classroomId == classroomEntity.getId()){
+                return "1";
+            }
+        }
+        return "0";
     }
 
 }

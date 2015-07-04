@@ -47,6 +47,17 @@
                     padding: 5px 10px;
                     width: 170px;
                 }
+                tr.header
+                {
+                    cursor:pointer;
+                }
+                .header .sign:after{
+                    content:">>";
+                    display:inline-block;
+                }
+                .header.expand .sign:after{
+                    content:"<<";
+                }
             </style>
             <script>
                 function findAvailableRoom() {
@@ -88,6 +99,7 @@
         <c:set var="dateto" value="${requestScope.DATETO}"/>
         <c:set var="teacher" value="${requestScope.TEACHER}"/>
         <c:set var="classroom" value="${requestScope.CLASSROOM}"/>
+        <c:set var="isEmpty" value="${requestScope.ISEMPTY}"/>
 
         <div class="contain-layout">
             <jsp:include flush="true" page="Header.jsp"/>
@@ -189,7 +201,7 @@
                     </table>
                 </div>
             </form>
-            <c:if test="${not empty schedules}">
+            <c:if test="${not isEmpty}">
                 <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 1000px;">
                     <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;font-size: medium;
   font-weight: bold;">
@@ -198,6 +210,7 @@
                 </div>
                 <div id="result"
                      style="width: 1000px; height: 300px; overflow: scroll; margin-left: 20px; background-color: #ffffff">
+
                     <c:if test="${not empty schedules}">
                         <table border="1px">
                             <tr>
@@ -210,93 +223,29 @@
                                 </c:forEach>
 
                             </tr>
-                            <c:forEach var="ci" items="${classroomId}">
-                                <tr>
-                                    <td rowspan="6">${ci}</td>
-                                    <td bgcolor="yellow">7:00-8:30</td>
-                                    <c:forEach items="${teachingDate}" var="td">
-                                        <td>
-                                            <c:forEach var="s" items="${schedules}">
-                                                <c:choose>
-                                                    <c:when test="${s.timeFrom=='07:00:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
-                                                        ${s.username}
-                                                    </c:when>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </td>
-                                    </c:forEach>
+                            <c:forEach var="cs" items="${schedules}">
+                                <tr class="header" style="clear: both  ">
+                                    <td rowspan="${cs.rowspan}" >${cs.roomName}<span class="sign"></span></td>
+                                </tr>
 
-                                </tr>
-                                <tr>
-                                    <td bgcolor="yellow">8:45-10:15</td>
-                                    <c:forEach items="${teachingDate}" var="td">
-                                        <td>
-                                            <c:forEach var="s" items="${schedules}">
-                                                <c:choose>
-                                                    <c:when test="${s.timeFrom=='08:45:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
-                                                        ${s.username}
-                                                    </c:when>
-                                                </c:choose>
+                                <c:forEach var="tis" items="${cs.timeSchedules}">
+                                    <c:if test="${ not empty tis.teacherSchedules}">
+                                        <tr>
+                                            <td bgcolor="yellow">${tis.time}</td>
+
+                                            <c:forEach items="${teachingDate}" var="td">
+                                                <td>
+                                                    <c:forEach var="tes" items="${tis.teacherSchedules}">
+                                                        <c:if test="${tes.date == td.toString()}">
+                                                            ${tes.teacher}
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </td>
                                             </c:forEach>
-                                        </td>
-                                    </c:forEach>
-                                </tr>
-                                <tr>
-                                    <td bgcolor="yellow">10:30-12:00</td>
-                                    <c:forEach items="${teachingDate}" var="td">
-                                        <td>
-                                            <c:forEach var="s" items="${schedules}">
-                                                <c:choose>
-                                                    <c:when test="${s.timeFrom=='10:30:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
-                                                        ${s.username}
-                                                    </c:when>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </td>
-                                    </c:forEach>
-                                </tr>
-                                <tr>
-                                    <td bgcolor="yellow">12:30-14:00</td>
-                                    <c:forEach items="${teachingDate}" var="td">
-                                        <td>
-                                            <c:forEach var="s" items="${schedules}">
-                                                <c:choose>
-                                                    <c:when test="${s.timeFrom=='12:30:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
-                                                        ${s.username}
-                                                    </c:when>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </td>
-                                    </c:forEach>
-                                </tr>
-                                <tr>
-                                    <td bgcolor="yellow">14:15-15:45</td>
-                                    <c:forEach items="${teachingDate}" var="td">
-                                        <td>
-                                            <c:forEach var="s" items="${schedules}">
-                                                <c:choose>
-                                                    <c:when test="${s.timeFrom=='14:15:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
-                                                        ${s.username}
-                                                    </c:when>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </td>
-                                    </c:forEach>
-                                </tr>
-                                <tr>
-                                    <td bgcolor="yellow">16:00-17:30</td>
-                                    <c:forEach items="${teachingDate}" var="td">
-                                        <td>
-                                            <c:forEach var="s" items="${schedules}">
-                                                <c:choose>
-                                                    <c:when test="${s.timeFrom=='16:00:00' and s.tblClassroomByClassroomId.name==ci and s.date == td.toString()}">
-                                                        ${s.username}
-                                                    </c:when>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </td>
-                                    </c:forEach>
-                                </tr>
+                                        </tr>
+
+                                    </c:if>
+                                </c:forEach>
                             </c:forEach>
                         </table>
                     </c:if>
@@ -378,7 +327,13 @@
                             <div class="group-control">
                                 <div class="name">Số học sinh(*):</div>
                                 <div class="control">
-                                    <input type="text" name="numberOfStudent" id="numberOfStudent">
+                                    <input type="text"
+                                           onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )" name="numberOfStudent" id="numberOfStuden"t>
                                 </div>
                             </div>
                             <div class="group-control">
@@ -476,8 +431,13 @@
                 if (avai == 0 && all == 0) {
                     alert("Phải chọn phòng học!");
                     return false;
+                }else{
+                    if(all!=0 && checkClassroom(all)==="1"){
+                        alert("Phòng học hiện không khả dụng!");
+                        return false;
+                    }
                 }
-                if (dateTo != null && dateFrom!= null) {
+                if (dateTo != null && dateFrom != null) {
                     var date1 = new Date(dateFrom);
                     var date2 = new Date(dateTo);
                     if (date2 < date1) {
@@ -486,6 +446,24 @@
                     }
                 }
             }
+            function checkClassroom(classroomId) {
+                return $.ajax({
+                    type: "get",
+                    url: "/ajax/checkClassroom",
+                    cache: false,
+                    data: 'classroomId=' + classroomId,
+                    success: function (data) {
+                        console.log(data);
+                        alert("Phòng học hiện không khả dụng!");
+                    },
+                    error: function () {
+                        alert('Error while request..');
+                    }
+                })
+            }
+            $('.header').click(function(){
+                $(this).toggleClass('expand').nextUntil('tr.header').slideToggle(100);
+            });
         </script>
         </body>
         </html>

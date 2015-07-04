@@ -3,9 +3,7 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblScheduleEntity;
-import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.Entity.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -27,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLEncoder;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -308,7 +307,7 @@ public class ScheduleController {
                 if (all.equals("0")) {
                     scheduleDAO.persist(tblScheduleEntity);
                 } else {
-                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom,Integer.parseInt(all));
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, timeFrom, Integer.parseInt(all));
                     if (!tblScheduleEntities.isEmpty()) {
                         tblScheduleEntities.get(0).setIsActive(false);
                         scheduleDAO.merge(tblScheduleEntities.get(0));
@@ -365,16 +364,82 @@ public class ScheduleController {
                     }
                 }
             }
+
+            List<CrSdEntity> crSdEntities = new ArrayList<CrSdEntity>();
+            for (int i = 0; i < classroomName.size(); i++) {
+                List<TimeSchedule> timeSchedules = new ArrayList<TimeSchedule>();
+                List<String> teacheingTime = Arrays.asList("07:00:00", "08:45:00", "10:30:00", "12:30:00", "14:15:00", "16:00:00");
+                for (int j = -0; j < teacheingTime.size(); j++) {
+                    TimeSchedule timeSchedule = new TimeSchedule();
+                    timeSchedule.setTime(teacheingTime.get(j));
+                    timeSchedules.add(timeSchedule);
+                }
+                CrSdEntity crSdEntity = new CrSdEntity();
+                crSdEntity.setRoomName(classroomName.get(i));
+                crSdEntity.setTimeSchedules(timeSchedules);
+                crSdEntities.add(crSdEntity);
+            }
+
+            String room = "";
+            String time = "";
+            String date = "";
+            String teacher = "";
+
+            for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
+                for (int i = 0; i<crSdEntities.size(); i++) {
+                    room = tblScheduleEntity.getTblClassroomByClassroomId().getName();
+                    if (crSdEntities.get(i).getRoomName().equals(room)) {
+                        List<TimeSchedule> timeSchedules1 = crSdEntities.get(i).getTimeSchedules();
+                        time = tblScheduleEntity.getTimeFrom().toString();
+                        for (int j = 0; j < 6; j++) {
+                            if (timeSchedules1.get(j).getTime().equals(time)) {
+                                TeacherSchedule teacherSchedule = new TeacherSchedule();
+                                teacherSchedule.setTeacher(tblScheduleEntity.getUsername());
+                                teacherSchedule.setDate(tblScheduleEntity.getDate().toString());
+                                List<TeacherSchedule> teacherSchedules = timeSchedules1.get(j).getTeacherSchedules();
+                                if (teacherSchedules == null) {
+                                    teacherSchedules = new ArrayList<TeacherSchedule>();
+                                }
+                                teacherSchedules.add(teacherSchedule);
+                                timeSchedules1.get(j).setTeacherSchedules(teacherSchedules);
+                                j = 6;
+                            }
+                        }
+                    }
+
+                }
+            }
+            boolean isEmpty = true;
+            for(CrSdEntity crSdEntity: crSdEntities){
+                int rowspan = 0;
+                List<TimeSchedule> timeSchedules = crSdEntity.getTimeSchedules();
+                for(TimeSchedule timeSchedule: timeSchedules){
+                    if(timeSchedule.getTeacherSchedules()!=null){
+                        isEmpty =false;
+                        rowspan+=1;
+                    }
+                }
+                crSdEntity.setRowspan(rowspan+1);
+            }
+            Collections.sort(crSdEntities, new CustomComparator());
             request.setAttribute("TEACHINGDATE", teachingDate);
             request.setAttribute("CLASSROOMID", classroomName);
-            request.setAttribute("SCHEDULES", tblScheduleEntities);
+            request.setAttribute("SCHEDULES", crSdEntities);
             request.setAttribute("TEACHER", username);
             request.setAttribute("CLASSROOM", classroomId);
             request.setAttribute("DATEFROM", datefrom);
             request.setAttribute("DATETO", dateto);
+            request.setAttribute("ISEMPTY", isEmpty);
+
             return "Staff_MappingSchedule";
         } else {
             return "Login";
+        }
+    }
+    public class CustomComparator implements Comparator<CrSdEntity> {
+        @Override
+        public int compare(CrSdEntity o1, CrSdEntity o2) {
+            return o1.getRoomName().compareTo(o2.getRoomName());
         }
     }
 }

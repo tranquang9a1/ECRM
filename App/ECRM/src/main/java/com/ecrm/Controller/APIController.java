@@ -52,6 +52,9 @@ public class APIController {
     @Autowired
     ScheduleDAOImpl scheduleDAO;
 
+    @Autowired
+    NotificationDAOImp notificationDAO;
+
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id") int classroomId) {
         TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
@@ -290,9 +293,9 @@ public class APIController {
     @RequestMapping(value = "/getReportStaff", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<ReportClassDTO> getReportStaff() {
+    List<ReportClassDTO> getReportStaff(@RequestParam("status") String status) {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
-        List<Integer> listClass = reportDAO.getReportByClassId();
+        List<Integer> listClass = reportDAO.getReportByClassId(status);
         List<Integer> listReport = new ArrayList<Integer>();
         for (int classId : listClass) {
             //int id = Integer.parseInt(classId);
@@ -310,8 +313,18 @@ public class APIController {
                 if (mapCount.get(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName()) != null) {
                     mapCount.put(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName(),
                             mapCount.get(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName()) + 1);
+
                 } else {
                     mapCount.put(detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName(), 1);
+                }
+            }
+
+            Map<Integer, Integer> mapReport = new HashMap<Integer, Integer>();
+            for (TblReportDetailEntity detail : details) {
+                if (mapReport.get(detail.getReportId()) != null) {
+                    mapReport.put(detail.getReportId(), mapReport.get(detail.getReportId()) + 1);
+                } else {
+                    mapReport.put(detail.getReportId(), 1);
                 }
             }
             Map<String, Boolean> mapManage = new HashMap<String, Boolean>();
@@ -332,23 +345,30 @@ public class APIController {
                 }
 
             }
+
+
             ReportClassDTO reportClassDTO = new ReportClassDTO();
-            for (int report : listReport) {
-                TblReportEntity reportEntity = reportDAO.find(report);
+            String userReport = "";
+            for (Map.Entry<Integer, Integer> entry : mapReport.entrySet()) {
+                TblReportEntity reportEntity = reportDAO.find(entry.getKey());
                 reportClassDTO.setRoomName(reportEntity.getTblClassroomByClassRoomId().getName());
                 reportClassDTO.setRoomId(classId);
                 reportClassDTO.setEquipments(equipments);
-                reportClassDTO.setUserReport(reportClassDTO.getUserReport() + reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() != null ? reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName() + ", " : reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getUsername() + ", ");
                 reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
                 reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
                 reportClassDTO.setEvaluate(reportEntity.getEvaluate());
-
+                reportClassDTO.setChangedRoom(reportEntity.getChangedRoom());
+                if (!userReport.contains(reportEntity.getUsername())) {
+                    userReport += reportEntity.getUsername() + ", ";
+                }
             }
-//            reportClassDTO.setUserReport(reportClassDTO.getUserReport().substring(0, reportClassDTO.getUserReport().length()));
+
+            reportClassDTO.setUserReport(userReport.substring(0, userReport.length() - 2));
             result.add(reportClassDTO);
 
         }
 
+        System.out.println("Result Size: "+ result.size());
         return result;
 
     }
@@ -365,20 +385,48 @@ public class APIController {
     @RequestMapping(value = "/resolve", method = RequestMethod.POST)
     public
     @ResponseBody
-    ResultDTO resolveReport(@RequestParam("reportId") int reportId,
-                            @RequestParam("equipmentId") int equipmentId,
-                            @RequestParam("solution") String solution) {
+    ResultDTO resolveReport(@RequestParam("roomId") int roomId) {
         ResultDTO result = new ResultDTO();
         try {
-            reportDAO.resolveReport(reportId, equipmentId, solution);
+            TblClassroomEntity room = classroomDAO.find(roomId);
+            List<TblEquipmentEntity> equips = room.getTblEquipmentsById();
+            for (TblEquipmentEntity equip : equips) {
+                if (!equip.isStatus()) {
+                    equip.setStatus(true);
+                    equipmentDAO.merge(equip);
+                }
+            }
+
+            List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(roomId);
+            for (TblReportEntity report : reports) {
+                List<TblReportDetailEntity> details = report.getTblReportDetailsById();
+                for (TblReportDetailEntity detail : details) {
+                    if (!detail.isStatus()) {
+                        detail.setStatus(true);
+                        reportDetailDAO.merge(detail);
+                    }
+                }
+
+                report.setStatus(Enumerable.ReportStatus.FINISH.getValue());
+                reportDAO.merge(report);
+            }
+
+            TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(roomId, Enumerable.MessageType.NEWREPORT.getValue());
+            if (notify != null) {
+                notify.setStatus(false);
+                notificationDAO.merge(notify);
+            }
+
+            room.setDamagedLevel(0);
+            classroomDAO.merge(room);
+            result.setError("Sucess");
             result.setError_code(100);
-            result.setError("OK");
-        } catch (Exception e) {
+        }catch (Exception e) {
             result.setError_code(101);
             result.setError(e.getMessage());
         }
-
         return result;
+
     }
 
 

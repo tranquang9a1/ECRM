@@ -169,10 +169,19 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
-    public List<Integer> getReportByClassId() {
+    public List<Integer> getReportByClassId(String status) {
         Query query  = entityManager.createQuery("Select u.classRoomId from TblReportEntity u where u.status = :statusnew " +
                 "group by u.classRoomId ");
-        query.setParameter("statusnew", ReportStatus.NEW.getValue());
+        if (status.equalsIgnoreCase("new")) {
+            query.setParameter("statusnew", ReportStatus.NEW.getValue());
+        } else if (status.equalsIgnoreCase("going")) {
+            query.setParameter("statusnew", ReportStatus.GOING.getValue());
+        } else if (status.equalsIgnoreCase("finish")) {
+            query.setParameter("statusnew", ReportStatus.FINISH.getValue());
+        } else {
+            query.setParameter("statusnew", ReportStatus.REMOVE.getValue());
+        }
+
         return query.getResultList();
     }
 
@@ -194,7 +203,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         }
 
         int rows = query.executeUpdate();
-        return rows > 0 ? true : false;
+        return rows > 0;
     }
 
     @Transactional
@@ -205,7 +214,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         query.setParameter("reportId", reportId);
 
         int rows = query.executeUpdate();
-        return rows > 0 ? true : false;
+        return rows > 0;
 
     }
 
@@ -217,6 +226,6 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         Query query1 = entityManager.createQuery("Update TblReportEntity u set u.status = true");
         query1.executeUpdate();
 
-        return rows > 0 ? true : false;
+        return rows > 0;
     }
 }

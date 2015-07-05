@@ -30,7 +30,7 @@ public interface ReportDAO {
 
     public boolean createReport();
 
-    public List<Integer> getReportByClassId();
+    public List<Integer> getReportByClassId(String status);
 
     public boolean resolveReport(int reportId, int equipmentId, String solution);
 

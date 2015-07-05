@@ -21,8 +21,9 @@
             <link rel="stylesheet" href="../../resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="../../resource/css/layout.css"/>
             <link rel="stylesheet" href="../../resource/css/general.css"/>
-            <link rel="stylesheet" href="../../resource/css/management.css"/>
             <link rel="stylesheet" href="../../resource/css/jquery-ui.css"/>
+            <link rel="stylesheet" href="../../resource/css/jquery-ui.css"/>
+            <link rel="stylesheet" href="../../resource/css/component.css"/>
 
             <script src="../../resource/js/jquery-1.11.3.js"></script>
             <script src="../../resource/js/jquery-1.11.3.min.js"></script>
@@ -47,16 +48,12 @@
                     padding: 5px 10px;
                     width: 170px;
                 }
-                tr.header
-                {
-                    cursor:pointer;
+                .inline{
+                    display: inline-block;
+                    margin-left: 15px;
                 }
-                .header .sign:after{
-                    content:">>";
-                    display:inline-block;
-                }
-                .header.expand .sign:after{
-                    content:"<<";
+                .inline div{
+                    margin-bottom: 5px;
                 }
             </style>
             <script>
@@ -117,115 +114,112 @@
 
 
             <form action="/staff/searchSchedule" onsubmit="return validateForm()" name="searchForm">
-                <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 511px;">
+                <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 445px;">
                     <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px; font-size: medium;
   font-weight: bold;">
                         TÌM KIẾM
                     </header>
                 </div>
-                <div style="margin-left: 20px; background-color: #ffffff; width: 511px;">
-                    <table>
-                        <tr>
-                            <td><label>Ngày: </label></td>
-                            <td><input type="text" id="datefrom" name="datefrom" value="${datefrom}"><label>
-                                ~ </label><input
-                                    type="text"
-                                    id="dateto"
-                                    name="dateto" value="${dateto}"></td>
-                        </tr>
-                        <tr>
-                            <td><label>Phòng học: </label></td>
-                            <td>
-                                <div class="ui-widget">
-                                    <select name="classroomId" id="combobox1">
-                                        <option value="0"></option>
-                                        <c:choose>
-                                            <c:when test="${not empty classroom}">
-                                                <c:forEach items="${classrooms}" var="c">
-                                                    <c:choose>
-                                                        <c:when test="${classroom == c.id}">
-                                                            <option value="${c.id}" selected>${c.name}</option>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <option value="${c.id}">${c.name}</option>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <c:forEach items="${classrooms}" var="c">
+                <div style="margin-left: 20px; background-color: #ffffff; width: 445px;height: 170px;">
+                    <div class="inline">
+                        <div>Ngày:</div>
+                        <div><input type="text" id="datefrom" name="datefrom" value="${datefrom}"><label>
+                            ~ </label><input
+                                type="text"
+                                id="dateto"
+                                name="dateto" value="${dateto}"></div>
+                    </div>
+                    <div class="inline">
+                        <div>Phòng học:</div>
+                        <div class="ui-widget">
+                            <select name="classroomId" id="combobox1">
+                                <option value="0"></option>
+                                <c:choose>
+                                    <c:when test="${not empty classroom}">
+                                        <c:forEach items="${classrooms}" var="c">
+                                            <c:choose>
+                                                <c:when test="${classroom == c.id}">
+                                                    <option value="${c.id}" selected>${c.name}</option>
+                                                </c:when>
+                                                <c:otherwise>
                                                     <option value="${c.id}">${c.name}</option>
-                                                </c:forEach>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </select>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Giáo viên: </label></td>
-                            <td>
-                                <div class="ui-widget">
-                                    <select name="username" style="width: 150px" id="combobox2">
-                                        <option value="0"></option>
-                                        <c:choose>
-                                            <c:when test="${not empty teacher}">
-                                                <c:forEach items="${teachers}" var="t">
-                                                    <c:choose>
-                                                        <c:when test="${teacher == t.username}">
-                                                            <option value="${t.username}"
-                                                                    selected>${t.tblUserInfoByUsername.fullName}</option>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <c:forEach items="${teachers}" var="t">
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach items="${classrooms}" var="c">
+                                            <option value="${c.id}">${c.name}</option>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="inline" style="margin-left: 42px;">
+                        <div>Giáo viên:</div>
+                        <div class="ui-widget">
+                            <select name="username" style="width: 150px" id="combobox2">
+                                <option value="0"></option>
+                                <c:choose>
+                                    <c:when test="${not empty teacher}">
+                                        <c:forEach items="${teachers}" var="t">
+                                            <c:choose>
+                                                <c:when test="${teacher == t.username}">
+                                                    <option value="${t.username}"
+                                                            selected>${t.tblUserInfoByUsername.fullName}</option>
+                                                </c:when>
+                                                <c:otherwise>
                                                     <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                                </c:forEach>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </select>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td style="padding: 10px 0px 5px 0px;">
-                                <button type="submit" class="btn btn-orange" style="float: right">Tìm Kiếm</button>
-                            </td>
-                        </tr>
-                    </table>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach items="${teachers}" var="t">
+                                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="padding: 10px 0px 5px 0px;">
+                            <button type="submit" class="btn btn-orange" style="margin-left: 15px">Tìm Kiếm</button>
+                        </div>
+                    </div>
+
                 </div>
             </form>
             <c:if test="${not isEmpty}">
-                <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 1000px;">
-                    <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;font-size: medium;
-  font-weight: bold;">
-                        LỊCH
-                    </header>
-                </div>
-                <div id="result"
-                     style="width: 1000px; height: 300px; overflow: scroll; margin-left: 20px; background-color: #ffffff">
 
+                <div class="component">
+                    <div style="background-color: #ffffff;">
+                        <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;font-size: medium;
+  font-weight: bold;">
+                            LỊCH
+                        </header>
+                    </div>
                     <c:if test="${not empty schedules}">
-                        <table border="1px">
+                        <table class="overflow-y">
+                            <thead>
                             <tr>
 
-                                <th bgcolor="yellow">Phòng</th>
-                                <th bgcolor="yellow">Ngày</th>
+                                <th>Phòng</th>
+                                <th>Ngày</th>
 
                                 <c:forEach items="${teachingDate}" var="td">
-                                    <th bgcolor="#32cd32">${td}</th>
+                                    <th>${td}</th>
                                 </c:forEach>
 
                             </tr>
+                            </thead>
+                            <tbody>
                             <c:forEach var="cs" items="${schedules}">
-                                <tr class="header" style="clear: both  ">
-                                    <td rowspan="${cs.rowspan}" >${cs.roomName}<span class="sign"></span></td>
+                                <tr>
+                                    <th rowspan="${cs.rowspan}">${cs.roomName}</th>
                                 </tr>
 
                                 <c:forEach var="tis" items="${cs.timeSchedules}">
@@ -247,6 +241,7 @@
                                     </c:if>
                                 </c:forEach>
                             </c:forEach>
+                            </tbody>
                         </table>
                     </c:if>
                 </div>
@@ -333,7 +328,7 @@
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
                     || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )" name="numberOfStudent" id="numberOfStuden"t>
+                    || (event.keyCode==46) )" name="numberOfStudent" id="numberOfStuden" t>
                                 </div>
                             </div>
                             <div class="group-control">
@@ -387,7 +382,8 @@
         </div>
 
         <script src="../../resource/js/script.js"></script>
-
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+        <script src="../../resource/js/jquery.stickyheader.js"></script>
         <script>
             function doAction(choose, object) {
                 closeConform();
@@ -431,8 +427,8 @@
                 if (avai == 0 && all == 0) {
                     alert("Phải chọn phòng học!");
                     return false;
-                }else{
-                    if(all!=0 && checkClassroom(all)==="1"){
+                } else {
+                    if (all != 0 && checkClassroom(all) === "1") {
                         alert("Phòng học hiện không khả dụng!");
                         return false;
                     }
@@ -461,9 +457,6 @@
                     }
                 })
             }
-            $('.header').click(function(){
-                $(this).toggleClass('expand').nextUntil('tr.header').slideToggle(100);
-            });
         </script>
         </body>
         </html>

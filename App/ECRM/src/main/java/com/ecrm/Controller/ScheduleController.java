@@ -417,6 +417,27 @@ public class ScheduleController {
                     if(timeSchedule.getTeacherSchedules()!=null){
                         isEmpty =false;
                         rowspan+=1;
+                        if(timeSchedule.getTime().equals("07:00:00")){
+                            timeSchedule.setTime("7:00 - 08:30");
+                        }
+                        if(timeSchedule.getTime().equals("08:45:00")){
+                            timeSchedule.setTime("8:45 - 10:15");
+                        }
+                        if(timeSchedule.getTime().equals("08:45:00")){
+                            timeSchedule.setTime("8:45 - 10:15");
+                        }
+                        if(timeSchedule.getTime().equals("10:30:00")){
+                            timeSchedule.setTime("10:30 - 12:00");
+                        }
+                        if(timeSchedule.getTime().equals("12:30:00")){
+                            timeSchedule.setTime("12:30 - 14:00");
+                        }
+                        if(timeSchedule.getTime().equals("14:15:00")){
+                            timeSchedule.setTime("14:15 - 15:45");
+                        }
+                        if(timeSchedule.getTime().equals("16:00:00")){
+                            timeSchedule.setTime("16:00 - 17:30");
+                        }
                     }
                 }
                 crSdEntity.setRowspan(rowspan+1);

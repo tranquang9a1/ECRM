@@ -21,6 +21,7 @@ public class TblReportEntity {
     private Timestamp createTime;
     private String evaluate;
     private int status;
+    private String changedRoom;
     private TblClassroomEntity tblClassroomByClassRoomId;
     private TblUserEntity tblUserByUserId;
     private List<TblReportDetailEntity> tblReportDetailsById;
@@ -102,6 +103,16 @@ public class TblReportEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name="ChangedRoom")
+    public String getChangedRoom() {
+        return changedRoom;
+    }
+
+    public void setChangedRoom(String changedRoom) {
+        this.changedRoom = changedRoom;
     }
 
     @Override

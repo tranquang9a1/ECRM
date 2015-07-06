@@ -65,7 +65,7 @@ public class Utils {
 //                accountDTO.setClassrooms(classrooms);
 //            }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -201,5 +201,70 @@ public class Utils {
             temp = true;
         }
         return temp;
+    }
+
+    public static List<String> sortClassroom(List<String> listClassroom, String currentClassroom) {
+        String room = currentClassroom;
+        List<String> list = listClassroom;
+        Collections.sort(list);
+        List<String> lstRoom = new ArrayList<String>();
+        lstRoom.add(room);
+        for (String s : list) {
+            lstRoom.add(s);
+        }
+        Collections.sort(lstRoom);
+        int index = lstRoom.indexOf(room);
+        if (index > 0) {
+            List<Integer> right = new ArrayList<Integer>();
+            List<Integer> left = new ArrayList<Integer>();
+            for (int i = index + 1; i < lstRoom.size(); i++) {
+                right.add(Integer.parseInt(lstRoom.get(i)));
+            }
+            for (int j = 0; j < index; j++) {
+                left.add(Integer.parseInt(lstRoom.get(j)));
+            }
+            lstRoom.clear();
+            int temp = 0;
+            Collections.sort(left, Collections.reverseOrder());
+            int floorL = Integer.parseInt(room)/100;
+            int floorR = Integer.parseInt(room)/100;
+            for (int i = 0; i < left.size(); i++) {
+                int currentLeftFloor = left.get(i)/100;
+                if (floorL - currentLeftFloor ==0) {
+                    int maxL = left.get(i);
+                    lstRoom.add(Integer.toString(maxL));
+                }
+                else{
+                    for(int j = temp; j<right.size(); j++){
+                        int currentRightFloor = right.get(j)/100;
+                        if(currentRightFloor-floorR == 0){
+                            int maxR = right.get(j);
+                            lstRoom.add(Integer.toString(maxR));
+                            temp += 1;
+                        }else{
+                            floorR+=1;
+                            break;
+                        }
+                    }
+                    floorL = floorL-1;
+                    i-=1;
+                }
+
+
+            }
+            for (int l : left) {
+                if (!lstRoom.contains(Integer.toString(l))) {
+                    lstRoom.add(Integer.toString(l));
+                }
+            }
+            for (int r : right) {
+                if (!lstRoom.contains(Integer.toString(r))) {
+                    lstRoom.add(Integer.toString(r));
+                }
+            }
+
+        }
+
+        return lstRoom;
     }
 }

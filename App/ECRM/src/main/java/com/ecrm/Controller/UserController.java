@@ -12,6 +12,9 @@ import com.ecrm.Utils.Enumerable.ReportStatus;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.socket.SocketIO;
 import com.twilio.sdk.TwilioRestException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,7 +97,6 @@ public class UserController {
     }
 
     @RequestMapping(value = "sentReport", method = RequestMethod.POST)
-    @Transactional
     @ResponseBody
     public String createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest) {
         GCMController gcm = new GCMController();
@@ -122,12 +124,11 @@ public class UserController {
 
         String[] evaluates = reportRequest.getListEvaluate().split(",");
         int category = 0;
-        List<TblEquipmentEntity> listDamamagedEquipment2 = new ArrayList<TblEquipmentEntity>();
         if ("".equals(reportRequest.getListDamaged())) {
             for (int i = 0; i < evaluates.length; i++) {
+
                 category = Integer.parseInt(evaluates[i].split("-")[0]);
                 TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
-                listDamamagedEquipment2.add(tblEquipmentEntity);
             }
         } else {
             String[] equipments = reportRequest.getListDamaged().split("--");
@@ -137,28 +138,16 @@ public class UserController {
 
                 if (equipsInCate.size() == 0) {
                     TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
-                    listDamamagedEquipment2.add(tblEquipmentEntity);
                 } else {
                     for (int j = 0; j < equipsInCate.size(); j++) {
                         TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
-                        listDamamagedEquipment2.add(tblEquipmentEntity);
                     }
                 }
             }
         }
 
-        List<TblEquipmentEntity> listDamamagedEquipment = new ArrayList<TblEquipmentEntity>();
-        listDamamagedEquipment = listDamamagedEquipment2;
-        for(int i = 0; i <listDamamagedEquipment1.size(); i++){
-            TblEquipmentEntity tblEquipmentEntity1 = listDamamagedEquipment1.get(i);
-            for(int j = 0; j< listDamamagedEquipment2.size(); j++){
-                TblEquipmentEntity tblEquipmentEntity2 = listDamamagedEquipment2.get(j);
-                if(tblEquipmentEntity1!=tblEquipmentEntity2){
-                    listDamamagedEquipment.add(tblEquipmentEntity1);
-                    break;
-                }
-            }
-        }
+        List<TblEquipmentEntity> listDamamagedEquipment = equipmentDAO.getDamagedEquipments(room.getId());
+
         int damagedLevel = checkDamagedLevel(listDamamagedEquipment,room);
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);

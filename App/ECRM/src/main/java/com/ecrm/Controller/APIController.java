@@ -12,6 +12,9 @@ import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.ecrm.Utils.socket.SocketIO;
 import com.twilio.sdk.TwilioRestException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -99,7 +102,6 @@ public class APIController {
     }
 
     @RequestMapping(value = "/createReport", method = RequestMethod.POST)
-    @Transactional
     public
     @ResponseBody
     ResultDTO createReport(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("classId") String classId,
@@ -127,16 +129,6 @@ public class APIController {
             for (int i = 0; i < categoryNames.length; i++) {
                 categoriesId.add(equipmentCategoryDAO.findEquipmentId(categoryNames[i]));
             }
-            //List damagedLevel
-            List<TblEquipmentEntity>listDamamagedEquipment1 =  room.getTblEquipmentsById();
-            Iterator<TblEquipmentEntity> iterator1 = listDamamagedEquipment1.iterator();
-            while (iterator1.hasNext()){
-                TblEquipmentEntity tblEquipmentEntity = iterator1.next();
-                if(tblEquipmentEntity.isStatus()){
-                    iterator1.remove();
-                }
-            }
-            List<TblEquipmentEntity> listDamamagedEquipment2 = new ArrayList<TblEquipmentEntity>();
             for (int j = 0; j < categoriesId.size(); j++) {
                 int category = categoriesId.get(j);
                 String positon = positions[j];
@@ -156,14 +148,12 @@ public class APIController {
                         TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                 reportId, damagedLevel, description, positon);
                         reportDetailDAO.persist(tblReportDetailEntity);
-                        listDamamagedEquipment2.add(tblEquipmentEntity);
                     } else {
                         tblEquipmentEntity.setStatus(false);
                         equipmentDAO.merge(tblEquipmentEntity);
                         TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                 reportId, damagedLevel, description, positon);
                         reportDetailDAO.persist(tblReportDetailEntity);
-                        listDamamagedEquipment2.add(tblEquipmentEntity);
                     }
                 }
                 if (category > 6) {
@@ -176,7 +166,6 @@ public class APIController {
                             TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                     reportId, damagedLevel, description, positon);
                             reportDetailDAO.persist(tblReportDetailEntity);
-                            listDamamagedEquipment2.add(tblEquipmentEntity);
                         } else {
                             tblEquipmentEntity.setPosition("[0]");
                             tblEquipmentEntity.setStatus(false);
@@ -184,7 +173,6 @@ public class APIController {
                             TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                     reportId, damagedLevel, description, positon);
                             reportDetailDAO.persist(tblReportDetailEntity);
-                            listDamamagedEquipment2.add(tblEquipmentEntity);
                         }
                     } else {
                         TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId, category, positon, serialNumber);
@@ -194,31 +182,19 @@ public class APIController {
                             TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                     reportId, damagedLevel, description, positon);
                             reportDetailDAO.persist(tblReportDetailEntity);
-                            listDamamagedEquipment2.add(tblEquipmentEntity);
                         } else {
                             tblEquipmentEntity.setStatus(false);
 							equipmentDAO.merge(tblEquipmentEntity);
 							TblReportDetailEntity tblReportDetailEntity = new TblReportDetailEntity(tblEquipmentEntity.getId(),
                                 reportId, damagedLevel, description, positon);
 							reportDetailDAO.persist(tblReportDetailEntity);
-                            listDamamagedEquipment2.add(tblEquipmentEntity);
                         }
                         
                     }
                 }
             }
-            List<TblEquipmentEntity> listDamamagedEquipment = new ArrayList<TblEquipmentEntity>();
-            listDamamagedEquipment = listDamamagedEquipment2;
-            for(int i = 0; i <listDamamagedEquipment1.size(); i++){
-                TblEquipmentEntity tblEquipmentEntity1 = listDamamagedEquipment1.get(i);
-                for(int j = 0; j< listDamamagedEquipment2.size(); j++){
-                    TblEquipmentEntity tblEquipmentEntity2 = listDamamagedEquipment2.get(j);
-                    if(tblEquipmentEntity1!=tblEquipmentEntity2){
-                        listDamamagedEquipment.add(tblEquipmentEntity1);
-                        break;
-                    }
-                }
-            }
+            List<TblEquipmentEntity> listDamamagedEquipment = equipmentDAO.getDamagedEquipments(room.getId());
+
             int damagedLevel = checkDamagedLevel(listDamamagedEquipment,room);
 
             room.setDamagedLevel(damagedLevel);
@@ -632,6 +608,7 @@ public class APIController {
                 String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                         tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + classroomEntity.getName() + ".";
                 scheduleDAO.persist(newSchedule);
+                //update report status
                 dto.setError(message);
                 dto.setError_code(100);
                 return dto;

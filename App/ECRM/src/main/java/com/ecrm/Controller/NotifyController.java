@@ -55,7 +55,7 @@ public class NotifyController {
     @RequestMapping(value = "")
     public String notifications(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if(session.getAttribute("USER") == null) {
+        if (session.getAttribute("USER") == null) {
             return "redirect:/";
         }
 
@@ -73,7 +73,7 @@ public class NotifyController {
         resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
         resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
         resultObject.setDamagedLevel(classroom.getDamagedLevel());
-        if(schedules.size() > 0) {
+        if (schedules.size() > 0) {
             resultObject.setSuggestRooms(getAvailableRoom(roomId));
         } else {
             resultObject.setFree(true);
@@ -83,14 +83,14 @@ public class NotifyController {
     }
 
     @RequestMapping(value = "hu-hai")
-    public String showReportDetail(HttpServletRequest request, @RequestParam(value = "phong") int roomId){
+    public String showReportDetail(HttpServletRequest request, @RequestParam(value = "phong") int roomId) {
         HttpSession session = request.getSession();
-        if(session.getAttribute("USER") == null) {
+        if (session.getAttribute("USER") == null) {
             return "redirect:/";
         }
 
         List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
-        if(equipments.size() > 0) {
+        if (equipments.size() > 0) {
             getListReport(request);
             request.setAttribute("SHOWDETAIL", roomId);
             return "staff/Notifications";
@@ -222,7 +222,13 @@ public class NotifyController {
             SmsUtils.sendMessage(user.getPhone(), user.toString());
 
         }
-
+//update status report
+        List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
+        for (TblReportEntity tblReportEntity : tblReportEntities) {
+            tblReportEntity.setChangedRoom(changeRoom);
+            tblReportEntity.setStatus(2);
+            reportDAO.merge(tblReportEntity);
+        }
         return "Đổi phòng thành công!";
     }
 
@@ -246,13 +252,13 @@ public class NotifyController {
     private boolean resolve(int room, int category, String[] listEquipment) {
         //Change Equipment status and ReportDetail status
         List<TblEquipmentEntity> equips = equipmentDAO.getDamagedEquipmentsByCategory(room, category);
-        for (TblEquipmentEntity equip: equips) {
+        for (TblEquipmentEntity equip : equips) {
             List<TblReportDetailEntity> reportDetails = reportDetailDAO.getUnresolveReportDetail(equip.getId());
-            List<TblEquipmentEntity> listEquips = getListRealEquipment(listEquipment, category+"", room);
+            List<TblEquipmentEntity> listEquips = getListRealEquipment(listEquipment, category + "", room);
 
             if (listEquips.size() > 0) {
-                for(TblEquipmentEntity item: listEquips) {
-                    for (TblReportDetailEntity detailItem: reportDetails) {
+                for (TblEquipmentEntity item : listEquips) {
+                    for (TblReportDetailEntity detailItem : reportDetails) {
                         TblReportDetailEntity reportDetail = new TblReportDetailEntity(item.getId(), detailItem.getReportId(), detailItem.getDamagedLevel(),
                                 detailItem.getDescription(), item.getPosition(), true);
                         reportDetail.setResolveTime(new Timestamp(new Date().getTime()));
@@ -279,9 +285,9 @@ public class NotifyController {
 
         for (int i = 0; i < list.length; i++) {
             equipment = list[i].split("-");
-            if(equipment.length > 0 && category.equals(equipment[0])) {
+            if (equipment.length > 0 && category.equals(equipment[0])) {
                 TblEquipmentEntity equip = equipmentDAO.getEquipmentBySerialNumber(roomId, equipment[1]);
-                if(equip != null) {
+                if (equip != null) {
                     result.add(equip);
                 }
             }

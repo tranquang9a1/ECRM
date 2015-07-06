@@ -1,8 +1,10 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
+import com.ecrm.DAO.Impl.ReportDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
+import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Entity.TblScheduleEntity;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
@@ -29,7 +31,8 @@ public class ChangeRoomController {
     ScheduleDAOImpl scheduleDAO;
     @Autowired
     ClassroomDAOImpl classroomDAO;
-
+    @Autowired
+    ReportDAOImpl reportDAO;
 
     @RequestMapping(value = "getAvailableRoom")
     public
@@ -54,6 +57,10 @@ public class ChangeRoomController {
                 }
             }
         }
+        if(!availableClassroom.isEmpty()){
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+            availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
+        }
         return availableClassroom;
     }
 
@@ -61,6 +68,7 @@ public class ChangeRoomController {
     public
     @ResponseBody
     Boolean changeRoom(@RequestParam("from")String currentClassroom,@RequestParam("to") String changeClassroom) throws TwilioRestException {
+        GCMController gcmController = new GCMController();
         TblClassroomEntity currentClassroomEntity = classroomDAO.getClassroomByName(currentClassroom);
         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(changeClassroom);
         List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomEntity.getId());
@@ -76,6 +84,14 @@ public class ChangeRoomController {
                     + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
             scheduleDAO.persist(newSchedule);
             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+        }
+        //update status report
+        List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroomEntity.getId());
+        for(TblReportEntity tblReportEntity:tblReportEntities){
+            tblReportEntity.setChangedRoom(changeClassroom);
+            tblReportEntity.setStatus(2);
+            reportDAO.merge(tblReportEntity);
         }
         return true;
     }

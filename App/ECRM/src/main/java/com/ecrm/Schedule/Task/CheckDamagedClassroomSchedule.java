@@ -1,30 +1,18 @@
 package com.ecrm.Schedule.Task;
 
-import com.ecrm.DAO.Impl.ClassroomDAOImpl;
-import com.ecrm.DAO.Impl.EquipmentDAOImpl;
-import com.ecrm.DAO.Impl.ScheduleDAOImpl;
-import com.ecrm.DAO.Impl.UserDAOImpl;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblEquipmentEntity;
-import com.ecrm.Entity.TblScheduleEntity;
-import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.Controller.GCMController;
+import com.ecrm.DAO.Impl.*;
+import com.ecrm.DAO.ScheduleDAO;
+import com.ecrm.Entity.*;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
-import com.ecrm.hibernate.HibernateUtils;
-import com.twilio.sdk.TwilioRestException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
 
@@ -42,46 +30,60 @@ public class CheckDamagedClassroomSchedule {
     UserDAOImpl userDAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;
+    @Autowired
+    ReportDAOImpl reportDAO;
 
+        
     @Scheduled(cron = "${cron.expression}")
-    @Async
-    @Transactional
-    public void checkChangeClassroom() throws TwilioRestException {
+    public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
+        GCMController gcmController = new GCMController();
         if (localDate.getDayOfWeek() != 7) {
             int time = localTime.getHourOfDay() + localTime.getMinuteOfHour() + localTime.getSecondOfMinute();
             if (time == 6) {
                 System.out.println("Task check change room run!!! Current time is : " + new Date());
                 //tim nhung phong bi hu hai ma chua sua
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
-                //tim nhung phong chua hu hai
-                List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
+
                 for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
-                    SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
-                    Session session = sessionFactory.openSession();
-                    Transaction tx = session.beginTransaction();
+                    //tim nhung phong chua hu hai
+                    List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
                     int classroomId = classroomEntity.getId();
                     List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleInClassroom(classroomId);
-                    List<String> availableClassroom = new ArrayList<String>();
-                    for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
-                        List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
-                        if (!classroom.isEmpty()) {
-                            if (availableClassroom.isEmpty()) {
-                                availableClassroom = classroom;
-                            } else {
-                                Iterator<String> it = availableClassroom.iterator();
-                                while (it.hasNext()) {
-                                    String room = it.next();
-                                    if (!classroom.contains(room)) {
-                                        it.remove();
+                    String classroomName = "";
+                    List<TblReportEntity> liveReportsInRoom = reportDAO.getLiveReportsInRoom(classroomEntity.getId());
+                    for (TblReportEntity tblReportEntity : liveReportsInRoom) {
+                        if (tblReportEntity.getChangedRoom() != null || tblReportEntity.getChangedRoom().trim().length() != 0) {
+                            classroomName = tblReportEntity.getChangedRoom();
+                        }
+                    }
+                    TblClassroomEntity changeClassroomEntity = new TblClassroomEntity();
+                    if (classroomName.trim().length() != 0) {
+                        changeClassroomEntity = classroomDAO.getClassroomByName(classroomName);
+                    } else {
+                        List<String> availableClassroom = new ArrayList<String>();
+                        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
+                            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+                            if (!classroom.isEmpty()) {
+                                if (availableClassroom.isEmpty()) {
+                                    availableClassroom = classroom;
+                                } else {
+                                    Iterator<String> it = availableClassroom.iterator();
+                                    while (it.hasNext()) {
+                                        String room = it.next();
+                                        if (!classroom.contains(room)) {
+                                            it.remove();
+                                        }
                                     }
                                 }
                             }
                         }
+                        if (!availableClassroom.isEmpty()) {
+                            changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+                        }
                     }
-                    if (!availableClassroom.isEmpty()) {
-                        TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+                    if (changeClassroomEntity != null) {
                         for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                             tblScheduleEntity.setIsActive(false);
                             scheduleDAO.merge(tblScheduleEntity);
@@ -93,12 +95,12 @@ public class CheckDamagedClassroomSchedule {
                                     tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
                                     + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
                             scheduleDAO.persist(newSchedule);
-                            /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);*/
+                            SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                         }
                     }
-                    tx.commit();
-                    session.close();
                 }
+
             }
             if (time == 7) {
                 System.out.println("Task check time using run!!! Current time is: " + new Date());

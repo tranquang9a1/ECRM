@@ -39,9 +39,8 @@ public class Equipment implements Parcelable {
         this.equipmentId = equipmentId;
     }
 
-    public Equipment(int reportId, int equipmentId, String equipmentName, int quantity, boolean status, String evaluate, String damaged) {
+    public Equipment(int reportId, String equipmentName, int quantity, boolean status, String evaluate, String damaged) {
         this.reportId = reportId;
-        this.equipmentId = equipmentId;
         this.equipmentName = equipmentName;
         this.quantity = quantity;
         this.status = status;

@@ -77,8 +77,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Đề xuất hệ thống"
+                            android:text="Đề xuất hệ thống:"
                             android:id="@+id/textView16"
+                            android:textStyle="bold" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Trạng thái: "
+                            android:id="@+id/textView17" android:visibility="gone"
                             android:textStyle="bold" />
 
 
@@ -148,25 +155,22 @@
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="Đổi phòng "
-                                android:id="@+id/textView26"
+                                android:id="@+id/txtSuggest"
                                 android:textStyle="bold"
                                 />
-                        <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="503"
-                                android:id="@+id/txtNewRoom"
-                                android:textStyle="bold"
-                                />
-                        <Button android:id="@+id/choose_room_button"
-                                android:layout_width="50dp" android:layout_height="wrap_content"
-                                android:layout_gravity="bottom" android:layout_alignParentBottom="true"
-                                android:layout_alignParentStart="true"/>
+
+
 
 
                     </LinearLayout>
-
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Đổi phòng sang 303"
+                            android:id="@+id/txtStatus"
+                            android:textStyle="bold" android:visibility="gone"
+                            />
 
                 </LinearLayout>
             </LinearLayout>
@@ -181,7 +185,7 @@
 
             <com.fu.group10.apps.staff.component.InfinityListView
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
+                    android:layout_height="360dp"
                     android:id="@+id/listView"
                     android:paddingTop="20dp"
                     android:paddingBottom="@dimen/ad_height"
@@ -211,15 +215,22 @@
 
 
     </LinearLayout>
-    <Button android:id="@+id/resolve_button" style="?android:textAppearanceSmall"
+    <Button android:id="@+id/view_map_button" style="?android:textAppearanceSmall"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/action_resolve"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true" android:layout_toEndOf="@+id/view_map_button"/>
-    <Button android:id="@+id/view_map_button" style="?android:textAppearanceSmall"
+            android:layout_gravity="bottom" android:visibility="visible"
+            android:layout_alignParentBottom="true" android:layout_toEndOf="@+id/resolve_button"/>
+    <Button android:id="@+id/resolve_button" style="?android:textAppearanceSmall"
             android:layout_width="186dp" android:layout_height="wrap_content"
+            android:text="@string/action_choose_room"
+            android:layout_gravity="bottom" android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" android:visibility="visible"/>
+
+    <Button android:id="@+id/view_map_button1" style="?android:textAppearanceSmall"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/action_view_map"
             android:layout_gravity="bottom" android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true" android:visibility="gone"
+            />
 
 </RelativeLayout>

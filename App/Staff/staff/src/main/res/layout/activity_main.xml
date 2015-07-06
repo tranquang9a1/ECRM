@@ -1,22 +1,49 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/background"
-              android:orientation="vertical"
-              tools:context="com.hac.apps.xemthethao.app.activity.MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity"
+                android:layout_width="match_parent">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       android:id="@+id/tool_bar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:background="?attr/colorPrimary"
+                                       android:elevation="10dp"
+                                       android:minHeight="?attr/actionBarSize"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:id="@+id/container">
-        <fragment android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:id="@+id/liveFragment"
-                  android:name="com.fu.group10.apps.staff.fragment.TestFragment"
-                  tools:layout="@layout/fragment_report"/>
+    <android.support.v4.widget.DrawerLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tool_bar">
 
-    </FrameLayout>
+        <!-- Framelayout to display Fragments -->
+        <FrameLayout
+                android:id="@+id/frame_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        <!-- Listview to display slider menu -->
+        <ListView
+                android:id="@+id/list_slidermenu"
+                android:layout_width="240dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:choiceMode="singleChoice"
+                android:divider="@color/list_divider"
+                android:dividerHeight="1dp"
+                android:listSelector="@drawable/list_selector"
+                android:background="@color/list_background"/>
+    </android.support.v4.widget.DrawerLayout>
 
 
-</LinearLayout>
+
+
+
+
+</RelativeLayout>

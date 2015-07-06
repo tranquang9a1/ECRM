@@ -7,6 +7,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.fu.group10.apps.staff.R;
+import com.fu.group10.apps.staff.Utils.Constants;
 
 /**
  * Created by QuangTV on 6/5/2015.
@@ -15,7 +16,7 @@ public class MapActivity extends Activity {
 
 
     private WebView classmap;
-    private String id;
+    private Integer id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class MapActivity extends Activity {
     }
     @SuppressLint("SetJavaScriptEnabled")
     private void initView() {
-        id = getIntent().getExtras().getString("id");
+        id = getIntent().getExtras().getInt("id");
         classmap = (WebView) findViewById(R.id.classmap);
         classmap.getSettings().setJavaScriptEnabled(true);
         classmap.setWebViewClient(new WebViewClient());
@@ -37,7 +38,8 @@ public class MapActivity extends Activity {
 
     private void refreshMap() {
         classmap.clearCache(true);
-        classmap.loadUrl("http://app.megahd.vn/api/capstone/test.html");
+        String url = Constants.API_LOAD_MAP + id;
+        classmap.loadUrl(url);
     }
 
 }

@@ -1,19 +1,26 @@
 package com.fu.group10.apps.staff.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.fu.group10.apps.staff.R;
+import com.fu.group10.apps.staff.Utils.Constants;
+import com.fu.group10.apps.staff.Utils.ParseUtils;
+import com.fu.group10.apps.staff.Utils.RequestSender;
 import com.fu.group10.apps.staff.adapter.ResolveAdapter;
 import com.fu.group10.apps.staff.component.InfinityListView;
 import com.fu.group10.apps.staff.fragment.ChooseRoomDialogFragment;
 import com.fu.group10.apps.staff.fragment.ResolveDialogFragment;
 import com.fu.group10.apps.staff.model.ReportInfo;
+import com.fu.group10.apps.staff.model.Result;
 
 /**
  * Created by QuangTV on 6/13/2015.
@@ -26,11 +33,19 @@ public class ResolveReportActivity extends Activity {
     TextView txtEvaluate;
     TextView txtUser;
     TextView txtNewRoom;
+    TextView txtSuggest;
+    TextView txtStatus;
+    TextView txtStatusDes;
 
     Button btnChooseRoom;
     Button btnViewMap;
     Button btnResolve;
+    Button btnViewMapFull;
     private String resolveMsg;
+    String[] items;
+    String current;
+    ProgressDialog progress;
+    String type;
 
     private ChooseRoomDialogFragment chooseRoomDialog;
     private ResolveDialogFragment resolveDialog;
@@ -46,44 +61,43 @@ public class ResolveReportActivity extends Activity {
 
     private void initView() {
 
+        progress = ProgressDialog.show(this, "", "Đang tải thông tin báo cáo", true);
         txtClassroom = (TextView) findViewById(R.id.txtClassroom);
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtDamageLevel = (TextView) findViewById(R.id.txtDamageLevel);
         txtEvaluate = (TextView) findViewById(R.id.txtEvaluate);
         txtUser = (TextView) findViewById(R.id.txtUser);
-        txtNewRoom = (TextView) findViewById(R.id.txtNewRoom);
-
-        btnChooseRoom = (Button) findViewById(R.id.choose_room_button);
-        btnResolve = (Button) findViewById(R.id.resolve_button);
-        btnViewMap = (Button) findViewById(R.id.view_map_button);
-
+        txtStatus = (TextView) findViewById(R.id.txtStatus);
+        txtSuggest = (TextView) findViewById(R.id.txtSuggest);
+        btnChooseRoom = (Button) findViewById(R.id.resolve_button);
+        btnResolve = (Button) findViewById(R.id.view_map_button);
+        btnViewMapFull = (Button) findViewById(R.id.view_map_button1);
+        txtStatusDes = (TextView) findViewById(R.id.textView17);
 
         final ReportInfo report = getIntent().getParcelableExtra("report");
-        txtClassroom.setText(report.getRoomId()+ "");
+        type  = getIntent().getExtras().getString("type");
+
+        txtClassroom.setText(report.getRoomName());
         txtTime.setText(report.getTimeReport());
         txtDamageLevel.setText(report.getDamageLevel() + "");
+
+
+
+
+
         txtEvaluate.setText(report.getEvaluate());
-        txtNewRoom.setText(report.getSystemEvaluate() + "");
         txtUser.setText(report.getUserReport());
         listView = (InfinityListView) findViewById(R.id.listView);
         ResolveAdapter adapter = new ResolveAdapter(getApplicationContext(), report.getEquipments());
         listView.setAdapter(adapter);
-        final String[] items = getResources().getStringArray(R.array.list);
-        btnChooseRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseRoomDialog = new ChooseRoomDialogFragment();
-                chooseRoomDialog.setParam(items, new ChooseRoomDialogFragment.OnListChooseListener() {
-                    @Override
-                    public void onListChoose(String name) {
-                        txtNewRoom.setText(name + "");
-                    }
-                });
-                chooseRoomDialog.show(getFragmentManager(), "Choose Room");
-
-            }
-        });
-
+        checkSchedule(report.getRoomId()+"");
+        current = report.getRoomName();
+        if (report.getDamageLevel() > 30) {
+            txtSuggest.setText("Đổi phòng");
+        } else {
+            txtSuggest.setText("Tiếp tục học");
+        }
+        setSuggest(report);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,29 +116,31 @@ public class ResolveReportActivity extends Activity {
             }
         });
 
+
+
+
+        btnChooseRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgress();
+                getAvailableRoom(report.getRoomId()+ "");
+            }
+        });
+
         btnResolve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resolveDialog = new ResolveDialogFragment();
-                resolveDialog.setParams(ResolveReportActivity.this,null, null, new ResolveDialogFragment.OnMsgEnteredListener() {
-                    @Override
-                    public void onMsgEnteredListener(String newName) {
-                        resolveMsg = newName == null ? "" : newName;
-                    }
-                });
-
-                resolveDialog.show(getFragmentManager(), "Resolve all");
+                progressResolve();
+                resolve(report.getRoomId());
             }
         });
 
-        btnViewMap.setOnClickListener(new View.OnClickListener() {
+        btnViewMapFull.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
                 openMap(report.getRoomId());
             }
         });
-
     }
 
     private void openMap(int id) {
@@ -133,5 +149,118 @@ public class ResolveReportActivity extends Activity {
         startActivity(intent);
 
 
+    }
+
+    private void resolve(int roomId) {
+        String url = Constants.API_RESOLVE_REPORT + roomId;
+        RequestSender sender = new RequestSender();
+        sender.start(url, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                Result res = ParseUtils.parseResult(result);
+                progress.dismiss();
+                if (res.getError_code() == 100) {
+                    openHome();
+                } else {
+                    Toast.makeText(ResolveReportActivity.this, "Có lỗi xảy ra" + res.getError(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+
+
+    public void showProgress() {
+        progress = ProgressDialog.show(this, "", "Đang tải phòng học", true);
+    }
+    public void progressResolve() {
+        progress = ProgressDialog.show(this, "", "Đang khắc phục", true);
+    }
+    public void openHome() {
+        Intent intent = new Intent(ResolveReportActivity.this, ListRoomActivity.class);
+        setResult(RESULT_OK);
+        startActivity(intent);
+        finish();
+    }
+
+    public void getAvailableRoom(String roomId) {
+        String url = Constants.API_GET_AVAILABLE_ROOM + roomId;
+        RequestSender sender = new RequestSender();
+        sender.start(url, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                items = ParseUtils.parseListRoom(result);
+                progress.dismiss();
+                if (items != null) {
+                    chooseRoomDialog = new ChooseRoomDialogFragment();
+                    chooseRoomDialog.setParam(items, current);
+                    chooseRoomDialog.show(getFragmentManager(), "ChooseRoom");
+                } else {
+                    Toast.makeText(getApplicationContext(), "Hiện tại không có phòng trống", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+    }
+
+    public void checkSchedule(String roomId) {
+        String url = Constants.API_CHECK_SCHEDULE + roomId;
+        RequestSender sender = new RequestSender();
+        sender.start(url, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                if (result.equalsIgnoreCase("false")) {
+                    if (type.equalsIgnoreCase("finish") || type.equalsIgnoreCase("removed")) {
+                        btnChooseRoom.setVisibility(View.GONE);
+                        btnResolve.setVisibility(View.GONE);
+                    } else {
+                        btnChooseRoom.setVisibility(View.GONE);
+                        btnResolve.setVisibility(View.VISIBLE);
+                    }
+
+                } else {
+                    if (type.equalsIgnoreCase("new")) {
+                        btnChooseRoom.setVisibility(View.VISIBLE);
+                        btnResolve.setVisibility(View.VISIBLE);
+                    } else if (type.equalsIgnoreCase("going")) {
+                        btnChooseRoom.setVisibility(View.GONE);
+                        btnResolve.setVisibility(View.VISIBLE);
+                    } else {
+                        btnChooseRoom.setVisibility(View.GONE);
+                        btnResolve.setVisibility(View.GONE);
+                    }
+
+                }
+                progress.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
+    }
+
+
+    public void setSuggest(ReportInfo report) {
+        if (type.equalsIgnoreCase("new")) {
+            txtStatus.setVisibility(View.GONE);
+            btnChooseRoom.setVisibility(View.VISIBLE);
+            btnResolve.setVisibility(View.VISIBLE);
+        } else if (type.equalsIgnoreCase("finish")) {
+            txtStatus.setText("Phòng đã được sửa");
+            txtStatus.setVisibility(View.VISIBLE);
+            txtStatusDes.setVisibility(View.VISIBLE);
+        } else if (type.equalsIgnoreCase("going")) {
+            txtStatus.setText("Đổi phòng sang " + report.getChangedRoom());
+            txtStatus.setVisibility(View.VISIBLE);
+            txtStatusDes.setVisibility(View.VISIBLE);
+        } else {
+            txtStatus.setText("Báo cáo đã bị xóa");
+            txtStatus.setVisibility(View.VISIBLE);
+            txtStatusDes.setVisibility(View.VISIBLE);
+        }
     }
 }

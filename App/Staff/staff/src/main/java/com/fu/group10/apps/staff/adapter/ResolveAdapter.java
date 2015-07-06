@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.fu.group10.apps.staff.R;
+import com.fu.group10.apps.staff.Utils.Constants;
 import com.fu.group10.apps.staff.Utils.ParseUtils;
 import com.fu.group10.apps.staff.component.InfinityListView;
 import com.fu.group10.apps.staff.model.Equipment;
@@ -78,8 +79,15 @@ public class ResolveAdapter extends BaseAdapter implements InfinityListView.IInf
 
         holder.equipmentName.setText(items.get(i).getEquipmentName());
         holder.quantity.setText(items.get(i).getQuantity() + "");
-        holder.damagedLevel.setText(items.get(i).getDamaged());
-        holder.resolveDes.setText(items.get(i).getEvaluate());
+        holder.damagedLevel.setText(Constants.convertDamageLevel(Integer.parseInt(items.get(i).getDamaged())));
+        if (!items.get(i).getEvaluate().equalsIgnoreCase("null")) {
+            holder.resolveDes.setVisibility(View.VISIBLE);
+            holder.resolveDes.setText(items.get(i).getEvaluate());
+        } else {
+            holder.resolveDes.setVisibility(View.GONE);
+        }
+
+
         holder.equipmentImg.setImageResource(setImage(items.get(i)));
 
 
@@ -120,7 +128,7 @@ public class ResolveAdapter extends BaseAdapter implements InfinityListView.IInf
     public int setImage(Equipment report) {
         if (report.getEquipmentName().equalsIgnoreCase("Bàn")) {
             return R.drawable.ic_table1;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Quạt")) {
+        } else if (report.getEquipmentName().equalsIgnoreCase("Máy Quạt")) {
             return R.drawable.ic_fan;
         } else if (report.getEquipmentName().equalsIgnoreCase("Máy Lạnh")) {
             return R.drawable.ic_air;
@@ -128,6 +136,8 @@ public class ResolveAdapter extends BaseAdapter implements InfinityListView.IInf
             return R.drawable.ic_tv;
         } else if (report.getEquipmentName().equalsIgnoreCase("Ghế")) {
             return R.drawable.ic_chair;
+        } else if (report.getEquipmentName().equalsIgnoreCase("Bóng Đèn")) {
+            return R.mipmap.ic_bulb;
         } else if (report.getEquipmentName().equalsIgnoreCase("Máy Chiếu")) {
             return R.drawable.ic_projector;
         } else  {

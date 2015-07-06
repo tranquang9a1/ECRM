@@ -77,7 +77,7 @@
                     android:textColor="@color/font"
                     android:textSize="@dimen/room_id_size"
                     android:paddingBottom="5dp"
-                    android:text="Mức độ hư hỏng: "/>
+                    android:text="Mức độ hư hại: "/>
 
             <TextView
                     android:id="@+id/damagedLevel"
@@ -108,7 +108,7 @@
                     android:textSize="@dimen/room_id_size"
                     android:paddingBottom="5dp"
                     android:text="Mua phụ kiện thay mới!"
-                    android:visibility="invisible"/>
+                    android:visibility="gone"/>
 
 
 

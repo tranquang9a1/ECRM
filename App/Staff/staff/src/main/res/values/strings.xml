@@ -11,7 +11,7 @@
     <string name="incorrect_password">Password is incorrect</string>
     <string name="field_required">This field is required</string>
     <string name="checkingConnection">Checking connection…</string>
-    <string name="noConnection">Cannot connect to internet! Please try again</string>
+    <string name="noConnection">Không thể kết nối đến internet!</string>
     <string name="tryAgain">Try again</string>
     <string name="search_movie_hint">Search!</string>
     <string name="tabAccount">ACCOUNT</string>
@@ -19,14 +19,14 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="no_report_found">No Report Found</string>
+    <string name="no_report_found">Không có báo cáo nào</string>
     <string name="highlight_image">Highlight Image</string>
-    <string name="delete">DELETE</string>
-    <string name="fixed">FIXED</string>
+    <string name="delete">Xóa</string>
+    <string name="fixed">Đã sửa</string>
     <string name="enter_keyword">Nhập lớp học</string>
     <string name="action_view_map">Xem bản đồ</string>
-    <string name="action_choose_room">Chọn phòng</string>
-    <string name="action_resolve">Sửa</string>
+    <string name="action_choose_room">Đổi phòng học</string>
+    <string name="action_resolve">Khắc phục</string>
     <string name="choose_room_dialog_title">Chọn phòng học</string>
     <string name="alert">Thông báo</string>
     <string name="cancel">Hủy</string>
@@ -34,4 +34,31 @@
     <string name="resolve_hint">Nhập cách sửa chửa</string>
     <string name="resolve_title">Nhập cách sửa chữa</string>
     <string name="action_ok">OK</string>
+
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+    <string name="logout">Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item >Trang chủ</item>
+        <item >Báo cáo đang sửa</item>
+        <item >Báo cáo đã sửa</item>
+        <item >Báo cáo đã xóa</item>
+        <item >Đăng xuất</item>
+
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_air</item>
+        <item>@drawable/ic_chair</item>
+        <item>@drawable/ic_fan</item>
+        <item>@drawable/ic_projector</item>
+        <item>@drawable/ic_projector</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
 </resources>

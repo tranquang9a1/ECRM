@@ -79,7 +79,7 @@ public class ParseUtils {
                 for (int j = 0; j < equipments.length(); j++) {
                     JSONObject equipment = equipments.getJSONObject(j);
 
-                    equipmentList.add(new Equipment(equipment.getInt("reportId"), equipment.getInt("equipmentId"), equipment.getString("equipmentName"),
+                    equipmentList.add(new Equipment(equipment.getInt("reportId"), equipment.getString("equipmentName"),
                             equipment.getInt("quantity"), equipment.getBoolean("status"), equipment.getString("evaluate"),
                             equipment.getString("damage")));
 
@@ -88,11 +88,12 @@ public class ParseUtils {
 
                 reports.add(new ReportInfo(
                         result.getJSONObject(i).getInt("roomId"),
+                        result.getJSONObject(i).getString("roomName"),
                         result.getJSONObject(i).getString("timeReport"),
                         result.getJSONObject(i).getInt("damageLevel"),
                         result.getJSONObject(i).getString("evaluate"),
                         result.getJSONObject(i).getString("userReport"),
-                        result.getJSONObject(i).getInt("systemEvaluate"),
+                        result.getJSONObject(i).getInt("systemEvaluate"), result.getJSONObject(i).getString("changedRoom"),
                         equipmentList
                 ));
             }
@@ -122,5 +123,26 @@ public class ParseUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String[] parseListRoom(String json) {
+
+        try {
+            JSONArray jsonListRoom = new JSONArray(json);
+            if (jsonListRoom.length() == 0) {
+                return null;
+            }
+            String[] result = new String[jsonListRoom.length()];
+            for (int i = 0; i < jsonListRoom.length(); i++) {
+                result[i] = jsonListRoom.getString(i);
+            }
+            return result;
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
     }
 }

@@ -290,8 +290,14 @@
 
                             <div class="group-control">
                                 <div class="name">Tài khoản(*):</div>
-                                <div class="control">
-                                    <input type="text" name="username">
+
+                                <div class="ui-widget">
+                                    <select id="ui-username" name="username">
+                                        <option value=""></option>
+                                        <c:forEach items="${teachers}" var="t">
+                                            <option value="${t.username}">${t.username}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
                             </div>
 
@@ -327,7 +333,7 @@
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
                     || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )" name="numberOfStudent" id="numberOfStuden" t>
+                    || (event.keyCode==46) )" name="numberOfStudent" id="numberOfStudent">
                                 </div>
                             </div>
                             <div class="group-control">

@@ -135,6 +135,8 @@ $(function () {
     $("#combobox2").combobox();
     $("#all").combobox();
     $("#avai").combobox();
+    $("#ui-username").combobox();
+
 });
 $(function () {
     $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});

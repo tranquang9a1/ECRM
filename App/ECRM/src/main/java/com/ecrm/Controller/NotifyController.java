@@ -198,7 +198,7 @@ public class NotifyController {
             TblScheduleEntity newSchedule = new TblScheduleEntity(schedule.getUsername(), changeClassroom.getId(),
                     schedule.getNumberOfStudents(), "Thay đổi phòng từ phòng " + schedule.getTblClassroomByClassroomId().getName()
                     + " sang phòng " + changeClassroom.getName(), schedule.getTimeFrom(),
-                    schedule.getSlots(), schedule.getDate(), true);
+                    schedule.getSlots(), schedule.getDate(), true, schedule.getScheduleConfigId());
             scheduleDAO.persist(newSchedule);
         }
 

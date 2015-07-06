@@ -269,9 +269,18 @@ public class ScheduleController {
                     TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
                             teachingDate, true, scheduleConfigId);
                     if (all.equals("0")) {
-                        scheduleDAO.persist(tblScheduleEntity);
+                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
+                        if (!tblScheduleEntities.isEmpty()) {
+                            tblScheduleEntities.get(0).setIsActive(false);
+                            scheduleDAO.merge(tblScheduleEntities.get(0));
+                            tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
+                            scheduleDAO.persist(tblScheduleEntity);
+                        } else {
+                            tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
+                            scheduleDAO.persist(tblScheduleEntity);
+                        }
                     } else {
-                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, Integer.parseInt(all));
+                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
                         if (!tblScheduleEntities.isEmpty()) {
                             tblScheduleEntities.get(0).setIsActive(false);
                             scheduleDAO.merge(tblScheduleEntities.get(0));
@@ -288,9 +297,18 @@ public class ScheduleController {
                 TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
                         teachingDate, true, scheduleConfigId);
                 if (all.equals("0")) {
-                    scheduleDAO.persist(tblScheduleEntity);
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username,dateFrom, scheduleConfigId);
+                    if (!tblScheduleEntities.isEmpty()) {
+                        tblScheduleEntities.get(0).setIsActive(false);
+                        scheduleDAO.merge(tblScheduleEntities.get(0));
+                        tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
+                        scheduleDAO.persist(tblScheduleEntity);
+                    } else {
+                        tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
+                        scheduleDAO.persist(tblScheduleEntity);
+                    }
                 } else {
-                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, Integer.parseInt(all));
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username,dateFrom, scheduleConfigId);
                     if (!tblScheduleEntities.isEmpty()) {
                         tblScheduleEntities.get(0).setIsActive(false);
                         scheduleDAO.merge(tblScheduleEntities.get(0));
@@ -414,6 +432,7 @@ public class ScheduleController {
             request.setAttribute("DATEFROM", datefrom);
             request.setAttribute("DATETO", dateto);
             request.setAttribute("ISEMPTY", isEmpty);
+
 
             return "Staff_MappingSchedule";
         } else {

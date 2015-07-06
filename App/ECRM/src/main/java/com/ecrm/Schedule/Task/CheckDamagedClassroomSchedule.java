@@ -54,7 +54,7 @@ public class CheckDamagedClassroomSchedule {
                     String classroomName = "";
                     List<TblReportEntity> liveReportsInRoom = reportDAO.getLiveReportsInRoom(classroomEntity.getId());
                     for (TblReportEntity tblReportEntity : liveReportsInRoom) {
-                        if (tblReportEntity.getChangedRoom() != null || tblReportEntity.getChangedRoom().trim().length() != 0) {
+                        if (tblReportEntity.getChangedRoom() != null) {
                             classroomName = tblReportEntity.getChangedRoom();
                         }
                     }
@@ -90,13 +90,13 @@ public class CheckDamagedClassroomSchedule {
                             TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
                                     tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
                                     + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
-                                    tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
+                                    tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
                             String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                                     tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
                                     + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
                             scheduleDAO.persist(newSchedule);
-                            SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                            /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());*/
                         }
                     }
                 }

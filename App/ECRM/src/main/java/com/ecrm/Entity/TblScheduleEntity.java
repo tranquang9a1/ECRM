@@ -19,7 +19,9 @@ public class TblScheduleEntity {
     private int slots;
     private Date date;
     private boolean isActive;
+    private Integer scheduleConfigId;
     private TblClassroomEntity tblClassroomByClassroomId;
+    private TblScheduleConfigEntity tblScheduleConfigByScheduleConfigId;
     private TblUserEntity tblUserByUserId;
 
     @Id
@@ -112,7 +114,15 @@ public class TblScheduleEntity {
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
+    @Basic
+    @Column(name = "ScheduleConfigId")
+    public Integer getScheduleConfigId() {
+        return scheduleConfigId;
+    }
 
+    public void setScheduleConfigId(Integer scheduleConfigId) {
+        this.scheduleConfigId = scheduleConfigId;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,7 +174,15 @@ public class TblScheduleEntity {
     public void setTblUserByUserId(TblUserEntity tblUserByUserId) {
         this.tblUserByUserId = tblUserByUserId;
     }
+    @ManyToOne
+    @JoinColumn(name = "ScheduleConfigId", referencedColumnName = "Id" , insertable = false, updatable = false)
+    public TblScheduleConfigEntity getTblScheduleConfigByScheduleConfigId() {
+        return tblScheduleConfigByScheduleConfigId;
+    }
 
+    public void setTblScheduleConfigByScheduleConfigId(TblScheduleConfigEntity tblScheduleConfigByScheduleConfigId) {
+        this.tblScheduleConfigByScheduleConfigId = tblScheduleConfigByScheduleConfigId;
+    }
     public TblScheduleEntity() {
     }
 
@@ -178,5 +196,17 @@ public class TblScheduleEntity {
         this.slots = slots;
         this.date = date;
         this.isActive = isActive;
+    }
+    public TblScheduleEntity(String username, int classroomId, int numberOfStudents, String note, Time timeFrom,
+                             int slots, Date date, boolean isActive, int scheduleConfigId) {
+        this.username = username;
+        this.classroomId = classroomId;
+        this.numberOfStudents = numberOfStudents;
+        this.note = note;
+        this.timeFrom = timeFrom;
+        this.slots = slots;
+        this.date = date;
+        this.isActive = isActive;
+        this.scheduleConfigId = scheduleConfigId;
     }
 }

@@ -19,9 +19,9 @@ public interface ScheduleDAO {
 
     public List<TblScheduleEntity> getSchedulesFinishOfUser(String username);
 
-    public List<TblScheduleEntity> findScheduleWithDate(String username, String date, String timeFrom);
+    public List<TblScheduleEntity> findScheduleWithDate(String username, String date, int scheduleConfigId);
 
-    public List<TblScheduleEntity> findSpecificSchedule(String date, String timeFrom, int classroomId);
+    public List<TblScheduleEntity> findSpecificSchedule(String date, int scheduleConigId, int classroomId);
 
     public int findScheduleAfterCurrentTime(int classroomId);
 }

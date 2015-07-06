@@ -6,23 +6,28 @@ import java.util.List;
  * Created by Htang on 7/4/2015.
  */
 public class TimeSchedule {
-    private String time;
+    private String timeFrom;
+    private String timeTo;
+    private int scheduleConfigId;
     private List<TeacherSchedule> teacherSchedules;
 
     public TimeSchedule() {
     }
 
-    public TimeSchedule(String time, List<TeacherSchedule> teacherSchedules) {
-        this.time = time;
-        this.teacherSchedules = teacherSchedules;
+    public String getTimeFrom() {
+        return timeFrom;
     }
 
-    public String getTime() {
-        return time;
+    public void setTimeFrom(String timeFrom) {
+        this.timeFrom = timeFrom;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public String getTimeTo() {
+        return timeTo;
+    }
+
+    public void setTimeTo(String timeTo) {
+        this.timeTo = timeTo;
     }
 
     public List<TeacherSchedule> getTeacherSchedules() {
@@ -31,5 +36,13 @@ public class TimeSchedule {
 
     public void setTeacherSchedules(List<TeacherSchedule> teacherSchedules) {
         this.teacherSchedules = teacherSchedules;
+    }
+
+    public int getScheduleConfigId() {
+        return scheduleConfigId;
+    }
+
+    public void setScheduleConfigId(int scheduleConfigId) {
+        this.scheduleConfigId = scheduleConfigId;
     }
 }

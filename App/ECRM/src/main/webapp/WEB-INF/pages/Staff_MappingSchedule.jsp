@@ -48,11 +48,13 @@
                     padding: 5px 10px;
                     width: 170px;
                 }
-                .inline{
+
+                .inline {
                     display: inline-block;
                     margin-left: 15px;
                 }
-                .inline div{
+
+                .inline div {
                     margin-bottom: 5px;
                 }
             </style>
@@ -97,6 +99,7 @@
         <c:set var="teacher" value="${requestScope.TEACHER}"/>
         <c:set var="classroom" value="${requestScope.CLASSROOM}"/>
         <c:set var="isEmpty" value="${requestScope.ISEMPTY}"/>
+        <c:set var="scheduleConfig" value="${requestScope.SCHEDULECONFIG}"/>
 
         <div class="contain-layout">
             <jsp:include flush="true" page="Header.jsp"/>
@@ -194,56 +197,55 @@
                 </div>
             </form>
             <c:if test="${not isEmpty}">
-
-                <div class="component">
+                <c:if test="${not empty schedules}">
+                    <div class="component">
                     <div style="background-color: #ffffff;">
                         <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px;font-size: medium;
   font-weight: bold;">
                             LỊCH
                         </header>
                     </div>
-                    <c:if test="${not empty schedules}">
-                        <table class="overflow-y">
-                            <thead>
-                            <tr>
+                    <table class="overflow-y">
+                        <thead>
+                        <tr>
 
-                                <th>Phòng</th>
-                                <th>Ngày</th>
+                            <th>Phòng</th>
+                            <th>Ngày</th>
 
-                                <c:forEach items="${teachingDate}" var="td">
-                                    <th>${td}</th>
-                                </c:forEach>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach var="cs" items="${schedules}">
-                                <tr>
-                                    <th rowspan="${cs.rowspan}">${cs.roomName}</th>
-                                </tr>
-
-                                <c:forEach var="tis" items="${cs.timeSchedules}">
-                                    <c:if test="${ not empty tis.teacherSchedules}">
-                                        <tr>
-                                            <td bgcolor="yellow">${tis.time}</td>
-
-                                            <c:forEach items="${teachingDate}" var="td">
-                                                <td>
-                                                    <c:forEach var="tes" items="${tis.teacherSchedules}">
-                                                        <c:if test="${tes.date == td.toString()}">
-                                                            ${tes.teacher}
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </td>
-                                            </c:forEach>
-                                        </tr>
-
-                                    </c:if>
-                                </c:forEach>
+                            <c:forEach items="${teachingDate}" var="td">
+                                <th>${td}</th>
                             </c:forEach>
-                            </tbody>
-                        </table>
-                    </c:if>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="cs" items="${schedules}">
+                            <tr>
+                                <th rowspan="${cs.rowspan}">${cs.roomName}</th>
+                            </tr>
+
+                            <c:forEach var="tis" items="${cs.timeSchedules}">
+                                <c:if test="${ not empty tis.teacherSchedules}">
+                                    <tr>
+                                        <td bgcolor="yellow">${tis.timeFrom} - ${tis.timeTo}</td>
+
+                                        <c:forEach items="${teachingDate}" var="td">
+                                            <td>
+                                                <c:forEach var="tes" items="${tis.teacherSchedules}">
+                                                    <c:if test="${tes.date == td.toString()}">
+                                                        ${tes.teacher}
+                                                    </c:if>
+                                                </c:forEach>
+                                            </td>
+                                        </c:forEach>
+                                    </tr>
+
+                                </c:if>
+                            </c:forEach>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </c:if>
                 </div>
             </c:if>
             <div class="modal modal-small" id="Upload">
@@ -297,12 +299,9 @@
                                 <div class="name">Tiết bắt đầu(*):</div>
                                 <div class="control">
                                     <select name="slot" id="slot">
-                                        <option value="1">1: 07:00:00</option>
-                                        <option value="2">2: 08:45:00</option>
-                                        <option value="3">3: 10:30:00</option>
-                                        <option value="4">4: 12:30:00</option>
-                                        <option value="5">5: 14:15:00</option>
-                                        <option value="6">6: 16:00:00</option>
+                                        <c:forEach items="${scheduleConfig}" var="sc">
+                                            <option value="${sc.slot}">${sc.slot} - ${sc.timeFrom}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>

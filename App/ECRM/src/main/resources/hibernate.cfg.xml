@@ -4,12 +4,12 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://localhost:3306/ecrm?useEncoding=true&amp;characterEncoding=UTF-8</property>
+    <property name="connection.url">jdbc:mysql://localhost:3306/ecrm</property>
 
     <!-- SQL dialect -->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <mapping class="com.ecrm.Entity.TblClassroomEntity"/>
-
     <mapping class="com.ecrm.Entity.TblEquipmentEntity"/>
     <mapping class="com.ecrm.Entity.TblEquipmentCategoryEntity"/>
     <mapping class="com.ecrm.Entity.TblReportEntity"/>
@@ -23,6 +23,7 @@
     <mapping class="com.ecrm.Entity.TimeSchedule"/>
     <mapping class="com.ecrm.Entity.TeacherSchedule"/>
     <mapping class="com.ecrm.Entity.TblNotificationEntity"/>
+    <mapping class="com.ecrm.Entity.TblScheduleConfigEntity"/>
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->

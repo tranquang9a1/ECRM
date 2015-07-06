@@ -102,21 +102,21 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         return result;
     }
 
-    public List<TblScheduleEntity> findScheduleWithDate(String username, String date, String timeFrom){
+    public List<TblScheduleEntity> findScheduleWithDate(String username, String date, int scheduleConfigId){
         Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.username = :username and" +
-                " s.date = Date(:date) and s.timeFrom = Time(:timeFrom)");
+                " s.date = Date(:date) and s.scheduleConfigId =:scheduleConfigId");
         q.setParameter("username", username);
         q.setParameter("date", date);
-        q.setParameter("timeFrom", timeFrom);
+        q.setParameter("scheduleConfigId", scheduleConfigId);
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         return tblScheduleEntities;
     }
 
-    public List<TblScheduleEntity> findSpecificSchedule(String date, String timeFrom, int classroomId){
+    public List<TblScheduleEntity> findSpecificSchedule(String date, int scheduleConigId, int classroomId){
         Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where" +
-                " s.date = Date(:date) and s.timeFrom = Time(:timeFrom) and s.isActive = true and s.classroomId =:classroomId");
+                " s.date = Date(:date) and s.scheduleConfigId = :scheduleConigId and s.isActive = true and s.classroomId =:classroomId");
         q.setParameter("date", date);
-        q.setParameter("timeFrom", timeFrom);
+        q.setParameter("scheduleConigId", scheduleConigId);
         q.setParameter("classroomId", classroomId);
         List<TblScheduleEntity> tblScheduleEntities =  q.getResultList();
         return tblScheduleEntities;

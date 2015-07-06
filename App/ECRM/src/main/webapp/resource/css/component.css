@@ -70,17 +70,17 @@ tbody tr:hover {
 	top: 0;
 	left: 0;
 	transition: all .125s ease-in-out;
-	z-index: 50;
+	/*z-index: 50;*/
 	width: auto; /* Prevent table from stretching to full size */
 }
 	.sticky-wrap .sticky-thead {
 		box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
-		z-index: 100;
+		/*z-index: 100;*/
 		width: 100%; /* Force stretch */
 	}
 	.sticky-wrap .sticky-intersect {
 		opacity: 1;
-		z-index: 150;
+		/*z-index: 150;*/
 
 	}
 		.sticky-wrap .sticky-intersect th {

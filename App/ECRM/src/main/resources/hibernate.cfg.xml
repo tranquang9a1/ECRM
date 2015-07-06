@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/ecrm?useEncoding=true&amp;characterEncoding=UTF-8</property>
+
+    <!-- SQL dialect -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <mapping class="com.ecrm.Entity.TblClassroomEntity"/>
+
+    <mapping class="com.ecrm.Entity.TblEquipmentEntity"/>
+    <mapping class="com.ecrm.Entity.TblEquipmentCategoryEntity"/>
+    <mapping class="com.ecrm.Entity.TblReportEntity"/>
+    <mapping class="com.ecrm.Entity.TblReportDetailEntity"/>
+    <mapping class="com.ecrm.Entity.TblRoleEntity"/>
+    <mapping class="com.ecrm.Entity.TblRoomTypeEntity"/>
+    <mapping class="com.ecrm.Entity.TblScheduleEntity"/>
+    <mapping class="com.ecrm.Entity.TblUserEntity"/>
+    <mapping class="com.ecrm.Entity.TblUserInfoEntity"/>
+    <mapping class="com.ecrm.Entity.CrSdEntity"/>
+    <mapping class="com.ecrm.Entity.TimeSchedule"/>
+    <mapping class="com.ecrm.Entity.TeacherSchedule"/>
+    <mapping class="com.ecrm.Entity.TblNotificationEntity"/>
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

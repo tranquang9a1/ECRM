@@ -275,7 +275,13 @@ public class APIController {
         List<Integer> listReport = new ArrayList<Integer>();
         for (int classId : listClass) {
             //int id = Integer.parseInt(classId);
-            List<TblReportDetailEntity> details = reportDetailDAO.getReportByClassId(classId);
+            List<TblReportDetailEntity> details = new ArrayList<TblReportDetailEntity>();
+            if (status.equalsIgnoreCase("finish")) {
+                details = reportDetailDAO.getReportFinishByClassID(classId);
+            } else {
+                details = reportDetailDAO.getReportByClassId(classId);
+            }
+
             if (details.size() == 0) {
                 continue;
             }
@@ -358,48 +364,54 @@ public class APIController {
     }
 
 
-    @RequestMapping(value = "/resolve", method = RequestMethod.POST)
+    @RequestMapping(value = "/resolve", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResultDTO resolveReport(@RequestParam("roomId") int roomId) {
+    ResultDTO resolveReport(@RequestParam("listRoomId") String listRoom) {
         ResultDTO result = new ResultDTO();
         try {
-            TblClassroomEntity room = classroomDAO.find(roomId);
-            List<TblEquipmentEntity> equips = room.getTblEquipmentsById();
-            for (TblEquipmentEntity equip : equips) {
-                if (!equip.isStatus()) {
-                    equip.setStatus(true);
-                    equipmentDAO.merge(equip);
-                }
-            }
-
-            List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(roomId);
-            for (TblReportEntity report : reports) {
-                List<TblReportDetailEntity> details = report.getTblReportDetailsById();
-                for (TblReportDetailEntity detail : details) {
-                    if (!detail.isStatus()) {
-                        detail.setStatus(true);
-                        reportDetailDAO.merge(detail);
+            String[] roomId = listRoom.split(",");
+            for (int i = 0; i < roomId.length; i++) {
+                System.out.println("RoomID" + roomId[i]);
+                TblClassroomEntity room = classroomDAO.find(Integer.parseInt(roomId[i]));
+                List<TblEquipmentEntity> equips = room.getTblEquipmentsById();
+                for (TblEquipmentEntity equip : equips) {
+                    if (!equip.isStatus()) {
+                        equip.setStatus(true);
+                        equipmentDAO.merge(equip);
                     }
                 }
 
-                report.setStatus(Enumerable.ReportStatus.FINISH.getValue());
-                reportDAO.merge(report);
+                List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(Integer.parseInt(roomId[i]));
+                for (TblReportEntity report : reports) {
+                    List<TblReportDetailEntity> details = report.getTblReportDetailsById();
+                    for (TblReportDetailEntity detail : details) {
+                        if (!detail.isStatus()) {
+                            detail.setStatus(true);
+                            reportDetailDAO.merge(detail);
+                        }
+                    }
+
+                    report.setStatus(Enumerable.ReportStatus.FINISH.getValue());
+                    reportDAO.merge(report);
+                }
+
+                TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(Integer.parseInt(roomId[i]), Enumerable.MessageType.NEWREPORT.getValue());
+                if (notify != null) {
+                    notify.setStatus(false);
+                    notificationDAO.merge(notify);
+                }
+
+                room.setDamagedLevel(0);
+                classroomDAO.merge(room);
+                result.setError("Success");
+                result.setError_code(100);
             }
 
-            TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(roomId, Enumerable.MessageType.NEWREPORT.getValue());
-            if (notify != null) {
-                notify.setStatus(false);
-                notificationDAO.merge(notify);
-            }
-
-            room.setDamagedLevel(0);
-            classroomDAO.merge(room);
-            result.setError("Sucess");
-            result.setError_code(100);
         }catch (Exception e) {
             result.setError_code(101);
             result.setError(e.getMessage());
+            e.printStackTrace();
         }
         return result;
 

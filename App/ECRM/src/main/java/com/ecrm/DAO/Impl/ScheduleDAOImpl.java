@@ -2,20 +2,9 @@ package com.ecrm.DAO.Impl;
 
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.ScheduleDAO;
-import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.transaction.aspectj.AnnotationTransactionAspect;
-
 import javax.persistence.Query;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

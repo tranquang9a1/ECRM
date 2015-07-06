@@ -59,7 +59,9 @@ public class ChangeRoomController {
         }
         if(!availableClassroom.isEmpty()){
             TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
             availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
+            availableClassroom.remove(classroomEntity.getName());
         }
         return availableClassroom;
     }

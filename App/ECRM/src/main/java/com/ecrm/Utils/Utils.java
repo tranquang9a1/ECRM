@@ -203,9 +203,7 @@ public class Utils {
         return temp;
     }
 
-    public static List<String> sortClassroom(List<String> listClassroom, String currentClassroom) {
-        String room = currentClassroom;
-        List<String> list = listClassroom;
+    public static List<String> sortClassroom(List<String> list, String room) {
         Collections.sort(list);
         List<String> lstRoom = new ArrayList<String>();
         lstRoom.add(room);

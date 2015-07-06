@@ -17,5 +17,7 @@ public interface ReportDetailDAO {
 
     public List<TblReportDetailEntity> getReportByClassId(int classId);
 
+    public List<TblReportDetailEntity> getReportFinishByClassID(int classId);
+
     public TblReportDetailEntity getReportDetail(int reportId, int equipmentId);
 }

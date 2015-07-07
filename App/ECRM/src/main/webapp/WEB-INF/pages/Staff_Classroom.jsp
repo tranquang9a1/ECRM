@@ -166,7 +166,7 @@
                                     <option data-value='{"id" :${r.id}, "verticalRows":${r.verticalRows}, "horizontalRows":"${r.horizontalRows}", "noSlotsEachHRows":"${r.numberOfSlotsEachHRows}",
                             "airConditioning":${r.airConditioning},
                             "fan":${r.fan}, "projector":${r.projector}, "speaker":${r.speaker}, "television":${r.television}}'>
-                                        Loai ${r.id}</option>
+                                        Loai ${r.name}</option>
                                 </c:forEach>
                             </select>
                         </div>

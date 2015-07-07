@@ -30,6 +30,8 @@ public interface ReportDAO {
 
     public List<TblReportEntity> getFinishReport(int limit, int offset);
 
+    public int getNumberOfFinishReport();
+
     public List<TblReportEntity> getAllReport(int limit, int offset);
 
     public boolean createReport();

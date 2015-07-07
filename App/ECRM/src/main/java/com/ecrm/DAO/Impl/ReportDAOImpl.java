@@ -163,9 +163,24 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
+    public int getNumberOfFinishReport() {
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.status = :status");
+        query.setParameter("status", ReportStatus.FINISH.getValue());
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return queryResult.size();
+        }
+
+        return 0;
+    }
+
+    @Override
     public List<TblReportEntity> getFinishReport(int limit, int offset) {
         Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.status = :status");
         query.setParameter("status", ReportStatus.FINISH.getValue());
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
 
         List queryResult = query.getResultList();
         List<TblReportEntity> result = new ArrayList<TblReportEntity>();

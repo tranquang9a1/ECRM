@@ -53,13 +53,16 @@ public class NotifyController {
     NotificationDAOImp notificationDAOImp;
 
     @RequestMapping(value = "")
-    public String notifications(HttpServletRequest request) {
+    public String notifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
         HttpSession session = request.getSession();
         if (session.getAttribute("USER") == null) {
             return "redirect:/";
         }
 
-        getListReport(request);
+        if(!getListReport(request, page)) {
+            return "Error";
+        }
+
         return "staff/Notifications";
     }
 
@@ -91,7 +94,7 @@ public class NotifyController {
 
         List<TblEquipmentEntity> equipments = equipmentDAO.getDamagedEquipments(roomId);
         if (equipments.size() > 0) {
-            getListReport(request);
+            getListReport(request, null);
             request.setAttribute("SHOWDETAIL", roomId);
             return "staff/Notifications";
         }
@@ -501,7 +504,7 @@ public class NotifyController {
         }
     }
 
-    private void getListReport(HttpServletRequest request) {
+    private boolean getListReport(HttpServletRequest request, String page) {
         List<Integer> rooms = reportDAO.getDamagedRoom();
         List<GroupReportsDTO> groups = new ArrayList<GroupReportsDTO>();
         String equipmentNames = "";
@@ -520,19 +523,40 @@ public class NotifyController {
             groups.add(group);
         }
 
-        List<TblReportEntity> finishReport = reportDAO.getFinishReport(0, 0);
+        int pageNumber = 0;
+        int size = 5;
+        int numberOfReport = reportDAO.getNumberOfFinishReport();
+        int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
+        if(page != null) {
+            pageNumber = Integer.parseInt(page);
+            request.setAttribute("ACTIVETAB", "tab2");
+
+            if(pageNumber > numberOfPage) {
+                return false;
+            }
+        }
+
+        if(pageNumber <= 0) {
+            pageNumber = 1;
+        }
+
+        List<TblReportEntity> finishReport = reportDAO.getFinishReport(size, (pageNumber-1)*size);
         List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
         for (int i = 0; i < finishReport.size(); i++) {
-            ReportResponseObject report = new ReportResponseObject(finishReport.get(i)/*,reportDetails*/);
+            ReportResponseObject report = new ReportResponseObject(finishReport.get(i));
             report.setReporter(finishReport.get(i).getTblUserByUserId().getTblUserInfoByUsername().getFullName());
             report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
 
             listReport.add(report);
         }
 
+        request.setAttribute("PAGE", pageNumber);
+        request.setAttribute("SIZE", numberOfPage);
         request.setAttribute("FINISHREPORT", listReport);
         request.setAttribute("NEWREPORT", groups);
 
         request.setAttribute("ACTIVELEFTTAB", "STAFF_NOTIFY");
+
+        return true;
     }
 }

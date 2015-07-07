@@ -295,3 +295,29 @@ body{
 .body-content {
     margin: 0 20px;
 }
+
+.paging {
+    margin: 15px 0 0;
+    float: right;
+}
+
+.paging .page {
+    padding: 0 5px;
+    float: right;
+    cursor: pointer;
+}
+
+.paging .page a{
+    color: #888;
+    text-decoration: none;
+}
+
+.paging .page.current {
+    color: #444;
+    font-weight: bold;
+    cursor: default;
+}
+
+.paging .page:hover > a{
+    color: #444;
+}

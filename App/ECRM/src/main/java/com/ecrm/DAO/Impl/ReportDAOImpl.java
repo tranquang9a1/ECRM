@@ -139,6 +139,30 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
+    public List<TblReportEntity> getPagingReportByUser(String username, int page, int size) {
+
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username ORDER BY r.createTime DESC");
+        query.setParameter("username", username);
+        query.setFirstResult((page-1)*size);
+        query.setMaxResults(size);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public int getNumberOfUserReport(String username) {
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username");
+        query.setParameter("username", username);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return queryResult.size();
+        }
+
+        return 0;
+    }
+
+    @Override
     public List<TblReportEntity> getFinishReport(int limit, int offset) {
         Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.status = :status");
         query.setParameter("status", ReportStatus.FINISH.getValue());

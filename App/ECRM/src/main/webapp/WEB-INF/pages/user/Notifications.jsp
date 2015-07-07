@@ -27,6 +27,8 @@
 <c:set var="room" value="${requestScope.ROOM}"/>
 <c:set var="notifies" value="${requestScope.NOTIFICATIONS}"/>
 <c:set var="schedules" value="${requestScope.LISTSCHEDULE}"/>
+<c:set var="page" value="${requestScope.PAGE}"/>
+<c:set var="size" value="${requestScope.MAX}"/>
 <input type="hidden" id="roomId" value="${room.id}"/>
 <div class="contain-layout">
     <jsp:include page="../Header.jsp"/>
@@ -47,68 +49,84 @@
         <div class="clear"></div>
     </div>
     <div class="body-content">
-        <div class="table" style="margin-top: 15px">
-            <div class="header-table">
-                <div class="width-10">
-                    <div>Phòng</div>
-                </div>
-                <div class="width-35">
-                    <div>Thiết bị</div>
-                </div>
-                <div class="width-20">
-                    <div>Ngày báo cáo</div>
-                </div>
-                <div class="width-20">
-                    <div>Trạng thái</div>
-                </div>
-                <div class="width-15">
-                    <div>Quản lý</div>
-                </div>
-                <p class="clear"></p>
-            </div>
-            <div class="body-table" id="content-report">
-                <c:if test="${notifies.size() > 0}">
-                     <c:forEach var="i" begin="0" end="${notifies.size()-1}">
-                    <div class="row" id="report-${notifies[i].reportId}">
-                        <div class="width-10">
-                            <div>${notifies[i].room}</div>
-                        </div>
-                        <div class="width-35">
-                            <div id="list-${notifies[i].reportId}" title="${notifies[i].listEquipment}">${notifies[i].listEquipment}</div>
-                        </div>
-                        <div class="width-20">
-                            <div>${notifies[i].createDate}</div>
-                        </div>
-                        <div class="width-20">
-                            <div>
-                                <c:if test="${notifies[i].status == 1}">
-                                    <p class="label red">Chưa sửa</p>
-                                </c:if>
-                                <c:if test="${notifies[i].status == 2}">
-                                    <p class="label blue">Đang sửa</p>
-                                </c:if>
-                                <c:if test="${notifies[i].status == 3}">
-                                    <p class="label green">Đã sửa</p>
-                                </c:if>
-                                <c:if test="${notifies[i].status == 4}">
-                                    <p class="label">Đã hủy</p>
-                                </c:if>
-                            </div>
-                        </div>
-                        <div class="width-15">
-                            <div class="group-button">
-                                <div onclick="loadReportHistory(${notifies[i].reportId}, ${notifies[i].room})" class="btn btn-detail"><i
-                                        class="fa fa-file"></i>
-                                </div>
-                                <%--<div href="javascript:void(0)" class="btn btn-remove"><i class="fa fa-times"></i></div>--%>
-                            </div>
-                        </div>
-                        <p class="clear"></p>
+        <c:if test="${notifies.size() > 0}">
+            <div class="table" style="margin-top: 15px">
+                <div class="header-table">
+                    <div class="width-10">
+                        <div>Phòng</div>
                     </div>
-                </c:forEach>
-                </c:if>
+                    <div class="width-35">
+                        <div>Thiết bị</div>
+                    </div>
+                    <div class="width-20">
+                        <div>Ngày báo cáo</div>
+                    </div>
+                    <div class="width-20">
+                        <div>Trạng thái</div>
+                    </div>
+                    <div class="width-15">
+                        <div>Quản lý</div>
+                    </div>
+                    <p class="clear"></p>
+                </div>
+                <div class="body-table" id="content-report">
+                    <c:if test="${notifies.size() > 0}">
+                         <c:forEach var="i" begin="0" end="${notifies.size()-1}">
+                        <div class="row" id="report-${notifies[i].reportId}">
+                            <div class="width-10">
+                                <div>${notifies[i].room}</div>
+                            </div>
+                            <div class="width-35">
+                                <div id="list-${notifies[i].reportId}" title="${notifies[i].listEquipment}">${notifies[i].listEquipment}</div>
+                            </div>
+                            <div class="width-20">
+                                <div>${notifies[i].createDate}</div>
+                            </div>
+                            <div class="width-20">
+                                <div>
+                                    <c:if test="${notifies[i].status == 1}">
+                                        <p class="label red">Chưa sửa</p>
+                                    </c:if>
+                                    <c:if test="${notifies[i].status == 2}">
+                                        <p class="label blue">Đang sửa</p>
+                                    </c:if>
+                                    <c:if test="${notifies[i].status == 3}">
+                                        <p class="label green">Đã sửa</p>
+                                    </c:if>
+                                    <c:if test="${notifies[i].status == 4}">
+                                        <p class="label">Đã hủy</p>
+                                    </c:if>
+                                </div>
+                            </div>
+                            <div class="width-15">
+                                <div class="group-button">
+                                    <div onclick="loadReportHistory(${notifies[i].reportId}, ${notifies[i].room})" class="btn btn-detail"><i
+                                            class="fa fa-file"></i>
+                                    </div>
+                                    <%--<div href="javascript:void(0)" class="btn btn-remove"><i class="fa fa-times"></i></div>--%>
+                                </div>
+                            </div>
+                            <p class="clear"></p>
+                        </div>
+                    </c:forEach>
+                    </c:if>
+                </div>
             </div>
-        </div>
+            <c:if test="${size > 1}">
+                <div class="paging">
+                    <c:if test="${page + 1 < size}">
+                        <div class="page"><a href="/giang-vien/thong-bao?trang=${page+1}">Sau</a></div>
+                        <div class="page"><a href="/giang-vien/thong-bao?trang=${page+1}">${page+1}</a></div>
+                    </c:if>
+                    <div class="page current">${page}</div>
+                    <c:if test="${page - 1 > 0}">
+                        <div class="page"><a href="/giang-vien/thong-bao?trang=${page-1}">${page-1}</a></div>
+                        <div class="page"><a href="/giang-vien/thong-bao?trang=${page-1}">Trước</a></div>
+                    </c:if>
+                </div>
+            </c:if>
+        </c:if>
+        <c:if test="${notifies.size() <= 0}"><p>Bạn chưa có báo cáo!</p></c:if>
     </div>
 </div>
 <div class="content-all-modal">

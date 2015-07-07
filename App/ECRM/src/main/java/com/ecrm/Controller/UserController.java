@@ -53,25 +53,66 @@ public class UserController {
     @Autowired
     NotificationDAOImp notificationDAOImp;
 
-
-    @RequestMapping(value = "thong-bao")
-    public String notifications(HttpServletRequest request) {
+    @RequestMapping(value = "/")
+    public String homePage(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session.getAttribute("USER") == null) {
             return "redirect:/";
         }
 
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
-
-        List<TblReportEntity> list = reportDAO.getReportByUserId(user.getUsername());
-        List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
-        for (int i = 0; i < list.size(); i++) {
-            ReportResponseObject report = new ReportResponseObject(list.get(i));
-            report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
-
-            listReport.add(report);
+        String role = user.getTblRoleByRoleId().getName();
+        List<TblNotificationEntity> listNotify = new ArrayList<TblNotificationEntity>();
+        if (role.equals("Teacher")) {
+            listNotify = notificationDAOImp.getAllNotifyOfUser(user.getUsername(), MessageType.CHANGEROOM.getValue());
+        } else if (role.equals("Staff")) {
+            listNotify = notificationDAOImp.getAllNotifyOfStaff();
         }
-        request.setAttribute("NOTIFICATIONS", listReport);
+
+        List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
+
+        request.setAttribute("LISTNOTIFY", listNotify);
+        request.setAttribute("SCHEDULE", list);
+        return "user/NewTemplate";
+    }
+
+    @RequestMapping(value = "thong-bao")
+    public String notifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("USER") == null) {
+            return "redirect:/";
+        }
+
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+        int pageNumber = Integer.parseInt(page);
+        int size = 5;
+        int numberOfReport = reportDAO.getNumberOfUserReport(user.getUsername());
+        int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
+
+        if(pageNumber > numberOfPage && pageNumber > 0) {
+            return "Error";
+        }
+
+        if(numberOfReport == 0) {
+            request.setAttribute("NOTIFICATIONS", new ArrayList<ReportResponseObject>());
+        } else {
+            if(pageNumber == 0) {
+                pageNumber = 1;
+            }
+
+            List<TblReportEntity> list = reportDAO.getPagingReportByUser(user.getUsername(), pageNumber, size);
+            List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
+            for (int i = 0; i < list.size(); i++) {
+                ReportResponseObject report = new ReportResponseObject(list.get(i));
+                report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
+
+                listReport.add(report);
+            }
+
+            request.setAttribute("PAGE", pageNumber);
+            request.setAttribute("MAX", numberOfPage);
+            request.setAttribute("NOTIFICATIONS", listReport);
+        }
 
         List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
         if (schedules.size() > 0) {

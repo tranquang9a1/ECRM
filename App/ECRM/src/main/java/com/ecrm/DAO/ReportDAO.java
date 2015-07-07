@@ -18,6 +18,10 @@ public interface ReportDAO {
 
     public List<TblReportEntity> getReportByUserId(String username);
 
+    public List<TblReportEntity> getPagingReportByUser(String username, int page, int size);
+
+    public int getNumberOfUserReport(String username);
+
     public String getReportersInRoom(int room);
 
     public TblReportEntity getReportOfUsernameInDay(String username, int roomId);

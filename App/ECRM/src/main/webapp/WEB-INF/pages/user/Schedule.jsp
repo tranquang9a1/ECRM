@@ -30,6 +30,7 @@
                 <p>Lịch dạy</p>
             </div>
             <div class="body-content">
+                <c:if test="${schedule.size() > 0}">
                 <div class="table" style="margin: 20px 0 0">
                     <div class="header-table">
                         <div class="width-15">
@@ -78,6 +79,10 @@
                         </c:forEach>
                     </div>
                 </div>
+                </c:if>
+                <c:if test="${schedule.size() <= 0}">
+                    <p>Bạn không có lịch dạy nào trong ngày</p>
+                </c:if>
             </div>
         </div>
         </body>

@@ -130,6 +130,29 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         return tblScheduleEntities;
     }
+    //lấy tất cả các lịch buổi sáng hoặc chiều
+    public List<TblScheduleEntity> findAllScheduleInClassroomByDayTime(int classroomId, String dayTime){
+        List<TblScheduleEntity> tblScheduleEntities = new ArrayList<TblScheduleEntity>();
+        if(dayTime.equals("12:00:00")){
+            Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s, TblScheduleConfigEntity sc " +
+                    "where s.scheduleConfigId = sc.id and s.classroomId = :classroomId and " +
+                    " current_date() = s.date  " +
+                    " and s.isActive= true and sc.timeFrom > Time(:dayTime)");
+            q.setParameter("dayTime", dayTime);
+            q.setParameter("classroomId", classroomId);
+            tblScheduleEntities = q.getResultList();
+        }else{
+            Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s, TblScheduleConfigEntity sc " +
+                    "where s.scheduleConfigId = sc.id and s.classroomId = :classroomId and " +
+                    " current_date() = s.date  " +
+                    " and s.isActive= true and sc.timeFrom > Time(:dayTime) and sc.timeFrom < Time('12:00:00')");
+            System.out.println(q);
+            q.setParameter("dayTime", dayTime);
+            q.setParameter("classroomId", classroomId);
+            tblScheduleEntities = q.getResultList();
+        }
+        return tblScheduleEntities;
+    }
 
     public List<TblScheduleEntity> findAllScheduleToday(){
         Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where " +
@@ -152,12 +175,28 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         return tblScheduleEntities;
     }
 
-    public List<TblScheduleEntity> findAllScheduleMoreThan15MLeft(int classroomId){
-        Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s where s.classroomId = :classroomId and " +
-                " current_date() = s.date  " +
-                " and s.isActive= true and SUBTIME(ADDTIME(s.timeFrom, '01:30:00'),CURTIME())>'00:15:00'");
-        q.setParameter("classroomId", classroomId);
-        List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+    public List<TblScheduleEntity> findAllScheduleMoreThan15MLeft(int classroomId, String dayTime){
+        List<TblScheduleEntity> tblScheduleEntities = new ArrayList<TblScheduleEntity>();
+
+        if(dayTime.equals("Noon")){
+            Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s, TblScheduleConfigEntity sc " +
+                    "where s.scheduleConfigId = sc.id and s.classroomId = :classroomId and " +
+                    " current_date() = s.date  " +
+                    " and s.isActive= true and SUBTIME(sc.timeTo,CURTIME())>'00:15:00' and " +
+                    "sc.timeFrom > Time('12:00:00')");
+            q.setParameter("classroomId", classroomId);
+            tblScheduleEntities = q.getResultList();
+        }else{
+            Query q = entityManager.createQuery("SELECT s from TblScheduleEntity s, TblScheduleConfigEntity sc " +
+                    "where s.scheduleConfigId = sc.id and s.classroomId = :classroomId and " +
+                    " current_date() = s.date  " +
+                    " and s.isActive= true and sc.timeFrom > Time('06:00:00') " +
+                    "and SUBTIME(sc.timeTo,CURTIME())>'00:15:00'" +
+                    " and sc.timeFrom < Time('12:00:00')");
+            System.out.println(q);
+            q.setParameter("classroomId", classroomId);
+            tblScheduleEntities = q.getResultList();
+        }
         return tblScheduleEntities;
     }
 

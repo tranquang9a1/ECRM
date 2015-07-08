@@ -14,6 +14,7 @@ import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.ecrm.Utils.socket.SocketIO;
 import com.twilio.sdk.TwilioRestException;
+import org.joda.time.LocalTime;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -182,8 +183,14 @@ public class NotifyController {
     public String changeRoom(HttpServletRequest request, @RequestParam("currentClassroom") String currentRoom, @RequestParam("changeClassroom") String changeRoom) throws TwilioRestException {
         TblClassroomEntity currentClassroom = classroomDAO.getClassroomByName(currentRoom);
         TblClassroomEntity changeClassroom = classroomDAO.getClassroomByName(changeRoom);
-
-        List<TblScheduleEntity> currentSchedule = scheduleDAO.getScheduleNoFinishOfRoom(currentClassroom.getId());
+        LocalTime localTime =  new LocalTime();
+        LocalTime noon = new LocalTime("12:00:00");
+        List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
+        if(localTime.isBefore(noon)){
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Morning");
+        }else{
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(changeClassroom.getId(), "Noon");
+        }
 
         List<GroupUser> groupUsers = new ArrayList<GroupUser>();
         for (TblScheduleEntity schedule : currentSchedule) {

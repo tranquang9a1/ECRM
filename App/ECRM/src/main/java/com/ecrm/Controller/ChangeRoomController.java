@@ -9,6 +9,7 @@ import com.ecrm.Entity.TblScheduleEntity;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +74,14 @@ public class ChangeRoomController {
         GCMController gcmController = new GCMController();
         TblClassroomEntity currentClassroomEntity = classroomDAO.getClassroomByName(currentClassroom);
         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(changeClassroom);
-        List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomEntity.getId());
+        LocalTime localTime =  new LocalTime();
+        LocalTime noon = new LocalTime("12:00:00");
+        List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
+        if(localTime.isBefore(noon)){
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomEntity.getId(), "Morning");
+        }else{
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomEntity.getId(), "Noon");
+        }
         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
             tblScheduleEntity.setIsActive(false);
             scheduleDAO.merge(tblScheduleEntity);

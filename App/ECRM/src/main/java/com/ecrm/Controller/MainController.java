@@ -2,19 +2,25 @@ package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
+import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
+import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblRoomTypeEntity;
+import com.ecrm.Entity.TblScheduleEntity;
 import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,6 +32,9 @@ public class MainController {
     RoomTypeDAOImpl roomTypeDAO;
     @Autowired
     ClassroomDAOImpl classroomDAO;
+
+    @Autowired
+    ScheduleDAOImpl scheduleDAO;
 
     @RequestMapping(method = RequestMethod.GET)
     public String printWelcome(ModelMap model, HttpServletRequest request) {

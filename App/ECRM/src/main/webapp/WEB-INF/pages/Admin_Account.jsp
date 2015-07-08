@@ -119,13 +119,13 @@
                     <i class="fa fa-times" onclick="showModal(0, 'CreateAccount')"></i>
                 </div>
                 <div class="body-modal">
-                    <form action="/admin/createAccount" id="AccountForm" onsubmit="return validateAccountForm()">
+                    <form action="/admin/createAccount" id="AccountForm">
                         <br/>
 
                         <div class="group-control">
                             <div class="name">Username(*):</div>
                             <div class="control">
-                                <input type="text" name="Username">
+                                <input type="text" name="Username" onchange="checkUsername();">
                             </div>
                         </div>
                         <div class="group-control">
@@ -152,13 +152,13 @@
                 <div class="footer-modal">
                     <input type="button" class="btn btn-normal" onclick="showModal(0, 'CreateAccount')"
                            value="Thoát"/>
-                    <input type="button" class="btn btn-orange" onclick="validateAccountForm();"
+                    <input type="button" class="btn btn-orange" onclick="submit();"
                            value="Tạo"/>
                 </div>
             </div>
             <div class="black-background"></div>
         </div>
-
+<input type="hidden" id="validateUsername">
         <script src="../../resource/js/script.js"></script>
 
         <script>
@@ -172,19 +172,28 @@
                 document.getElementById('action').value = 'Activate';
                 document.getElementById('editAccount').submit();
             }
+            function submit(){
+                if(validateAccountForm() == true){
+                    document.getElementById("AccountForm").submit();
+                }
+
+            }
             function validateAccountForm() {
                 var username = document.forms["AccountForm"]["Username"].value;
+                checkUsername(username);
                 var phone = document.forms["AccountForm"]["Phone"].value;
                 var fullName = document.forms["AccountForm"]["FullName"].value;
                 var message = "";
                 if (username == null || username == "") {
                     alert("Username không được bỏ trống!");
                     return false;
+                }else{
+                    if(document.getElementById("validateUsername").value==="NO"){
+                        alert("Username đã tồn tại!");
+                        return false;
+                    }
                 }
-                if (checkUsername(username) === "NO") {
-                    alert("Username đã tồn tại!");
-                    return false;
-                }
+
 
                 if (phone == null || phone == "") {
                     alert("Số điện thoại không được bỏ trống!");
@@ -194,7 +203,7 @@
                     alert("Họ tên không được bỏ trống!");
                     return false;
                 }
-
+                return true;
             }
             function checkUsername(username) {
                 return $.ajax({
@@ -203,8 +212,12 @@
                     cache: false,
                     data: 'Username=' + username,
                     success: function (data) {
+                        if(data === "OK"){
+                            document.getElementById("validateUsername").value = "OK";
+                        }else{
+                            document.getElementById("validateUsername").value = "NO";
+                        }
                         console.log(data);
-                        alert("Username đã tồn tại!");
                     },
                     error: function () {
                         alert('Error while request..');

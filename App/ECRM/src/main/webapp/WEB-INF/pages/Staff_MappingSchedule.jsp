@@ -282,7 +282,7 @@
                         <p>Nhập Lịch Bằng Tay</p>
                         <i class="fa fa-times" onclick="showModal(0, 'Manual')"></i>
                     </div>
-                    <form action="/staff/importManually" id="importManually" onsubmit="return validateImportForm()"
+                    <form action="/staff/importManually" id="importManually"
                           name="ImportManually">
                         <div class="body-modal">
 
@@ -292,7 +292,7 @@
                                 <div class="name">Tài khoản(*):</div>
 
                                 <div class="ui-widget">
-                                    <select id="ui-username" name="username">
+                                    <select id="ui-username" name="username" id="username">
                                         <option value=""></option>
                                         <c:forEach items="${teachers}" var="t">
                                             <option value="${t.username}">${t.username}</option>
@@ -375,7 +375,7 @@
                         <div class="footer-modal">
                             <input type="button" class="btn btn-normal" onclick="showModal(0, 'Manual')"
                                    value="Thoát"/>
-                            <button type="submit" class="btn btn-orange">Tạo</button>
+                            <button type="button" class="btn btn-orange" onclick="validateImportForm()">Tạo</button>
                         </div>
                     </form>
                 </div>
@@ -395,6 +395,7 @@
                 switch (choose) {
                     case 1:
                         document.getElementById('uploadSchedule').submit();
+                        waitLoading();
                         break;
                 }
             }
@@ -417,7 +418,24 @@
                 var dateTo = document.forms["ImportManually"]["dateT"].value;
                 var all = document.forms["ImportManually"]["all"].value;
                 var avai = document.forms["ImportManually"]["avai"].value;
-                if (username == null || username == "") {
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/checkClassroom",
+                    cache: false,
+                    data: 'all=' + all+ '&numberOfStudent='+ numberOfStudent+ '&dateFrom='+ dateFrom+ '&username='+ username+
+                    '&avai='+avai+'&dateTo='+dateTo,
+                    success: function (data) {
+                        if(data.status == true){
+                            document.getElementById('importManually').submit();
+                        }else{
+                            alert(data.alert);
+                        }
+                    },
+                    error: function () {
+                        alert('Error while request..');
+                    }
+                })
+                /*if (username == null || username == "") {
                     alert("Phải nhập tài khoản!");
                     return false;
                 }
@@ -432,12 +450,12 @@
                 if (avai == 0 && all == 0) {
                     alert("Phải chọn phòng học!");
                     return false;
-                } else {
-                    if (all != 0 && checkClassroom(all) === "1") {
-                        alert("Phòng học hiện không khả dụng!");
-                        return false;
-                    }
                 }
+                if (all != 0 && checkClassroom(all) === "NO") {
+                    alert("Phòng học hiện không khả dụng!");
+                    return false;
+                }
+
                 if (dateTo != null && dateFrom != null) {
                     var date1 = new Date(dateFrom);
                     var date2 = new Date(dateTo);
@@ -445,23 +463,24 @@
                         alert("Ngày kết thúc không được nhỏ hơn ngày bắt đầu!");
                         return false;
                     }
-                }
+                }*/
+
             }
             function checkClassroom(classroomId) {
-                return $.ajax({
+                $.ajax({
                     type: "get",
                     url: "/ajax/checkClassroom",
                     cache: false,
                     data: 'classroomId=' + classroomId,
                     success: function (data) {
                         console.log(data);
-                        alert("Phòng học hiện không khả dụng!");
                     },
                     error: function () {
                         alert('Error while request..');
                     }
                 })
             }
+
         </script>
         </body>
         </html>

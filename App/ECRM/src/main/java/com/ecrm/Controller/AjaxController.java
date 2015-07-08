@@ -6,8 +6,10 @@ import com.ecrm.DAO.Impl.UserDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblScheduleEntity;
 import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.Entity.ValidateEntity;
 import com.ecrm.Utils.Utils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,10 +38,11 @@ public class AjaxController {
     ScheduleDAOImpl scheduleDAO;
 
     @RequestMapping(value = "findClassroom")
-    public @ResponseBody
+    public
+    @ResponseBody
     void findClassroom(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
-        HttpSession session  =  request.getSession();
-        if(session!=null) {
+        HttpSession session = request.getSession();
+        if (session != null) {
             String slot = request.getParameter("slot");
             String currentSlots = request.getParameter("numberOfStudent");
             String timeFrom = "07:00:00";
@@ -107,28 +110,79 @@ public class AjaxController {
     }
 
     //check username
-    @RequestMapping(value="checkUsername")
-    public @ResponseBody
-    String checkUsername(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "checkUsername")
+    public
+    @ResponseBody
+    String checkUsername(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("Username");
         List<TblUserEntity> tblUserEntities = userDAO.checkUsername(username);
-        if(tblUserEntities.isEmpty()){
+        if (tblUserEntities.isEmpty()) {
             return "OK";
         }
         return "NO";
     }
 
     @RequestMapping(value = "checkClassroom")
-    public @ResponseBody
-    String checkClassroom(HttpServletRequest request, HttpServletResponse response){
-        int classroomId = Integer.parseInt(request.getParameter("classroomId"));
-        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
-        for(TblClassroomEntity classroomEntity:tblClassroomEntities){
-            if(classroomId == classroomEntity.getId()){
-                return "1";
+    public
+    @ResponseBody
+    ValidateEntity checkClassroom(HttpServletRequest request, HttpServletResponse response) {
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+        String username = request.getParameter("username");
+        if (username == null || username.trim().length() == 0) {
+            alert = "Phải nhập tài khoản!";
+            validateEntity.setAlert(alert);
+            validateEntity.setStatus(false);
+            return validateEntity;
+        }
+        String numberOfStudent = request.getParameter("numberOfStudent");
+        if (numberOfStudent == null || numberOfStudent.trim().length() == 0) {
+            alert = "Phải nhập số lượng học sinh!";
+            validateEntity.setAlert(alert);
+            validateEntity.setStatus(false);
+            return validateEntity;
+        }
+        String dateFrom = request.getParameter("dateFrom");
+        String dateTo = request.getParameter("dateTo");
+        if (dateFrom == null || dateFrom.trim().length() == 0) {
+            alert = "Phải nhập ngày bắt đầu!";
+            validateEntity.setAlert(alert);
+            validateEntity.setStatus(false);
+            return validateEntity;
+        }
+        if (dateFrom != null && dateFrom.trim().length()!=0 && dateTo != null && dateTo.trim().length() !=0) {
+            LocalDate date1 = new LocalDate(dateFrom);
+            LocalDate date2 = new LocalDate(dateTo);
+            if (date2.isBefore(date1)) {
+                alert = "Ngày kết thúc không được nhỏ hơn ngày bắt đầu!";
+                validateEntity.setAlert(alert);
+                validateEntity.setStatus(false);
+                return validateEntity;
             }
         }
-        return "0";
+        int avai = Integer.parseInt(request.getParameter("avai"));
+        int all = Integer.parseInt(request.getParameter("all"));
+        if (avai == 0 && all == 0) {
+            alert = "Phải chọn phòng học!";
+            validateEntity.setAlert(alert);
+            validateEntity.setStatus(false);
+            return validateEntity;
+        }
+        if (all != 0) {
+            List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
+            for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+                if (all == classroomEntity.getId()) {
+                    alert = "Phòng học hiện không khả dụng!";
+                    validateEntity.setAlert(alert);
+                    validateEntity.setStatus(false);
+                    return validateEntity;
+                }
+            }
+        }
+        return validateEntity;
     }
 
 }

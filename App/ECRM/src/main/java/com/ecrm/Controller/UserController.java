@@ -52,8 +52,10 @@ public class UserController {
     EquipmentCategoryDAOImpl equipmentCategoryDAO;
     @Autowired
     NotificationDAOImp notificationDAOImp;
+    @Autowired
+    UserNotificationDAOImpl userNotificationDAO;
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "")
     public String homePage(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session.getAttribute("USER") == null) {
@@ -154,6 +156,7 @@ public class UserController {
                 iterator1.remove();
             }
         }
+
         TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
         if (report == null) {
             report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
@@ -193,7 +196,7 @@ public class UserController {
         room.setDamagedLevel(damagedLevel);
         classroomDAO.merge(room);
 
-        String message = user.getTblUserInfoByUsername().getFullName() + " vừa báo cáo hư hại phòng " + room.getName();
+        String message = user.getTblUserInfoByUsername().getFullName() + " báo cáo hư hại phòng " + room.getName();
         TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
         if (notify == null) {
             notify = new TblNotificationEntity(reportRequest.getRoomId(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
@@ -204,7 +207,10 @@ public class UserController {
         List<TblUserEntity> staffs = userDAO.getAllStaff();
         try {
             for (TblUserEntity staff : staffs) {
-                socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId());
+                TblUserNotificationEntity userNotification = new TblUserNotificationEntity(staff.getUsername(), notify.getId(), false);
+                userNotificationDAO.persist(userNotification);
+
+                socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/notify?link="+ userNotification.getId());
                 SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
                 gcm.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
             }

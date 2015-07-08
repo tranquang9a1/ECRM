@@ -1,10 +1,13 @@
 package com.ecrm.Entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ChiDNMSE60717 on 6/24/2015.
@@ -20,6 +23,7 @@ public class TblNotificationEntity {
     private int messageType;
     private boolean status;
     private TblClassroomEntity tblClassroomEntity;
+    private List<TblUserNotificationEntity> tblUserNotificationById;
 
     public TblNotificationEntity() {}
 
@@ -111,5 +115,15 @@ public class TblNotificationEntity {
 
     public void setTblClassroomEntity(TblClassroomEntity tblClassroomEntity) {
         this.tblClassroomEntity = tblClassroomEntity;
+    }
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "tblNotificationById", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<TblUserNotificationEntity> getTblUserNotificationById() {
+        return tblUserNotificationById;
+    }
+
+    public void setTblUserNotificationById(List<TblUserNotificationEntity> tblUserNotificationById) {
+        this.tblUserNotificationById = tblUserNotificationById;
     }
 }

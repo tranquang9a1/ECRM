@@ -1,8 +1,8 @@
 /**
  * Created by ChiDNMSE60717 on 6/16/2015.
  */
-var socket = io.connect('http://192.168.1.102:3000');
-/*var socket = io.connect('http://10.82.137.140:3000');*/
+//var socket = io.connect('http://192.168.1.112:3000');
+var socket = io.connect('http://192.168.1.112:3000');
 function connectToSocket(username, role) {
     var jsonObject = {socketId: "", username: username, role: role, deviceType: 1};
     socket.emit('connectServer', jsonObject);
@@ -17,12 +17,12 @@ socket.on('ChangeRoom', function(data) {
         result += listTime[i] + ", ";
     }
     result = result.substring(0, result.length-2);
-    result += "</b>. Được chuyền sang dạy phòng <b>" + data.changeRoom + "</b>";
+    result += "</b>. Được đổi sang phòng " + data.changeRoom;
 
     var img = document.createElement("img");
     img.setAttribute("src", "/resource/img/user.png");
     var aDiv = document.createElement("a");
-    aDiv.setAttribute("href", "/giang-vien/lich-day");
+    aDiv.setAttribute("href", data.redirectLink);
     aDiv.innerHTML = result;
 
     var liDiv = document.createElement("li");

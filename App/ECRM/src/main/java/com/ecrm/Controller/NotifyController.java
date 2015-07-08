@@ -51,7 +51,9 @@ public class NotifyController {
     @Autowired
     EquipmentCategoryDAOImpl equipmentCategoryDAO;
     @Autowired
-    NotificationDAOImp notificationDAOImp;
+    NotificationDAOImp notificationDAO;
+    @Autowired
+    UserNotificationDAOImpl userNotificationDAO;
 
     @RequestMapping(value = "")
     public String notifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
@@ -167,10 +169,10 @@ public class NotifyController {
             reportDAO.merge(report);
         }
 
-        TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(roomId, MessageType.NEWREPORT.getValue());
+        TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(roomId, MessageType.NEWREPORT.getValue());
         if (notify != null) {
             notify.setStatus(false);
-            notificationDAOImp.merge(notify);
+            notificationDAO.merge(notify);
         }
 
         room.setDamagedLevel(0);
@@ -183,80 +185,102 @@ public class NotifyController {
     public String changeRoom(HttpServletRequest request, @RequestParam("currentClassroom") String currentRoom, @RequestParam("changeClassroom") String changeRoom) throws TwilioRestException {
         TblClassroomEntity currentClassroom = classroomDAO.getClassroomByName(currentRoom);
         TblClassroomEntity changeClassroom = classroomDAO.getClassroomByName(changeRoom);
+
         LocalTime localTime =  new LocalTime();
         LocalTime noon = new LocalTime("12:00:00");
-        List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
+        List<TblScheduleEntity> currentSchedule;
         if(localTime.isBefore(noon)){
             currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Morning");
         }else{
             currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(changeClassroom.getId(), "Noon");
         }
 
-        List<GroupUser> groupUsers = new ArrayList<GroupUser>();
-        for (TblScheduleEntity schedule : currentSchedule) {
-            GroupUser group = GroupUser.checkContainIn(groupUsers, schedule.getUsername());
-            if (group == null) {
-                group = new GroupUser(schedule.getUsername(), schedule.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), currentRoom, changeRoom);
-                groupUsers.add(group);
+        if(currentSchedule != null && currentSchedule.size() > 0) {
+            String message = "Đổi phòng từ " + currentRoom + " sang phòng " + changeRoom;
+            //Group schedule by user
+            List<GroupUser> groupUsers = new ArrayList<GroupUser>();
+            for (TblScheduleEntity schedule : currentSchedule) {
+                GroupUser group = GroupUser.checkContainIn(groupUsers, schedule.getUsername());
+                if (group == null) {
+                    group = new GroupUser(schedule.getUsername(), schedule.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), currentRoom, changeRoom);
+                    groupUsers.add(group);
+                }
+
+                List<String> listTime = group.getListTime();
+                listTime.add(schedule.getTimeFrom().getHours() + "h" + schedule.getTimeFrom().getMinutes());
+
+                schedule.setIsActive(false);
+                scheduleDAO.merge(schedule);
+
+                TblScheduleEntity newSchedule = new TblScheduleEntity(schedule.getUsername(), changeClassroom.getId(),
+                        schedule.getNumberOfStudents(), message, schedule.getTimeFrom(),
+                        schedule.getSlots(), schedule.getDate(), true, schedule.getScheduleConfigId());
+                scheduleDAO.persist(newSchedule);
             }
-            List<String> listTime = group.getListTime();
-            listTime.add(schedule.getTimeFrom().getHours() + "h" + schedule.getTimeFrom().getMinutes());
 
-            schedule.setIsActive(false);
-            scheduleDAO.merge(schedule);
+            TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(currentClassroom.getId(), MessageType.CHANGEROOM.getValue());
+            if (notify == null) {
+                notify = new TblNotificationEntity(currentClassroom.getId(), message, "/giang-vien/lich-day", MessageType.CHANGEROOM.getValue());
+                notificationDAO.persist(notify);
+            }
 
-            TblScheduleEntity newSchedule = new TblScheduleEntity(schedule.getUsername(), changeClassroom.getId(),
-                    schedule.getNumberOfStudents(), "Thay đổi phòng từ phòng " + schedule.getTblClassroomByClassroomId().getName()
-                    + " sang phòng " + changeClassroom.getName(), schedule.getTimeFrom(),
-                    schedule.getSlots(), schedule.getDate(), true, schedule.getScheduleConfigId());
-            scheduleDAO.persist(newSchedule);
+            SocketIO socket = new SocketIO();
+            for (GroupUser user : groupUsers) {
+                TblUserNotificationEntity userNotification = new TblUserNotificationEntity(user.getUsername(), notify.getId(), false);
+                userNotificationDAO.persist(userNotification);
+
+                //Message object for socket
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("currentRoom", currentRoom);
+                jsonObject.put("currentRoomId", currentClassroom.getId());
+                jsonObject.put("changeRoom", changeRoom);
+                jsonObject.put("changeRoomId", changeClassroom.getId());
+                jsonObject.put("listTime", user.getListTime());
+                jsonObject.put("redirectLink", "/giang-vien/notify?link=" + userNotification.getId());
+
+                //Sent notifies to user
+                socket.sendNotifyObjectToStaff(user.getUsername(), NotifyType.TEACHERCHANGEROOM.getValue(), jsonObject);
+                SmsUtils.sendMessage(user.getPhone(), user.toString());
+            }
+
+            //update status report
+            List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
+            for (TblReportEntity tblReportEntity : tblReportEntities) {
+                tblReportEntity.setChangedRoom(changeRoom);
+                tblReportEntity.setStatus(2);
+                reportDAO.merge(tblReportEntity);
+            }
+            return "Đổi phòng thành công!";
         }
 
-        String message = "Đổi phòng " + currentRoom + " sang phòng " + changeRoom;
-        TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(currentClassroom.getId(), MessageType.CHANGEROOM.getValue());
-        if (notify == null) {
-            notify = new TblNotificationEntity(currentClassroom.getId(), message, "/giang-vien/lich-day", MessageType.CHANGEROOM.getValue());
-            notificationDAOImp.persist(notify);
-        }
-
-        SocketIO socket = new SocketIO();
-        for (GroupUser user : groupUsers) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("currentRoom", currentRoom);
-            jsonObject.put("currentRoomId", currentClassroom.getId());
-            jsonObject.put("changeRoom", changeRoom);
-            jsonObject.put("changeRoomId", changeClassroom.getId());
-            jsonObject.put("listTime", user.getListTime());
-
-            boolean check = socket.sendNotifyObjectToStaff(user.getUsername(), NotifyType.TEACHERCHANGEROOM.getValue(), jsonObject);
-            SmsUtils.sendMessage(user.getPhone(), user.toString());
-
-        }
-//update status report
-        List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
-        for (TblReportEntity tblReportEntity : tblReportEntities) {
-            tblReportEntity.setChangedRoom(changeRoom);
-            tblReportEntity.setStatus(2);
-            reportDAO.merge(tblReportEntity);
-        }
-        return "Đổi phòng thành công!";
+        return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
 
     @RequestMapping(value = "all-notify")
     public String getAllNotify(HttpServletRequest request) {
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
-        String role = user.getTblRoleByRoleId().getName();
-        List<TblNotificationEntity> listNotify;
-        if (role.equals("Teacher")) {
-            listNotify = notificationDAOImp.getAllNotifyOfUser(user.getUsername(), MessageType.CHANGEROOM.getValue());
-        } else {
-            listNotify = notificationDAOImp.getAllNotifyOfStaff();
-        }
 
+        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getUnreadNotificationByUser(user.getUsername());
+        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
+
+        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
         request.setAttribute("LISTNOTIFY", listNotify);
 
         return "ListNotification";
+    }
+
+    @RequestMapping(value = "notify")
+    public String redirectNotify(HttpServletRequest request, @RequestParam(value = "link") int notifyId){
+        TblUserNotificationEntity userNotification = userNotificationDAO.find(notifyId);
+        if(userNotification != null && userNotification.isStatus() == false) {
+            userNotification.setStatus(true);
+            userNotificationDAO.merge(userNotification);
+
+            return "redirect:" + userNotification.getTblNotificationById().getRedirectLink();
+        }
+
+        return "redirect:/giang-vien";
     }
 
     private boolean resolve(int room, int category, String[] listEquipment) {
@@ -480,35 +504,30 @@ public class NotifyController {
     private List<String> getAvailableRoom(int classroomId) {
         List<String> availableClassroom = new ArrayList<String>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
-        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
-            List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleInClassroom(classroomEntity.getId());
-            if (tblScheduleEntities.isEmpty()) {
-                availableClassroom.add(classroomEntity.getName());
-            }
-        }
-
-        if (!availableClassroom.isEmpty()) {
-            return availableClassroom;
-        } else {
-            List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
-            for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
-                List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
-                if (!classroom.isEmpty()) {
-                    if (availableClassroom.isEmpty()) {
-                        availableClassroom = classroom;
-                    } else {
-                        Iterator<String> it = availableClassroom.iterator();
-                        while (it.hasNext()) {
-                            String room = it.next();
-                            if (!classroom.contains(room)) {
-                                it.remove();
-                            }
+        List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            if (!classroom.isEmpty()) {
+                if (availableClassroom.isEmpty()) {
+                    availableClassroom = classroom;
+                } else {
+                    Iterator<String> it = availableClassroom.iterator();
+                    while (it.hasNext()) {
+                        String room = it.next();
+                        if (!classroom.contains(room)) {
+                            it.remove();
                         }
                     }
                 }
             }
-            return availableClassroom;
         }
+        if(!availableClassroom.isEmpty()){
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
+            availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
+            availableClassroom.remove(classroomEntity.getName());
+        }
+        return availableClassroom;
     }
 
     private boolean getListReport(HttpServletRequest request, String page) {
@@ -534,7 +553,7 @@ public class NotifyController {
         int size = 5;
         int numberOfReport = reportDAO.getNumberOfFinishReport();
         int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
-        if(page != null) {
+        if(page != null && !page.equals("0")) {
             pageNumber = Integer.parseInt(page);
             request.setAttribute("ACTIVETAB", "tab2");
 

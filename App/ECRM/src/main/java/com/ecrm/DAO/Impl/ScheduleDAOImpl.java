@@ -46,7 +46,8 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
                 "FROM TblScheduleEntity s " +
                 "WHERE s.username = :username " +
                 "AND current_date() = s.date " +
-                "AND s.isActive = true");
+                "AND s.isActive = true " +
+                "ORDER BY s.timeFrom ASC");
         query.setParameter("username", username);
 
         List queryResult = query.getResultList();

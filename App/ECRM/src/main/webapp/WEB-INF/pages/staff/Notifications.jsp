@@ -174,7 +174,7 @@
                                 </c:forEach>
                             </div>
                         </div>
-                        <c:if test="${size >= 1}">
+                        <c:if test="${size > 1}">
                             <div class="paging">
                                 <c:if test="${page + 1 < size}">
                                     <div class="page"><a href="/thong-bao?trang=${page+1}">Sau</a></div>

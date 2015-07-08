@@ -121,7 +121,7 @@ public class NotifyController {
         for (TblReportEntity report : reports) {
             List<TblReportDetailEntity> details = report.getTblReportDetailsById();
             for (int i = 0; i < details.size(); i++) {
-                if (!details.get(i).isStatus()) {
+                if (details.get(i).isStatus()) {
                     flag++;
                 }
             }
@@ -129,6 +129,8 @@ public class NotifyController {
             if (flag == details.size()) {
                 report.setStatus(ReportStatus.FINISH.getValue());
                 reportDAO.merge(report);
+
+                changeNotificationStatus(roomId);
             } else if (flag > 0) {
                 report.setStatus(ReportStatus.GOING.getValue());
                 reportDAO.merge(report);
@@ -169,14 +171,10 @@ public class NotifyController {
             reportDAO.merge(report);
         }
 
-        TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(roomId, MessageType.NEWREPORT.getValue());
-        if (notify != null) {
-            notify.setStatus(false);
-            notificationDAO.merge(notify);
-        }
-
+        changeNotificationStatus(roomId);
         room.setDamagedLevel(0);
         classroomDAO.merge(room);
+
         return "redirect:/thong-bao";
     }
 
@@ -261,7 +259,7 @@ public class NotifyController {
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
 
-        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getUnreadNotificationByUser(user.getUsername());
+        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername());
         int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
 
         request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
@@ -272,15 +270,45 @@ public class NotifyController {
 
     @RequestMapping(value = "notify")
     public String redirectNotify(HttpServletRequest request, @RequestParam(value = "link") int notifyId){
-        TblUserNotificationEntity userNotification = userNotificationDAO.find(notifyId);
-        if(userNotification != null && userNotification.isStatus() == false) {
-            userNotification.setStatus(true);
-            userNotificationDAO.merge(userNotification);
+        HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+        TblRoleEntity role = user.getTblRoleByRoleId();
 
+        TblUserNotificationEntity userNotification = userNotificationDAO.find(notifyId);
+        if(userNotification != null) {
+            if(!userNotification.isStatus()) {
+                userNotification.setStatus(true);
+                userNotificationDAO.merge(userNotification);
+            }
             return "redirect:" + userNotification.getTblNotificationById().getRedirectLink();
         }
 
-        return "redirect:/giang-vien";
+        if("Teacher".equals(role.getName())) {
+            return "redirect:/giang-vien/thong-bao";
+        } else if("Staff".equals(role.getName())) {
+            return "redirect:/thong-bao";
+        } else {
+            return "redirect:/admin/account";
+        }
+    }
+
+//  PRIVATE METHOD
+    private void changeNotificationStatus(int roomId) {
+        List<TblNotificationEntity> notifies = notificationDAO.getActiveNotifyOfRoom(roomId, MessageType.NEWREPORT.getValue());
+        for (TblNotificationEntity notify: notifies) {
+            if(!notify.isStatus()) {
+                notify.setStatus(true);
+                notificationDAO.merge(notify);
+            }
+
+            List<TblUserNotificationEntity> listUserNotifies = notify.getTblUserNotificationById();
+            for (TblUserNotificationEntity userNotify: listUserNotifies) {
+                if(!userNotify.isStatus()) {
+                    userNotify.setStatus(true);
+                    userNotificationDAO.merge(userNotify);
+                }
+            }
+        }
     }
 
     private boolean resolve(int room, int category, String[] listEquipment) {

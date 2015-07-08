@@ -314,6 +314,9 @@ function sentReport(){
         url: "sentReport",
         data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate option:selected").text(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
+            $(".table").css("display", "block");
+            $(".none-message").remove();
+
             var data = result.split('-');
             var oldRow = document.getElementById("report-" + data[0]);
 
@@ -337,6 +340,10 @@ function sentReport(){
                 document.getElementById("content-report").innerHTML += content;
             } else {
                 document.getElementById("list-" + data[0]).innerHTML = data[2];
+                var label = oldRow.getElementsByClassName("label")[0];
+                if(label.innerHTML.trim() == 'Đã sửa') {
+                    label.innerHTML = "Đang sửa";
+                }
             }
 
             for (var key in noDamagedEquipments) {

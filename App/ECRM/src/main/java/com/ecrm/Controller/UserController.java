@@ -63,16 +63,12 @@ public class UserController {
         }
 
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
-        String role = user.getTblRoleByRoleId().getName();
-        List<TblNotificationEntity> listNotify = new ArrayList<TblNotificationEntity>();
-        if (role.equals("Teacher")) {
-            listNotify = notificationDAOImp.getAllNotifyOfUser(user.getUsername(), MessageType.CHANGEROOM.getValue());
-        } else if (role.equals("Staff")) {
-            listNotify = notificationDAOImp.getAllNotifyOfStaff();
-        }
+        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername());
+        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
 
         List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
 
+        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
         request.setAttribute("LISTNOTIFY", listNotify);
         request.setAttribute("SCHEDULE", list);
         return "user/NewTemplate";

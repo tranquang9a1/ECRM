@@ -33,7 +33,7 @@ public class TblNotificationEntity {
         this.createTime = new Timestamp(new Date().getTime());
         this.redirectLink = redirectLink;
         this.messageType = messageType;
-        this.status = true;
+        this.status = false;
     }
 
     @Id

@@ -20,71 +20,53 @@ public class NotificationDAOImp extends BaseDAO<TblNotificationEntity, Integer> 
         super(TblNotificationEntity.class);
     }
 
-    @Override
-    public List<TblNotificationEntity> getAllNotifyOfUser(String username, int messageType) {
-        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
-                "WHERE DATE(n.createTime) = CURDATE() " +
-                "AND n.status = true " +
-                "AND n.messageType = :mType " +
-                "AND n.classroomId IN (SELECT s.classroomId FROM TblScheduleEntity s " +
-                                "WHERE s.date = CURDATE() " +
-                                "AND s.username = :username " +
-                                "GROUP BY s.classroomId)");
-        query.setParameter("username", username);
-        query.setParameter("mType", messageType);
+//    @Override
+//    public List<TblNotificationEntity> getAllNotifyOfUser(String username, int messageType) {
+//        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
+//                "WHERE DATE(n.createTime) = CURDATE() " +
+//                "AND n.status = true " +
+//                "AND n.messageType = :mType " +
+//                "AND n.classroomId IN (SELECT s.classroomId FROM TblScheduleEntity s " +
+//                                "WHERE s.date = CURDATE() " +
+//                                "AND s.username = :username " +
+//                                "GROUP BY s.classroomId)");
+//        query.setParameter("username", username);
+//        query.setParameter("mType", messageType);
+//
+//        List queryResult = query.getResultList();
+//        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
+//        if(!queryResult.isEmpty()) {
+//            for (Iterator i = queryResult.iterator(); i.hasNext();){
+//                result.add((TblNotificationEntity) i.next());
+//            }
+//        }
+//
+//        return result;
+//    }
 
-        List queryResult = query.getResultList();
-        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
-        if(!queryResult.isEmpty()) {
-            for (Iterator i = queryResult.iterator(); i.hasNext();){
-                result.add((TblNotificationEntity) i.next());
-            }
-        }
-
-        return result;
-    }
-
-    public List<TblNotificationEntity> getAllNotifyOfStaff() {
-        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
-                "WHERE DATE(n.createTime) = CURDATE() " +
-                "AND n.status = true " +
-                "AND n.messageType = :mType ");
-        query.setParameter("mType", Enumerable.MessageType.NEWREPORT.getValue());
-
-        List queryResult = query.getResultList();
-        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
-        if(!queryResult.isEmpty()) {
-            for (Iterator i = queryResult.iterator(); i.hasNext();){
-                result.add((TblNotificationEntity) i.next());
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public List<TblNotificationEntity> getNotifyInDay() {
-        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
-                "WHERE DATE(n.createTime) < CURDATE() " +
-                "AND n.status = true " +
-                "AND n.messageType = 2");
-
-        List queryResult = query.getResultList();
-        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
-        if(!queryResult.isEmpty()) {
-            for (Iterator i = queryResult.iterator(); i.hasNext();){
-                result.add((TblNotificationEntity) i.next());
-            }
-        }
-
-        return result;
-    }
+//    @Override
+//    public List<TblNotificationEntity> getNotifyInDay() {
+//        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
+//                "WHERE DATE(n.createTime) < CURDATE() " +
+//                "AND n.status = true " +
+//                "AND n.messageType = 2");
+//
+//        List queryResult = query.getResultList();
+//        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
+//        if(!queryResult.isEmpty()) {
+//            for (Iterator i = queryResult.iterator(); i.hasNext();){
+//                result.add((TblNotificationEntity) i.next());
+//            }
+//        }
+//
+//        return result;
+//    }
 
     @Override
     public TblNotificationEntity getNotifyOfRoom(int roomID, int messageType) {
         Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
                 "WHERE n.classroomId = :room " +
-                "AND n.status = true " +
+                "AND n.status = false " +
                 "AND DATE(n.createTime) = CURDATE() " +
                 "AND n.messageType = :mType");
         query.setParameter("room", roomID);
@@ -96,5 +78,25 @@ public class NotificationDAOImp extends BaseDAO<TblNotificationEntity, Integer> 
         }
 
         return null;
+    }
+
+    @Override
+    public List<TblNotificationEntity> getActiveNotifyOfRoom(int roomID, int messageType) {
+        Query query = entityManager.createQuery("SELECT n FROM TblNotificationEntity n " +
+                "WHERE n.classroomId = :room " +
+                "AND n.status = false " +
+                "AND n.messageType = :mType");
+        query.setParameter("room", roomID);
+        query.setParameter("mType", messageType);
+
+        List queryResult = query.getResultList();
+        List<TblNotificationEntity> result = new ArrayList<TblNotificationEntity>();
+        if(!queryResult.isEmpty()) {
+            for(Iterator i = queryResult.iterator(); i.hasNext();) {
+                result.add((TblNotificationEntity) i.next());
+            }
+        }
+
+        return result;
     }
 }

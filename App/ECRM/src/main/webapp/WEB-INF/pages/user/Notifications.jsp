@@ -51,6 +51,11 @@
     <div class="body-content">
         <c:if test="${notifies.size() > 0}">
             <div class="table" style="margin-top: 15px">
+        </c:if>
+        <c:if test="${notifies.size() <= 0}">
+            <p class="none-message">Bạn chưa có báo cáo!</p>
+            <div class="table" style="margin-top: 15px; display: none">
+        </c:if>
                 <div class="header-table">
                     <div class="width-10">
                         <div>Phòng</div>
@@ -125,8 +130,6 @@
                     </c:if>
                 </div>
             </c:if>
-        </c:if>
-        <c:if test="${notifies.size() <= 0}"><p>Bạn chưa có báo cáo!</p></c:if>
     </div>
 </div>
 <div class="content-all-modal">

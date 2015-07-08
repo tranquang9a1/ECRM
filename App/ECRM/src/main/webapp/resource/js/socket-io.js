@@ -67,12 +67,17 @@ function sendDisconnect() {
 }
 
 function setDefaultDiv() {
-    var numberOfNotify = $(".number-of-notify").attr("data-value");
+    var numberOfNewNotify = $(".number-of-notify").attr("data-value");
+    var numberOfNotify = $(".list-notify").attr("data-value");
     if(numberOfNotify == 0){
         $(".list-notify ul").html("");
     }
+
     numberOfNotify++;
-    $(".number-of-notify").attr("data-value", numberOfNotify);
-    $(".number-of-notify").html(numberOfNotify);
+    $(".list-notify").attr("data-value", numberOfNotify);
+
+    numberOfNewNotify++;
+    $(".number-of-notify").attr("data-value", numberOfNewNotify);
+    $(".number-of-notify").html(numberOfNewNotify);
     $(".number-of-notify").removeClass("hidden");
 }

@@ -11,9 +11,11 @@ import java.util.List;
 @Repository
 public interface NotificationDAO {
 
-    public List<TblNotificationEntity> getAllNotifyOfUser(String username, int messageType);
+//    public List<TblNotificationEntity> getAllNotifyOfUser(String username, int messageType);
 
     public TblNotificationEntity getNotifyOfRoom(int roomID, int messageType);
 
-    public List<TblNotificationEntity> getNotifyInDay();
+    public List<TblNotificationEntity> getActiveNotifyOfRoom(int roomID, int messageType);
+
+//    public List<TblNotificationEntity> getNotifyInDay();
 }

@@ -212,7 +212,7 @@ body{
 }
 
 .account-notify .notifications .list-notify ul li:hover {
-    background-color: #cccccc;
+    background-color: #f1f1f1 !important;
 }
 
 .account-notify .notifications .list-notify ul li:first-child {

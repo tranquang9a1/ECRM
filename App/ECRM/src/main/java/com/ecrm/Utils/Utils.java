@@ -91,7 +91,8 @@ public class Utils {
         reportDTO.setEvaluate(reportEntity.getEvaluate());
         reportDTO.setReportId(reportEntity.getId());
         reportDTO.setStatus(reportEntity.getStatus());
-        reportDTO.setDamageLevel(reportEntity.getClassRoomId());
+        reportDTO.setDamageLevel(reportEntity.getTblClassroomByClassRoomId().getDamagedLevel());
+        reportDTO.setChangedRoom(reportEntity.getChangedRoom());
 
         return reportDTO;
     }
@@ -103,7 +104,7 @@ public class Utils {
             ReportDetailDTO dto = new ReportDetailDTO();
             dto.setEquipmentName(entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName());
             dto.setDamaged(entity.getDamagedLevel());
-            dto.setDescription(entity.getSolution());
+            dto.setDescription(entity.getDescription());
             dto.setResolveTime(entity.getResolveTime());
             dto.setSolution(entity.getSolution());
             dto.setStatus(entity.isStatus());

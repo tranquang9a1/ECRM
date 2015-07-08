@@ -88,8 +88,8 @@ public class APIController {
     @RequestMapping(value = "/getReportByUsername", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<ReportDTO> getReport(@RequestParam("username") String username) {
-        List<TblReportEntity> entities = reportDAO.getReportByUserId(username);
+    List<ReportDTO> getReport(@RequestParam("username") String username, @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        List<TblReportEntity> entities = reportDAO.getReportByUserId(username, offset, limit);
         return Utils.convertFromListEntityToListDTO(entities);
     }
 
@@ -269,9 +269,9 @@ public class APIController {
     @RequestMapping(value = "/getReportStaff", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<ReportClassDTO> getReportStaff(@RequestParam("status") String status) {
+    List<ReportClassDTO> getReportStaff(@RequestParam("status") String status, @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
-        List<Integer> listClass = reportDAO.getReportByClassId(status);
+        List<Integer> listClass = reportDAO.getReportByClassId(status, offset, limit);
         List<Integer> listReport = new ArrayList<Integer>();
         for (int classId : listClass) {
             //int id = Integer.parseInt(classId);
@@ -736,6 +736,24 @@ public class APIController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @RequestMapping(value="/remove", method = RequestMethod.GET)
+    public @ResponseBody boolean removeReport(@RequestParam("reportId") int reportId) {
+        try {
+            TblReportEntity report = reportDAO.find(reportId);
+            List<TblReportDetailEntity> details = report.getTblReportDetailsById();
+            for (TblReportDetailEntity detail : details) {
+                detail.setStatus(true);
+                reportDetailDAO.merge(detail);
+            }
+            report.setStatus(Enumerable.ReportStatus.REMOVE.getValue());
+            reportDAO.merge(report);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 

@@ -16,7 +16,7 @@ public interface ReportDAO {
 
     public List<TblReportEntity> getLiveReportsInRoom(int room);
 
-    public List<TblReportEntity> getReportByUserId(String username);
+    public List<TblReportEntity> getReportByUserId(String username, int offset, int limit);
 
     public List<TblReportEntity> getPagingReportByUser(String username, int page, int size);
 
@@ -36,11 +36,13 @@ public interface ReportDAO {
 
     public boolean createReport();
 
-    public List<Integer> getReportByClassId(String status);
+    public List<Integer> getReportByClassId(String status, int offset, int limit);
 
     public boolean resolveReport(int reportId, int equipmentId, String solution);
 
     public boolean updateDamageLevel(int damageLevel, int reportId);
 
     public boolean resolveAll(String solution);
+
+    public boolean removeReport(int reportId);
 }

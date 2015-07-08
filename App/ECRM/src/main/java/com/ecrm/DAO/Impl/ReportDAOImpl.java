@@ -131,9 +131,11 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
-    public List<TblReportEntity> getReportByUserId(String username) {
+    public List<TblReportEntity> getReportByUserId(String username, int offset, int limit) {
         Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username ORDER BY r.createTime DESC");
         query.setParameter("username", username);
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
 
         return query.getResultList();
     }
@@ -208,7 +210,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     }
 
     @Override
-    public List<Integer> getReportByClassId(String status) {
+    public List<Integer> getReportByClassId(String status, int offset, int limit) {
         Query query  = entityManager.createQuery("Select u.classRoomId from TblReportEntity u where u.status = :statusnew " +
                 "group by u.classRoomId ");
         if (status.equalsIgnoreCase("new")) {
@@ -220,6 +222,8 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         } else {
             query.setParameter("statusnew", ReportStatus.REMOVE.getValue());
         }
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
 
         return query.getResultList();
     }
@@ -266,5 +270,10 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         query1.executeUpdate();
 
         return rows > 0;
+    }
+
+    @Override
+    public boolean removeReport(int reportId) {
+        return true;
     }
 }

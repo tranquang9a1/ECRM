@@ -18,10 +18,11 @@ public class ReportDTO {
     private String evaluate;
     private int status;
     private int damageLevel;
+    private String changedRoom;
     private List<ReportDetailDTO> equipments;
 
     public ReportDTO(int reportId, String username, String fullname, String classId, String createTime, String evaluate,
-                     int status, int damageLevel, List<ReportDetailDTO> equipmentId) {
+                     int status, int damageLevel, String changedRoom, List<ReportDetailDTO> equipmentId) {
         this.reportId = reportId;
         this.username = username;
         this.fullname = fullname;
@@ -30,6 +31,7 @@ public class ReportDTO {
         this.evaluate = evaluate;
         this.status = status;
         this.equipments = equipmentId;
+        this.changedRoom = changedRoom;
         this.damageLevel = damageLevel;
     }
 
@@ -107,5 +109,14 @@ public class ReportDTO {
 
     public void setDamageLevel(int damageLevel) {
         this.damageLevel = damageLevel;
+    }
+
+
+    public String getChangedRoom() {
+        return changedRoom;
+    }
+
+    public void setChangedRoom(String changedRoom) {
+        this.changedRoom = changedRoom;
     }
 }

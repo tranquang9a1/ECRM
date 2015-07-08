@@ -16,12 +16,23 @@
     <c:otherwise>
         <html>
         <head>
+            <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
+            <c:set var="classrooms" value="${requestScope.CLASSROOMS}"/>
+            <c:set var="teachers" value="${requestScope.TEACHERS}"/>
+            <c:set var="teachingDate" value="${requestScope.TEACHINGDATE}"/>
+            <c:set var="classroomId" value="${requestScope.CLASSROOMID}"/>
+            <c:set var="schedules" value="${requestScope.SCHEDULES}"/>
+            <c:set var="datefrom" value="${requestScope.DATEFROM}"/>
+            <c:set var="dateto" value="${requestScope.DATETO}"/>
+            <c:set var="teacher" value="${requestScope.TEACHER}"/>
+            <c:set var="classroom" value="${requestScope.CLASSROOM}"/>
+            <c:set var="isEmpty" value="${requestScope.ISEMPTY}"/>
+            <c:set var="scheduleConfig" value="${requestScope.SCHEDULECONFIG}"/>
             <meta charset="UTF-8"/>
             <title>ECRM - Equipment Classroom Management</title>
             <link rel="stylesheet" href="../../resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="../../resource/css/layout.css"/>
             <link rel="stylesheet" href="../../resource/css/general.css"/>
-            <link rel="stylesheet" href="../../resource/css/jquery-ui.css"/>
             <link rel="stylesheet" href="../../resource/css/jquery-ui.css"/>
             <link rel="stylesheet" href="../../resource/css/component.css"/>
 
@@ -57,6 +68,27 @@
                 .inline div {
                     margin-bottom: 5px;
                 }
+
+                .show-more {
+                    position: absolute;
+                    width: 1.8em;
+                    height: 1.8em;
+                }
+
+                .advance-search {
+                    display: block;
+                    position: absolute;
+                    left: 50%;
+                    margin-left: -8px;
+                    top: 50%;
+                    margin-top: -8px;
+                    background-image: url("../../resource/img/ic_expand_more_48px-256.png");
+                    width: 16px;
+                    height: 16px;
+                    text-indent: -99999px;
+                    overflow: hidden;
+                    background-repeat: no-repeat;
+                }
             </style>
             <script>
                 function findAvailableRoom() {
@@ -87,19 +119,7 @@
                 }
             </script>
         </head>
-        <body>
-        <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
-        <c:set var="classrooms" value="${requestScope.CLASSROOMS}"/>
-        <c:set var="teachers" value="${requestScope.TEACHERS}"/>
-        <c:set var="teachingDate" value="${requestScope.TEACHINGDATE}"/>
-        <c:set var="classroomId" value="${requestScope.CLASSROOMID}"/>
-        <c:set var="schedules" value="${requestScope.SCHEDULES}"/>
-        <c:set var="datefrom" value="${requestScope.DATEFROM}"/>
-        <c:set var="dateto" value="${requestScope.DATETO}"/>
-        <c:set var="teacher" value="${requestScope.TEACHER}"/>
-        <c:set var="classroom" value="${requestScope.CLASSROOM}"/>
-        <c:set var="isEmpty" value="${requestScope.ISEMPTY}"/>
-        <c:set var="scheduleConfig" value="${requestScope.SCHEDULECONFIG}"/>
+        <body style="background: url('../../resource/img/Calendar-600.jpg') no-repeat; background-size: cover">
 
         <div class="contain-layout">
             <jsp:include flush="true" page="Header.jsp"/>
@@ -117,53 +137,20 @@
 
 
             <form action="/staff/searchSchedule" onsubmit="return validateForm()" name="searchForm">
-                <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 445px;">
-                    <header style="  border-bottom: 1px solid #EBEEF3; padding: 10px; font-size: medium;
-  font-weight: bold;">
-                        TÌM KIẾM
-                    </header>
-                </div>
-                <div style="margin-left: 20px; background-color: #ffffff; width: 445px;height: 170px;">
-                    <div class="inline">
-                        <div>Ngày:</div>
-                        <div><input type="text" id="datefrom" name="datefrom" value="${datefrom}"><label>
-                            ~ </label><input
-                                type="text"
-                                id="dateto"
-                                name="dateto" value="${dateto}"></div>
-                    </div>
-                    <div class="inline">
-                        <div>Phòng học:</div>
-                        <div class="ui-widget">
-                            <select name="classroomId" id="combobox1">
-                                <option value="0"></option>
-                                <c:choose>
-                                    <c:when test="${not empty classroom}">
-                                        <c:forEach items="${classrooms}" var="c">
-                                            <c:choose>
-                                                <c:when test="${classroom == c.id}">
-                                                    <option value="${c.id}" selected>${c.name}</option>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <option value="${c.id}">${c.name}</option>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <c:forEach items="${classrooms}" var="c">
-                                            <option value="${c.id}">${c.name}</option>
-                                        </c:forEach>
-                                    </c:otherwise>
-                                </c:choose>
-                            </select>
-                        </div>
-                    </div>
+                <div style=" margin-top: 20px;margin-left: 20px; background-color: #ffffff; width: 490px;height: 50px; border-bottom: 1px solid #EBEEF3;">
 
-                    <div class="inline" style="margin-left: 42px;">
-                        <div>Giáo viên:</div>
-                        <div class="ui-widget">
-                            <select name="username" style="width: 150px" id="combobox2">
+                    <div class="search" style="  margin: 0 15px 0 15px;  display: inline-flex;padding-top: 7px">
+                        <a style="margin-right: 3px;background-color: #AAAAAA; border-radius: 3px; cursor: pointer;"
+                           title="Advance Search" onclick="showAdvance();"><img
+                                src="../../resource/img/ic_expand_more_48px-256.png"
+                                style="width:25px;height: 25px; padding-top: 6px"></a>
+                        <select onchange="changeSearch();" id="selectSearch">
+                            <option value="0">Giáo viên</option>
+                            <option value="1">Phòng học</option>
+                        </select>
+
+                        <div class="ui-widget" style="display: block" id="teacherBox">
+                            <select name="username" style="width: 150px" id="combobox2" style="display: none">
                                 <option value="0"></option>
                                 <c:choose>
                                     <c:when test="${not empty teacher}">
@@ -187,14 +174,56 @@
                                 </c:choose>
                             </select>
                         </div>
-                    </div>
-                    <div>
-                        <div style="padding: 10px 0px 5px 0px;">
-                            <button type="submit" class="btn btn-orange" style="margin-left: 15px">Tìm Kiếm</button>
+                        <div class="ui-widget" style="display: none" id="classroomBox">
+                            <select name="classroomId" id="combobox1" style="display: none">
+                                <option value="0"></option>
+                                <c:choose>
+                                    <c:when test="${not empty classroom}">
+                                        <c:forEach items="${classrooms}" var="c">
+                                            <c:choose>
+                                                <c:when test="${classroom == c.id}">
+                                                    <option value="${c.id}" selected>${c.name}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${c.id}">${c.name}</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach items="${classrooms}" var="c">
+                                            <option value="${c.id}">${c.name}</option>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
+                            </select>
+                        </div>
+                        <div>
+                            <div style="padding: 0px 0px 0px 0px;">
+                                <button type="submit" class="btn btn-orange" style="margin-left: 15px">Tìm Kiếm</button>
+                            </div>
                         </div>
                     </div>
-
                 </div>
+                <c:choose>
+                <c:when test="${not empty datefrom or not empty dateto}">
+                <div style="margin-left: 20px; background-color: #ffffff; width: 490px;height: 50px;display: block"
+                     class="date">
+                    </c:when>
+                    <c:otherwise>
+                    <div style="margin-left: 20px; background-color: #ffffff; width: 490px;height: 50px;display: none"
+                         class="date">
+                        </c:otherwise>
+                        </c:choose>
+
+
+                        <div style="margin-left: 15px">Ngày:
+                            <input type="text" id="datefrom" name="datefrom" value="${datefrom}"><label>
+                                ~ </label><input
+                                    type="text"
+                                    id="dateto"
+                                    name="dateto" value="${dateto}"></div>
+                    </div>
             </form>
             <c:if test="${not isEmpty}">
                 <c:if test="${not empty schedules}">
@@ -390,6 +419,15 @@
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
         <script src="../../resource/js/jquery.stickyheader.js"></script>
         <script>
+            if('${teacher}'!=0){
+                var select = document.getElementById("selectSearch").selectedIndex = 0;
+
+                changeSearch();
+            }
+            if('${classroom}'!=0){
+                var select = document.getElementById("selectSearch").selectedIndex = 1;
+                changeSearch();
+            }
             function doAction(choose, object) {
                 closeConform();
                 switch (choose) {
@@ -397,18 +435,6 @@
                         document.getElementById('uploadSchedule').submit();
                         waitLoading();
                         break;
-                }
-            }
-            function validateForm() {
-                var dateFrom = document.forms["searchForm"]["datefrom"].value;
-                var dateTo = document.forms["searchForm"]["dateto"].value;
-                if (dateFrom == null || dateFrom == "") {
-                    alert("Phải nhập ngày bắt đầu!");
-                    return false;
-                }
-                if (dateTo == null || dateTo == "") {
-                    alert("Phải nhập ngày kết thúc!");
-                    return false;
                 }
             }
             function validateImportForm() {
@@ -422,12 +448,12 @@
                     type: "get",
                     url: "/ajax/checkClassroom",
                     cache: false,
-                    data: 'all=' + all+ '&numberOfStudent='+ numberOfStudent+ '&dateFrom='+ dateFrom+ '&username='+ username+
-                    '&avai='+avai+'&dateTo='+dateTo,
+                    data: 'all=' + all + '&numberOfStudent=' + numberOfStudent + '&dateFrom=' + dateFrom + '&username=' + username +
+                    '&avai=' + avai + '&dateTo=' + dateTo,
                     success: function (data) {
-                        if(data.status == true){
+                        if (data.status == true) {
                             document.getElementById('importManually').submit();
-                        }else{
+                        } else {
                             alert(data.alert);
                         }
                     },
@@ -435,35 +461,6 @@
                         alert('Error while request..');
                     }
                 })
-                /*if (username == null || username == "") {
-                    alert("Phải nhập tài khoản!");
-                    return false;
-                }
-                if (numberOfStudent == null || numberOfStudent == "") {
-                    alert("Phải nhập số lượng học sinh!");
-                    return false;
-                }
-                if (dateFrom == null || dateFrom == "") {
-                    alert("Phải nhập ngày bắt đầu!");
-                    return false;
-                }
-                if (avai == 0 && all == 0) {
-                    alert("Phải chọn phòng học!");
-                    return false;
-                }
-                if (all != 0 && checkClassroom(all) === "NO") {
-                    alert("Phòng học hiện không khả dụng!");
-                    return false;
-                }
-
-                if (dateTo != null && dateFrom != null) {
-                    var date1 = new Date(dateFrom);
-                    var date2 = new Date(dateTo);
-                    if (date2 < date1) {
-                        alert("Ngày kết thúc không được nhỏ hơn ngày bắt đầu!");
-                        return false;
-                    }
-                }*/
 
             }
             function checkClassroom(classroomId) {
@@ -480,7 +477,24 @@
                     }
                 })
             }
-
+            function changeSearch() {
+                var select = document.getElementById("selectSearch");
+                var sub = select.options[select.selectedIndex].value;
+                if (sub == '0') {
+                    document.getElementById('teacherBox').style.display = 'block';
+                    document.getElementById('classroomBox').style.display = 'none';
+                    $("#classroomBox  span  input").val("");
+                    document.getElementById('combobox1').selectedIndex = 0;
+                } else {
+                    document.getElementById('teacherBox').style.display = 'none';
+                    document.getElementById('classroomBox').style.display = 'block';
+                    $("#teacherBox  span  input").val("");
+                    document.getElementById('combobox2').selectedIndex = 0;
+                }
+            }
+            function showAdvance() {
+                $('.date').toggle();
+            }
         </script>
         </body>
         </html>

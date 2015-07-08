@@ -44,7 +44,7 @@
         },
 
         _createShowAllButton: function () {
-            var input = this.input,
+            /*var input = this.input,
                 wasOpen = false;
 
             $("<a>")
@@ -73,7 +73,7 @@
 
                     // Pass empty string as value to search for, displaying all results
                     input.autocomplete("search", "");
-                });
+                });*/
         },
 
         _source: function (request, response) {

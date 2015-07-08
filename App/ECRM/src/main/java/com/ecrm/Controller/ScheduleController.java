@@ -340,13 +340,26 @@ public class ScheduleController {
             request.setAttribute("TEACHERS", tblUserEntities);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
             List<LocalDate> teachingDate = new ArrayList<LocalDate>();
+            LocalDate dateFrom = new LocalDate();
+            LocalDate dateTo = new LocalDate();
             //
+            if(datefrom.trim().length()==0 && dateto.trim().length()==0){
+                dateTo = dateFrom.plusDays(5);
+            }
             if (datefrom.trim().length() > 0 && dateto.trim().length() > 0) {
-                LocalDate dateFrom = new LocalDate(datefrom);
-                LocalDate dateTo = new LocalDate(dateto);
-                for (LocalDate date = dateFrom; date.isBefore(dateTo.plusDays(1)); date = date.plusDays(1)) {
-                    teachingDate.add(date);
-                }
+                dateFrom = new LocalDate(datefrom);
+                dateTo = new LocalDate(dateto);
+            }
+            if(datefrom.trim().length()>0 && dateto.trim().length()==0){
+                dateFrom = new LocalDate(datefrom);
+                dateTo = new LocalDate(datefrom);
+            }
+            if(datefrom.trim().length()==0&& dateto.trim().length()>0){
+                dateTo = new LocalDate(dateTo);
+                dateFrom = dateTo.minusDays(5);
+            }
+            for (LocalDate date = dateFrom; date.isBefore(dateTo.plusDays(1)); date = date.plusDays(1)) {
+                teachingDate.add(date);
             }
             if (classroomId.equals("0")) {
                 classroomId = "";
@@ -354,7 +367,7 @@ public class ScheduleController {
             if (username.equals("0")) {
                 username = "";
             }
-            List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.advanceSearch(datefrom, dateto, classroomId, username);
+            List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.advanceSearch(dateFrom.toString(), dateTo.toString(), classroomId, username);
             List<String> classroomName = new ArrayList<String>();
             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                 if (classroomName.isEmpty()) {

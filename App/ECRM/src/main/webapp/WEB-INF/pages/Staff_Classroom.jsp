@@ -25,7 +25,7 @@
             <script src="../../resource/js/jquery-1.11.3.js"></script>
             <script src="../../resource/js/jquery-1.11.3.min.js"></script>
         </head>
-        <body>
+        <body style="background: url('../../resource/img/LargeClassroomWindowView_0.JPG') no-repeat; background-size: cover">
         <c:set var="user" value="${sessionScope.USER}"/>
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
 
@@ -38,7 +38,7 @@
 
                 <div class="clear"></div>
             </div>
-            <div class="body-content">
+            <div class="body-content" style="background-color: whitesmoke;">
                 <div class="tab">
                     <div class="tab-medium">
                         <ul>

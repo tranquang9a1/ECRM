@@ -15,11 +15,11 @@
 </head>
 <body>
   <div class="top">
-    <img src="/resource/img/logo.png">
-    <p>Quản lý thiết bị phòng học - Trường Đại Học FPT</p>
+
+    <p><img src="../../resource/img/LOGO1.PNG">Quản lý thiết bị phòng học</p>
   </div>
   <div class="mid">
-    <form class="login-form" action="/login" method="post">
+    <form class="login-form" action="/login" method="post" style="background-color: white; opacity: 0.9">
       <p>Đăng nhập</p>
       <c:if test="${requestScope.MESSAGE!=null}"><div style="color: #d9534f; margin: 0 5px">${requestScope.MESSAGE}</div></c:if>
       <p class="old">Tài khoản</p>
@@ -29,7 +29,7 @@
       <p><input type="checkbox" name="rememberAccount"/> Duy trì đăng nhập</p>
       <button type="submit">Đăng nhập</button>
     </form>
-    <img src="/resource/img/LogoNew.PNG">
+    <img src="/resource/img/LargeClassroomWindowView_0.JPG">
   </div>
   <div class="bottom">
     <p><b>Địa chỉ: </b> Tòa nhà Inovation, công viên PM Quang Trung, Quận 12, TP Hồ Chí Minh</p>

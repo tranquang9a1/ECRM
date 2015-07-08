@@ -374,6 +374,8 @@ input[type='checkbox'] {
 
 .table .body-table .row{
     border-bottom: 1px solid #ccc;
+    background-color: #5bc0de;
+
 }
 
 .table .body-table .row:nth-child(2n){

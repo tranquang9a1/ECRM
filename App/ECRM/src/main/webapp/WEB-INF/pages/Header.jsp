@@ -13,7 +13,7 @@
 <script src="../resource/js/socket.io.js"></script>
 <script src="../resource/js/socket-io.js"></script>
 <div class="header-bar">
-    <div class="logo">Quản lý thiết bị phòng học - Trường Đại Học FPT</div>
+    <div class="logo">Quản lý thiết bị phòng học</div>
     <div class="account-notify">
         <div class="account-control">
             <p>${user.tblUserInfoByUsername.fullName}</p>

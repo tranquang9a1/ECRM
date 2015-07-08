@@ -26,7 +26,7 @@
             <script src="../../resource/js/jquery-1.11.3.min.js"></script>
 
         </head>
-        <body>
+        <body style="background: url('../../resource/img/LargeClassroomWindowView_0.JPG') no-repeat; background-size: cover">
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
         <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
         <c:set var="categories" value="${requestScope.CATEGORIES}"/>

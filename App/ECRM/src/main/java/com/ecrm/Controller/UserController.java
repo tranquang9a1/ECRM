@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -56,22 +53,82 @@ public class UserController {
     UserNotificationDAOImpl userNotificationDAO;
 
     @RequestMapping(value = "")
-    public String homePage(HttpServletRequest request) {
+    public String homePage(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
+        //Check user login
         HttpSession session = request.getSession();
         if (session.getAttribute("USER") == null) {
             return "redirect:/";
         }
-
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+
+        //Get notifications
         List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername());
         int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
-
-        List<TblScheduleEntity> list = scheduleDAO.getSchedulesOfUser(user.getUsername());
-
         request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
         request.setAttribute("LISTNOTIFY", listNotify);
-        request.setAttribute("SCHEDULE", list);
+
+        //Get all schedule in day
+        List<TblScheduleEntity> allSchedules = scheduleDAO.getSchedulesOfUser(user.getUsername());
+        request.setAttribute("ALLSCHEDULE", allSchedules);
+
+        //Get schedules are finish and going
+        List<TblScheduleEntity> finishSchedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
+        List<ScheduleDTO> listFinnishSchedule = new ArrayList<ScheduleDTO>();
+        for (TblScheduleEntity schedule : finishSchedules) {
+            listFinnishSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null));
+        }
+        request.setAttribute("FINISHSCHEDULE", listFinnishSchedule);
+
+        //Get history report
+        int pageNumber = 0;
+        try {
+            pageNumber = Integer.parseInt(page);
+        } catch (NumberFormatException ex) {
+            pageNumber = 1;
+        }
+
+        int size = 5;
+        int numberOfReport = reportDAO.getNumberOfUserReport(user.getUsername());
+        int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
+
+        if(pageNumber > numberOfPage && pageNumber > 0) {
+            return "Error";
+        }
+
+        if(numberOfReport == 0) {
+            request.setAttribute("HISTORYREPORT", new ArrayList<ReportResponseObject>());
+        } else {
+            if(pageNumber == 0) {
+                pageNumber = 1;
+            }
+
+            List<TblReportEntity> list = reportDAO.getPagingReportByUser(user.getUsername(), pageNumber, size);
+            List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
+            for (int i = 0; i < list.size(); i++) {
+                ReportResponseObject report = new ReportResponseObject(list.get(i));
+                report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
+
+                listReport.add(report);
+            }
+
+            request.setAttribute("CURRENTPAGE", pageNumber);
+            request.setAttribute("MAXPAGE", numberOfPage);
+            request.setAttribute("HISTORYREPORT", listReport);
+        }
+
         return "user/NewTemplate";
+    }
+
+    @RequestMapping(value = "phong-bao-cao")
+    public String getRoom(HttpServletRequest request, @RequestParam("roomId") int roomId) {
+        TblClassroomEntity classroom = classroomDAO.find(roomId);
+        TblRoomTypeEntity roomType = roomTypeDAO.find(classroom.getRoomTypeId());
+        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(roomId);
+
+        request.setAttribute("ROOM", classroom);
+        request.setAttribute("EQUIPMENTS", listEquipment);
+        request.setAttribute("ROOMTYPE", roomType);
+        return "user/ReportRoomNew";
     }
 
     @RequestMapping(value = "thong-bao")

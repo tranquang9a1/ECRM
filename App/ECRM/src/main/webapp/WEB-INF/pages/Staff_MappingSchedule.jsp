@@ -262,10 +262,11 @@
                                             <td>
                                                 <c:forEach var="tes" items="${tis.teacherSchedules}">
                                                     <c:if test="${tes.date == td.toString()}">
-                                                        ${tes.teacher}
+                                                        ${tes.teacher} <span style="font-style: italic; color: red">${tes.note}</span>
                                                     </c:if>
                                                 </c:forEach>
                                             </td>
+
                                         </c:forEach>
                                     </tr>
 
@@ -419,12 +420,12 @@
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
         <script src="../../resource/js/jquery.stickyheader.js"></script>
         <script>
-            if('${teacher}'!=0){
+            if ('${teacher}' != 0) {
                 var select = document.getElementById("selectSearch").selectedIndex = 0;
 
                 changeSearch();
             }
-            if('${classroom}'!=0){
+            if ('${classroom}' != 0) {
                 var select = document.getElementById("selectSearch").selectedIndex = 1;
                 changeSearch();
             }

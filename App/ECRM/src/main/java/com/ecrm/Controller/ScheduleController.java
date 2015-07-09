@@ -271,10 +271,12 @@ public class ScheduleController {
                     if (all.equals("0")) {
                         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
                         if (!tblScheduleEntities.isEmpty()) {
-                            tblScheduleEntities.get(0).setIsActive(false);
-                            scheduleDAO.merge(tblScheduleEntities.get(0));
                             tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
                             scheduleDAO.persist(tblScheduleEntity);
+                            TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(avai));
+                            tblScheduleEntities.get(0).setIsActive(false);
+                            tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
+                            scheduleDAO.merge(tblScheduleEntities.get(0));
                         } else {
                             tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
                             scheduleDAO.persist(tblScheduleEntity);
@@ -282,10 +284,12 @@ public class ScheduleController {
                     } else {
                         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
                         if (!tblScheduleEntities.isEmpty()) {
-                            tblScheduleEntities.get(0).setIsActive(false);
-                            scheduleDAO.merge(tblScheduleEntities.get(0));
                             tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                             scheduleDAO.persist(tblScheduleEntity);
+                            TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(all));
+                            tblScheduleEntities.get(0).setIsActive(false);
+                            tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
+                            scheduleDAO.merge(tblScheduleEntities.get(0));
                         } else {
                             tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                             scheduleDAO.persist(tblScheduleEntity);
@@ -299,10 +303,12 @@ public class ScheduleController {
                 if (all.equals("0")) {
                     List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username,dateFrom, scheduleConfigId);
                     if (!tblScheduleEntities.isEmpty()) {
-                        tblScheduleEntities.get(0).setIsActive(false);
-                        scheduleDAO.merge(tblScheduleEntities.get(0));
                         tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
                         scheduleDAO.persist(tblScheduleEntity);
+                        TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(avai));
+                        tblScheduleEntities.get(0).setIsActive(false);
+                        tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
+                        scheduleDAO.merge(tblScheduleEntities.get(0));
                     } else {
                         tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
                         scheduleDAO.persist(tblScheduleEntity);
@@ -310,10 +316,12 @@ public class ScheduleController {
                 } else {
                     List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username,dateFrom, scheduleConfigId);
                     if (!tblScheduleEntities.isEmpty()) {
-                        tblScheduleEntities.get(0).setIsActive(false);
-                        scheduleDAO.merge(tblScheduleEntities.get(0));
                         tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                         scheduleDAO.persist(tblScheduleEntity);
+                        TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(all));
+                        tblScheduleEntities.get(0).setIsActive(false);
+                        tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
+                        scheduleDAO.merge(tblScheduleEntities.get(0));
                     } else {
                         tblScheduleEntity.setClassroomId(Integer.parseInt(all));
                         scheduleDAO.persist(tblScheduleEntity);
@@ -410,6 +418,8 @@ public class ScheduleController {
                                 TeacherSchedule teacherSchedule = new TeacherSchedule();
                                 teacherSchedule.setTeacher(tblScheduleEntity.getUsername());
                                 teacherSchedule.setDate(tblScheduleEntity.getDate().toString());
+                                teacherSchedule.setNote(tblScheduleEntity.getNote());
+                                teacherSchedule.setIsActive(tblScheduleEntity.getIsActive());
                                 List<TeacherSchedule> teacherSchedules = timeSchedules1.get(j).getTeacherSchedules();
                                 if (teacherSchedules == null) {
                                     teacherSchedules = new ArrayList<TeacherSchedule>();

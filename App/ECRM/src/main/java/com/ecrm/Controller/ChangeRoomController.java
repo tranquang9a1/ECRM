@@ -84,6 +84,7 @@ public class ChangeRoomController {
         }
         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
             tblScheduleEntity.setIsActive(false);
+            tblScheduleEntity.setNote("Đổi sang phòng "+changeClassroomEntity.getName());
             scheduleDAO.merge(tblScheduleEntity);
             TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
                     tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()

@@ -208,6 +208,7 @@ public class NotifyController {
                 listTime.add(schedule.getTimeFrom().getHours() + "h" + schedule.getTimeFrom().getMinutes());
 
                 schedule.setIsActive(false);
+                schedule.setNote("Đổi sang phòng "+changeRoom);
                 scheduleDAO.merge(schedule);
 
                 TblScheduleEntity newSchedule = new TblScheduleEntity(schedule.getUsername(), changeClassroom.getId(),

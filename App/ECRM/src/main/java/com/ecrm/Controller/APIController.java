@@ -746,6 +746,9 @@ public class APIController {
             for (TblReportDetailEntity detail : details) {
                 detail.setStatus(true);
                 reportDetailDAO.merge(detail);
+                TblEquipmentEntity tblEquipmentEntity = detail.getTblEquipmentByEquipmentId();
+                tblEquipmentEntity.setStatus(true);
+                equipmentDAO.merge(tblEquipmentEntity);
             }
             report.setStatus(Enumerable.ReportStatus.REMOVE.getValue());
             reportDAO.merge(report);

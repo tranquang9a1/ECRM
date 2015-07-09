@@ -6,6 +6,8 @@ package com.ecrm.Entity;
 public class TeacherSchedule {
     private String teacher;
     private String date;
+    private boolean isActive;
+    private String note;
 
     public TeacherSchedule() {
     }
@@ -29,5 +31,21 @@ public class TeacherSchedule {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

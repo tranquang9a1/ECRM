@@ -36,6 +36,7 @@ public class CheckDamagedClassroomSchedule {
         
     @Scheduled(cron = "${cron.expression}")
     public void checkChangeClassroom() throws Exception {
+        System.out.println("cronjon running!!!");
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
         GCMController gcmController = new GCMController();
@@ -91,12 +92,35 @@ public class CheckDamagedClassroomSchedule {
                             }
                             if (!availableClassroom.isEmpty()) {
                                 changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+                            }else{
+                                for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
+                                    List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+                                    if (!classroom.isEmpty()) {
+                                        TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(classroom.get(0));
+                                        tblScheduleEntity.setIsActive(false);
+                                        tblScheduleEntity.setNote("Đổi sang phòng "+classroom.get(0));
+                                        scheduleDAO.merge(tblScheduleEntity);
+                                        TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), newClassroom.getId(),
+                                                tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
+                                                + " sang phòng " + newClassroom.getName(), tblScheduleEntity.getTimeFrom(),
+                                                tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
+                                        String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
+                                                tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + newClassroom.getName() + "vào lúc "
+                                                + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
+                                        scheduleDAO.persist(newSchedule);
+                                        System.out.println(message);
+                                /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                                gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());*/
+
+                                    }
+                                }
                             }
                         }
                         if (changeClassroomEntity != null) {
                             System.out.println("Bắt đầu đổi phòng!");
                             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                                 tblScheduleEntity.setIsActive(false);
+                                tblScheduleEntity.setNote("Đổi sang phòng "+changeClassroomEntity.getName() );
                                 scheduleDAO.merge(tblScheduleEntity);
                                 TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
                                         tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
@@ -113,9 +137,8 @@ public class CheckDamagedClassroomSchedule {
                             System.out.println("Kết thúc đổi phòng!");
                         }
                     }
-                    System.out.println("Kết thúc cronjob vào lúc:"+ new Date());
-
                 }
+                System.out.println("Kết thúc cronjob vào lúc:"+ new Date());
 
             }
             /*if (time == 7) {

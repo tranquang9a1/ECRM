@@ -10,7 +10,7 @@ function showReportDetail(roomId){
     if(room != roomId) {
         $.ajax({
             method: "GET",
-            url: "/thong-bao/chi-tiet",
+            url: "/bao-cao/chi-tiet",
             data: {roomId: roomId},
             success: function(result) {
                 $(".content-all-modal").html(result);
@@ -71,7 +71,7 @@ function changeRoom() {
     waitLoading();
     $.ajax({
         method: "GET",
-        url: "/thong-bao/doi-phong",
+        url: "/bao-cao/doi-phong",
         data: {currentClassroom: $("#current-room").val(), changeClassroom: $("#new-room").val()},
         success: function(result) {
             $(".change-room-text").html("<div class='value' style='color:darkorange'><span>Đã Đổi phòng!</span> Không còn lớp trong ngày</div>");

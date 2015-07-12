@@ -43,27 +43,7 @@
           <div class="list-notification">
             <div class="title" style="cursor: pointer" onclick="showListNotify()">Thông báo gần đây</div>
             <div class="notifications" id="notifications">
-              <c:forEach items="${notifies}" var="item">
-                <c:choose>
-                  <c:when test="${item.tblNotificationById.status == true && item.tblNotificationById.messageType == 1}">
-                    <%--<li><img src="/resource/img/user.png"><a href="/thong-bao">${item.tblNotificationById.message}</a></li>--%>
-                    <div class="item" id="notify-${item.id}" title="${item.message}" onclick="conformData('${item.message}')">${item.message}</div>
-                  </c:when>
-                  <c:otherwise>
-                    <c:if test="${item.status == true}">
-                      <%--<li><img src="/resource/img/user.png"><a href="/thong-bao/notify?link=${item.id}">${item.tblNotificationById.message}</a></li>--%>
-                      <div class="item" id="notify-${item.id}" title="${item.message}" onclick="conformData('${item.message}')">${item.message}</div>
-                    </c:if>
-                    <c:if test="${item.status == false}">
-                      <%--<li style="background-color: #d5d5d5;"><img src="/resource/img/user.png"><a href="/thong-bao/notify?link=${item.id}">${item.tblNotificationById.message}</a></li>--%>
-                      <div class="item" id="notify-${item.id}" title="${item.message}" onclick="conformData('${item.message}')"><b>${item.message}</b></div>
-                    </c:if>
-                  </c:otherwise>
-                </c:choose>
-              </c:forEach>
-              <c:forEach var="item" items="${notifications}">
-
-              </c:forEach>
+              <c:import url="/bao-cao/danh-sach-thong-bao?little=true" />
             </div>
           </div>
           <div class="user-schedule">
@@ -208,10 +188,10 @@
 
         createTimes();
         getRoomReport();
-        <%--var listSchedule = {};--%>
-        <%--<c:forEach items="allSchedule" var="item">--%>
-          <%--listSchedule[${item.tblScheduleConfigByScheduleConfigId.timeFrom}] = ${item.tblScheduleConfigByScheduleConfigId.timeFrom};--%>
-        <%--</c:forEach>--%>
+        var listSchedule = {};
+        <c:forEach items="${allSchedule}" var="item">
+          listSchedule[${item.id}] = '${item.tblScheduleConfigByScheduleConfigId.timeFrom}';
+        </c:forEach>
 
         $(".need-remove").remove();
       </script>

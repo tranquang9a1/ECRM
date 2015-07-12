@@ -29,7 +29,7 @@
                 </ul>
             </div>
         </div>
-        <c:import url="/thong-bao/all-notify"/>
+        <c:import url="/bao-cao/all-notify"/>
     </div>
 </div>
 <div class="list-category">
@@ -42,7 +42,7 @@
         <%--</li>--%>
         <c:if test="${user.tblRoleByRoleId.name == 'Staff'}">
             <li id="STAFF_NOTIFY">
-                <a href="/thong-bao">
+                <a href="/bao-cao">
                     <p>Thông Báo</p>
                 </a>
             </li>

@@ -54,7 +54,7 @@ public class MainController {
                 return "redirect:/admin/account";
             }
             if (user.getTblRoleByRoleId().getName().equals("Staff")) {
-                return "redirect:/thong-bao";
+                return "redirect:/bao-cao";
             }
             if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
                 return "redirect:/giang-vien/thong-bao";

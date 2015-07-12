@@ -32,7 +32,7 @@ import java.util.*;
  * Created by ChiDNMSE60717 on 6/8/2015.
  */
 @Controller
-@RequestMapping("/thong-bao")
+@RequestMapping("/bao-cao")
 public class NotifyController {
     @Autowired
     UserDAOImpl userDAO;
@@ -66,7 +66,7 @@ public class NotifyController {
             return "Error";
         }
 
-        return "staff/Notifications";
+        return "staff/ListDamagedRoom";
     }
 
     @RequestMapping(value = "chi-tiet")
@@ -85,7 +85,7 @@ public class NotifyController {
             resultObject.setFree(true);
         }
         request.setAttribute("DAMAGEDROOM", resultObject);
-        return "staff/ReportDetail";
+        return "staff/RoomDetail";
     }
 
     @RequestMapping(value = "hu-hai")
@@ -99,10 +99,11 @@ public class NotifyController {
         if (equipments.size() > 0) {
             getListReport(request, null);
             request.setAttribute("SHOWDETAIL", roomId);
-            return "staff/Notifications";
+
+            return "staff/ListDamagedRoom";
         }
 
-        return "redirect:/thong-bao";
+        return "redirect:/bao-cao";
     }
 
     @RequestMapping(value = "sua-chua")
@@ -175,7 +176,7 @@ public class NotifyController {
         room.setDamagedLevel(0);
         classroomDAO.merge(room);
 
-        return "redirect:/thong-bao";
+        return "redirect:/bao-cao";
     }
 
     @RequestMapping(value = "doi-phong")
@@ -255,12 +256,47 @@ public class NotifyController {
         return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
 
+    @RequestMapping(value = "danh-sach-thong-bao")
+    public String getListNotification(HttpServletRequest request, @RequestParam(value = "little") boolean isLittle, @RequestParam(value = "page", defaultValue = "0", required = false) String page) {
+        HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+
+        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
+        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
+
+        int size = 5;
+        int pageNumber = 0;
+        try {
+            pageNumber = Integer.parseInt(page);
+        } catch (NumberFormatException e) {
+            request.setAttribute("MESSAGE", "Đường dẫn không tồn tại trong hệ thống!");
+            return "Error";
+        }
+
+        if(isLittle) {
+            pageNumber++;
+
+            List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), pageNumber, size);
+            request.setAttribute("LISTNOTIFY", listNotify);
+        } else {
+            pageNumber = (pageNumber == 0 ? 1 : pageNumber);
+
+            List<TblUserNotificationEntity> listUnread = userNotificationDAO.getUnreadNotifyOfUser(user.getUsername());
+            request.setAttribute("UNREADNOTIFYS", listUnread);
+
+            List<TblUserNotificationEntity> listRead = userNotificationDAO.getReadNotifyOfUser(user.getUsername(), pageNumber, size);
+            request.setAttribute("READNOTIFYS", listUnread);
+        }
+
+        return "ListNotifies";
+    }
+
     @RequestMapping(value = "all-notify")
     public String getAllNotify(HttpServletRequest request) {
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
 
-        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername());
+        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), 1, 5);
         int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
 
         request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
@@ -610,7 +646,12 @@ public class NotifyController {
         request.setAttribute("FINISHREPORT", listReport);
         request.setAttribute("NEWREPORT", groups);
 
-        request.setAttribute("ACTIVELEFTTAB", "STAFF_NOTIFY");
+        HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
+        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
+
+        request.setAttribute("TABCONTROL", "STAFF_REPORT");
 
         return true;
     }

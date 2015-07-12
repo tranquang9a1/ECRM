@@ -10,7 +10,7 @@ function showListNotify(element) {
     }
 }
 
-function conformData(message) {
+function conformData(type, object) {
     var body = document.getElementsByTagName("body").item(0);
     var conformDiv = document.createElement("div");
     conformDiv.className = "conform";
@@ -19,16 +19,52 @@ function conformData(message) {
 
     var titleDiv = document.createElement("div");
     titleDiv.className = "title-conform";
-    titleDiv.innerHTML = message;
-
-    var btnConform = document.createElement("input");
-    btnConform.className = "btn btn-orange";
-    btnConform.type = "button";
-    btnConform.value = "Đóng";
-    btnConform.addEventListener("click", closeConformData, false);
-
+    titleDiv.innerHTML = object.message;
     contentDiv.appendChild(titleDiv);
-    contentDiv.appendChild(btnConform);
+
+    switch (type) {
+        case 1:
+            var btnConform = document.createElement("input");
+            btnConform.className = "btn btn-orange";
+            btnConform.type = "button";
+            btnConform.value = "Đóng";
+            btnConform.addEventListener("click", closeConformData, false);
+            contentDiv.appendChild(btnConform);
+            break;
+
+        case 2:
+            var btnNo = document.createElement("input");
+            btnNo.className = "btn btn-normal";
+            btnNo.type = "button";
+            btnNo.value = "Đóng";
+            btnNo.addEventListener("click", closeConformData, false);
+
+            var btnYes = document.createElement("a");
+            btnYes.className = "btn btn-primary";
+            btnYes.href = object.link;
+            btnYes.innerHTML = object.btnName;
+
+            contentDiv.appendChild(btnNo);
+            contentDiv.appendChild(btnYes);
+            break;
+
+        case 3:
+            var btnNo = document.createElement("input");
+            btnNo.className = "btn btn-normal";
+            btnNo.type = "button";
+            btnNo.value = "Đóng";
+            btnNo.addEventListener("click", closeConformData, false);
+
+            var btnYes = document.createElement("a");
+            btnYes.className = "btn btn-primary";
+            btnYes.type = "button";
+            btnYes.value = object.btnName;
+            btnYes.addEventListener("click", function(){ doAction(object.choose, object.object)}, false);
+
+            contentDiv.appendChild(btnNo);
+            contentDiv.appendChild(btnYes);
+            break;
+    }
 
     var bgDiv = document.createElement("div");
     bgDiv.className = "white-background";
@@ -70,6 +106,8 @@ function updateTime() {
     var time = ((nowHour - 6) * 60) + nowMinute - 832;
     document.getElementById("now-time").style.top  = time + "px";
     document.getElementById("time-here").innerHTML = nowHour + ":" + nowMinute;
+
+    $(".content-schedule").scrollTop(((nowHour - 6) * 60) + nowMinute + 100);
 
     setTimeout(function() {updateTime()}, 6000);
 }
@@ -176,4 +214,32 @@ function changePage(page){
         $("#" + page).addClass("active");
         $(".loading-page").removeClass("active");
     }, 300);
+}
+
+
+function showDetailReport(roomId){
+    $(".loading-page").addClass("active");
+    var room = $("#report-details").attr("data-room");
+    window.history.pushState({},"", "/bao-cao/hu-hai?phong=" + roomId);
+
+    if(room != roomId) {
+        $.ajax({
+            method: "GET",
+            url: "/bao-cao/chi-tiet",
+            data: {roomId: roomId},
+            success: function(result) {
+                $("#report-details .page-content").html(result);
+                $("#report-details script").remove();
+                $("#report-details").attr("data-room", roomId);
+
+                changePage('report-details');
+            }
+        });
+    } else {
+        changePage('report-details');
+    }
+}
+
+function resetURL() {
+    window.history.pushState({},"", "/thong-bao");
 }

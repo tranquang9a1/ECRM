@@ -183,6 +183,7 @@ public class TblScheduleEntity {
     public void setTblScheduleConfigByScheduleConfigId(TblScheduleConfigEntity tblScheduleConfigByScheduleConfigId) {
         this.tblScheduleConfigByScheduleConfigId = tblScheduleConfigByScheduleConfigId;
     }
+    
     public TblScheduleEntity() {
     }
 

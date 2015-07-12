@@ -212,7 +212,7 @@
                 sendResolve();
                 break;
             case 2:
-                window.location.href = "/thong-bao/sua-het?roomId="+object;
+                window.location.href = "/bao-cao/sua-het?roomId="+object;
                 break;
             case 3:
                 changeRoom();

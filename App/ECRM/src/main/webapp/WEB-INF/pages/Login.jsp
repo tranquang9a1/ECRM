@@ -29,7 +29,7 @@
       <p><input type="checkbox" name="rememberAccount"/> Duy trì đăng nhập</p>
       <button type="submit">Đăng nhập</button>
     </form>
-    <img src="/resource/img/LargeClassroomWindowView_0.JPG">
+    <img src="/resource/img/background/LargeClassroomWindowView_0.JPG">
   </div>
   <div class="bottom">
     <p><b>Địa chỉ: </b> Tòa nhà Inovation, công viên PM Quang Trung, Quận 12, TP Hồ Chí Minh</p>

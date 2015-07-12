@@ -62,7 +62,7 @@ public class UserController {
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
 
         //Get notifications
-        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername());
+        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), 1, 5);
         int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
         request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
         request.setAttribute("LISTNOTIFY", listNotify);

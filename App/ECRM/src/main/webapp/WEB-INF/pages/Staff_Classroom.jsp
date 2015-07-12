@@ -25,7 +25,7 @@
             <script src="../../resource/js/jquery-1.11.3.js"></script>
             <script src="../../resource/js/jquery-1.11.3.min.js"></script>
         </head>
-        <body style="background: url('../../resource/img/LargeClassroomWindowView_0.JPG') no-repeat; background-size: cover">
+        <body style="background: url('../../resource/img/background/LargeClassroomWindowView_0.JPG') no-repeat; background-size: cover">
         <c:set var="user" value="${sessionScope.USER}"/>
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
 

@@ -2,10 +2,17 @@ body {
     font-size: 14px;
     font-family: Cambria;
     background-color: #f1f1f1;
-    background-image: url("/resource/img/background.jpg");
-    /*background-image: url("/resource/img/background-1.jpg");*/
+    background-image: url("/resource/img/background/LargeClassroomWindowView_0.JPG");
+    /*background-image: url("/resource/img/background/background.jpg");*/
+    /*background-image: url("/resource/img/background/background-1.jpg");*/
     background-size: 100% 100%;
     margin: 0;
+}
+
+.layout-background {
+    width: 100%;
+    height: 100%;
+    /*background-image: url("/resource/img/background/content-bg-cover.png");*/
 }
 
 .clear {
@@ -26,7 +33,8 @@ body {
 }
 
 .header{
-    margin: 20px 0;
+    padding: 20px 0;
+    margin: 0;
     height: 40px;
 }
 
@@ -67,14 +75,20 @@ body {
     background-color: white;
 }
 
-.left-control {
+
+.layout-background .content-body{
+    background: none;
+}
+
+.left-control, .left-category {
     float: left;
     width: 260px;
     height: 500px;
-    margin: 15px 0 15px 15px;
-    padding: 0 14px 0 0;
+    padding: 0 14px 0 15px;
+    margin: 15px 0;
     border-right: 1px solid #ddd;
     overflow: hidden;
+    background-color: white;
 }
 
 .left-control .list-notification{
@@ -174,7 +188,7 @@ body {
     position: absolute;
     bottom: -12px;
     border: 1px solid #ddd;
-    width: 80px;
+    width: 65px;
     height: 24px;
     line-height: 24px;
     text-align: center;
@@ -207,8 +221,14 @@ body {
 }
 
 .conform .content-conform .title-conform{
-    height: 70px;
-    padding: 40px 15px 10px;
+    width: 470px;
+    height: 120px;
+    line-height: 100px;
+    border: 0;
+    text-align: left;
+    font-weight: normal;
+    font-size: 17px;
+    padding: 0 15px;
 }
 
 .conform .content-conform{
@@ -259,7 +279,11 @@ body {
 }
 
 .conform .btn {
-    margin: -15px 10px 0 0;
+    margin: -10px 10px 0 0;
+    text-decoration: none;
+    line-height: 32px;
+    padding: 0 15px;
+    height: 32px;
 }
 
 /*RIGHT CONTENT*/
@@ -268,17 +292,20 @@ body {
     height: 500px;
     float: left;
     position: relative;
-    margin: 15px;
+    margin: 0 0 0 15px;
+    padding: 15px 0 0;
     overflow: hidden;
 }
 .page, .loading-page {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     width: 100%;
     height: 100%;
     opacity: 0;
     z-index: -1;
+    padding: 15px 0 0;
+    background-color: white;
 }
 
 .page.active {
@@ -350,6 +377,11 @@ body {
 .table .header-table{
     background-color: #f1f1f1;
     color: #656565;
+}
+
+.table .body-table .row {
+    border: 0;
+    background-color: white;
 }
 
 /*CREATE REPORT*/
@@ -545,4 +577,91 @@ body {
 
 .width-50{
     width: 50%;
+}
+
+.width-70{
+    width: 70%;
+}
+
+.left-category{
+    width: 200px;
+    height: 530px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.left-category ul{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style-type: none;
+}
+
+.left-category ul li{
+    line-height: 40px;
+    padding: 0 15px;
+    margin: 0 0 5px;
+}
+
+.left-category ul li a{
+    text-decoration: none;
+    color: #555;
+}
+
+.left-category ul li p{
+    margin: 0;
+}
+
+.left-category ul li.active, .left-category ul li:hover{
+    background-color: #e6e6e6;
+}
+
+.left-category ul li.active p, .left-category ul li:hover p{
+    color: orangered;
+    font-weight: bold;
+}
+
+.left-category ul li .part-float {
+    float: left;
+}
+
+.left-category ul li .part-float.right {
+    float: right;
+    color: #555;
+    font-weight: bold;
+    line-height: 30px;
+    padding: 0 7px;
+    margin: 5px 0;
+    border-radius: 3px;
+    background-color: #ccc;
+}
+
+.left-category ul li .part-float.right.active {
+    color: white;
+    background-color: orangered;
+}
+
+.layout-background .right-content{
+    margin: 0 0 0 15px;
+}
+
+.layout-background .right-content, .layout-background .page{
+    width: 705px;
+    height: 500px;
+    padding: 15px;
+}
+
+.tab .tab-medium{
+    margin-top: -1px;
+    background-color: #f1f1f1;
+    border-color: #f1f1f1;
+}
+
+.tab .tab-medium li{
+    border-color: #f1f1f1;
+}
+
+.tab .tab-medium li.active{
+    font-weight: bold;
 }

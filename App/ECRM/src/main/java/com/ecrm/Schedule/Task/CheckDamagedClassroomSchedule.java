@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Time;
 import java.util.*;
 
 /**
@@ -141,20 +142,35 @@ public class CheckDamagedClassroomSchedule {
                 System.out.println("Kết thúc cronjob vào lúc:"+ new Date());
 
             }
-            /*if (time == 7) {
+            if (hour == 7 && localTime.getMinuteOfHour()==0 && localTime.getSecondOfMinute() == 0) {
                 System.out.println("Task check time using run!!! Current time is: " + new Date());
                 List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
                 for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
-                    double slots = tblScheduleEntity.getSlots();
+                    TblScheduleConfigEntity scheduleConfigEntity = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId();
+                    Time timeFrom = scheduleConfigEntity.getTimeFrom();
+                    Time timeTo = scheduleConfigEntity.getTimeTo();
+                    long time = timeTo.getTime() - timeFrom.getTime();
+                    double rs = time/(1000*60*60);
                     TblClassroomEntity classroomEntity = tblScheduleEntity.getTblClassroomByClassroomId();
                     List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
                     if (!tblEquipmentEntities.isEmpty()) {
-                        TblEquipmentEntity equipmentEntity = tblEquipmentEntities.get(0);
-                        equipmentEntity.setTimeRemain(equipmentEntity.getTimeRemain() - (slots * 1.5));
-                        equipmentDAO.merge(equipmentEntity);
+                        for(TblEquipmentEntity equipmentEntity: tblEquipmentEntities){
+                            double timeRemain = equipmentEntity.getTimeRemain() - rs;
+                            equipmentEntity.setTimeRemain(timeRemain);
+                            equipmentDAO.merge(equipmentEntity);
+                            if(equipmentEntity.getTimeRemain()<=50){
+                                String message = "Bóng đèn của projector: "+ equipmentEntity.getName() +" số serial: "+ equipmentEntity.getSerialNumber()+
+                                        " của phòng: "+ equipmentEntity.getTblClassroomByClassroomId().getName()+" sắp hết thời gian sử dụng!";
+                                gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                            }
+                        }
+
                     }
+
                 }
-            }*/
+                System.out.println("Kết thúc cronjob check equipment vào lúc:"+ new Date());
+
+            }
         }
     }
 

@@ -113,8 +113,12 @@ public class APIController {
             int classroomId = Integer.parseInt(classId);
             TblClassroomEntity room = classroomDAO.find(classroomId);
             Date date = new Date();
-            TblReportEntity report = new TblReportEntity(username, classroomId, new Timestamp(date.getTime()), evaluate, 1);
-            reportDAO.insert(report);
+            TblReportEntity report = reportDAO.getReportOfUsernameInDay(username, classroomId);
+            if (report == null || report.getStatus() == Enumerable.ReportStatus.FINISH.getValue()) {
+                report = new TblReportEntity(username, classroomId, new Timestamp(date.getTime()), evaluate, 1);
+                reportDAO.insert(report);
+            }
+            
             int reportId = report.getId();
             //position
             String[] positions = listPosition.split("-");

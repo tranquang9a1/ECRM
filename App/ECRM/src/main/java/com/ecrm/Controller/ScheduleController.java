@@ -10,6 +10,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.joda.time.LocalDate;
@@ -129,7 +131,6 @@ public class ScheduleController {
                 int classroom = 0;
                 int numberOfSlot = 0;
                 int count = 0;
-                TblScheduleEntity tblScheduleEntity = new TblScheduleEntity();
                 TblClassroomEntity classroomEntity = new TblClassroomEntity();
                 while (rowIterator.hasNext()) {
                     String slot = "";
@@ -161,7 +162,7 @@ public class ScheduleController {
                         String[] array = slot.split("-");
                         timeFrom = array[0].trim();
                         timeTo = array[1].trim();
-                        List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigByTFTT(timeFrom,timeTo);
+                        List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigByTFTT(timeFrom, timeTo);
                         scheduleConfigId = tblScheduleConfigEntities.get(0).getId();
                         count = 0;
                         while (cellIterator.hasNext()) {
@@ -191,33 +192,13 @@ public class ScheduleController {
         }
     }
 
-    public String convertSlotToTime(String slot) throws ParseException {
-        String timeFrom = "07:00:00";
-        if (slot.equals("Slot 2")) {
-            timeFrom = "08:45:00";
-        }
-        if (slot.equals("Slot 3")) {
-            timeFrom = "10:30:00";
-        }
-        if (slot.equals("Slot 4")) {
-            timeFrom = "12:30:00";
-        }
-        if (slot.equals("Slot 5")) {
-            timeFrom = "14:15:00";
-        }
-        if (slot.equals("Slot 6")) {
-            timeFrom = "16:00:00";
-        }
-        return timeFrom;
-    }
-
     public void insertSchedule(String teacher, TblClassroomEntity classroomEntity,
                                int numberOfSlot, String timeFrom, String date, DateFormat formatter, int scheduleConfigId) throws ParseException {
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
         if (checkValidSchedule(teacher, date, scheduleConfigId)) {
-                TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
-                        teachingDate, true, scheduleConfigId);
-                scheduleDAO.persist(tblScheduleEntity);
+            TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
+                    teachingDate, true, scheduleConfigId);
+            scheduleDAO.persist(tblScheduleEntity);
         }
 
     }
@@ -254,80 +235,68 @@ public class ScheduleController {
                                  @RequestParam("dateT") String dateTo) throws ParseException {
         HttpSession session = request.getSession();
         if (session != null) {
-            List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigBySlot(slot);
-            String timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom().toString();
-            int scheduleConfigId = tblScheduleConfigEntities.get(0).getId();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             LocalDate dateF = new LocalDate(dateFrom);
             if (dateTo.trim().length() == 0) {
                 dateTo = dateFrom;
             }
             LocalDate dateT = new LocalDate(dateTo);
-            if (!dateTo.equals(dateFrom)) {
-                for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
-                    java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
-                    TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
-                            teachingDate, true, scheduleConfigId);
-                    if (all.equals("0")) {
-                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
-                        if (!tblScheduleEntities.isEmpty()) {
-                            tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
-                            scheduleDAO.persist(tblScheduleEntity);
-                            TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(avai));
-                            tblScheduleEntities.get(0).setIsActive(false);
-                            tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
-                            scheduleDAO.merge(tblScheduleEntities.get(0));
+            for(int i = 0; i<numberOfSlots; i++){
+                List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigBySlot(slot+i);
+                String timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom().toString();
+                int scheduleConfigId = tblScheduleConfigEntities.get(0).getId();
+                if (!dateTo.equals(dateFrom)) {
+                    for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
+                        java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
+
+                        int classroom;
+                        if (all.equals("0")) {
+                            classroom = Integer.parseInt(avai);
                         } else {
-                            tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
-                            scheduleDAO.persist(tblScheduleEntity);
+                            classroom = Integer.parseInt(all);
                         }
-                    } else {
-                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
+                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, classroom);
+                        List<TblScheduleEntity> tblScheduleEntities2 = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
                         if (!tblScheduleEntities.isEmpty()) {
-                            tblScheduleEntity.setClassroomId(Integer.parseInt(all));
-                            scheduleDAO.persist(tblScheduleEntity);
-                            TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(all));
                             tblScheduleEntities.get(0).setIsActive(false);
-                            tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
+                            tblScheduleEntities.get(0).setNote("Đã thay đổi");
                             scheduleDAO.merge(tblScheduleEntities.get(0));
-                        } else {
-                            tblScheduleEntity.setClassroomId(Integer.parseInt(all));
-                            scheduleDAO.persist(tblScheduleEntity);
+                        }if(!tblScheduleEntities2.isEmpty() && !tblScheduleEntities.get(0).getUsername().equals(tblScheduleEntities2.get(0).getUsername())){
+                            TblClassroomEntity classroomEntity = classroomDAO.find(classroom);
+                            tblScheduleEntities2.get(0).setIsActive(false);
+                            tblScheduleEntities2.get(0).setNote("Đã đổi sang phòng: " + classroomEntity.getName());
+                            scheduleDAO.merge(tblScheduleEntities2.get(0));
                         }
-                    }
-                }
-            } else {
-                java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
-                TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, Integer.parseInt(avai), numberOfStudent, null, java.sql.Time.valueOf(timeFrom), numberOfSlots,
-                        teachingDate, true, scheduleConfigId);
-                if (all.equals("0")) {
-                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username,dateFrom, scheduleConfigId);
-                    if (!tblScheduleEntities.isEmpty()) {
-                        tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
-                        scheduleDAO.persist(tblScheduleEntity);
-                        TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(avai));
-                        tblScheduleEntities.get(0).setIsActive(false);
-                        tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
-                        scheduleDAO.merge(tblScheduleEntities.get(0));
-                    } else {
-                        tblScheduleEntity.setClassroomId(Integer.parseInt(avai));
+                        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, classroom, numberOfStudent, "Nhập tay", java.sql.Time.valueOf(timeFrom), 1,
+                                teachingDate, true, scheduleConfigId);
                         scheduleDAO.persist(tblScheduleEntity);
                     }
                 } else {
-                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(username,dateFrom, scheduleConfigId);
-                    if (!tblScheduleEntities.isEmpty()) {
-                        tblScheduleEntity.setClassroomId(Integer.parseInt(all));
-                        scheduleDAO.persist(tblScheduleEntity);
-                        TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(all));
-                        tblScheduleEntities.get(0).setIsActive(false);
-                        tblScheduleEntities.get(0).setNote("Đổi sang phòng " + classroomEntity.getName());
-                        scheduleDAO.merge(tblScheduleEntities.get(0));
+                    java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
+                    int classroom;
+                    if (all.equals("0")) {
+                        classroom = Integer.parseInt(avai);
                     } else {
-                        tblScheduleEntity.setClassroomId(Integer.parseInt(all));
-                        scheduleDAO.persist(tblScheduleEntity);
+                        classroom = Integer.parseInt(all);
                     }
+                    List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, classroom);
+                    List<TblScheduleEntity> tblScheduleEntities2 = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
+                    if (!tblScheduleEntities.isEmpty()) {
+                        tblScheduleEntities.get(0).setIsActive(false);
+                        tblScheduleEntities.get(0).setNote("Đã thay đổi");
+                        scheduleDAO.merge(tblScheduleEntities.get(0));
+                    }if(!tblScheduleEntities2.isEmpty() && !tblScheduleEntities.get(0).getUsername().equals(tblScheduleEntities2.get(0).getUsername())){
+                        TblClassroomEntity classroomEntity = classroomDAO.find(classroom);
+                        tblScheduleEntities2.get(0).setIsActive(false);
+                        tblScheduleEntities2.get(0).setNote("Đã đổi sang phòng: "+ classroomEntity.getName());
+                        scheduleDAO.merge(tblScheduleEntities2.get(0));
+                    }
+                    TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, classroom, numberOfStudent, "Nhập tay", java.sql.Time.valueOf(timeFrom), 1,
+                            teachingDate, true, scheduleConfigId);
+                    scheduleDAO.persist(tblScheduleEntity);
                 }
             }
+
 
 
             return "redirect:/staff/schedule?ACTIVETAB=tab2";
@@ -351,18 +320,18 @@ public class ScheduleController {
             LocalDate dateFrom = new LocalDate();
             LocalDate dateTo = new LocalDate();
             //
-            if(datefrom.trim().length()==0 && dateto.trim().length()==0){
+            if (datefrom.trim().length() == 0 && dateto.trim().length() == 0) {
                 dateTo = dateFrom.plusDays(5);
             }
             if (datefrom.trim().length() > 0 && dateto.trim().length() > 0) {
                 dateFrom = new LocalDate(datefrom);
                 dateTo = new LocalDate(dateto);
             }
-            if(datefrom.trim().length()>0 && dateto.trim().length()==0){
+            if (datefrom.trim().length() > 0 && dateto.trim().length() == 0) {
                 dateFrom = new LocalDate(datefrom);
                 dateTo = new LocalDate(datefrom);
             }
-            if(datefrom.trim().length()==0&& dateto.trim().length()>0){
+            if (datefrom.trim().length() == 0 && dateto.trim().length() > 0) {
                 dateTo = new LocalDate(dateTo);
                 dateFrom = dateTo.minusDays(5);
             }
@@ -408,13 +377,13 @@ public class ScheduleController {
             String time = "";
 
             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
-                for (int i = 0; i<crSdEntities.size(); i++) {
+                for (int i = 0; i < crSdEntities.size(); i++) {
                     room = tblScheduleEntity.getTblClassroomByClassroomId().getName();
                     if (crSdEntities.get(i).getRoomName().equals(room)) {
                         List<TimeSchedule> timeSchedules1 = crSdEntities.get(i).getTimeSchedules();
                         int id = tblScheduleEntity.getScheduleConfigId();
                         for (int j = 0; j < 6; j++) {
-                            if (timeSchedules1.get(j).getScheduleConfigId()==id) {
+                            if (timeSchedules1.get(j).getScheduleConfigId() == id) {
                                 TeacherSchedule teacherSchedule = new TeacherSchedule();
                                 teacherSchedule.setTeacher(tblScheduleEntity.getUsername());
                                 teacherSchedule.setDate(tblScheduleEntity.getDate().toString());
@@ -434,16 +403,16 @@ public class ScheduleController {
                 }
             }
             boolean isEmpty = true;
-            for(CrSdEntity crSdEntity: crSdEntities){
+            for (CrSdEntity crSdEntity : crSdEntities) {
                 int rowspan = 0;
                 List<TimeSchedule> timeSchedules = crSdEntity.getTimeSchedules();
-                for(TimeSchedule timeSchedule: timeSchedules){
-                    if(timeSchedule.getTeacherSchedules()!=null){
-                        isEmpty =false;
-                        rowspan+=1;
+                for (TimeSchedule timeSchedule : timeSchedules) {
+                    if (timeSchedule.getTeacherSchedules() != null) {
+                        isEmpty = false;
+                        rowspan += 1;
                     }
                 }
-                crSdEntity.setRowspan(rowspan+1);
+                crSdEntity.setRowspan(rowspan + 1);
             }
             Collections.sort(crSdEntities, new CustomComparator());
             request.setAttribute("SCHEDULECONFIG", tblScheduleConfigEntities);
@@ -462,10 +431,58 @@ public class ScheduleController {
             return "Login";
         }
     }
+
     public class CustomComparator implements Comparator<CrSdEntity> {
         @Override
         public int compare(CrSdEntity o1, CrSdEntity o2) {
             return o1.getRoomName().compareTo(o2.getRoomName());
         }
+    }
+
+    @RequestMapping("createSchedule")
+    public void createSchedule(HttpServletRequest request) throws IOException, InvalidFormatException {
+        String filePath = "";
+        ServletContext servletContext = request.getSession().getServletContext();
+        filePath = servletContext.getRealPath("Schedule_Sample.xlsx");
+        FileInputStream fileInputStream = new FileInputStream(new File(filePath));
+        //Get the workbook instance for XLS file
+        Workbook workbook = WorkbookFactory.create(fileInputStream);
+
+        //Get first sheet from the workbook
+        Sheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> rowIterator = sheet.iterator();
+        int i = 1;
+        int j = 0;
+        List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findAll();
+        int size = tblScheduleConfigEntities.size();
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
+
+            //For each row, iterate through each columns
+            Iterator<Cell> cellIterator = row.cellIterator();
+            Cell cell = null;
+            if (row.getRowNum() > 4) {
+                cell = sheet.getRow(row.getRowNum()).getCell(1);
+                if(j<=size-1){
+                    cell.setCellValue(tblScheduleConfigEntities.get(j).getTimeFrom()+" - "+tblScheduleConfigEntities.get(j).getTimeTo());
+                }else{
+                    row.removeCell(cell);
+                }
+                j+=1;
+            }
+            i+=1;
+        }
+        if(j<=size){
+            for(int k = j; k<size; k++){
+                Row row = workbook.getSheetAt(0).createRow(i);
+                Cell cell = row.createCell(1);
+                cell.setCellValue(tblScheduleConfigEntities.get(k).getTimeFrom()+" - "+tblScheduleConfigEntities.get(k).getTimeTo());
+                i+=1;
+            }
+        }
+        fileInputStream.close();
+        FileOutputStream fileOutputStream = new FileOutputStream(new File(filePath));
+        workbook.write(fileOutputStream);
+        fileOutputStream.close();
     }
 }

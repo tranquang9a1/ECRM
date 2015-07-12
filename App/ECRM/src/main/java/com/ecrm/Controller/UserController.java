@@ -211,13 +211,14 @@ public class UserController {
         }
 
         TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
-        if (report == null) {
+        if (report == null || report.getStatus() == ReportStatus.FINISH.getValue()) {
             report = new TblReportEntity(user.getUsername(), reportRequest.getRoomId(), reportRequest.getEvaluate());
             reportDAO.persist(report);
-        } else if (report.getStatus() == ReportStatus.FINISH.getValue()) {
-            report.setStatus(ReportStatus.GOING.getValue());
-            reportDAO.merge(report);
         }
+//        else if (report.getStatus() == ReportStatus.FINISH.getValue()) {
+//            report.setStatus(ReportStatus.GOING.getValue());
+//            reportDAO.merge(report);
+//        }
 
         String[] evaluates = reportRequest.getListEvaluate().split(",");
         int category = 0;

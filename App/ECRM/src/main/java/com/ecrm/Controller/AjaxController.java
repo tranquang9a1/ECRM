@@ -1,12 +1,10 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
+import com.ecrm.DAO.Impl.ScheduleConfigDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblScheduleEntity;
-import com.ecrm.Entity.TblUserEntity;
-import com.ecrm.Entity.ValidateEntity;
+import com.ecrm.Entity.*;
 import com.ecrm.Utils.Utils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.joda.time.LocalDate;
@@ -36,6 +34,8 @@ public class AjaxController {
     UserDAOImpl userDAO;
     @Autowired
     ScheduleDAOImpl scheduleDAO;
+    @Autowired
+    ScheduleConfigDAOImpl scheduleConfigDAO;
 
     @RequestMapping(value = "findClassroom")
     public
@@ -43,28 +43,17 @@ public class AjaxController {
     void findClassroom(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
         HttpSession session = request.getSession();
         if (session != null) {
-            String slot = request.getParameter("slot");
+            int slot = Integer.parseInt(request.getParameter("slot"));
             String currentSlots = request.getParameter("numberOfStudent");
-            String timeFrom = "07:00:00";
-            if (slot.equals("2")) {
-                timeFrom = "08:45:00";
+            int numberOfSlot = Integer.parseInt(request.getParameter("numberOfSlots"));
+            List<Integer> listSlot = new ArrayList<Integer>();
+            listSlot.add(slot);
+            if(numberOfSlot>1){
+                for(int i = 2; i<=numberOfSlot; i++){
+                    listSlot.add(slot+1);
+                }
             }
-            if (slot.equals("3")) {
-                timeFrom = "10:30:00";
-            }
-            if (slot.equals("4")) {
-                timeFrom = "12:30:00";
-            }
-            if (slot.equals("5")) {
-                timeFrom = "14:15:00";
-            }
-            if (slot.equals("6")) {
-                timeFrom = "16:00:00";
-            }
-            String numberOfSlot = request.getParameter("numberOfSlots");
             String date = request.getParameter("date");
-            String dateTime = date + " " + timeFrom;
-            List<Date> time = Utils.timeFraction(dateTime, Integer.parseInt(numberOfSlot));
             //Tìm những phòng có chỗ ngồi phù hợp
             List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
@@ -75,22 +64,29 @@ public class AjaxController {
                 }
             }
             tblClassroomEntities.clear();
-            //So sánh ngày giờ với những schedule khác
+            Iterator<TblClassroomEntity> iterator = fitClassroom.iterator();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-            for (int i = 0; i < fitClassroom.size(); i++) {
-                Collection<TblScheduleEntity> tblScheduleEntities = fitClassroom.get(i).getTblSchedulesById();
+            boolean isMatch = false;
+            while (iterator.hasNext()){
+                isMatch = false;
+                TblClassroomEntity classroomEntity = iterator.next();
+                Collection<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
                 if (tblScheduleEntities != null) {
                     for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                         //So sanh ngay
                         if (tblScheduleEntity1.getDate().getTime() == format.parse(date).getTime() && tblScheduleEntity1.getIsActive()) {
                             //So sanh gio
-                            String t = tblScheduleEntity1.getDate().toString() + " " + tblScheduleEntity1.getTimeFrom();
-                            List<Date> listTimeToCompare = Utils.timeFraction(t, tblScheduleEntity1.getSlots());
-                            if (Utils.timeComparation(time, listTimeToCompare)) {
-                                fitClassroom.remove(i);
-                                break;
+                            int targetSlot = tblScheduleEntity1.getTblScheduleConfigByScheduleConfigId().getSlot();
+                            for(int i = 0; i< listSlot.size(); i++){
+                                if(targetSlot==listSlot.get(i)){
+                                    iterator.remove();
+                                    isMatch = true;
+                                    break;
+                                }
                             }
+                        }
+                        if(isMatch){
+                            break;
                         }
                     }
                 }

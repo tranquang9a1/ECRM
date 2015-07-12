@@ -20,12 +20,12 @@ public class UserNotificationDAOImpl extends BaseDAO<TblUserNotificationEntity, 
     }
 
     @Override
-    public List<TblUserNotificationEntity> getNotificationByUser(String username) {
+    public List<TblUserNotificationEntity> getNotificationByUser(String username, int page, int size) {
         Query query = entityManager.createQuery("SELECT n FROM TblUserNotificationEntity n " +
                 "WHERE n.username = :username ORDER BY n.status ASC, n.id DESC");
         query.setParameter("username", username);
-        query.setMaxResults(5);
-        query.setFirstResult(0);
+        query.setMaxResults(size);
+        query.setFirstResult((page-1)*size);
 
         List queryResult = query.getResultList();
         List<TblUserNotificationEntity> result = new ArrayList<TblUserNotificationEntity>();
@@ -50,5 +50,38 @@ public class UserNotificationDAOImpl extends BaseDAO<TblUserNotificationEntity, 
         }
 
         return 0;
+    }
+
+    @Override
+    public List<TblUserNotificationEntity> getUnreadNotifyOfUser(String username) {
+        Query query = entityManager.createQuery("SELECT n FROM TblUserNotificationEntity n " +
+                "WHERE n.username = :username AND n.status = false");
+        query.setParameter("username", username);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return queryResult;
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<TblUserNotificationEntity> getReadNotifyOfUser(String username, int page, int size) {
+        Query query = entityManager.createQuery("SELECT n FROM TblUserNotificationEntity n " +
+                "WHERE n.username = :username AND n.status = true ORDER BY n.id DESC");
+        query.setParameter("username", username);
+        query.setMaxResults(size);
+        query.setFirstResult((page-1)*size);
+
+        List queryResult = query.getResultList();
+        List<TblUserNotificationEntity> result = new ArrayList<TblUserNotificationEntity>();
+        if(!queryResult.isEmpty()) {
+            for(Iterator i = queryResult.iterator(); i.hasNext();){
+                result.add((TblUserNotificationEntity) i.next());
+            }
+        }
+
+        return result;
     }
 }

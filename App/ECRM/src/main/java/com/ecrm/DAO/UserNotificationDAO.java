@@ -11,7 +11,11 @@ import java.util.List;
 @Repository
 public interface UserNotificationDAO {
 
-    public List<TblUserNotificationEntity> getNotificationByUser(String username);
-
     public int getNumberUnreadNotifyOfUser(String username);
+
+    public List<TblUserNotificationEntity> getUnreadNotifyOfUser(String username);
+
+    public List<TblUserNotificationEntity> getReadNotifyOfUser(String username, int page, int size);
+
+    public List<TblUserNotificationEntity> getNotificationByUser(String username, int page, int size);
 }

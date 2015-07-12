@@ -43,11 +43,12 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
     @Override
     public List<TblScheduleEntity> getSchedulesOfUser(String username) {
         Query query = entityManager.createQuery("SELECT s " +
-                "FROM TblScheduleEntity s " +
+                "FROM TblScheduleEntity s, TblScheduleConfigEntity sc " +
                 "WHERE s.username = :username " +
                 "AND current_date() = s.date " +
                 "AND s.isActive = true " +
-                "ORDER BY s.timeFrom ASC");
+                "AND s.scheduleConfigId = sc.id " +
+                "ORDER BY sc.timeFrom ASC");
         query.setParameter("username", username);
 
         List queryResult = query.getResultList();
@@ -65,9 +66,10 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
     @Override
     public List<TblScheduleEntity> getSchedulesFinishOfUser(String username) {
         Query query = entityManager.createQuery("SELECT s " +
-                "FROM TblScheduleEntity s " +
-                "WHERE s.username = :username " +
-                "AND CURTIME() >= s.timeFrom " +
+                "FROM TblScheduleEntity s, TblScheduleConfigEntity sc " +
+                "WHERE s.scheduleConfigId = sc.id " +
+                "AND s.username = :username " +
+                "AND CURTIME() >= sc.timeFrom " +
                 "AND CURDATE() = s.date " +
                 "AND s.isActive = true " +
                 "GROUP BY s.classroomId");
@@ -87,8 +89,12 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
 
     @Override
     public List<TblScheduleEntity> getScheduleNoFinishOfRoom(int room) {
-        Query query = entityManager.createQuery("SELECT s FROM TblScheduleEntity s WHERE s.classroomId = :classroomId " +
-                "AND CURDATE() = s.date AND s.isActive = true AND ADDTIME(s.timeFrom, '01:15:00') >= CURTIME()");
+        Query query = entityManager.createQuery("SELECT s FROM TblScheduleEntity s, TblScheduleConfigEntity sc " +
+                "WHERE sc.id = s.scheduleConfigId " +
+                    "AND s.classroomId = :classroomId " +
+                    "AND CURDATE() = s.date " +
+                    "AND s.isActive = true " +
+                    "AND SUBTIME(CURTIME(), sc.timeTo ) >= '00:15:00'");
         query.setParameter("classroomId", room);
 
         List list = query.getResultList();
@@ -202,12 +208,12 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
     }
 
 
-    @Override
-    public int findScheduleAfterCurrentTime(int classroomId) {
-        Query query = entityManager.createQuery("SELECT COUNT(*) FROM TblScheduleEntity  s WHERE s.classroomId = :classroomId " +
-                "AND s.timeFrom > current_time() AND s.date = current_date() AND s.isActive=true ");
-        query.setParameter("classroomId", classroomId);
-        Integer result = (Integer) query.getSingleResult();
-        return result;
-    }
+//    @Override
+//    public int findScheduleAfterCurrentTime(int classroomId) {
+//        Query query = entityManager.createQuery("SELECT COUNT(*) FROM TblScheduleEntity  s WHERE s.classroomId = :classroomId " +
+//                "AND s.timeFrom > current_time() AND s.date = current_date() AND s.isActive=true ");
+//        query.setParameter("classroomId", classroomId);
+//        Integer result = (Integer) query.getSingleResult();
+//        return result;
+//    }
 }

@@ -61,7 +61,7 @@ public class ScheduleController {
             request.setAttribute("CLASSROOMS", tblClassroomEntities);
             request.setAttribute("TEACHERS", tblUserEntities);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
-            return "Staff_MappingSchedule";
+            return "Staff_Schedule";
         } else {
             return "Login";
         }
@@ -186,7 +186,7 @@ public class ScheduleController {
                 out.close();
 
             }
-            return "redirect:/staff/schedule?ACTIVETAB=tab1";
+            return "redirect:/staff/Staff_Schedule";
         } else {
             return "Login";
         }
@@ -299,7 +299,7 @@ public class ScheduleController {
 
 
 
-            return "redirect:/staff/schedule?ACTIVETAB=tab2";
+            return "redirect:/staff/Staff_Schedule";
         } else {
             return "Login";
         }
@@ -426,7 +426,7 @@ public class ScheduleController {
             request.setAttribute("ISEMPTY", isEmpty);
 
 
-            return "Staff_MappingSchedule";
+            return "Staff_Schedule";
         } else {
             return "Login";
         }

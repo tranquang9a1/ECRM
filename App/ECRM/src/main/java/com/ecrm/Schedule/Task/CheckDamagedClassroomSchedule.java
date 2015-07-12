@@ -37,7 +37,6 @@ public class CheckDamagedClassroomSchedule {
         
     @Scheduled(cron = "${cron.expression}")
     public void checkChangeClassroom() throws Exception {
-        System.out.println("cronjon running!!!");
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
         GCMController gcmController = new GCMController();

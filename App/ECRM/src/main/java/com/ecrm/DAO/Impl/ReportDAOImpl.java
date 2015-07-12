@@ -145,7 +145,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
 
         Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.username = :username ORDER BY r.createTime DESC");
         query.setParameter("username", username);
-        query.setFirstResult((page-1)*size);
+        query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);
 
         return query.getResultList();
@@ -275,5 +275,13 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     @Override
     public boolean removeReport(int reportId) {
         return true;
+    }
+
+    public List<TblReportEntity> findAllReportInOneMonth(int classroomId){
+        Query query = entityManager.createQuery("SELECT r from TblReportEntity r where r.classRoomId =:classroomId and" +
+                " r.createTime between DATE_FORMAT(CURDATE() ,'%Y-%m-01') and LAST_DAY(CURDATE())");
+        query.setParameter("classroomId", classroomId);
+        List<TblReportEntity> tblReportEntities = query.getResultList();
+        return tblReportEntities;
     }
 }

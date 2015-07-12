@@ -338,6 +338,11 @@ body {
     float: right;
 }
 
+.page .title select{
+    float: right;
+    margin-left: 3px;
+}
+
 .loading-page{
     position: relative;
     background-color: #fff;
@@ -664,4 +669,13 @@ body {
 
 .tab .tab-medium li.active{
     font-weight: bold;
+}
+
+.btn.btn-brown {
+    background-color: #B37840;
+    color: #ffffff;
+}
+
+.btn.btn-brown:hover{
+    background-color: #083357;
 }

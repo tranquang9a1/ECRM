@@ -79,4 +79,11 @@ public class ReportDetailDAOImpl extends BaseDAO<TblReportDetailEntity, Integer>
 
         return null;
     }
+
+    public List<TblReportDetailEntity> findAllReportDTInOneMonth(){
+        Query query = entityManager.createQuery("select rd from TblReportDetailEntity rd, TblReportEntity r where r.id = rd.reportId and" +
+                " r.createTime between DATE_FORMAT(CURDATE() ,'%Y-%m-01') and LAST_DAY(CURDATE())");
+        List<TblReportDetailEntity> tblReportDetailEntities = query.getResultList();
+        return tblReportDetailEntities;
+    }
 }

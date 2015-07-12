@@ -57,7 +57,10 @@
                 </a>
             </li>
             <li>
-                <p>Thống Kê</p>
+                <a href="/staff/statistic">
+                    <p>Thống Kê</p>
+                </a>
+
             </li>
             <li id="STAFF_SCHEDULE">
                 <a href="/staff/schedule">

@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="user" value="${sessionScope.USER}"/>
+<c:set var="tab" value="${requestScope.TABCONTROL}"/>
 <c:choose>
     <c:when test="${empty user}">
         <jsp:forward page="Login.jsp"/>
@@ -39,6 +40,7 @@
             <script src="/resource/js/jquery-1.11.3.js"></script>
             <script src="/resource/js/jquery-1.11.3.min.js"></script>
             <script src="/resource/js/jquery-ui.js"></script>
+            <script src="/resource/js/newTemplate.js"></script>
             <script src="/resource/js/Staff-schedule.js"></script>
             <style>
                 .inline div {
@@ -85,15 +87,15 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <jsp:include flush="true" page="Left_Category.jsp"/>
+                    <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
-                        <div class="page active">
+                        <div class="page active" id="">
                             <div class="title"><p>Xếp lịch</p>
 
-                                <div><input type="button" class="btn btn-brown" onclick="showModal(1,'Upload');"
+                                <div><input type="button" class="btn btn-primary" onclick="showModal(1,'Upload');"
                                             value="Nhập File"/>
                                 </div>
-                                <div><input type="button" class="btn btn-brown" onclick="showModal(1,'Manual');"
+                                <div><input type="button" class="btn btn-normal" onclick="showModal(1,'Manual');"
                                             value="Tạo mới"/></div>
                                 <div class="clear"></div>
                             </div>
@@ -162,7 +164,7 @@
                                         </div>
                                         <div>
                                             <div style="padding: 0px 0px 0px 0px;">
-                                                <button type="submit" class="btn btn-brown" style="margin-left: 15px">
+                                                <button type="submit" class="btn btn-primary" style="margin-left: 15px">
                                                     Tìm Kiếm
                                                 </button>
                                             </div>
@@ -262,9 +264,7 @@
                                                value="Nhập lịch"/>
                                     </div>
                                 </div>
-                                <div class="black-background"></div>
                             </div>
-
                             <div class="modal modal-medium" id="Manual">
                                 <div class="content-modal" style="height: 530px">
                                     <div class="header-modal title">
@@ -372,10 +372,9 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="black-background"></div>
                             </div>
-
                         </div>
+                        <c:import url="/bao-cao/thong-bao?little=false"/>
                     </div>
                 </div>
             </div>
@@ -462,7 +461,11 @@
             function showAdvance() {
                 $('.date').toggle();
             }
+
+            document.getElementById("${tab}").className += " active";
+            document.getElementById("${tab}").setAttribute("data-main", "1");
         </script>
+        <div class="black-background"></div>
         </body>
         </html>
     </c:otherwise>

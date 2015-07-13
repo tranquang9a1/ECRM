@@ -144,7 +144,7 @@
       </div>
       <div class="footer-modal">
         <input type="button" class="btn btn-normal" onclick="showModal(0, 'change-room');" value="Đóng" />
-        <input type="button" class="btn btn-primary" onclick="changeRoom();" value="Đổi phòng" />
+        <input type="button" class="btn btn-primary" onclick="changeNewRoom();" value="Đổi phòng" />
       </div>
     </div>
   </div>

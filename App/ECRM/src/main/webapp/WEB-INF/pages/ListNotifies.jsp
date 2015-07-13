@@ -9,8 +9,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<c:set var="backLink" value="${requestScope.BACKLINK}"/>
 <c:set var="numberOfUnreadNotify" value="${requestScope.NUMBEROFNOTIFY}"/>
 <c:set var="notifies" value="${requestScope.LISTNOTIFY}"/>
+
 <c:set var="unreadNotifies" value="${requestScope.UNREADNOTIFYS}"/>
 <c:set var="readNotifies" value="${requestScope.READNOTIFYS}"/>
 
@@ -36,8 +38,14 @@
 </c:if>
 <c:if test="${empty notifies}">
   <div class="page" id="list-notifies">
-    <div class="block-content block-64 left">
-      <div class="title">Thông báo</div>
+    <div class="title">
+      <p>Danh sách thông báo</p>
+      <c:if test="${backLink != null}">
+        <input type="button" class="btn btn-normal" onclick="showViewPage('${backLink}')" value="Quay lại"/>
+      </c:if>
+    </div>
+    <div class="left-col width-35">
+      <div class="tab"><div class="tab-medium"><ul><li class="active">Thông báo</li></ul></div></div>
       <div class="block-content">
         <c:if test="${unreadNotifies.size() > 0}">
           <c:forEach var="item" items="${unreadNotifies}">
@@ -52,29 +60,29 @@
         </c:if>
       </div>
     </div>
-    <div class="block-content block-64 right">
-    <div class="title">Lịch sử thông báo</div>
-    <div class="block-content">
-    <c:if test="${readNotifies.size() <= 0}">
-      <div class="none-message">Không có thông báo</div>
-    </c:if>
-    <c:if test="${readNotifies.size() > 0}">
-      <div class="table">
-        <div class="header-table">
-          <div class="width-30">Thời gian</div>
-          <div class="width-70">Nội dung</div>
+    <div class="right-col width-60">
+      <div class="tab"><div class="tab-medium"><ul><li class="active">Lịch sử thông báo</li></ul></div></div>
+      <div class="block-content">
+      <c:if test="${readNotifies.size() <= 0}">
+        <div class="none-message">Không có thông báo</div>
+      </c:if>
+      <c:if test="${readNotifies.size() > 0}">
+        <div class="table">
+          <div class="header-table">
+            <div class="width-30">Thời gian</div>
+            <div class="width-70">Nội dung</div>
+          </div>
+          <div class="body-table">
+            <c:forEach items="${readNotifies}" var="item">
+              <div class="row">
+                <div class="width-30"><div><fmt:formatDate type="time" timeStyle="short" value="${item.tblNotificationById.createTime}"/></div></div>
+                <div class="width-70"><div>${item.tblNotificationById.message}</div></div>
+              </div>
+            </c:forEach>
+          </div>
         </div>
-        <div class="body-table">
-          <c:forEach items="${readNotifies}" var="item">
-            <div class="row">
-              <div class="width-30"><div><fmt:formatDate type="time" timeStyle="short" value="${item.tblNotificationById.createTime}"/></div></div>
-              <div class="width-70"><div>${item.tblNotificationById.message}</div></div>
-            </div>
-          </c:forEach>
-        </div>
+      </c:if>
       </div>
-    </c:if>
     </div>
-  </div>
   </div>
 </c:if>

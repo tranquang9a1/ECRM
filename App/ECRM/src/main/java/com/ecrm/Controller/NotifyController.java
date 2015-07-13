@@ -256,8 +256,10 @@ public class NotifyController {
         return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
 
-    @RequestMapping(value = "danh-sach-thong-bao")
-    public String getListNotification(HttpServletRequest request, @RequestParam(value = "little") boolean isLittle, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
+    @RequestMapping(value = "thong-bao")
+    public String getListNotification(HttpServletRequest request, @RequestParam(value = "little") boolean isLittle,
+                                      @RequestParam(value = "trang", defaultValue = "0", required = false) String page,
+                                      @RequestParam(value = "quay-lai", required = false, defaultValue = "") String backLink) {
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
 
@@ -286,9 +288,24 @@ public class NotifyController {
 
             List<TblUserNotificationEntity> listRead = userNotificationDAO.getReadNotifyOfUser(user.getUsername(), pageNumber, size);
             request.setAttribute("READNOTIFYS", listUnread);
+
+            if(!"".equals(backLink)) {
+                request.setAttribute("BACKLINK", backLink);
+            }
         }
 
         return "ListNotifies";
+    }
+
+    @RequestMapping(value = "danh-muc")
+    public String getLeftMenu(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+
+        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
+        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
+
+        return "LeftCategory";
     }
 
     @RequestMapping(value = "all-notify")

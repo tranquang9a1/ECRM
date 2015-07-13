@@ -60,7 +60,7 @@ public class ScheduleController {
             request.setAttribute("SCHEDULECONFIG", tblScheduleConfigEntities);
             request.setAttribute("CLASSROOMS", tblClassroomEntities);
             request.setAttribute("TEACHERS", tblUserEntities);
-            request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
+            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
             return "Staff_Schedule";
         } else {
             return "Login";
@@ -315,7 +315,7 @@ public class ScheduleController {
             List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
             request.setAttribute("CLASSROOMS", tblClassroomEntities);
             request.setAttribute("TEACHERS", tblUserEntities);
-            request.setAttribute("ACTIVELEFTTAB", "STAFF_SCHEDULE");
+            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
             List<LocalDate> teachingDate = new ArrayList<LocalDate>();
             LocalDate dateFrom = new LocalDate();
             LocalDate dateTo = new LocalDate();

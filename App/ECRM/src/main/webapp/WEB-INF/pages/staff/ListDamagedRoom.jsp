@@ -12,7 +12,6 @@
 <c:set var="user" value="${sessionScope.USER}"/>
 <c:set var="tab" value="${requestScope.TABCONTROL}"/>
 
-<c:set var="numberOfNotify" value="${requestScope.NUMBEROFNOTIFY}"/>
 <c:set var="newReport" value="${requestScope.NEWREPORT}"/>
 
 <html>
@@ -24,11 +23,7 @@
     <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
 
     <script src="/resource/js/jquery-1.11.3.js"></script>
-    <script src="/resource/js/socket.io.js"></script>
-
-    <script src="/resource/js/socket-io.js"></script>
     <script src="/resource/js/script.js"></script>
-    <script src="/resource/js/staff-notify.js"></script>
     <script src="/resource/js/newTemplate.js"></script>
 </head>
 <body>
@@ -42,45 +37,7 @@
         </div>
       </div>
       <div class="content-body">
-        <div class="left-category">
-          <ul>
-            <li id="STAFF_REPORT">
-              <a href="/bao-cao">
-                <p>Báo cáo</p>
-              </a>
-            </li>
-            <li id="STAFF_NOTIFICATION">
-              <a href="javascript:void(0)" onclick="showNotifies()">
-                <p class="part-float">Thông báo</p>
-                <c:if test="${numberOfNotify > 0}">
-                  <p class="part-float right active">${numberOfNotify}</p>
-                </c:if>
-                <c:if test="${numberOfNotify == 0}">
-                  <p class="part-float right">${numberOfNotify}</p>
-                </c:if>
-                <p class="clear"></p>
-              </a>
-            </li>
-            <li id="STAFF_EQUIP">
-              <a href="/staff/equipment">
-                <p>Thiết Bị</p>
-              </a>
-            </li>
-            <li id="STAFF_CLASSROOM">
-              <a href="/staff/classroom?ACTIVETAB=tab1">
-                <p>Phòng Học</p>
-              </a>
-            </li>
-            <li>
-              <p>Thống Kê</p>
-            </li>
-            <li id="STAFF_SCHEDULE">
-              <a href="/staff/schedule">
-                <p>Xếp Lịch</p>
-              </a>
-            </li>
-          </ul>
-        </div>
+        <c:import url="/bao-cao/danh-muc"/>
         <div class="right-content">
           <div class="page active" id="list-report">
             <div class="title"><p>Danh sách báo cáo</p></div>
@@ -136,7 +93,7 @@
             </div>
             <div class="page-content"></div>
           </div>
-          <c:import url="/bao-cao/danh-sach-thong-bao?little=false"/>
+          <c:import url="/bao-cao/thong-bao?little=false&quay-lai=list-report"/>
           <div class="loading-page">
             <img src="/resource/img/500.GIF">
             <div>Đang tải! Vui lòng chờ trong giây lát!</div>
@@ -147,6 +104,8 @@
     <div id="need-remove">
     <script>
       document.getElementById("${tab}").className += " active";
+      document.getElementById("${tab}").setAttribute("data-main", "1");
+
       connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
 
       <c:if test="${requestScope.SHOWDETAIL != null}">

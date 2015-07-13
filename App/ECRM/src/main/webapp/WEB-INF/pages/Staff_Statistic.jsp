@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <jsp:include flush="true" page="Left_Category.jsp"/>
+                    <jsp:include flush="true" page="LeftCategory.jsp"/>
                     <div class="right-content">
                         <div class="page active">
                             <div class="title"><p>Thống Kê</p>

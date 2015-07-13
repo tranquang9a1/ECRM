@@ -256,12 +256,16 @@ function resetURL() {
     window.history.pushState({},"", "/bao-cao");
 }
 
-function showNotifies() {
-    changePage("list-notifies");
-    $(".left-category ul li").removeClass("active");
-    $("#STAFF_NOTIFICATION").addClass("active");
+function showViewPage(page) {
+    changePage(page);
 
-    window.history.pushState({},"", "/bao-cao/thong-bao" + roomId);
+    if("list-notifies" == page) {
+        $(".left-category ul li").removeClass("active");
+        $("#STAFF_NOTIFICATION").addClass("active");
+    } else {
+        $(".left-category ul li").removeClass("active");
+        $("[data-main=1]").addClass("active");
+    }
 }
 
 function changeNewRoom() {

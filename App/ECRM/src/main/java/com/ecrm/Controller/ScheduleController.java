@@ -186,7 +186,7 @@ public class ScheduleController {
                 out.close();
 
             }
-            return "redirect:/staff/Staff_Schedule";
+            return "redirect:/staff/schedule";
         } else {
             return "Login";
         }
@@ -299,7 +299,7 @@ public class ScheduleController {
 
 
 
-            return "redirect:/staff/Staff_Schedule";
+            return "redirect:/staff/schedule";
         } else {
             return "Login";
         }
@@ -424,6 +424,7 @@ public class ScheduleController {
             request.setAttribute("DATEFROM", datefrom);
             request.setAttribute("DATETO", dateto);
             request.setAttribute("ISEMPTY", isEmpty);
+            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
 
 
             return "Staff_Schedule";

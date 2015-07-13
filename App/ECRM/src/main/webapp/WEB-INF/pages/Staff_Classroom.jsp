@@ -17,54 +17,70 @@
         <head>
             <meta charset="UTF-8"/>
             <title>ECRM - Equipment Classroom Management</title>
-            <link rel="stylesheet" href="../../resource/css/font-awesome.css"/>
-            <link rel="stylesheet" href="../../resource/css/layout.css"/>
-            <link rel="stylesheet" href="../../resource/css/general.css"/>
-            <link rel="stylesheet" href="../../resource/css/management.css"/>
-            <link rel="stylesheet" href="../../resource/css/roomtype-2.css"/>
-            <script src="../../resource/js/jquery-1.11.3.js"></script>
-            <script src="../../resource/js/jquery-1.11.3.min.js"></script>
+            <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
+            <link rel="stylesheet" href="/resource/css/layout.css"/>
+            <link rel="stylesheet" href="/resource/css/general.css"/>
+            <link rel="stylesheet" href="/resource/css/management.css"/>
+            <link rel="stylesheet" href="/resource/css/roomtype-2.css"/>
+            <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
+
+            <script src="/resource/js/jquery-1.11.3.js"></script>
+            <script src="/resource/js/jquery-1.11.3.min.js"></script>
+            <script src="/resource/js/socket.io.js"></script>
+
+            <script src="/resource/js/socket-io.js"></script>
+            <script src="/resource/js/staff-notify.js"></script>
+            <script src="/resource/js/newTemplate.js"></script>
         </head>
-        <body style="background: url('../../resource/img/background/LargeClassroomWindowView_0.JPG') no-repeat; background-size: cover">
-        <c:set var="user" value="${sessionScope.USER}"/>
+        <body>
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
-
-        <div class="contain-layout">
-            <jsp:include flush="true" page="Header.jsp"/>
-        </div>
-        <div class="container">
-            <div class="title page-title right-button">
-                <p>Quản lý phòng học</p>
-
-                <div class="clear"></div>
-            </div>
-            <div class="body-content" style="background-color: whitesmoke;">
-                <div class="tab">
-                    <div class="tab-medium">
-                        <ul>
-                            <li id="tab1-1" onclick="changeTab('tab1', this)">Phòng học</li>
-                            <li id="tab2-2" onclick="changeTab('tab2', this)">Loại phòng</li>
-                        </ul>
+        <div class="layout-background">
+            <div class="container">
+                <div class="header">
+                    <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
+                    <div class="account-control">
+                        <p>${user.tblUserInfoByUsername.fullName}</p>
+                        <img src="../../resource/img/gears.png"/>
                     </div>
-                    <div class="content-tab">
-                        <div id="tab1" class="body-tab">
-                            <div><input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')"
-                                        value="Tạo phòng học"/></div>
-                            <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
+                </div>
+                <div class="content-body">
+                    <jsp:include flush="true" page="Left_Menu.jsp"/>
+                    <div class="right-content">
+                        <div class="page active">
+                            <div class="title"><p>Phòng Học</p></div>
+                                <div class="body-content" style="background-color: whitesmoke;">
+                                    <div class="tab">
+                                        <div class="tab-medium">
+                                            <ul>
+                                                <li id="tab1-1" onclick="changeTab('tab1', this)">Phòng học</li>
+                                                <li id="tab2-2" onclick="changeTab('tab2', this)">Loại phòng</li>
+                                            </ul>
+                                        </div>
+                                        <div class="content-tab">
+                                            <div id="tab1" class="body-tab">
+                                                <div><input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')"
+                                                            value="Tạo phòng học"/></div>
+                                                <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
+                                            </div>
+                                            <div id="tab2" class="body-tab">
+                                                <div>
+                                                    <div></div>
+                                                    <input type="button" class="btn btn-orange" style="margin: 0"
+                                                           onclick="showModal(1, 'modal-roomtypedetail')"
+                                                           value="Tạo loại phòng"/></div>
+                                                <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div id="tab2" class="body-tab">
-                            <div>
-                                <div></div>
-                                <input type="button" class="btn btn-orange" style="margin: 0"
-                                       onclick="showModal(1, 'modal-roomtypedetail')"
-                                       value="Tạo loại phòng"/></div>
-                            <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-        </div>
+
             <%--Modal hien len khi nhap vao nut xem cua CLASSROOM--%>
         <div class="modal modal-medium" id="modal-manageclassroom">
             <div class="content-modal">
@@ -316,10 +332,10 @@
                 <div class="black-background"></div>
             </div>
         </form>
-        <script src="../../resource/js/script.js"></script>
-        <script src="../../resource/js/staff_manageclassroom.js"></script>
-        <script src="../../resource/js/staff_manageroomtype.js"></script>
-        <script src="../../resource/js/roomtype-2.js"></script>
+        <script src="/resource/js/script.js"></script>
+        <script src="/resource/js/staff_manageclassroom.js"></script>
+        <script src="/resource/js/staff_manageroomtype.js"></script>
+        <script src="/resource/js/roomtype-2.js"></script>
 
         <script>
             window.onload = createDetailMap;

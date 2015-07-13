@@ -22,9 +22,9 @@
             <c:set var="text" value="${requestScope.TEXT}"/>
             <c:set var="time" value="${requestScope.TIME}"/>
             <c:set var="category" value="${requestScope.CATEGORY}"/>
+            <c:set var="tab" value="${requestScope.TABCONTROL}"/>
             <title>ECRM - Equipment Classroom Management</title>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
-            <link rel="stylesheet" href="/resource/css/general.css"/>
             <link rel="stylesheet" href="/resource/css/jquery-ui.css"/>
             <link rel="stylesheet" href="/resource/css/component.css"/>
             <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <jsp:include flush="true" page="LeftCategory.jsp"/>
+                    <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
                         <div class="page active">
                             <div class="title"><p>Thống Kê</p>
@@ -60,8 +60,8 @@
                                     </select>
                                 </form>
                             </div>
-
-                            <div id="chartContainer" style="max-height: 50vh; width: 100%;"></div>
+                            <div style="text-align: center; "><h2 style="margin-bottom: 1px">${text}</h2></div>
+                            <div id="chartContainer" style="max-height: 47vh; width: 100%;"></div>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                 var chart = new CanvasJS.Chart("chartContainer",
                         {
                             title: {
-                                text: "${text}"
+                                text: ""
                             },
                             axisY: {
                                 title: "Số lượng báo cáo"
@@ -113,6 +113,9 @@
             }else{
                 document.getElementById('category').selectedIndex = 1;
             }
+
+            document.getElementById("${tab}").className += " active";
+            document.getElementById("${tab}").setAttribute("data-main", "1");
         </script>
         </html>
     </c:otherwise>

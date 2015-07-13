@@ -41,7 +41,7 @@
                 <p>Phòng Học</p>
             </a>
         </li>
-        <li>
+        <li id="STAFF_STATISTIC">
             <a href="/staff/statistic?time=0&category=0">
                 <p>Thống Kê</p>
             </a>

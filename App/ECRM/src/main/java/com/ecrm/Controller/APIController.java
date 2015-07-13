@@ -848,12 +848,17 @@ public class APIController {
 
 
     public TblEquipmentEntity getEquipment(List<TblEquipmentEntity> listEquipments, int id) {
+        TblEquipmentEntity tblEquipmentEntity = null;
         for (int i = 0; i < listEquipments.size(); i++) {
             if (listEquipments.get(i).getCategoryId() == id) {
-                return listEquipments.get(i);
+                tblEquipmentEntity = listEquipments.get(i);
+
+                if(tblEquipmentEntity != null && tblEquipmentEntity.isStatus() == false){
+                    break;
+                }
             }
         }
-        return null;
+        return tblEquipmentEntity;
     }
 
     @RequestMapping(value = "/sendSMS", method = RequestMethod.GET)

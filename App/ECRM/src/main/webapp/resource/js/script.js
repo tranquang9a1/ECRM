@@ -99,7 +99,7 @@ function waitLoading() {
     var contentDiv = document.createElement("div");
     contentDiv.className = "loading-content";
     var imgP = document.createElement("img");
-    imgP.setAttribute("src", "/resource/img/loadingAnimation.gif");
+    imgP.setAttribute("src", "/resource/img/500.GIF");
     contentDiv.appendChild(imgP);
 
     var bgDiv = document.createElement("div");

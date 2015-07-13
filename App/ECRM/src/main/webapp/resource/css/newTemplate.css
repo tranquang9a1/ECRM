@@ -350,6 +350,11 @@ body {
     float: right;
 }
 
+.page .title select{
+    float: right;
+    margin-left: 3px;
+}
+
 .loading-page{
     position: relative;
     background-color: #fff;
@@ -708,13 +713,13 @@ body {
     border: 0;
 }
 
-.btn.btn-brown {
-    background-color: #B37840;
+.btn.btn-orange {
+    background-color: #FC571B;
     color: #ffffff;
 }
 
-.btn.btn-brown:hover{
-    background-color: #083357;
+.btn.btn-orange:hover{
+    background-color: #FC571B;
 }
 
 .layout-background .container, .layout-background .content-body{

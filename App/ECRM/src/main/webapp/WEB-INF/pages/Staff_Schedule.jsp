@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="user" value="${sessionScope.USER}"/>
-<c:set var="tab" value="${requestScope.TABCONTROL}"/>
+
 <c:choose>
     <c:when test="${empty user}">
         <jsp:forward page="Login.jsp"/>
@@ -28,6 +28,7 @@
             <c:set var="classroom" value="${requestScope.CLASSROOM}"/>
             <c:set var="isEmpty" value="${requestScope.ISEMPTY}"/>
             <c:set var="scheduleConfig" value="${requestScope.SCHEDULECONFIG}"/>
+            <c:set var="tab" value="${requestScope.TABCONTROL}"/>
             <meta charset="UTF-8"/>
             <title>ECRM - Equipment Classroom Management</title>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
@@ -216,7 +217,7 @@
                                             <c:forEach var="tis" items="${cs.timeSchedules}">
                                                 <c:if test="${ not empty tis.teacherSchedules}">
                                                     <tr>
-                                                        <td bgcolor="yellow">${tis.timeFrom} - ${tis.timeTo}</td>
+                                                        <td bgcolor="#3177BC">${tis.timeFrom} - ${tis.timeTo}</td>
 
                                                         <c:forEach items="${teachingDate}" var="td">
                                                             <td>

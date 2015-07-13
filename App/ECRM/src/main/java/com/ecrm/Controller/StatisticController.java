@@ -107,6 +107,8 @@ public class StatisticController {
         request.setAttribute("LEGENDTEXT",legendText);
         request.setAttribute("TIME",time);
         request.setAttribute("CATEGORY",category);
+        request.setAttribute("CATEGORY",category);
+        request.setAttribute("TABCONTROL", "STAFF_STATISTIC");
         return "Staff_Statistic";
     }
 

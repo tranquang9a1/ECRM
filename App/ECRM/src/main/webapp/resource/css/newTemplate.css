@@ -9,6 +9,18 @@ body {
     margin: 0;
 }
 
+.message-text{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 77px;
+    line-height: 77px;
+    z-index: -1;
+    color: #d9534f;
+    font-weight: bold;
+    margin: 0;
+}
+
 .layout-background {
     width: 100%;
     height: 100%;
@@ -338,11 +350,6 @@ body {
     float: right;
 }
 
-.page .title select{
-    float: right;
-    margin-left: 3px;
-}
-
 .loading-page{
     position: relative;
     background-color: #fff;
@@ -382,6 +389,8 @@ body {
 .table .header-table{
     background-color: #f1f1f1;
     color: #656565;
+    height: 35px;
+    line-height: 35px;
 }
 
 .table .body-table .row {
@@ -580,6 +589,10 @@ body {
     width: 30%;
 }
 
+.width-45{
+    width: 45%;
+}
+
 .width-50{
     width: 50%;
 }
@@ -589,11 +602,12 @@ body {
 }
 
 .left-category{
-    width: 200px;
+    width: 170px;
     height: 530px;
     padding: 0;
     margin: 0;
     border: 0;
+    background-color: #f1f1f1;
 }
 
 .left-category ul{
@@ -648,27 +662,33 @@ body {
 }
 
 .layout-background .right-content{
-    margin: 0 0 0 15px;
+    margin: 0;
 }
 
 .layout-background .right-content, .layout-background .page{
-    width: 705px;
+    width: 800px;
     height: 500px;
     padding: 15px;
 }
 
+.tab {
+    margin-top: 10px;
+    /*border-left: 4px solid darkorange;*/
+}
+
 .tab .tab-medium{
-    margin-top: -1px;
+    border: 0;
     background-color: #f1f1f1;
-    border-color: #f1f1f1;
 }
 
 .tab .tab-medium li{
-    border-color: #f1f1f1;
+    border: 0;
+    margin: 0;
 }
 
-.tab .tab-medium li.active{
+.tab .tab-medium li.active, .tab .tab-medium li:hover{
     font-weight: bold;
+    border: 0;
 }
 
 .btn.btn-brown {
@@ -678,4 +698,56 @@ body {
 
 .btn.btn-brown:hover{
     background-color: #083357;
+}
+
+.layout-background .container, .layout-background .content-body{
+    width: 1000px
+}
+
+.left-col {
+    float: left;
+    position: relative;
+}
+
+.right-col {
+    float: right;
+    position: relative;
+}
+
+
+.group-equipment{
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin: 10px 0 0;
+    position: relative;
+}
+
+.group-equipment input{
+    float: left;
+    margin: 21px 13px 0 5px;
+}
+
+.group-equipment .equipment{
+    float: left;
+    margin: 0 0 0 13px;
+    line-height: 50px;
+    cursor: default;
+}
+
+.group-equipment .quantity{
+    float: right;
+    line-height: 50px;
+}
+
+.layout-background .header-modal.title {
+    padding: 0 10px;
+    margin-bottom: 15px;
+}
+
+.layout-background .header-modal.title p{
+    line-height: 49px;
+}
+
+.layout-background .footer-modal {
+    border: 0;
 }

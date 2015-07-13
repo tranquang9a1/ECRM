@@ -58,7 +58,7 @@ function conformData(type, object) {
             var btnYes = document.createElement("a");
             btnYes.className = "btn btn-primary";
             btnYes.type = "button";
-            btnYes.value = object.btnName;
+            btnYes.innerHTML = object.btnName;
             btnYes.addEventListener("click", function(){ doAction(object.choose, object.object)}, false);
 
             contentDiv.appendChild(btnNo);
@@ -81,6 +81,18 @@ function closeConformData() {
     var conformDiv = document.getElementsByClassName("conform")[0];
     conformDiv.parentNode.removeChild(conformDiv);
 }
+
+function doAction(choose, object) {
+    closeConformData();
+    switch (choose) {
+        case 1:
+            $(".loading-page").addClass("active");
+            sendResolve();
+            break;
+    }
+}
+
+
 
 function createTimes(){
     var element = document.getElementById("list-hour");
@@ -241,5 +253,31 @@ function showDetailReport(roomId){
 }
 
 function resetURL() {
-    window.history.pushState({},"", "/thong-bao");
+    window.history.pushState({},"", "/bao-cao");
+}
+
+function showNotifies() {
+    changePage("list-notifies");
+    $(".left-category ul li").removeClass("active");
+    $("#STAFF_NOTIFICATION").addClass("active");
+
+    window.history.pushState({},"", "/bao-cao/thong-bao" + roomId);
+}
+
+function changeNewRoom() {
+    showModal(0, 'change-room');
+    $(".loading-page").addClass("active");
+    $.ajax({
+        method: "GET",
+        url: "/bao-cao/doi-phong",
+        data: {currentClassroom: $("#current-room").val(), changeClassroom: $("#new-room").val()},
+        success: function(result) {
+            $(".change-room-text").html("<div class='value' style='color:darkorange'><span>Đã đổi phòng!</span> Phòng hiện đang trống</div>");
+            setTimeout(function(){
+                $(".change-room-text .value").css("color", "black");
+                $(".change-room-text .value span").remove();
+            }, 10000);
+            $(".loading-page").removeClass("active");
+        }
+    });
 }

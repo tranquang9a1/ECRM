@@ -143,7 +143,7 @@ public class NotifyController {
         room.setDamagedLevel(checkDamagedLevel(room));
         classroomDAO.merge(room);
 
-        return "redirect:/thong-bao";
+        return "redirect:/bao-cao";
     }
 
     @RequestMapping(value = "sua-het")
@@ -257,7 +257,7 @@ public class NotifyController {
     }
 
     @RequestMapping(value = "danh-sach-thong-bao")
-    public String getListNotification(HttpServletRequest request, @RequestParam(value = "little") boolean isLittle, @RequestParam(value = "page", defaultValue = "0", required = false) String page) {
+    public String getListNotification(HttpServletRequest request, @RequestParam(value = "little") boolean isLittle, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
 

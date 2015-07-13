@@ -27,6 +27,7 @@
     <script src="/resource/js/socket.io.js"></script>
 
     <script src="/resource/js/socket-io.js"></script>
+    <script src="/resource/js/script.js"></script>
     <script src="/resource/js/staff-notify.js"></script>
     <script src="/resource/js/newTemplate.js"></script>
 </head>
@@ -115,7 +116,7 @@
                       <div class="width-25">
                         <div class="group-button">
                           <div title="Xem" onclick="showDetailReport(${item.roomId})" class="btn btn-normal btn-text">Xem</div>
-                          <div title="Khắc phục tất cả" onclick="conformData(2, {message:'Bạn muốn khắc phục hư hại phòng ${item.roomName}!', btnName: 'Khắc phục', link: '/bao-cao/sua-het?roomId=${item.roomId}'})" class="btn btn-primary btn-text">Khắc phục</div>
+                          <div title="Khắc phục tất cả" onclick="conformData(2, {message:'Bạn muốn khắc phục tất cả hư hại phòng ${item.roomName}!', btnName: 'Khắc phục', link: '/bao-cao/sua-het?roomId=${item.roomId}'})" class="btn btn-primary btn-text">Khắc phục</div>
                         </div>
                       </div>
                       <p class="clear"></p>
@@ -156,5 +157,6 @@
     </script>
   </div>
   </div>
+  <div class="black-background"></div>
 </body>
 </html>

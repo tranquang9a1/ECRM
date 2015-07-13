@@ -15,8 +15,8 @@
 </head>
 <body>
   <div class="top">
-
-    <p><img src="../../resource/img/LOGO1.PNG">Quản lý thiết bị phòng học</p>
+    <img src="/resource/img/logo.png">
+    <p>Quản lý thiết bị phòng học</p>
   </div>
   <div class="mid">
     <form class="login-form" action="/login" method="post" style="background-color: white; opacity: 0.9">

@@ -250,10 +250,26 @@ public class APIController {
                 return resultDTO;
             }
 
-            List<TblReportDetailEntity> reportDetails = report.getTblReportDetailsById();
-            for(TblReportDetailEntity detail: reportDetails) {
-                reportDetailDAO.remove(detail);
+//            List<TblReportDetailEntity> reportDetails = report.getTblReportDetailsById();
+//            for(TblReportDetailEntity detail: reportDetails) {
+//                reportDetailDAO.remove(detail);
+//            }
+
+            List<TblEquipmentEntity> equipments = room.getTblEquipmentsById();
+            for(TblEquipmentEntity equipment: equipments) {
+                List<TblReportDetailEntity> reportDetails = reportDetailDAO.getUnresolveReportDetail(equipment.getId());
+                for(TblReportDetailEntity detail: reportDetails) {
+                    if(detail.getReportId() == reportId) {
+                        if(reportDetails.size() < 2) {
+                            equipment.setStatus(true);
+                            equipmentDAO.merge(equipment);
+                        }
+
+                        reportDetailDAO.remove(detail);
+                    }
+                }
             }
+
 
             //position
             String[] positions = listPosition.split("-");

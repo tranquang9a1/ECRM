@@ -93,6 +93,8 @@ public class APIController {
         return Utils.convertFromListEntityToListDTO(entities);
     }
 
+
+
     @RequestMapping(value = "/getAllReport", method = RequestMethod.GET)
     public
     @ResponseBody
@@ -598,8 +600,9 @@ public class APIController {
             ScheduleDTO dto = new ScheduleDTO();
             dto.setClassId(scheduleEntity.getClassroomId());
             dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
-            dto.setTimeFrom(scheduleEntity.getTimeFrom().getTime() + "");
-            dto.setTimeTo(scheduleEntity.getTimeFrom().getTime() + (scheduleEntity.getSlots() * Constant.TIME_ONE_SLOT * 60 * 1000) + "");
+            dto.setTimeFrom(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getTime() + "");
+            dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
+            dto.setDate(scheduleEntity.getDate().getTime() + "");
             result.add(dto);
         }
         return result;
@@ -761,6 +764,28 @@ public class APIController {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @RequestMapping(value="/getCurrentTime", method = RequestMethod.GET)
+    public @ResponseBody Long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
+    @RequestMapping(value="/getAllSchedule", method = RequestMethod.GET)
+    public @ResponseBody
+    List<ScheduleDTO> getAllSchedule(@RequestParam("username") String username) {
+        List<ScheduleDTO> result = new ArrayList<ScheduleDTO>();
+        List<TblScheduleEntity> listSchedule = scheduleDAO.getAllSchedulesOfUser(username);
+        for (TblScheduleEntity scheduleEntity : listSchedule) {
+            ScheduleDTO dto = new ScheduleDTO();
+            dto.setClassId(scheduleEntity.getClassroomId());
+            dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
+            dto.setTimeFrom(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getTime() + "");
+            dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
+            dto.setDate(scheduleEntity.getDate().getTime() + "");
+            result.add(dto);
+        }
+        return result;
     }
 
 

@@ -13,7 +13,8 @@ public class ReportDTO {
     private int reportId;
     private String username;
     private String fullname;
-    private String classId;
+    private int classId;
+    private String className;
     private String createTime;
     private String evaluate;
     private int status;
@@ -21,12 +22,13 @@ public class ReportDTO {
     private String changedRoom;
     private List<ReportDetailDTO> equipments;
 
-    public ReportDTO(int reportId, String username, String fullname, String classId, String createTime, String evaluate,
+    public ReportDTO(int reportId, String username, String fullname, int classId, String className, String createTime, String evaluate,
                      int status, int damageLevel, String changedRoom, List<ReportDetailDTO> equipmentId) {
         this.reportId = reportId;
         this.username = username;
         this.fullname = fullname;
         this.classId = classId;
+        this.className = className;
         this.createTime = createTime;
         this.evaluate = evaluate;
         this.status = status;
@@ -62,11 +64,11 @@ public class ReportDTO {
         this.fullname = fullname;
     }
 
-    public String getClassId() {
+    public int getClassId() {
         return classId;
     }
 
-    public void setClassId(String classId) {
+    public void setClassId(int classId) {
         this.classId = classId;
     }
 
@@ -118,5 +120,13 @@ public class ReportDTO {
 
     public void setChangedRoom(String changedRoom) {
         this.changedRoom = changedRoom;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

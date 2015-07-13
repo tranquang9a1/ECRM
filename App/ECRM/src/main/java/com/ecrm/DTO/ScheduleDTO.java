@@ -8,12 +8,14 @@ public class ScheduleDTO {
     private String className;
     private String timeFrom;
     private String timeTo;
+    private String date;
 
-    public ScheduleDTO(int classId, String className, String timeFrom, String timeTo) {
+    public ScheduleDTO(int classId, String className, String timeFrom, String timeTo, String date) {
         this.classId = classId;
         this.className = className;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        this.date = date;
     }
 
     public ScheduleDTO() {
@@ -49,5 +51,13 @@ public class ScheduleDTO {
 
     public void setTimeTo(String timeTo) {
         this.timeTo = timeTo;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

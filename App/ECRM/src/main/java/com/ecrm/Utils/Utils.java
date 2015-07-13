@@ -84,7 +84,8 @@ public class Utils {
         ReportDTO reportDTO = new ReportDTO();
         reportDTO.setUsername(reportEntity.getUsername());
         reportDTO.setFullname(reportEntity.getTblUserByUserId().getTblUserInfoByUsername().getFullName());
-        reportDTO.setClassId(reportEntity.getTblClassroomByClassRoomId().getName());
+        reportDTO.setClassId(reportEntity.getTblClassroomByClassRoomId().getId());
+        reportDTO.setClassName(reportEntity.getTblClassroomByClassRoomId().getName());
         reportDTO.setCreateTime(reportEntity.getCreateTime().getTime() + "");
         List<TblReportDetailEntity> detail = reportEntity.getTblReportDetailsById();
         reportDTO.setEquipments(convertFromReportEntityToDTO(detail));

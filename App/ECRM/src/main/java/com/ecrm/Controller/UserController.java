@@ -75,7 +75,7 @@ public class UserController {
         List<TblScheduleEntity> finishSchedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
         List<ScheduleDTO> listFinnishSchedule = new ArrayList<ScheduleDTO>();
         for (TblScheduleEntity schedule : finishSchedules) {
-            listFinnishSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null));
+            listFinnishSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null, null));
         }
         request.setAttribute("FINISHSCHEDULE", listFinnishSchedule);
 
@@ -177,7 +177,7 @@ public class UserController {
 
             List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
             for (TblScheduleEntity schedule : schedules) {
-                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null));
+                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null, null));
             }
 
             request.setAttribute("LISTSCHEDULE", listSchedule);

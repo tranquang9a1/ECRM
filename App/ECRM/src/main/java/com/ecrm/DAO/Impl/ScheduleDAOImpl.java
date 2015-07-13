@@ -208,6 +208,30 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
     }
 
 
+    @Override
+    public List<TblScheduleEntity> getAllSchedulesOfUser(String username) {
+        Query query = entityManager.createNativeQuery("SELECT * " +
+                "FROM tblSchedule s, tblScheduleConfig sc " +
+                "WHERE s.username = :username " +
+                "AND  current_date() <= s.date " +
+                "AND s.date <= (SELECT DATE(NOW() + INTERVAL(7 - DAYOFWEEK(NOW())) DAY)) " +
+                "AND s.isActive = true " +
+                "AND s.scheduleConfigId = sc.id " +
+                "ORDER BY sc.timeFrom ASC", TblScheduleEntity.class);
+        query.setParameter("username", username);
+
+        List queryResult = query.getResultList();
+        List<TblScheduleEntity> result = new ArrayList<TblScheduleEntity>();
+        if(!queryResult.isEmpty()){
+            for(Iterator i = queryResult.iterator(); i.hasNext();){
+                TblScheduleEntity item = (TblScheduleEntity)i.next();
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
 //    @Override
 //    public int findScheduleAfterCurrentTime(int classroomId) {
 //        Query query = entityManager.createQuery("SELECT COUNT(*) FROM TblScheduleEntity  s WHERE s.classroomId = :classroomId " +

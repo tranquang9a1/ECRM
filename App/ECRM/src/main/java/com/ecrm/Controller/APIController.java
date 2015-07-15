@@ -742,7 +742,7 @@ public class APIController {
             dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
             dto.setTimeFrom(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getTime() + "");
             dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
-            dto.setDate(scheduleEntity.getDate().getTime() + "");
+            dto.setDate(scheduleEntity.getDate() + "");
             result.add(dto);
         }
         return result;
@@ -938,7 +938,7 @@ public class APIController {
             dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
             dto.setTimeFrom(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getTime() + "");
             dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
-            dto.setDate(scheduleEntity.getDate().getTime() + "");
+            dto.setDate(scheduleEntity.getDate() + "");
             result.add(dto);
         }
         return result;

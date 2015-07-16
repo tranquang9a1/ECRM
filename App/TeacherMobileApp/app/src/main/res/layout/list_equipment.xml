@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:layout_height="match_parent"
+              android:gravity="top"
+              >
+    <LinearLayout
+            android:layout_width="@dimen/thumbnail_width"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <ImageView
+                android:id="@+id/equipmentImg"
+                android:layout_width="@dimen/thumbnail_width"
+                android:layout_height="@dimen/thumbnail_height"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/highlight_image"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/room_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="Bàn"/>
+            <TextView
+                    android:id="@+id/quantityView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text=" - Số lượng: "/>
+
+            <TextView
+                    android:id="@+id/quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/font"
+                    android:textSize="@dimen/room_id_size"
+                    android:paddingBottom="5dp"
+                    android:text="2"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinnerItem" android:layout_gravity="right" android:layout_weight="0"
+                    android:entries="@array/levelItems"
+
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+
+            <EditText android:id="@+id/evaluate" android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:hint="@string/prompt_description"
+                      android:imeActionLabel="@string/description"
+                      android:imeOptions="actionUnspecified" android:inputType="text"
+                      android:maxLines="1" android:singleLine="true"
+                      android:layout_marginBottom="10dp"
+                      android:visibility="invisible"
+                      />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

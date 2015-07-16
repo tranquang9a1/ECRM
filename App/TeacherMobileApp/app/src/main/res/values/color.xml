@@ -1,0 +1,41 @@
+<resources>
+    <color name="background">#ff53a3ff</color>
+    <color name="titleBg">#ffffff</color>
+    <color name="tabActive">#ffffff</color>
+    <color name="tabDelimiter">#ff53a3ff</color>
+    <color name="tab">#ff53a3ff</color>
+    <color name="font">#323232</color>
+    <color name="resolved">#ffd0d0d0</color>
+    <color name="live_item_bg">#ffffff</color>
+    <color name="itemPressed">#ccc</color>
+    <color name="evenRow">#ffffff</color>
+    <color name="oddRow">#f2f2f2</color>
+
+    <color name="colorPrimary">#607d8b</color>
+    <color name="colorPrimaryDark">#455a64</color>
+    <color name="colorPrimaryLight">#cfd8dc</color>
+    <color name="colorAccent">#ffc107</color>
+
+    <color name="green">#1DBF97</color>
+    <color name="red">#FF4B4B</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="black_light">#99444444</color>
+    <color name="gray_dark">#616161</color>
+    <color name="gray_light">#9e9e9e</color>
+    <color name="brown">#5d4037</color>
+
+    <color name="indicator_1">#55B3C2</color>
+    <color name="indicator_2">#64A4A4</color>
+    <color name="indicator_3">#66D7B9</color>
+    <color name="indicator_4">#FDBC7D</color>
+
+
+    <color name="list_item_title">#ffffff</color>
+    <color name="counter_text_color">#ffffff</color>
+    <color name="counter_text_bg">#000000</color>
+    <color name="list_background_pressed">#64A4A4</color>
+    <color name="list_background">#607d8b</color>
+    <color name="list_divider">#FFA4A8A4</color>
+</resources>

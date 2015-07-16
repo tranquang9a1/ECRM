@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+    <com.fu.group10.capstone.apps.teachermobileapp.model.RoundedLetterView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rlv_name_view"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="15dp"
+            tools:visibility="visible"
+            app:backgroundColorValue="@color/green"
+            app:titleColor="@android:color/white"
+            app:titleSize="35dp"
+            app:titleText="A" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Bắt Đầu: "
+            android:id="@+id/txtText1"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="45dp"
+            android:layout_toEndOf="@+id/rlv_name_view"
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="07:00"
+            android:id="@+id/txtTimeFrom"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/txtText1"
+            android:layout_marginStart="45dp"
+            android:layout_toEndOf="@+id/rlv_name_view"
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Kết Thúc: "
+            android:id="@+id/txtText2"
+            android:layout_below="@id/txtText1"
+            android:layout_marginStart="45dp"
+            android:layout_toEndOf="@+id/rlv_name_view"
+            />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="09:00"
+            android:id="@+id/txtTimeTo"
+            android:layout_below="@id/txtTimeFrom"
+            android:layout_toRightOf="@id/txtText2"
+            android:layout_marginStart="38dp"
+            android:layout_toEndOf="@+id/rlv_name_view"
+            />
+
+
+
+</RelativeLayout>

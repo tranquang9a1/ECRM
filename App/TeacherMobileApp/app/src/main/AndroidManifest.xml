@@ -1,0 +1,142 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fu.group10.capstone.apps.teachermobileapp">
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <permission
+        android:name="com.fu.group10.capstone.apps.teachermobileapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.fu.group10.capstone.apps.teachermobileapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application android:name="com.fu.group10.capstone.apps.teachermobileapp.DummyApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.AboutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.AddActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.ChangePasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.EditReportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.service.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.MapActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.NotifyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.CreateReportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.ReportDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.TestActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.activity.ListRoomActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:keepScreenOn="true"
+            android:label="@string/app_name" >
+        </activity>
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <receiver
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.service.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.fu.group10.capstone.apps.teachermobileapp" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.fu.group10.capstone.apps.teachermobileapp.service.NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+                <category android:name="com.fu.group10.capstone.apps.teachermobileapp" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.fu.group10.capstone.apps.teachermobileapp.service.GCMNotificationIntentService" />
+        <service android:name="com.fu.group10.capstone.apps.teachermobileapp.service.SynchronizeService" />
+    </application>
+
+</manifest>

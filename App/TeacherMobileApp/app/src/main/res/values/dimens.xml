@@ -1,0 +1,12 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="menu_font_size">16dp</dimen>
+    <dimen name="empty_list_text_size">30sp</dimen>
+    <dimen name="ad_height">70dp</dimen>
+    <dimen name="thumbnail_width">90dp</dimen>
+    <dimen name="thumbnail_height">88dp</dimen>
+    <dimen name="equipment_name_size">17sp</dimen>
+    <dimen name="room_id_size">17sp</dimen>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="suggestItems">
+        <item>Vẫn dạy được</item>
+        <item>Phải đổi phòng</item>
+    </string-array>
+
+    <string-array name="levelItems">
+        <item>Nhẹ</item>
+        <item>Trung Bình</item>
+        <item>Nặng</item>
+    </string-array>
+
+    <array name="indicator_colors">
+        <item>@color/indicator_1</item>
+        <item>@color/indicator_2</item>
+        <item>@color/indicator_3</item>
+        <item>@color/indicator_4</item>
+    </array>
+</resources>

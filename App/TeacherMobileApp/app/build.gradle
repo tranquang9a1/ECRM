@@ -1,0 +1,31 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.fu.group10.capstone.apps.teachermobileapp"
+        minSdkVersion 17
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.github.chenupt.android:springindicator:1.0.2@aar'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.github.chenupt.android:multiplemodel:1.1.0@aar'
+    compile 'com.github.pavlospt:roundedletterview:1.1'
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:21.0.+'
+}

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+        <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/scrollView"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+               >
+
+                <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:padding="10dp"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="horizontal"
+                                android:id="@+id/lytInfo1"
+                                android:layout_marginTop="10dp">
+
+                                <LinearLayout
+                                        android:orientation="vertical"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="fill_parent"
+                                        android:paddingRight="20dp">
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Phòng học:"
+                                                android:id="@+id/textView3"
+                                                android:textStyle="bold" />
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Thời gian:"
+                                                android:id="@+id/textView4"
+                                                android:textStyle="bold" />
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Độ hư hại:"
+                                                android:id="@+id/textView5"
+                                                android:textStyle="bold" />
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Đề xuất của GV:"
+                                                android:id="@+id/textView6"
+                                                android:textStyle="bold" />
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Người báo cáo:"
+                                                android:id="@+id/textView10"
+                                                android:textStyle="bold" />
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Đề xuất hệ thống:"
+                                                android:id="@+id/textView16"
+                                                android:textStyle="bold" />
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Trạng thái: "
+                                                android:id="@+id/textView17" android:visibility="gone"
+                                                android:textStyle="bold" />
+
+
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                        android:orientation="vertical"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent" >
+
+
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:id="@+id/txtClassroom"
+                                                android:maxLines="1"
+                                                android:ellipsize="end"
+                                                android:text="Phòng 301"/>
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:id="@+id/txtTime"
+                                                android:maxLines="1"
+                                                android:ellipsize="end"
+                                                android:text="15:30"/>
+
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:id="@+id/txtDamageLevel"
+                                                android:maxLines="1"
+                                                android:ellipsize="end"
+                                                android:text="85%"/>
+
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:id="@+id/txtEvaluate"
+                                                android:maxLines="1"
+                                                android:ellipsize="end"
+                                                android:text="Đổi phòng"/>
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:id="@+id/txtUser"
+                                                android:maxLines="1"
+                                                android:ellipsize="end"
+                                                android:text="Tran Vinh Quang"/>
+
+                                        <LinearLayout android:layout_width="wrap_content"
+                                                      android:layout_height="wrap_content"
+                                                      android:orientation="horizontal"
+                                                >
+
+                                                <TextView
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                                        android:text="Đổi phòng "
+                                                        android:id="@+id/txtSuggest"
+                                                        android:textStyle="bold"
+                                                        />
+
+
+
+
+                                        </LinearLayout>
+                                        <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                                android:text="Đổi phòng sang 303"
+                                                android:id="@+id/txtStatus"
+                                                android:textStyle="bold" android:visibility="gone"
+                                                />
+
+                                </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:text="Danh sách thiết bị được báo cáo:"
+                                android:id="@+id/textView7"
+                                android:textStyle="bold" />
+
+                        <com.fu.group10.capstone.apps.teachermobileapp.utils.InfinityListView
+                                android:layout_width="match_parent"
+                                android:layout_height="360dp"
+                                android:id="@+id/listView"
+                                android:paddingTop="20dp"
+                                android:paddingBottom="@dimen/ad_height"
+                                android:clipToPadding="false"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:divider="#FFA4A8A4"
+                                android:dividerHeight="5dp"
+                                android:layout_gravity="center_horizontal"/>
+
+
+
+
+
+
+
+                </LinearLayout>
+
+
+
+
+        </ScrollView>
+
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+
+
+        </LinearLayout>
+        <Button android:id="@+id/view_map_button" style="?android:textAppearanceSmall"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/update_title"
+                android:layout_gravity="bottom" android:visibility="visible"
+                android:layout_alignParentBottom="true" android:layout_toEndOf="@+id/resolve_button"/>
+        <Button android:id="@+id/resolve_button" style="?android:textAppearanceSmall"
+                android:layout_width="186dp" android:layout_height="wrap_content"
+                android:text="@string/remove_title"
+                android:layout_gravity="bottom" android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true" android:visibility="visible"/>
+
+
+</RelativeLayout>

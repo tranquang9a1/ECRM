@@ -199,7 +199,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
                     " current_date() = s.date  " +
                     " and s.isActive= true and sc.timeFrom > Time('06:00:00') " +
                     "and SUBTIME(sc.timeTo,CURTIME())>'00:15:00'" +
-                    " and sc.timeFrom < Time('12:00:00')");
+                    " and sc.timeFrom < Time('12:00:00') and CURTIME() between Time('07:00:00') and Time('12:00:00')");
             System.out.println(q);
             q.setParameter("classroomId", classroomId);
             tblScheduleEntities = q.getResultList();

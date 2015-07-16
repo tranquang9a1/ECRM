@@ -69,6 +69,7 @@ public class StaffController {
             request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
             request.setAttribute("ACTIVETAB", activeTab);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
+            request.setAttribute("TABCONTROL", "STAFF_CLASSROOM");
             return "Staff_Classroom";
         }else {
             return "Login";

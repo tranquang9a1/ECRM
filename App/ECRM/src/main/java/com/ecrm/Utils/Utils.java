@@ -6,6 +6,9 @@ import com.ecrm.DTO.ClassroomDTO;
 import com.ecrm.DTO.ReportDTO;
 import com.ecrm.DTO.ReportDetailDTO;
 import com.ecrm.Entity.*;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -133,7 +136,7 @@ public class Utils {
 
         //So sánh ngày giờ với những schedule khác
         Iterator<TblClassroomEntity> iterator = fitClassroom.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             TblClassroomEntity classroomEntity = iterator.next();
             Collection<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
             if (tblScheduleEntities != null) {
@@ -142,7 +145,7 @@ public class Utils {
                     if (tblScheduleEntity1.getDate().getTime() == tblScheduleEntity.getDate().getTime() && tblScheduleEntity1.getIsActive()) {
                         //So sanh gio
                         int targetSlot = tblScheduleEntity1.getTblScheduleConfigByScheduleConfigId().getSlot();
-                        if(targetSlot == currentSlot){
+                        if (targetSlot == currentSlot) {
                             iterator.remove();
                             break;
                         }
@@ -183,28 +186,27 @@ public class Utils {
             lstRoom.clear();
             int temp = 0;
             Collections.sort(left, Collections.reverseOrder());
-            int floorL = Integer.parseInt(room)/100;
-            int floorR = Integer.parseInt(room)/100;
+            int floorL = Integer.parseInt(room) / 100;
+            int floorR = Integer.parseInt(room) / 100;
             for (int i = 0; i < left.size(); i++) {
-                int currentLeftFloor = left.get(i)/100;
-                if (floorL - currentLeftFloor ==0) {
+                int currentLeftFloor = left.get(i) / 100;
+                if (floorL - currentLeftFloor == 0) {
                     int maxL = left.get(i);
                     lstRoom.add(Integer.toString(maxL));
-                }
-                else{
-                    for(int j = temp; j<right.size(); j++){
-                        int currentRightFloor = right.get(j)/100;
-                        if(currentRightFloor-floorR == 0){
+                } else {
+                    for (int j = temp; j < right.size(); j++) {
+                        int currentRightFloor = right.get(j) / 100;
+                        if (currentRightFloor - floorR == 0) {
                             int maxR = right.get(j);
                             lstRoom.add(Integer.toString(maxR));
                             temp += 1;
-                        }else{
-                            floorR+=1;
+                        } else {
+                            floorR += 1;
                             break;
                         }
                     }
-                    floorL = floorL-1;
-                    i-=1;
+                    floorL = floorL - 1;
+                    i -= 1;
                 }
 
 
@@ -221,7 +223,41 @@ public class Utils {
             }
 
         }
+        for (int i = 0; i < lstRoom.size(); i++) {
+            if (i + 1 < lstRoom.size()) {
+                int currentFloor = Integer.parseInt(lstRoom.get(i)) / 100;
+                int nextFloor = Integer.parseInt(lstRoom.get(i + 1)) / 100;
+                if (nextFloor - currentFloor == 0) {
+                    for(int j = i; j>=0; j--){
+                        String s1 = lstRoom.get(j);
+                        String s2 = lstRoom.get(j+1);
+                        if(Integer.parseInt(s1)>Integer.parseInt(s2)&&Integer.parseInt(s1)/100==currentFloor){
+                            lstRoom.set(j, s2);
+                            lstRoom.set(j+1, s1);
+                        }
+                    }
+                }
+            }
 
+        }
         return lstRoom;
     }
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            int d = Integer.parseInt(str);
+            if(d<=0){
+                return false;
+            }
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
+    }
+
+
 }
+

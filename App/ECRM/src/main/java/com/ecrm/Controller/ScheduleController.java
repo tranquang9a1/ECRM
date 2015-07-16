@@ -132,6 +132,7 @@ public class ScheduleController {
                 int numberOfSlot = 0;
                 int count = 0;
                 TblClassroomEntity classroomEntity = new TblClassroomEntity();
+                String date = "";
                 while (rowIterator.hasNext()) {
                     String slot = "";
                     String timeFrom;
@@ -185,7 +186,12 @@ public class ScheduleController {
                         new FileOutputStream(new File(filePath));
                 out.close();
 
+                if(!day.isEmpty()){
+                    return "redirect:/staff/searchSchedule?datefrom="+day.get(0)+"&dateto="+day.get(day.size()-1)+"&classroomId=0&username=0";
+                }
+
             }
+
             return "redirect:/staff/schedule";
         } else {
             return "Login";
@@ -213,7 +219,9 @@ public class ScheduleController {
 
     @RequestMapping(value = "download")
     public String download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String filename = "D:\\Capstone\\trunk\\Document\\Book1.xlsx";
+        ServletContext servletContext = request.getSession().getServletContext();
+
+        String filename = servletContext.getRealPath("Schedule_Sample.xlsx");
 
         File file = new File(filename);
 
@@ -241,6 +249,7 @@ public class ScheduleController {
                 dateTo = dateFrom;
             }
             LocalDate dateT = new LocalDate(dateTo);
+            int classroom =0;
             for(int i = 0; i<numberOfSlots; i++){
                 List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigBySlot(slot+i);
                 String timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom().toString();
@@ -249,7 +258,6 @@ public class ScheduleController {
                     for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
                         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
 
-                        int classroom;
                         if (all.equals("0")) {
                             classroom = Integer.parseInt(avai);
                         } else {
@@ -261,7 +269,7 @@ public class ScheduleController {
                             tblScheduleEntities.get(0).setIsActive(false);
                             tblScheduleEntities.get(0).setNote("Đã thay đổi");
                             scheduleDAO.merge(tblScheduleEntities.get(0));
-                        }if(!tblScheduleEntities2.isEmpty() && !tblScheduleEntities.get(0).getUsername().equals(tblScheduleEntities2.get(0).getUsername())){
+                        }if(!tblScheduleEntities2.isEmpty()){
                             TblClassroomEntity classroomEntity = classroomDAO.find(classroom);
                             tblScheduleEntities2.get(0).setIsActive(false);
                             tblScheduleEntities2.get(0).setNote("Đã đổi sang phòng: " + classroomEntity.getName());
@@ -273,7 +281,6 @@ public class ScheduleController {
                     }
                 } else {
                     java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
-                    int classroom;
                     if (all.equals("0")) {
                         classroom = Integer.parseInt(avai);
                     } else {
@@ -285,7 +292,7 @@ public class ScheduleController {
                         tblScheduleEntities.get(0).setIsActive(false);
                         tblScheduleEntities.get(0).setNote("Đã thay đổi");
                         scheduleDAO.merge(tblScheduleEntities.get(0));
-                    }if(!tblScheduleEntities2.isEmpty() && !tblScheduleEntities.get(0).getUsername().equals(tblScheduleEntities2.get(0).getUsername())){
+                    }if(!tblScheduleEntities2.isEmpty()){
                         TblClassroomEntity classroomEntity = classroomDAO.find(classroom);
                         tblScheduleEntities2.get(0).setIsActive(false);
                         tblScheduleEntities2.get(0).setNote("Đã đổi sang phòng: "+ classroomEntity.getName());
@@ -298,8 +305,9 @@ public class ScheduleController {
             }
 
 
+            return "redirect:/staff/searchSchedule?datefrom="+dateFrom+"&dateto=&classroomId="+Integer.toString(classroom)
+                    +"&username="+username;
 
-            return "redirect:/staff/schedule";
         } else {
             return "Login";
         }
@@ -440,50 +448,4 @@ public class ScheduleController {
         }
     }
 
-    @RequestMapping("createSchedule")
-    public void createSchedule(HttpServletRequest request) throws IOException, InvalidFormatException {
-        String filePath = "";
-        ServletContext servletContext = request.getSession().getServletContext();
-        filePath = servletContext.getRealPath("Schedule_Sample.xlsx");
-        FileInputStream fileInputStream = new FileInputStream(new File(filePath));
-        //Get the workbook instance for XLS file
-        Workbook workbook = WorkbookFactory.create(fileInputStream);
-
-        //Get first sheet from the workbook
-        Sheet sheet = workbook.getSheetAt(0);
-        Iterator<Row> rowIterator = sheet.iterator();
-        int i = 1;
-        int j = 0;
-        List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findAll();
-        int size = tblScheduleConfigEntities.size();
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-
-            //For each row, iterate through each columns
-            Iterator<Cell> cellIterator = row.cellIterator();
-            Cell cell = null;
-            if (row.getRowNum() > 4) {
-                cell = sheet.getRow(row.getRowNum()).getCell(1);
-                if(j<=size-1){
-                    cell.setCellValue(tblScheduleConfigEntities.get(j).getTimeFrom()+" - "+tblScheduleConfigEntities.get(j).getTimeTo());
-                }else{
-                    row.removeCell(cell);
-                }
-                j+=1;
-            }
-            i+=1;
-        }
-        if(j<=size){
-            for(int k = j; k<size; k++){
-                Row row = workbook.getSheetAt(0).createRow(i);
-                Cell cell = row.createCell(1);
-                cell.setCellValue(tblScheduleConfigEntities.get(k).getTimeFrom()+" - "+tblScheduleConfigEntities.get(k).getTimeTo());
-                i+=1;
-            }
-        }
-        fileInputStream.close();
-        FileOutputStream fileOutputStream = new FileOutputStream(new File(filePath));
-        workbook.write(fileOutputStream);
-        fileOutputStream.close();
-    }
 }

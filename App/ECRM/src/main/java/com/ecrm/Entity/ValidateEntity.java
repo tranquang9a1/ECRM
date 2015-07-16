@@ -10,6 +10,11 @@ public class ValidateEntity {
     public ValidateEntity() {
     }
 
+    public ValidateEntity(String alert, boolean status) {
+        this.alert = alert;
+        this.status = status;
+    }
+
     public String getAlert() {
         return alert;
     }

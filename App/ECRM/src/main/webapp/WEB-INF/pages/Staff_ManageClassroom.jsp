@@ -13,7 +13,7 @@
     <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
 </div>
 <div class="clear"></div>
-<div class="table small-table">
+<div class="table small-table" style="height: 210px">
     <div class="header-table">
         <div class="room-number">
             <div>Số phòng</div>
@@ -69,5 +69,6 @@
     </div>
 
 </div>
+<div id="pagination" style="padding-left: 150px;"></div>
 
 

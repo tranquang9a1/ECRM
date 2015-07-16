@@ -34,4 +34,12 @@ public class ScheduleConfigDAOImpl extends BaseDAO<TblScheduleConfigEntity,Integ
         List<TblScheduleConfigEntity>tblScheduleConfigEntities = query.getResultList();
         return tblScheduleConfigEntities;
     }
+
+    public List<TblScheduleConfigEntity> findById(int id){
+        Query query = entityManager.createQuery("SELECT s from TblScheduleConfigEntity s where " +
+                "s.id = :id");
+        query.setParameter("id", id);
+        List<TblScheduleConfigEntity>tblScheduleConfigEntities = query.getResultList();
+        return tblScheduleConfigEntities;
+    }
 }

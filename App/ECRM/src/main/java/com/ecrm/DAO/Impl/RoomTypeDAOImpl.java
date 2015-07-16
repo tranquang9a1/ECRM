@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Htang on 5/26/2015.
@@ -24,6 +25,21 @@ public class RoomTypeDAOImpl extends BaseDAO<TblRoomTypeEntity, Integer> impleme
         query.setParameter("id", roomtypeId);
         roomTypeEntity = (TblRoomTypeEntity) query.getSingleResult();
         return roomTypeEntity;
+    }
+
+    public TblRoomTypeEntity getRoomTypeByName(String name) {
+
+        Query query = entityManager.createQuery("SELECT r " +
+                "FROM TblRoomTypeEntity r " +
+                "WHERE r.name = :name");
+        query.setParameter("name", name);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()){
+            return (TblRoomTypeEntity)queryResult.get(0);
+        }
+
+        return null;
     }
 
 

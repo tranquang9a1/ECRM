@@ -10,7 +10,7 @@
 <c:set var="user" value="${sessionScope.USER}"/>
 
 <c:choose>
-    <c:when test="${empty user}">
+    <c:when test="${empty user or user.roleId != 2}">
         <jsp:forward page="Login.jsp"/>
     </c:when>
     <c:otherwise>
@@ -147,7 +147,8 @@
                                                         <c:forEach items="${classrooms}" var="c">
                                                             <c:choose>
                                                                 <c:when test="${classroom == c.id}">
-                                                                    <option value="${c.id}" selected>${c.name}</option>
+                                                                    <option value="${c.id}"
+                                                                            selected>${c.name}</option>
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <option value="${c.id}">${c.name}</option>
@@ -165,7 +166,8 @@
                                         </div>
                                         <div>
                                             <div style="padding: 0px 0px 0px 0px;">
-                                                <button type="submit" class="btn btn-primary" style="margin-left: 15px">
+                                                <button type="submit" class="btn btn-primary"
+                                                        style="margin-left: 15px">
                                                     Tìm Kiếm
                                                 </button>
                                             </div>
@@ -173,24 +175,31 @@
                                     </div>
                                 </div>
                                 <c:choose>
-                                <c:when test="${not empty datefrom or not empty dateto}">
-                                <div style="background-color: #ffffff; width: 490px;display: block"
-                                     class="date">
+                                    <c:when test="${not empty datefrom or not empty dateto}">
+                                        <div style="background-color: #ffffff; width: 490px;display: block"
+                                             class="date">
+                                            <div>Ngày:
+                                                <input type="text" id="datefrom" name="datefrom"
+                                                       value="${datefrom}"><label>
+                                                    ~ </label><input
+                                                        type="text"
+                                                        id="dateto"
+                                                        name="dateto" value="${dateto}"></div>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
-                                    <div style="background-color: #ffffff; width: 490px;display: none"
-                                         class="date">
-                                        </c:otherwise>
-                                        </c:choose>
-
-
-                                        <div>Ngày:
-                                            <input type="text" id="datefrom" name="datefrom" value="${datefrom}"><label>
-                                                ~ </label><input
-                                                    type="text"
-                                                    id="dateto"
-                                                    name="dateto" value="${dateto}"></div>
-                                    </div>
+                                        <div style="background-color: #ffffff; width: 490px;display: none"
+                                             class="date">
+                                            <div>Ngày:
+                                                <input type="text" id="datefrom" name="datefrom"
+                                                       value="${datefrom}"><label>
+                                                    ~ </label><input
+                                                        type="text"
+                                                        id="dateto"
+                                                        name="dateto" value="${dateto}"></div>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </form>
                             <c:if test="${not isEmpty}">
                                 <c:if test="${not empty schedules}">
@@ -198,7 +207,6 @@
                                     <table class="overflow-y">
                                         <thead>
                                         <tr>
-
                                             <th>Phòng</th>
                                             <th>Ngày</th>
 
@@ -221,7 +229,8 @@
 
                                                         <c:forEach items="${teachingDate}" var="td">
                                                             <td>
-                                                                <c:forEach var="tes" items="${tis.teacherSchedules}">
+                                                                <c:forEach var="tes"
+                                                                           items="${tis.teacherSchedules}">
                                                                     <c:if test="${tes.date == td.toString()}">
                                                                         ${tes.teacher} <span
                                                                             style="font-style: italic; color: red">${tes.note}</span>
@@ -231,7 +240,6 @@
 
                                                         </c:forEach>
                                                     </tr>
-
                                                 </c:if>
                                             </c:forEach>
                                         </c:forEach>
@@ -261,7 +269,7 @@
                                     <div class="footer-modal">
                                         <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload')"
                                                value="Thoát"/>
-                                        <input type="button" class="btn btn-orange" onclick="conform(1);"
+                                        <input type="button" class="btn btn-orange" onclick="submitImport();"
                                                value="Nhập lịch"/>
                                     </div>
                                 </div>
@@ -342,7 +350,8 @@
                                             <div class="group-control">
                                                 <div class="name">Phòng học(*):</div>
                                                 <div class="control">
-                                                    <input type="checkbox" onclick="findAvailableRoom()" id="chckBox">Tìm
+                                                    <input type="checkbox" onclick="findAvailableRoom()"
+                                                           id="chckBox">Tìm
                                                     phòng trống
                                                     <div id="classroom">
                                                         <div class="ui-widget">
@@ -365,22 +374,28 @@
                                             </div>
                                         </div>
                                         <div class="footer-modal">
-                                            <input type="button" class="btn btn-normal" onclick="showModal(0, 'Manual')"
+                                            <input type="button" class="btn btn-normal"
+                                                   onclick="showModal(0, 'Manual')"
                                                    value="Thoát"/>
-                                            <button type="button" class="btn btn-orange" onclick="validateImportForm()">
+                                            <button type="button" class="btn btn-orange"
+                                                    onclick="validateImportForm()">
                                                 Tạo
                                             </button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
+
                         </div>
                         <c:import url="/bao-cao/thong-bao?little=false"/>
+
                     </div>
+
                 </div>
             </div>
         </div>
 
+        </body>
 
         <script src="/resource/js/script.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
@@ -395,14 +410,12 @@
                 var select = document.getElementById("selectSearch").selectedIndex = 1;
                 changeSearch();
             }
-            function doAction(choose, object) {
-                closeConform();
-                switch (choose) {
-                    case 1:
-                        document.getElementById('uploadSchedule').submit();
-                        waitLoading();
-                        break;
-                }
+
+            function submitImport() {
+                showModal(0, 'Upload')
+                document.getElementById('uploadSchedule').submit();
+                $(".loading-page").addClass("active");
+                $(".page").removeClass("active");
             }
             function validateImportForm() {
                 var username = document.forms["ImportManually"]["username"].value;
@@ -467,7 +480,6 @@
             document.getElementById("${tab}").setAttribute("data-main", "1");
         </script>
         <div class="black-background"></div>
-        </body>
         </html>
     </c:otherwise>
 </c:choose>

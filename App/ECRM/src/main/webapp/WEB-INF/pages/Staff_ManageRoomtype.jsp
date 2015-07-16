@@ -21,7 +21,7 @@
     <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
 </div>
 <div class="clear"></div>
-<div class="table small-table">
+<div class="table small-table" style="height: 210px">
     <div class="header-table">
         <div class="room-number">
             <div>Loai Phong</div>
@@ -67,7 +67,5 @@
         </form>
     </div>
 </div>
-<script>
-
-</script>
+<div id="pagination2" style="padding-left: 150px;"></div>
 

@@ -1,9 +1,6 @@
 package com.ecrm.Controller;
 
-import com.ecrm.DAO.Impl.ClassroomDAOImpl;
-import com.ecrm.DAO.Impl.ScheduleConfigDAOImpl;
-import com.ecrm.DAO.Impl.ScheduleDAOImpl;
-import com.ecrm.DAO.Impl.UserDAOImpl;
+import com.ecrm.DAO.Impl.*;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Utils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -36,6 +33,8 @@ public class AjaxController {
     ScheduleDAOImpl scheduleDAO;
     @Autowired
     ScheduleConfigDAOImpl scheduleConfigDAO;
+    @Autowired
+    RoomTypeDAOImpl roomTypeDAO;
 
     @RequestMapping(value = "findClassroom")
     public
@@ -181,4 +180,82 @@ public class AjaxController {
         return validateEntity;
     }
 
+    @RequestMapping(value = "checkCreateClassroom")
+    public
+    @ResponseBody
+    ValidateEntity checkCreateClassroom(HttpServletRequest request){
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+
+        String roomName = request.getParameter("roomName");
+        if(roomName==null || roomName.trim().length()==0){
+            alert = "Tên phòng không được bỏ trống!";
+            status = false;
+            validateEntity = new ValidateEntity(alert,status);
+            return validateEntity;
+        }else{
+            String action = request.getParameter("action");
+            if(action.equals("create")){
+                TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName);
+                if(classroomEntity!=null){
+                    alert = "Tên phòng đã tồn tại!";
+                    status = false;
+                    validateEntity = new ValidateEntity(alert,status);
+                    return validateEntity;
+                }
+            }
+        }
+        String roomType = request.getParameter("roomType");
+        if(roomType==null || roomType.trim().length()==0){
+            alert = "Phải chọn loại phòng!";
+            status = false;
+            validateEntity = new ValidateEntity(alert,status);
+            return validateEntity;
+        }
+        return validateEntity;
+    }
+
+    @RequestMapping(value = "checkCreateRoomType")
+    public
+    @ResponseBody
+    ValidateEntity checkCreateRoomType(HttpServletRequest request){
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+
+        String roomTypeName = request.getParameter("roomtypeName");
+        if(roomTypeName==null || roomTypeName.trim().length()==0){
+            alert = "Tên loại phòng không được bỏ trống!";
+            status = false;
+            validateEntity = new ValidateEntity(alert,status);
+            return validateEntity;
+        }else{
+            String action = request.getParameter("action");
+            if(action.equals("create")){
+                TblRoomTypeEntity roomTypeEntity = roomTypeDAO.getRoomTypeByName(roomTypeName.trim());
+                if(roomTypeEntity!=null){
+                    alert = "Tên loại phòng đã tồn tại!";
+                    status = false;
+                    validateEntity = new ValidateEntity(alert,status);
+                    return validateEntity;
+                }
+            }
+        }
+        String airConditioning = request.getParameter("airConditioning");
+        if(airConditioning!=null){
+            if(!Utils.isNumeric(airConditioning)){
+                alert = "Số lượng không được là chữ!";
+                status = false;
+                validateEntity = new ValidateEntity(alert,status);
+                return validateEntity;
+            }
+
+        }
+        return validateEntity;
+    }
 }

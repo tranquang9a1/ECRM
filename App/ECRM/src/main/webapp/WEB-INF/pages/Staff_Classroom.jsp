@@ -23,6 +23,7 @@
             <link rel="stylesheet" href="/resource/css/management.css"/>
             <link rel="stylesheet" href="/resource/css/roomtype-2.css"/>
             <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
+            <link rel="stylesheet" href="/resource/css/simplePagination.css"/>
 
             <script src="/resource/js/jquery-1.11.3.js"></script>
             <script src="/resource/js/jquery-1.11.3.min.js"></script>
@@ -34,6 +35,8 @@
         </head>
         <body>
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
+        <c:set var="tab1" value="${requestScope.TABCONTROL}"/>
+
         <div class="layout-background">
             <div class="container">
                 <div class="header">
@@ -44,7 +47,7 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <jsp:include flush="true" page="Left_Menu.jsp"/>
+                    <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
                         <div class="page active">
                             <div class="title"><p>Phòng Học</p></div>
@@ -58,7 +61,7 @@
                                         </div>
                                         <div class="content-tab">
                                             <div id="tab1" class="body-tab">
-                                                <div><input type="button" class="btn btn-orange" onclick="showModal(1, 'modal-1')"
+                                                <div><input type="button" class="btn btn-orange" onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1')"
                                                             value="Tạo phòng học"/></div>
                                                 <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                             </div>
@@ -66,7 +69,7 @@
                                                 <div>
                                                     <div></div>
                                                     <input type="button" class="btn btn-orange" style="margin: 0"
-                                                           onclick="showModal(1, 'modal-roomtypedetail')"
+                                                           onclick="document.getElementById('RoomTypeAction').value='update';showModal(1, 'modal-roomtypedetail')"
                                                            value="Tạo loại phòng"/></div>
                                                 <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
                                             </div>
@@ -100,7 +103,7 @@
                            onclick="showModal(0, 'modal-manageclassroom');clearthietbi()"
                            value="Thoát"/>
                     <input type="button" class="btn btn-orange"
-                           onclick="showModal(2, 'modal-manageclassroom','modal-1'); "
+                           onclick="document.getElementById('ClassroomAction').value='update';showModal(2, 'modal-manageclassroom','modal-1'); "
                            value="Chỉnh Sửa"/>
                 </div>
             </div>
@@ -125,14 +128,15 @@
                            onclick="showModal(0, 'modal-manageroomtype');clearthietbi()"
                            value="Thoát"/>
                     <input type="button" class="btn btn-orange"
-                           onclick="showModal(2, 'modal-manageroomtype','modal-roomtypedetail')"
+                           onclick="document.getElementById('RoomTypeAction').value='update';showModal(2, 'modal-manageroomtype','modal-roomtypedetail')"
                            value="Chỉnh Sửa"/>
                 </div>
             </div>
             <div class="black-background"></div>
         </div>
             <%--Modal hien len khi nhap vao nut tao phong cua CLASSROOM--%>
-        <form action="/staff/createClassroom" id="createClassroom">
+        <form action="/staff/createClassroom" id="createClassroomForm" name="CreateClassroomForm">
+            <input type="hidden" name="Action" id="ClassroomAction">
             <div class="modal modal-small" id="modal-1">
                 <div class="content-modal">
                     <div class="header-modal title">
@@ -158,7 +162,7 @@
                     <div class="footer-modal">
                         <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()"
                                value="Thoát"/>
-                        <input type="button" class="btn btn-orange" onclick="conform(1);" value="Thêm"/>
+                        <input type="button" class="btn btn-orange" onclick="validateCreateClassroomForm();" value="Thêm"/>
                     </div>
                 </div>
                 <div class="black-background"></div>
@@ -225,15 +229,19 @@
                     <div class="group-control" style="margin: 15px 0 0">
                         <div class="name">Máy quạt</div>
                         <div class="control">
-                            <input class="check-box" type="checkbox" id="quat" onclick="checkFan();"/>
-                            Số lượng: <input disabled id="quantityFan" style="width: 20px">
+                            <input class="check-box" type="checkbox" id="quat"/>
                         </div>
                     </div>
                     <div class="group-control" style="margin: 15px 0 0">
                         <div class="name">Máy lạnh</div>
                         <div class="control">
                             <input class="check-box" type="checkbox" id="mayLanh" onclick="checkMayLanh();"/>
-                            Số lượng: <input disabled id="quantityAir" style="width: 20px">
+                            Số lượng: <input disabled id="quantityAir" style="width: 20px" onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )">
                         </div>
                     </div>
                     <div class="group-control" style="margin: 15px 0 0">
@@ -297,7 +305,7 @@
             <div class="black-background"></div>
         </div>
             <%--Modal hien len khi nhap vao nut Xem truoc kieu phong khi tao ROOMTYPE--%>
-        <form action="/staff/createRoomType" id="createRoomType">
+        <form action="/staff/createRoomType" id="createRoomType" name="CreateRoomType">
             <div class="modal modal-medium" id="modal-4">
                 <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="">
                 <input type="hidden" id="name" name="RoomtypeName" value="">
@@ -311,6 +319,7 @@
                 <input type="hidden" id="Speaker" name="Speaker" value="">
                 <input type="hidden" id="Bulb" name="Bulb" value="">
                 <input type="hidden" id="Television" name="Television" value="">
+                <input type="hidden" id="RoomTypeAction" name="Action" value="">
 
 
                 <div class="content-modal">
@@ -326,7 +335,7 @@
                         <input type="button" class="btn btn-normal"
                                onclick="showModal(2, 'modal-4', 'modal-roomtypedetail')"
                                value="Quay lại"/>
-                        <input type="button" class="btn btn-orange" onclick="conform(2);" value="Tạo mẫu"/>
+                        <input type="button" class="btn btn-orange" onclick="validateCreateRoomType();" value="Tạo mẫu"/>
                     </div>
                 </div>
                 <div class="black-background"></div>
@@ -336,6 +345,7 @@
         <script src="/resource/js/staff_manageclassroom.js"></script>
         <script src="/resource/js/staff_manageroomtype.js"></script>
         <script src="/resource/js/roomtype-2.js"></script>
+        <script src="/resource/js/jquery.simplePagination.js"></script>
 
         <script>
             window.onload = createDetailMap;
@@ -413,15 +423,105 @@
                 }
             }
 
-            function checkFan() {
-                if (document.getElementById('quat').checked) {
-                    document.getElementById('quantityFan').disabled = false;
-                } else {
-                    document.getElementById('quantityFan').disabled = true;
-                    document.getElementById('quantityFan').value = "";
-                }
+
+            function validateCreateClassroomForm(){
+                var roomName = document.forms["CreateClassroomForm"]["RoomName"].value;
+                var roomType = document.forms["CreateClassroomForm"]["RoomType"].value;
+                var action = document.forms["CreateClassroomForm"]["Action"].value;
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/checkCreateClassroom",
+                    cache: false,
+                    data: 'roomName=' + roomName + '&roomType=' + roomType+'&action='+action,
+                    success: function (data) {
+                        if (data.status == true) {
+                            document.getElementById('createClassroomForm').submit();
+                            clearthietbi();
+                        } else {
+                            alert(data.alert);
+                        }
+                    },
+                    error: function () {
+                        alert('Error while request..');
+                    }
+                })
             }
 
+            function validateCreateRoomType(){
+                var roomtypeName = document.forms["CreateRoomType"]["RoomtypeName"].value;
+                var airConditioning = document.forms["CreateRoomType"]["AirConditioning"].value;
+                var action = document.forms["CreateRoomType"]["Action"].value;
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/checkCreateRoomType",
+                    cache: false,
+                    data: 'roomtypeName=' + roomtypeName + '&airConditioning=' + airConditioning+'&action='+action,
+                    success: function (data) {
+                        if (data.status == true) {
+                            document.getElementById('createRoomType').submit();
+                            clearthietbi();
+                        } else {
+                            alert(data.alert);
+                        }
+                    },
+                    error: function () {
+                        alert('Error while request..');
+                    }
+                })
+            }
+
+            //phan trang
+            jQuery(function($) {
+                var items = $("#removeClassroom > div");
+
+                var numItems = items.length;
+                var perPage = 5;
+
+                // only show the first 2 (or "first per_page") items initially
+                items.slice(perPage).hide();
+                // now setup pagination
+                $("#pagination").pagination({
+                    items: numItems,
+                    itemsOnPage: perPage,
+                    cssStyle: "compact-theme",
+                    onPageClick: function(pageNumber) { // this is where the magic happens
+                        // someone changed page, lets hide/show trs appropriately
+                        var showFrom = perPage * (pageNumber - 1);
+                        var showTo = showFrom + perPage;
+
+                        items.hide() // first hide everything, then show for the new page
+                                .slice(showFrom, showTo).show();
+                    }
+                });
+            });
+
+            //phan trang
+            jQuery(function($) {
+                var items = $("#removeRoomtype > div");
+
+                var numItems = items.length;
+                var perPage = 5;
+
+                // only show the first 2 (or "first per_page") items initially
+                items.slice(perPage).hide();
+                // now setup pagination
+                $("#pagination2").pagination({
+                    items: numItems,
+                    itemsOnPage: perPage,
+                    cssStyle: "compact-theme",
+                    onPageClick: function(pageNumber) { // this is where the magic happens
+                        // someone changed page, lets hide/show trs appropriately
+                        var showFrom = perPage * (pageNumber - 1);
+                        var showTo = showFrom + perPage;
+
+                        items.hide() // first hide everything, then show for the new page
+                                .slice(showFrom, showTo).show();
+                    }
+                });
+            });
+
+            document.getElementById("${tab1}").className += " active";
+            document.getElementById("${tab1}").setAttribute("data-main", "1");
         </script>
         </body>
         </html>

@@ -51,5 +51,10 @@
                 <p>Xếp Lịch</p>
             </a>
         </li>
+        <li id="STAFF_SCHEDULECONFIG">
+            <a href="/staff/scheduleConfig">
+                <p>Tiết học</p>
+            </a>
+        </li>
     </ul>
 </div>

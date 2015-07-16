@@ -95,21 +95,11 @@ public class CheckDamagedClassroomSchedule {
                                 changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
                             } else {
                                 for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
+                                    validClassrooms = classroomDAO.getValidClassroom();
                                     List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
                                     if (!classroom.isEmpty()) {
                                         TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(classroom.get(0));
-                                        tblScheduleEntity.setIsActive(false);
-                                        tblScheduleEntity.setNote("Đổi sang phòng " + classroom.get(0));
-                                        scheduleDAO.merge(tblScheduleEntity);
-                                        TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), newClassroom.getId(),
-                                                tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
-                                                + " sang phòng " + newClassroom.getName(), tblScheduleEntity.getTimeFrom(),
-                                                tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
-                                        String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
-                                                tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + newClassroom.getName() + "vào lúc "
-                                                + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
-                                        scheduleDAO.persist(newSchedule);
-                                        System.out.println(message);
+                                        String message = changeRoom(tblScheduleEntity,newClassroom);
                                         SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
                                         gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
 
@@ -120,18 +110,7 @@ public class CheckDamagedClassroomSchedule {
                         if (changeClassroomEntity != null) {
                             System.out.println("Bắt đầu đổi phòng!");
                             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
-                                tblScheduleEntity.setIsActive(false);
-                                tblScheduleEntity.setNote("Đổi sang phòng " + changeClassroomEntity.getName());
-                                scheduleDAO.merge(tblScheduleEntity);
-                                TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
-                                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
-                                        + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
-                                        tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
-                                String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
-                                        tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
-                                        + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
-                                scheduleDAO.persist(newSchedule);
-                                System.out.println(message);
+                                String message = changeRoom(tblScheduleEntity,changeClassroomEntity);
                                 SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
                                 gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                             }
@@ -219,24 +198,12 @@ public class CheckDamagedClassroomSchedule {
                     //change room
                     if (i == 0) {
                         GCMController gcmController = new GCMController();
-                        TblClassroomEntity currentClassroomEntity = classroomEntity;
                         TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
                         System.out.println("Kiem lich hien tai: " + currentSchedule.size());
                         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
-                            tblScheduleEntity.setIsActive(false);
-                            tblScheduleEntity.setNote("Đổi sang phòng " + changeClassroomEntity.getName());
-                            scheduleDAO.merge(tblScheduleEntity);
-                            TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
-                                    tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
-                                    + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
-                                    tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
-                            String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
-                                    tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
-                                    + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
-                            scheduleDAO.persist(newSchedule);
+                            String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
                             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
                             gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
-                            System.out.println(message);
                         }
                     }
 
@@ -254,6 +221,22 @@ public class CheckDamagedClassroomSchedule {
         }
         System.out.println("End cronjob changeroom at: " + new Date());
         System.out.println("");
+    }
+
+    public String changeRoom(TblScheduleEntity tblScheduleEntity, TblClassroomEntity changeClassroomEntity){
+        tblScheduleEntity.setIsActive(false);
+        tblScheduleEntity.setNote("Đổi sang phòng " + changeClassroomEntity.getName());
+        scheduleDAO.merge(tblScheduleEntity);
+        TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
+                tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
+                + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
+                tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
+        String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
+                tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
+                + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
+        scheduleDAO.persist(newSchedule);
+        System.out.println(message);
+        return message;
     }
 
 }

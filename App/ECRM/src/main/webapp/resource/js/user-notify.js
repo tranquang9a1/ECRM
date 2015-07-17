@@ -272,6 +272,8 @@ function setChooseEquipment(map){
 
 
 function sentReport(){
+    $(".loading-page").addClass("active");
+
     var listEquipment = "";
     var listEvaluate = "";
     var listDesc = [];
@@ -296,9 +298,8 @@ function sentReport(){
     }
 
     if(listEvaluate == "") {
-        alert("Bạn cần chọn 1 thiết bị trước khi gửi báo cáo!");
-        closeLoading();
-        showModal(1, 'modal-1');
+        conformData(1, {message: "Bạn cần chọn 1 thiết bị trước khi báo cáo!"});
+        $(".loading-page").removeClass("active");
         return;
     }
     listEvaluate = listEvaluate.substring(0, listEvaluate.length-1);
@@ -311,7 +312,7 @@ function sentReport(){
             Accept : "text/plain; charset=utf-8",
             "Content-Type": "application/json; charset=utf-8"
         },
-        url: "sentReport",
+        url: "/giang-vien/sentReport",
         data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate option:selected").text(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
             $(".table").css("display", "block");
@@ -326,7 +327,7 @@ function sentReport(){
                 var createDate = new Date(parseInt(data[3]));
                 html += "<div class='width-20'><div>" + (createDate.getDate()<10?("0"+createDate.getDate()):createDate.getDate())  + "/" + ((createDate.getMonth()+1)<10?("0" + (createDate.getMonth()+1)):(createDate.getMonth()+1)) + "/" + createDate.getFullYear() + "</div></div>";
                 html += "<div class='width-20'><div><p class='label red'>Chưa sửa</p></div></div>";
-                html += "<div class='width-15'><div class='group-button'><div onclick='loadReportHistory(" + data[0]+ ", " + data[1] + ")' class='btn btn-detail'><i class='fa fa-file'></i></div></div></div>";
+                html += "<div class='width-15'><div class='group-button'><div onclick='loadReportHistory(" + data[0]+ ", " + data[1] + ")' class='btn btn-normal btn-text'>Xem</div></div></div>";
                 html += "<p class='clear'></p>";
 
                 var row = document.createElement("div");
@@ -367,12 +368,12 @@ function sentReport(){
             damagedEquipments = {};
             $(".check-damaged").attr("data-check","false");
             $(".check-damaged").removeClass("check");
-            $("#modal-1 .width-50 select").css("display", "none");
-            $("#modal-1 .width-50 select").val(4);
-            $("#modal-1 .width-50 input").addClass("hidden");
-            $("#modal-1 .width-50 input").val("");
+            $("#room-detail-" + room.value + " .width-50 select").css("display", "none");
+            $("#room-detail-" + room.value + " .width-50 select").val(4);
+            $("#room-detail-" + room.value + " .width-50 input").addClass("hidden");
+            $("#room-detail-" + room.value + " .width-50 input").val("");
 
-            closeLoading();
+            $(".loading-page").removeClass("active");
         }
     });
 }

@@ -168,7 +168,7 @@
 
               <div class="control-report-button">
                 <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report')"/>
-                <input type="button" class="btn btn-primary" value="Gửi báo cáo"/>
+                <input type="button" class="btn btn-primary" value="Gửi báo cáo" onclick="sentReport()"/>
               </div>
             </div>
             <div class="list-room-content"></div>
@@ -187,7 +187,9 @@
         var noDamagedEquipments = {};
 
         createTimes();
-        getRoomReport();
+        <c:if test="${finishSchedule.size() > 0}">
+          getRoomReport();
+        </c:if>
         var listSchedule = {};
         <c:forEach items="${allSchedule}" var="item">
           listSchedule[${item.id}] = '${item.tblScheduleConfigByScheduleConfigId.timeFrom}';

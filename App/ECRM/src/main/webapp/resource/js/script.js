@@ -23,7 +23,7 @@ function changeTab(tab , thisElement) {
 }
 
 function showModal(show, modal1, modal2) {
-    var bgA = document.getElementsByTagName("body")[0].getElementsByClassName("black-background")[0];
+    var bgA = document.getElementsByClassName("black-background")[0];
     var modalA = document.getElementById(modal1).getElementsByClassName("content-modal")[0];
 
     if (show == 0) {

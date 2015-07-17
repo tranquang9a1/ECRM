@@ -147,6 +147,7 @@
         <input type="button" class="btn btn-primary" onclick="changeNewRoom();" value="Đổi phòng" />
       </div>
     </div>
+    <div class="black-background"></div>
   </div>
 </c:if>
 <script>

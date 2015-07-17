@@ -52,7 +52,8 @@ function sendResolve() {
         document.getElementById("ListEquip").value = listEquip.substring(0, listEquip.length-1);
         document.getElementById("resolveForm").submit();
     } else {
-        alert("Bạn cần chọn thiết bị!");
+        conformData(1, {message: "Bạn cần chọn ít nhất 1 thiết bị!"});
+        $(".loading-page").removeClass("active");
     }
 }
 

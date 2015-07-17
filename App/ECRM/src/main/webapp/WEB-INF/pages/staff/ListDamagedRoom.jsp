@@ -116,6 +116,5 @@
     </script>
   </div>
   </div>
-  <div class="black-background"></div>
 </body>
 </html>

@@ -38,6 +38,17 @@ public class MainController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String printWelcome(ModelMap model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+
+        if(user == null) {
+            return "Login";
+        } else if("Teacher".equals(user.getTblRoleByRoleId().getName())) {
+            return "redirect:/giang-vien";
+        } else if ("Staff".equals(user.getTblRoleByRoleId().getName())) {
+            return "redirect:/giang-vien";
+        }
+
         return "Login";
     }
 
@@ -57,7 +68,7 @@ public class MainController {
                 return "redirect:/bao-cao";
             }
             if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
-                return "redirect:/giang-vien/thong-bao";
+                return "redirect:/giang-vien";
             }
         }
         request.setAttribute("MESSAGE","Tài khoản hoặc mật khẩu không đúng!");

@@ -167,6 +167,10 @@ body {
     overflow-x: hidden;
     margin: 15px 0 0;
     height: 415px;
+
+    transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
 }
 
 .content-schedule:hover #now-time div {
@@ -215,6 +219,21 @@ body {
 .real-time .hour-item{
     left: -41px;
     position: absolute;
+}
+
+.real-time .schedule-item{
+    position: absolute;
+    left: 10px;
+    line-height: 30px;
+    font-weight: bold;
+    width: 100px;
+    padding: 0 0 0 50px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.real-time .schedule-item.active{
+    color: #cd0a0a;
 }
 
 /*CONFORM DATA*/
@@ -868,5 +887,3 @@ body {
 .notifies.active{
     display: block;
 }
-
-

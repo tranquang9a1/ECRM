@@ -95,31 +95,64 @@ function doAction(choose, object) {
 
 
 function createTimes(){
-    var element = document.getElementById("list-hour");
+    var elementHour = document.getElementById("list-hour");
+    var elementSchedule = document.getElementById("list-schedule");
     var hour = 6;
 
     for(var i = 0; i < 14; i++) {
         var div = document.createElement("div");
         div.className = "hour-item";
         div.style.top = (i*60)+"px";
-        div.innerHTML = (hour+0) + ":00";
-        element.appendChild(div);
+        div.innerHTML = hour + ":00";
+        elementHour.appendChild(div);
         hour++;
+    }
+
+    for(var key in listSchedule) {
+        if (listSchedule.hasOwnProperty(key)){
+            var times = listSchedule[key].time.split(":");
+            var hours = parseInt(times[0]);
+            var minutes = parseInt(times[1]);
+
+            var div = document.createElement("div");
+            div.className = "schedule-item";
+            div.style.top = ((hours-6)*60 + minutes - 23)+"px";
+            div.innerHTML = "Phòng " + listSchedule[key].room;
+            elementSchedule.appendChild(div);
+        }
     }
 
    updateTime();
 
 }
 
+var stopUpdate = false;
 function updateTime() {
     var d = new Date();
     var nowHour = d.getHours();
     var nowMinute = d.getMinutes();
     var time = ((nowHour - 6) * 60) + nowMinute - 832;
     document.getElementById("now-time").style.top  = time + "px";
-    document.getElementById("time-here").innerHTML = nowHour + ":" + nowMinute;
+    document.getElementById("time-here").innerHTML = (nowHour<10?'0'+nowHour:nowHour) + ":" + (nowMinute<10?'0'+nowMinute:nowMinute);
 
-    $(".content-schedule").scrollTop(((nowHour - 6) * 60) + nowMinute + 100);
+    if(stopUpdate == false) {
+        var minTime = 100000;
+        for(var key in listSchedule) {
+            if (listSchedule.hasOwnProperty(key)) {
+                var times = listSchedule[key].time.split(":");
+                var hours = parseInt(times[0]);
+                var minutes = parseInt(times[1]);
+
+                var timeTmp = ((nowHour*60)+nowMinute) - ((hours*60)+minutes);
+                if(((nowHour*60)+nowMinute) >= ((hours*60)+minutes)) {
+                    if(timeTmp > 0 && timeTmp < minTime){
+                        $(".content-schedule").scrollTop(((hours - 6) * 60) + minutes - 23);
+                        minTime = timeTmp;
+                    }
+                }
+            }
+        }
+    }
 
     setTimeout(function() {updateTime()}, 6000);
 }

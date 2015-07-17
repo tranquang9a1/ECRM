@@ -51,7 +51,7 @@
             <c:if test="${allSchedule != null && allSchedule.size() > 0}">
               <div class="number-of-schedule">${allSchedule.size()}</div>
             </c:if>
-            <div class="content-schedule">
+            <div class="content-schedule" onmouseover="stopUpdate = true" onmouseout="stopUpdate = false;">
               <div class="data-schedule">
                 <div class="real-time">
                   <div id="now-time">
@@ -186,14 +186,15 @@
         var damagedEquipments = {};
         var noDamagedEquipments = {};
 
+        var listSchedule = {};
+        <c:forEach items="${allSchedule}" var="item">
+        listSchedule[${item.id}] = {room: ${item.tblClassroomByClassroomId.name}, time: '${item.tblScheduleConfigByScheduleConfigId.timeFrom}'};
+        </c:forEach>
+
         createTimes();
         <c:if test="${finishSchedule.size() > 0}">
           getRoomReport();
         </c:if>
-        var listSchedule = {};
-        <c:forEach items="${allSchedule}" var="item">
-          listSchedule[${item.id}] = '${item.tblScheduleConfigByScheduleConfigId.timeFrom}';
-        </c:forEach>
 
         $(".need-remove").remove();
       </script>

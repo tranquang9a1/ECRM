@@ -34,7 +34,7 @@
       <div class="header">
         <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
         <div class="account-control">
-          <p>${user.tblUserInfoByUsername.fullName}</p>
+          <p><a href="/dang-xuat" style="color: white; text-decoration: none">${user.tblUserInfoByUsername.fullName}</a></p>
           <img src="../../resource/img/gears.png"/>
         </div>
       </div>

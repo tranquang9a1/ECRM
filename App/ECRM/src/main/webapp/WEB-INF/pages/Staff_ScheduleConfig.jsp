@@ -97,7 +97,7 @@
 <div class="layout-background">
     <div class="container">
         <div class="header">
-            <div class="logo">Cấu Hình Tiết Học</div>
+            <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
             <div class="account-control">
                 <p>${user.tblUserInfoByUsername.fullName}</p>
                 <img src="/resource/img/gears.png"/>
@@ -106,7 +106,7 @@
         <div class="content-body">
             <c:import url="/bao-cao/danh-muc"/>
             <div class="right-content">
-                <div class="page active">
+                <div class="page active" id="scheduleconfig">
                     <div class="title">
                         <p>Cấu Hình Tiết Học</p>
 
@@ -139,6 +139,11 @@
                             </div>
                         </form>
                     </div>
+                </div>
+                <c:import url="/bao-cao/thong-bao?little=false&quay-lai=scheduleconfig"/>
+                <div class="loading-page">
+                    <img src="/resource/img/500.GIF">
+                    <div>Đang tải! Vui lòng chờ trong giây lát!</div>
                 </div>
             </div>
         </div>

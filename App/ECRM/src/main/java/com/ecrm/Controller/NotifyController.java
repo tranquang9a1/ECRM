@@ -240,7 +240,7 @@ public class NotifyController {
 
                 //Sent notifies to user
                 socket.sendNotifyObjectToStaff(user.getUsername(), NotifyType.TEACHERCHANGEROOM.getValue(), jsonObject);
-                SmsUtils.sendMessage(user.getPhone(), user.toString());
+                /*SmsUtils.sendMessage(user.getPhone(), user.toString());*/
             }
 
             //update status report

@@ -98,7 +98,7 @@ body{
     font-size: 25px;
     font-weight: bold;
     color: #083357;
-    padding: 0 0 30px;;
+/*    padding: 0 0 30px;;*/
 }
 
 .login-form p input[type='text'], .login-form p input[type='password']{
@@ -117,7 +117,7 @@ body{
 .login-form button{
     width: 150px;
     height: 35px;
-    margin: 0 5px;
+    margin: 0 65px;
     border: 0;
     outline: none;
     background-color: #083357;

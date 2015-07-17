@@ -15,9 +15,9 @@ import java.util.List;
  * Created by Htang on 6/24/2015.
  */
 public class SmsUtils {
-    private static final String ACCOUNT_SID = "AC64001238c3f322e6f605c72cf39e2006";
-    private static final String AUTH_TOKEN = "7506c80088bf501e84e6b5679ea994d8";
-    private static final String SMS_CENTER = "+16307967728";
+    private static final String ACCOUNT_SID = "AC766b17714b930a93d09e97d8372f96ec";
+    private static final String AUTH_TOKEN = "4920f5c1d5c7539735c7076bc32046c6";
+    private static final String SMS_CENTER = "+17164063801";
     private static final String STATUS_CALLBACK_URL = "";
     private static final TwilioRestClient client;
     static {

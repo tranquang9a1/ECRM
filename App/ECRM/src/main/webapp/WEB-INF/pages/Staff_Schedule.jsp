@@ -31,11 +31,11 @@
             <c:set var="tab" value="${requestScope.TABCONTROL}"/>
             <meta charset="UTF-8"/>
             <title>ECRM - Equipment Classroom Management</title>
+            <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="/resource/css/general.css"/>
             <link rel="stylesheet" href="/resource/css/jquery-ui.css"/>
             <link rel="stylesheet" href="/resource/css/component.css"/>
-            <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
 
 
             <script src="/resource/js/jquery-1.11.3.js"></script>
@@ -49,6 +49,13 @@
                 }
             </style>
             <script>
+                function checkSMS(){
+                    if(document.getElementById('chckSMS').checked){
+                        document.getElementById('sms').value = "1";
+                    }else{
+                        document.getElementById('sms').value = "0";
+                    }
+                }
                 function findAvailableRoom() {
                     if (document.getElementById('chckBox').checked) {
                         document.getElementById('classroom').style.display = 'none';
@@ -78,137 +85,137 @@
             </script>
         </head>
         <body>
-            <div class="layout-background">
-                <div class="container">
-                    <div class="header">
-                        <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
-                        <div class="account-control">
-                            <p>${user.tblUserInfoByUsername.fullName}</p>
-                            <img src="/resource/img/gears.png"/>
-                        </div>
+        <div class="layout-background">
+            <div class="container">
+                <div class="header">
+                    <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
+                    <div class="account-control">
+                        <p>${user.tblUserInfoByUsername.fullName}</p>
+                        <img src="/resource/img/gears.png"/>
                     </div>
-                    <div class="content-body">
-                        <c:import url="/bao-cao/danh-muc"/>
-                        <div class="right-content">
-                            <div class="page active" id="list-schedule">
-                                <div class="title"><p>Xếp lịch</p>
+                </div>
+                <div class="content-body">
+                    <c:import url="/bao-cao/danh-muc"/>
+                    <div class="right-content">
+                        <div class="page active" id="schedule">
+                            <div class="title"><p>Xếp lịch</p>
 
-                                    <div><input type="button" class="btn btn-primary" onclick="showModal(1,'Upload');"
-                                                value="Nhập File"/>
-                                    </div>
-                                    <div><input type="button" class="btn btn-normal" onclick="showModal(1,'Manual');"
-                                                value="Tạo mới"/></div>
-                                    <div class="clear"></div>
+                                <div><input type="button" class="btn btn-primary" onclick="showModal(1,'Upload');"
+                                            value="Nhập File"/>
                                 </div>
-                                <form action="/staff/searchSchedule" onsubmit="return validateForm()" name="searchForm">
-                                    <div style="background-color: #ffffff; width: 490px;height: 50px;">
+                                <div><input type="button" class="btn btn-normal" onclick="showModal(1,'Manual');"
+                                            value="Tạo mới"/></div>
+                                <div class="clear"></div>
+                            </div>
+                            <form action="/staff/searchSchedule" onsubmit="return validateForm()" name="searchForm">
+                                <div style="background-color: #ffffff; width: 490px;height: 50px;">
 
-                                        <div class="search" style="display: inline-flex;padding-top: 7px">
-                                            <a style="margin-right: 3px;background-color: #AAAAAA; border-radius: 3px; cursor: pointer;"
-                                               title="Advance Search" onclick="showAdvance();"><img
-                                                    src="/resource/img/ic_expand_more_48px-256.png"
-                                                    style="width:25px;height: 25px; padding-top: 6px"></a>
-                                            <select onchange="changeSearch();" id="selectSearch">
-                                                <option value="0">Giáo viên</option>
-                                                <option value="1">Phòng học</option>
+                                    <div class="search" style="display: inline-flex;padding-top: 7px">
+                                        <a style="margin-right: 3px;background-color: #AAAAAA; border-radius: 3px; cursor: pointer;"
+                                           title="Advance Search" onclick="showAdvance();"><img
+                                                src="/resource/img/ic_expand_more_48px-256.png"
+                                                style="width:25px;height: 25px; padding-top: 6px"></a>
+                                        <select onchange="changeSearch();" id="selectSearch">
+                                            <option value="0">Giáo viên</option>
+                                            <option value="1">Phòng học</option>
+                                        </select>
+
+                                        <div class="ui-widget" style="display: block" id="teacherBox">
+                                            <select name="username" style="width: 150px" id="combobox2"
+                                                    style="display: none">
+                                                <option value="0"></option>
+                                                <c:choose>
+                                                    <c:when test="${not empty teacher}">
+                                                        <c:forEach items="${teachers}" var="t">
+                                                            <c:choose>
+                                                                <c:when test="${teacher == t.username}">
+                                                                    <option value="${t.username}"
+                                                                            selected>${t.tblUserInfoByUsername.fullName}</option>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:forEach items="${teachers}" var="t">
+                                                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
+                                                        </c:forEach>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </select>
-
-                                            <div class="ui-widget" style="display: block" id="teacherBox">
-                                                <select name="username" style="width: 150px" id="combobox2"
-                                                        style="display: none">
-                                                    <option value="0"></option>
-                                                    <c:choose>
-                                                        <c:when test="${not empty teacher}">
-                                                            <c:forEach items="${teachers}" var="t">
-                                                                <c:choose>
-                                                                    <c:when test="${teacher == t.username}">
-                                                                        <option value="${t.username}"
-                                                                                selected>${t.tblUserInfoByUsername.fullName}</option>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </c:forEach>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <c:forEach items="${teachers}" var="t">
-                                                                <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                                            </c:forEach>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </select>
-                                            </div>
-                                            <div class="ui-widget" style="display: none" id="classroomBox">
-                                                <select name="classroomId" id="combobox1" style="display: none">
-                                                    <option value="0"></option>
-                                                    <c:choose>
-                                                        <c:when test="${not empty classroom}">
-                                                            <c:forEach items="${classrooms}" var="c">
-                                                                <c:choose>
-                                                                    <c:when test="${classroom == c.id}">
-                                                                        <option value="${c.id}"
-                                                                                selected>${c.name}</option>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <option value="${c.id}">${c.name}</option>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </c:forEach>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <c:forEach items="${classrooms}" var="c">
-                                                                <option value="${c.id}">${c.name}</option>
-                                                            </c:forEach>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <div style="padding: 0px 0px 0px 0px;">
-                                                    <button type="submit" class="btn btn-primary"
-                                                            style="margin-left: 15px">
-                                                        Tìm Kiếm
-                                                    </button>
-                                                </div>
+                                        </div>
+                                        <div class="ui-widget" style="display: none" id="classroomBox">
+                                            <select name="classroomId" id="combobox1" style="display: none">
+                                                <option value="0"></option>
+                                                <c:choose>
+                                                    <c:when test="${not empty classroom}">
+                                                        <c:forEach items="${classrooms}" var="c">
+                                                            <c:choose>
+                                                                <c:when test="${classroom == c.id}">
+                                                                    <option value="${c.id}"
+                                                                            selected>${c.name}</option>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <option value="${c.id}">${c.name}</option>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:forEach items="${classrooms}" var="c">
+                                                            <option value="${c.id}">${c.name}</option>
+                                                        </c:forEach>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <div style="padding: 0px 0px 0px 0px;">
+                                                <button type="submit" class="btn btn-primary"
+                                                        style="margin-left: 15px">
+                                                    Tìm Kiếm
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <c:choose>
-                                        <c:when test="${not empty datefrom or not empty dateto}">
-                                            <div style="background-color: #ffffff; width: 490px;display: block"
-                                                 class="date">
-                                                <div>Ngày:
-                                                    <input type="text" id="datefrom" name="datefrom"
-                                                           value="${datefrom}"><label>
-                                                        ~ </label><input
-                                                            type="text"
-                                                            id="dateto"
-                                                            name="dateto" value="${dateto}"></div>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div style="background-color: #ffffff; width: 490px;display: none"
-                                                 class="date">
-                                                <div>Ngày:
-                                                    <input type="text" id="datefrom" name="datefrom"
-                                                           value="${datefrom}"><label>
-                                                        ~ </label><input
-                                                            type="text"
-                                                            id="dateto"
-                                                            name="dateto" value="${dateto}"></div>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </form>
-                                <c:if test="${not isEmpty}">
-                                    <c:if test="${not empty schedules}">
-                                        <div class="component">
+                                </div>
+                                <c:choose>
+                                    <c:when test="${not empty datefrom or not empty dateto}">
+                                        <div style="background-color: #ffffff; width: 490px;display: block"
+                                             class="date">
+                                            <div>Ngày:
+                                                <input type="text" id="datefrom" name="datefrom"
+                                                       value="${datefrom}"><label>
+                                                    ~ </label><input
+                                                        type="text"
+                                                        id="dateto"
+                                                        name="dateto" value="${dateto}"></div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="background-color: #ffffff; width: 490px;display: none"
+                                             class="date">
+                                            <div>Ngày:
+                                                <input type="text" id="datefrom" name="datefrom"
+                                                       value="${datefrom}"><label>
+                                                    ~ </label><input
+                                                        type="text"
+                                                        id="dateto"
+                                                        name="dateto" value="${dateto}"></div>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </form>
+                            <c:if test="${not isEmpty}">
+                                <c:if test="${not empty schedules}">
+                                    <div class="component">
                                         <table class="overflow-y">
                                             <thead>
                                             <tr>
                                                 <th>Phòng</th>
-                                                <th>Ngày</th>
+                                                <th>Giờ</th>
 
                                                 <c:forEach items="${teachingDate}" var="td">
                                                     <th>${td}</th>
@@ -245,156 +252,171 @@
                                             </c:forEach>
                                             </tbody>
                                         </table>
-                                    </c:if>
                                     </div>
                                 </c:if>
-                            </div>
-                            <c:import url="/bao-cao/thong-bao?little=false&quay-lai=list-schedule"/>
-                        </div>
 
+                            </c:if>
+                            <c:if test="${empty schedules}">
+                                <h3>Không tìm thấy lịch!</h3>
+                            </c:if>
+                        </div>
+                        <c:import url="/bao-cao/thong-bao?little=false&quay-lai=schedule"/>
+                        <div class="loading-page">
+                            <img src="/resource/img/500.GIF">
+
+                            <div>Đang tải! Vui lòng chờ trong giây lát!</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="content-modal">
+            <div class="modal modal-small" id="Upload">
+                <div class="content-modal">
+                    <div class="header-modal title">
+                        <p>Nhập Lịch</p>
+                        <i class="fa fa-times" onclick="showModal(0, 'Upload')"></i>
+                    </div>
+                    <div class="body-modal">
+                        <a href="/staff/download">Bấm vào để tải mẫu!</a>
+
+                        <p>Chọn file excel:</p>
+
+                        <form action="/staff/import" method="post"
+                              enctype="multipart/form-data" id="uploadSchedule">
+                            <input type="file" name="scheduleFile" size="50" accept=".csv,
+                        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                            <br/>
+                        </form>
+                    </div>
+                    <div class="footer-modal">
+                        <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload')"
+                               value="Thoát"/>
+                        <input type="button" class="btn btn-orange" onclick="submitImport();"
+                               value="Nhập lịch"/>
                     </div>
                 </div>
             </div>
-            <div class="content-modal">
-                <div class="modal modal-small" id="Upload">
-                    <div class="content-modal">
-                        <div class="header-modal title">
-                            <p>Nhập Lịch</p>
-                            <i class="fa fa-times" onclick="showModal(0, 'Upload')"></i>
-                        </div>
-                        <div class="body-modal">
-                            <a href="/staff/download">Bấm vào để tải mẫu!</a>
-
-                            <p>Chọn file excel:</p>
-
-                            <form action="/staff/import" method="post"
-                                  enctype="multipart/form-data" id="uploadSchedule">
-                                <input type="file" name="scheduleFile" size="50" accept=".csv,
-                        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
-                                <br/>
-                            </form>
-                        </div>
-                        <div class="footer-modal">
-                            <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload')"
-                                   value="Thoát"/>
-                            <input type="button" class="btn btn-orange" onclick="submitImport();"
-                                   value="Nhập lịch"/>
-                        </div>
+            <div class="modal modal-medium" id="Manual">
+                <div class="content-modal" style="height: 550px">
+                    <div class="header-modal title">
+                        <p>Nhập Lịch Bằng Tay</p>
+                        <i class="fa fa-times" onclick="showModal(0, 'Manual'); clearFormManual();"></i>
                     </div>
-                </div>
-                <div class="modal modal-medium" id="Manual">
-                    <div class="content-modal" style="height: 530px">
-                        <div class="header-modal title">
-                            <p>Nhập Lịch Bằng Tay</p>
-                            <i class="fa fa-times" onclick="showModal(0, 'Manual')"></i>
-                        </div>
-                        <form action="/staff/importManually" id="importManually"
-                              name="ImportManually">
-                            <div class="body-modal">
+                    <form action="/staff/importManually" id="importManually"
+                          name="ImportManually">
+                        <div class="body-modal">
 
-                                <br/>
+                            <br/>
 
-                                <div class="group-control">
-                                    <div class="name">Tài khoản(*):</div>
+                            <div class="group-control">
+                                <div class="name">Tài khoản(*):</div>
 
-                                    <div class="ui-widget">
-                                        <select id="ui-username" name="username" id="username">
-                                            <option value=""></option>
-                                            <c:forEach items="${teachers}" var="t">
-                                                <option value="${t.username}">${t.username}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                                <div class="ui-widget">
+                                    <select id="ui-username" name="username">
+                                        <option value=""></option>
+                                        <c:forEach items="${teachers}" var="t">
+                                            <option value="${t.username}">${t.username}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
+                            </div>
 
-                                <div class="group-control">
-                                    <div class="name">Tiết bắt đầu(*):</div>
-                                    <div class="control">
-                                        <select name="slot" id="slot">
-                                            <c:forEach items="${scheduleConfig}" var="sc">
-                                                <option value="${sc.slot}">${sc.slot}
-                                                    - ${sc.timeFrom}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                            <div class="group-control">
+                                <div class="name">Tiết bắt đầu(*):</div>
+                                <div class="control">
+                                    <select name="slot" id="slot">
+                                        <c:forEach items="${scheduleConfig}" var="sc">
+                                            <option value="${sc.slot}">${sc.slot}
+                                                - ${sc.timeFrom}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
-                                <div class="group-control">
-                                    <div class="name">Số tiết(*):</div>
-                                    <div class="control">
-                                        <select name="numberOfSlots" id="numberOfSlots">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Số tiết(*):</div>
+                                <div class="control">
+                                    <select name="numberOfSlots" id="numberOfSlots">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
                                 </div>
-                                <div class="group-control">
-                                    <div class="name">Số học sinh(*):</div>
-                                    <div class="control">
-                                        <input type="text"
-                                               onkeydown="return ( event.ctrlKey || event.altKey
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Số học sinh(*):</div>
+                                <div class="control">
+                                    <input type="text"
+                                           onkeydown="return ( event.ctrlKey || event.altKey
                     || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
                     || (event.keyCode>34 && event.keyCode<40)
                     || (event.keyCode==46) )" name="numberOfStudent" id="numberOfStudent">
-                                    </div>
                                 </div>
-                                <div class="group-control">
-                                    <div class="name">Từ ngày(*):</div>
-                                    <div class="control">
-                                        <input type="text" id="datepickerFrom" name="dateF">
-                                    </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Từ ngày(*):</div>
+                                <div class="control">
+                                    <input type="text" id="datepickerFrom" name="dateF">
                                 </div>
-                                <div class="group-control">
-                                    <div class="name">Đến ngày:</div>
-                                    <div class="control">
-                                        <input type="text" id="datepickeTo" name="dateT">
-                                    </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Đến ngày:</div>
+                                <div class="control">
+                                    <input type="text" id="datepickeTo" name="dateT">
                                 </div>
-                                <div class="group-control">
-                                    <div class="name">Phòng học(*):</div>
-                                    <div class="control">
-                                        <input type="checkbox" onclick="findAvailableRoom()"
-                                               id="chckBox">Tìm
-                                        phòng trống
-                                        <div id="classroom">
-                                            <div class="ui-widget">
-                                                <select id="all" name="all">
-                                                    <option value="0"></option>
-                                                    <c:forEach items="${classrooms}" var="c">
-                                                        <option value="${c.id}">${c.name}</option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Phòng học(*):</div>
+                                <div class="control">
+                                    <input type="checkbox" onclick="findAvailableRoom()"
+                                           id="chckBox">Tìm
+                                    phòng trống
+                                    <div id="classroom">
+                                        <div class="ui-widget">
+                                            <select id="all" name="all">
+                                                <option value="0"></option>
+                                                <c:forEach items="${classrooms}" var="c">
+                                                    <option value="${c.id}">${c.name}</option>
+                                                </c:forEach>
+                                            </select>
                                         </div>
-                                        <div id="avai_classroom" style="display: none">
-                                            <div class="ui-widget">
-                                                <select id="avai" name="avai">
-                                                    <option value="0"></option>
-                                                </select>
-                                            </div>
+                                    </div>
+                                    <div id="avai_classroom" style="display: none">
+                                        <div class="ui-widget">
+                                            <select id="avai" name="avai">
+                                                <option value="0"></option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="footer-modal">
-                                <input type="button" class="btn btn-normal"
-                                       onclick="showModal(0, 'Manual')"
-                                       value="Thoát"/>
-                                <button type="button" class="btn btn-orange"
-                                        onclick="validateImportForm()">
-                                    Tạo
-                                </button>
+                            <div class="group-control">
+                                <input type="hidden" id="sms" name="sms" value="0">
+                                <div class="name">Gửi tin nhắn:</div>
+                                <div class="control"><input type="checkbox" id="chckSMS" onclick="checkSMS();">Gửi tin nhắn</div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="footer-modal">
+                            <input type="button" class="btn btn-normal"
+                                   onclick="showModal(0, 'Manual'); clearFormManual();"
+                                   value="Thoát"/>
+                            <button type="button" class="btn btn-orange"
+                                    onclick="validateImportForm()">
+                                Tạo
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="black-background"></div>
             </div>
+            <div class="black-background"></div>
+        </div>
+
         </body>
 
         <script src="/resource/js/script.js"></script>
@@ -474,6 +496,21 @@
             }
             function showAdvance() {
                 $('.date').toggle();
+            }
+
+            function clearFormManual(){
+                document.getElementById('ui-username').selectedIndex = 0;
+                document.getElementById('slot').selectedIndex = 0;
+                document.getElementById('numberOfSlots').selectedIndex = 0;
+                document.getElementById('numberOfStudent').value = "";
+                document.getElementById('datepickeTo').value = "";
+                document.getElementById('datepickerFrom').value = "";
+                document.getElementById('sms').value = "";
+                document.getElementById('all').selectedIndex = 0;
+                document.getElementById('avai').selectedIndex = 0;
+                document.getElementById('chckBox').checked = false;
+                document.getElementById('chckSMS').checked = false;
+
             }
 
             document.getElementById("${tab}").className += " active";

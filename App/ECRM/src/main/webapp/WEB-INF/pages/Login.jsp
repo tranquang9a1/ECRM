@@ -20,7 +20,7 @@
   </div>
   <div class="mid">
     <form class="login-form" action="/login" method="post" style="background-color: white; opacity: 0.9">
-      <p>Đăng nhập</p>
+      <p style="text-align: center">Đăng nhập</p>
       <c:if test="${requestScope.MESSAGE!=null}"><div style="color: #d9534f; margin: 0 5px">${requestScope.MESSAGE}</div></c:if>
       <p class="old">Tài khoản</p>
       <p><input type="text" value="" name="username" placeholder="Tài khoản"/></p>

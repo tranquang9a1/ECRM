@@ -26,7 +26,7 @@
             <script src="/resource/js/jquery-1.11.3.min.js"></script>
 
         </head>
-        <body>
+        < >
         <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
         <c:set var="categories" value="${requestScope.CATEGORIES}"/>
         <c:set var="tab" value="${requestScope.TABCONTROL}"/>
@@ -42,9 +42,10 @@
                 <div class="content-body">
                     <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
-                        <div class="page active">
+                        <div class="page active" id="equipment">
                             <div class="title">
                                 <p>Quản lý thiết bị</p>
+
                                 <div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
                                             onclick="showModal(1, 'modal-1')"/></div>
                                 <div class="clear"></div>
@@ -83,46 +84,89 @@
                                                    name="classroomName"/>
                                             <c:forEach items="${equipments}" var="e">
                                                 <c:choose>
-                                                    <c:when test="${e.timeRemain <=50}"><div class="row" style="background-color: #cd0a0a"></c:when>
-                                                    <c:otherwise><div class="row"></c:otherwise>
+                                                    <c:when test="${e.timeRemain <=50}">
+                                                        <div class="row" style="background-color: #cd0a0a">
+                                                            <div style="width:10%;">
+                                                                <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
+                                                            </div>
+                                                            <div style="width:12%;">
+                                                                <div>${e.name}</div>
+                                                            </div>
+                                                            <div style="width:20%;">
+                                                                <div>${e.serialNumber}</div>
+                                                            </div>
+                                                            <div style="width:100px;">
+                                                                <div>${e.tblEquipmentCategoryByCategoryId.usingTime}</div>
+                                                            </div>
+                                                            <div style="width:100px;">
+                                                                <div>${e.timeRemain}</div>
+                                                            </div>
+                                                            <div style="width:50px;">
+                                                                <div>${e.tblClassroomByClassroomId.name}</div>
+                                                            </div>
+                                                            <div style="width: 100px">
+                                                                <div class="group-button">
+                                                                    <c:choose>
+                                                                        <c:when test="${e.timeRemain<=50 and e.tblEquipmentCategoryByCategoryId.id==1}">
+                                                                            <div class="btn btn-detail"
+                                                                                 title="Chỉnh sửa"><i
+                                                                                    class="fa fa-pencil"></i>
+                                                                            </div>
+                                                                        </c:when>
+                                                                    </c:choose>
+                                                                    <div class="btn btn-remove"
+                                                                         onclick="conform(4, ${e.id})"
+                                                                         title="Xóa"><i
+                                                                            class="fa fa-times"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <p class="clear"></p>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div class="row">
+                                                            <div style="width:10%;">
+                                                                <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
+                                                            </div>
+                                                            <div style="width:12%;">
+                                                                <div>${e.name}</div>
+                                                            </div>
+                                                            <div style="width:20%;">
+                                                                <div>${e.serialNumber}</div>
+                                                            </div>
+                                                            <div style="width:100px;">
+                                                                <div>${e.tblEquipmentCategoryByCategoryId.usingTime}</div>
+                                                            </div>
+                                                            <div style="width:100px;">
+                                                                <div>${e.timeRemain}</div>
+                                                            </div>
+                                                            <div style="width:50px;">
+                                                                <div>${e.tblClassroomByClassroomId.name}</div>
+                                                            </div>
+                                                            <div style="width: 100px">
+                                                                <div class="group-button">
+                                                                    <c:choose>
+                                                                        <c:when test="${e.timeRemain<=50 and e.tblEquipmentCategoryByCategoryId.id==1}">
+                                                                            <div class="btn btn-detail"
+                                                                                 title="Chỉnh sửa"><i
+                                                                                    class="fa fa-pencil"></i>
+                                                                            </div>
+                                                                        </c:when>
+                                                                    </c:choose>
+                                                                    <div class="btn btn-remove"
+                                                                         onclick="conform(4, ${e.id})"
+                                                                         title="Xóa"><i
+                                                                            class="fa fa-times"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <p class="clear"></p>
+                                                        </div>
+                                                    </c:otherwise>
                                                 </c:choose>
 
-                                                    <div style="width:10%;">
-                                                        <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
-                                                    </div>
-                                                    <div style="width:12%;">
-                                                        <div>${e.name}</div>
-                                                    </div>
-                                                    <div style="width:20%;">
-                                                        <div>${e.serialNumber}</div>
-                                                    </div>
-                                                    <div style="width:100px;">
-                                                        <div>${e.tblEquipmentCategoryByCategoryId.usingTime}</div>
-                                                    </div>
-                                                    <div style="width:100px;">
-                                                        <div>${e.timeRemain}</div>
-                                                    </div>
-                                                    <div style="width:50px;">
-                                                        <div>${e.tblClassroomByClassroomId.name}</div>
-                                                    </div>
-                                                    <div style="width: 100px">
-                                                        <div class="group-button">
-                                                            <c:choose>
-                                                                <c:when test="${e.timeRemain<=50 and e.tblEquipmentCategoryByCategoryId.id==1}">
-                                                                    <div class="btn btn-detail" title="Chỉnh sửa"><i
-                                                                            class="fa fa-pencil"></i>
-                                                                    </div>
-                                                                </c:when>
-                                                            </c:choose>
-                                                            <div class="btn btn-remove"
-                                                                 onclick="conform(4, ${e.id})"
-                                                                 title="Xóa"><i
-                                                                    class="fa fa-times"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <p class="clear"></p>
-                                                </div>
+
                                             </c:forEach>
                                         </form>
                                     </div>
@@ -130,48 +174,59 @@
                                 <div id="pagination" style="padding-left: 150px;"></div>
                             </div>
                         </div>
+                        <c:import url="/bao-cao/thong-bao?little=false&quay-lai=equipment"/>
+                        <div class="loading-page">
+                            <img src="/resource/img/500.GIF">
+
+                            <div>Đang tải! Vui lòng chờ trong giây lát!</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <form action="/staff/createEquipment" id="createEquipment">
-            <div class="modal modal-large" id="modal-1">
-                <div class="content-modal">
-                    <div class="header-modal title">
-                        <p id="classroomName">Tạo thiết bị</p>
-                        <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
-                    </div>
-                    <div class="body-modal">
-                        <div class="group-control">
-                            <div class="name">Loại thiết bị</div>
-                            <div class="control">
-                                <select name="categoryId">
-                                    <c:forEach items="${categories}" var="ca">
-                                        <option value="${ca.id}">${ca.name}</option>
-                                    </c:forEach>
-                                </select>
+        <div class="content-modal">
+            <form action="/staff/createEquipment" id="createEquipment">
+                <div class="modal modal-large" id="modal-1">
+                    <div class="content-modal">
+                        <div class="header-modal title">
+                            <p id="classroomName">Tạo thiết bị</p>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+                        </div>
+                        <div class="body-modal">
+                            <div class="group-control">
+                                <div class="name">Loại thiết bị</div>
+                                <div class="control">
+                                    <select name="categoryId">
+                                        <c:forEach items="${categories}" var="ca">
+                                            <option value="${ca.id}">${ca.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Tên thiết bị</div>
+                                <input type="text" name="name">
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Số seri</div>
+                                <input type="text" name="serialNumber">
                             </div>
                         </div>
-                        <div class="group-control">
-                            <div class="name">Tên thiết bị</div>
-                            <input type="text" name="name">
-                        </div>
-                        <div class="group-control">
-                            <div class="name">Số seri</div>
-                            <input type="text" name="serialNumber">
+                        <div class="footer-modal">
+                            <input type="button" class="btn btn-normal"
+                                   onclick="showModal(0, 'modal-1')"
+                                   value="Thoát"/>
+                            <input type="button" class="btn btn-orange" onclick="conform(1);"
+                                   value="Tạo"/>
                         </div>
                     </div>
-                    <div class="footer-modal">
-                        <input type="button" class="btn btn-normal"
-                               onclick="showModal(0, 'modal-1')"
-                               value="Thoát"/>
-                        <input type="button" class="btn btn-orange" onclick="conform(1);"
-                               value="Tạo"/>
-                    </div>
+                    <div class="black-background"></div>
                 </div>
-                <div class="black-background"></div>
-            </div>
-        </form>
+            </form>
+        </div>
+
+
+        </body>
         <script src="/resource/js/script.js"></script>
         <script src="/resource/js/jquery.simplePagination.js"></script>
 
@@ -215,7 +270,6 @@
 
 
         </script>
-        </body>
         </html>
     </c:otherwise>
 </c:choose>

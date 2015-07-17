@@ -6,6 +6,8 @@ import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
 import com.ecrm.DAO.ScheduleConfigDAO;
 import com.ecrm.Entity.*;
+import com.ecrm.Utils.SmsUtils;
+import com.twilio.sdk.TwilioRestException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -240,7 +242,7 @@ public class ScheduleController {
     public String importManually(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("all") String all, @RequestParam("avai") String avai,
                                  @RequestParam("slot") int slot, @RequestParam("numberOfSlots") int numberOfSlots,
                                  @RequestParam("numberOfStudent") int numberOfStudent, @RequestParam("dateF") String dateFrom,
-                                 @RequestParam("dateT") String dateTo) throws ParseException {
+                                 @RequestParam("dateT") String dateTo, @RequestParam("sms")String sms) throws ParseException, TwilioRestException {
         HttpSession session = request.getSession();
         if (session != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -304,6 +306,10 @@ public class ScheduleController {
                 }
             }
 
+            if(sms.equals("1")){
+                TblUserEntity tblUserEntity = userDAO.findUser(username);
+                SmsUtils.sendMessage(tblUserEntity.getTblUserInfoByUsername().getPhone(),"Giáo viên "+username+" đổi sang phòng "+ classroom);
+            }
 
             return "redirect:/staff/searchSchedule?datefrom="+dateFrom+"&dateto=&classroomId="+Integer.toString(classroom)
                     +"&username="+username;

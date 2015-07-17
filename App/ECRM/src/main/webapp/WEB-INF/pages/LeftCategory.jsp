@@ -53,7 +53,7 @@
         </li>
         <li id="STAFF_SCHEDULECONFIG">
             <a href="/staff/scheduleConfig">
-                <p>Tiết học</p>
+                <p>Tiết Học</p>
             </a>
         </li>
     </ul>

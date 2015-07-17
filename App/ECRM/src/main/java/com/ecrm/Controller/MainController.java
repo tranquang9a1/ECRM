@@ -46,7 +46,7 @@ public class MainController {
         } else if("Teacher".equals(user.getTblRoleByRoleId().getName())) {
             return "redirect:/giang-vien";
         } else if ("Staff".equals(user.getTblRoleByRoleId().getName())) {
-            return "redirect:/giang-vien";
+            return "redirect:/bao-cao";
         }
 
         return "Login";
@@ -76,7 +76,7 @@ public class MainController {
     }
 
     //Logout
-    @RequestMapping(value = "logout")
+    @RequestMapping(value = "dang-xuat")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.removeAttribute("USER");

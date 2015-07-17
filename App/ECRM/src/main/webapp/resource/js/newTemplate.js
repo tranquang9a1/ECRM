@@ -218,6 +218,19 @@ function changeTabInfo(type, element){
     }
 }
 
+function changeTabTitle(type, element){
+    $(".title-category ul li").removeClass("active");
+    $(element).addClass("active");
+
+    if(type == 1) {
+        $('.main-info').addClass('active');
+        $('.map-info').removeClass('active');
+    } else {
+        $('.main-info').removeClass('active');
+        $('.map-info').addClass('active');
+    }
+}
+
 function changePage(page){
     $(".loading-page").addClass("active");
 
@@ -276,11 +289,9 @@ function changeNewRoom() {
         url: "/bao-cao/doi-phong",
         data: {currentClassroom: $("#current-room").val(), changeClassroom: $("#new-room").val()},
         success: function(result) {
-            $(".change-room-text").html("<div class='value' style='color:darkorange'><span>Đã đổi phòng!</span> Phòng hiện đang trống</div>");
-            setTimeout(function(){
-                $(".change-room-text .value").css("color", "black");
-                $(".change-room-text .value span").remove();
-            }, 10000);
+            $(".change-room-text").html("<div class='value'>Phòng hiện đang trống</div>");
+            conformData(1,{message: "Phòng đã được đổi thành công"});
+            //conformData(1,{message: "Phòng đã được chuyển sang " + $("#new-room option:checked").text()})
             $(".loading-page").removeClass("active");
         }
     });

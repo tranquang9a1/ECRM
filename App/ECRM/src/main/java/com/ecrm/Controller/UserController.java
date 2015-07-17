@@ -252,8 +252,10 @@ public class UserController {
 
         String message = user.getTblUserInfoByUsername().getFullName() + " báo cáo hư hại phòng " + room.getName();
         TblNotificationEntity notify = notificationDAOImp.getNotifyOfRoom(reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
+        boolean check = false;
         if (notify == null) {
-            notify = new TblNotificationEntity(reportRequest.getRoomId(), message, "/thong-bao/hu-hai?phong=" + reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
+            check = true;
+            notify = new TblNotificationEntity(reportRequest.getRoomId(), message, "/bao-cao/hu-hai?phong=" + reportRequest.getRoomId(), MessageType.NEWREPORT.getValue());
             notificationDAOImp.persist(notify);
         }
 
@@ -261,10 +263,12 @@ public class UserController {
         List<TblUserEntity> staffs = userDAO.getAllStaff();
         try {
             for (TblUserEntity staff : staffs) {
-                TblUserNotificationEntity userNotification = new TblUserNotificationEntity(staff.getUsername(), notify.getId(), false);
-                userNotificationDAO.persist(userNotification);
+                if(check) {
+                    TblUserNotificationEntity userNotification = new TblUserNotificationEntity(staff.getUsername(), notify.getId(), false);
+                    userNotificationDAO.persist(userNotification);
+                    socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/bao-cao/notify?link=" + userNotification.getId());
+                }
 
-                socketIO.sendNotifyMessageToUser(staff.getUsername(), NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/notify?link="+ userNotification.getId());
                 SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
                 gcm.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
             }

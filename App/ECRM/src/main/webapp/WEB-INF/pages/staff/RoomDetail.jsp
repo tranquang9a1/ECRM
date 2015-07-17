@@ -112,7 +112,7 @@
   </c:forEach>
   <p style="margin-bottom: 0">
     <input type="button" class="btn btn-primary" onclick="conformData(3, {message:'Bạn muốn khắc phục hư hại phòng ${room.roomName}!', btnName: 'Khắc phục', choose: 1, object: {}})"  value="Khắc phục" />
-    <input type="button" class="btn btn-normal" onclick="conformData(2, {message:'Bạn muốn khắc phục tất cả hư hại phòng ${room.roomName}!', btnName: 'Khắc phục', link: '/bao-cao/sua-het?roomId=${item.roomId}'})" value="Khắc phục tất cả" />
+    <input type="button" class="btn btn-normal" onclick="conformData(2, {message:'Bạn muốn khắc phục tất cả hư hại phòng ${room.roomName}!', btnName: 'Khắc phục', link: '/bao-cao/sua-het?roomId=${room.roomId}'})" value="Khắc phục tất cả" />
   </p>
 </div>
 </div>

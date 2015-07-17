@@ -315,6 +315,7 @@ function sentReport(){
         url: "/giang-vien/sentReport",
         data: JSON.stringify({"roomId": room.value, "evaluate": $("#report-evaluate option:selected").text(), "listDamaged": listEquipment, "listEvaluate": listEvaluate, "listDesc": listDesc}),
         success: function(result) {
+            conformData(1, {message: "Báo cáo đã được giử thành công!"});
             $(".table").css("display", "block");
             $(".none-message").remove();
 

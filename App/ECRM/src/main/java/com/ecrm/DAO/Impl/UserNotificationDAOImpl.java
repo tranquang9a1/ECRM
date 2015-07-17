@@ -55,7 +55,7 @@ public class UserNotificationDAOImpl extends BaseDAO<TblUserNotificationEntity, 
     @Override
     public List<TblUserNotificationEntity> getUnreadNotifyOfUser(String username) {
         Query query = entityManager.createQuery("SELECT n FROM TblUserNotificationEntity n " +
-                "WHERE n.username = :username AND n.status = false");
+                "WHERE n.username = :username AND n.status = false ORDER BY n.id DESC");
         query.setParameter("username", username);
 
         List queryResult = query.getResultList();

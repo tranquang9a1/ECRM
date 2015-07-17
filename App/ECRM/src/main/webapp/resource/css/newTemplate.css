@@ -196,6 +196,7 @@ body {
     background-color: orangered;
     opacity: 0.6;
     z-index: 10;
+
 }
 
 .real-time #now-time div{
@@ -208,6 +209,7 @@ body {
     text-align: center;
     left: 10px;
     opacity: 0;
+    color: #000;
 }
 
 .real-time .hour-item{
@@ -701,18 +703,18 @@ body {
 }
 
 .tab .tab-medium{
-    border: 0;
-    background-color: #f1f1f1;
 }
 
 .tab .tab-medium li{
     border: 0;
     margin: 0;
+    padding: 0 15px 0 0;
 }
 
 .tab .tab-medium li.active, .tab .tab-medium li:hover{
     font-weight: bold;
     border: 0;
+    background-color: white;
 }
 
 .btn.btn-orange {
@@ -766,6 +768,7 @@ body {
 .layout-background .header-modal.title {
     padding: 0 10px;
     margin-bottom: 15px;
+    width: auto;
 }
 
 .layout-background .header-modal.title p{
@@ -813,3 +816,57 @@ body {
     color: #d9534f;
     font-weight: bold;
 }
+
+.title-category {
+    height: 30px;
+    margin: 6px 0 0;
+}
+
+.title-category ul{
+    margin: 0;
+    padding: 0;
+}
+
+.title-category ul li{
+    list-style-type: none;
+    display: inline-block;
+    padding: 0 10px;
+    line-height: 27px;
+    border-bottom: 2px solid rgba(0,0,0,0);
+    font-weight: normal;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.title-category ul li.active{
+    border-bottom: 3px solid darkorange;
+}
+
+.unread-notify .row{
+    margin: 0 0 10px;
+}
+
+.unread-notify a{
+    text-decoration: none;
+    color: #555;
+}
+
+.unread-notify .time{
+    float: left;
+    font-weight: bold;
+    width: 25%;
+}
+
+.unread-notify .message{
+    float: right;
+    width: 75%;
+}
+
+.notifies{
+    display: none;
+}
+.notifies.active{
+    display: block;
+}
+
+

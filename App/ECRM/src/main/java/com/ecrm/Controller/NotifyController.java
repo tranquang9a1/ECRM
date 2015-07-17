@@ -287,7 +287,7 @@ public class NotifyController {
             request.setAttribute("UNREADNOTIFYS", listUnread);
 
             List<TblUserNotificationEntity> listRead = userNotificationDAO.getReadNotifyOfUser(user.getUsername(), pageNumber, size);
-            request.setAttribute("READNOTIFYS", listUnread);
+            request.setAttribute("READNOTIFYS", listRead);
 
             if(!"".equals(backLink)) {
                 request.setAttribute("BACKLINK", backLink);
@@ -308,19 +308,19 @@ public class NotifyController {
         return "LeftCategory";
     }
 
-    @RequestMapping(value = "all-notify")
-    public String getAllNotify(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
-
-        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), 1, 5);
-        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
-
-        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
-        request.setAttribute("LISTNOTIFY", listNotify);
-
-        return "ListNotification";
-    }
+//    @RequestMapping(value = "all-notify")
+//    public String getAllNotify(HttpServletRequest request) {
+//        HttpSession session = request.getSession();
+//        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+//
+//        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), 1, 5);
+//        int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
+//
+//        request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
+//        request.setAttribute("LISTNOTIFY", listNotify);
+//
+//        return "ListNotification";
+//    }
 
     @RequestMapping(value = "notify")
     public String redirectNotify(HttpServletRequest request, @RequestParam(value = "link") int notifyId){
@@ -338,7 +338,7 @@ public class NotifyController {
         }
 
         if("Teacher".equals(role.getName())) {
-            return "redirect:/giang-vien/thong-bao";
+            return "redirect:/giang-vien";
         } else if("Staff".equals(role.getName())) {
             return "redirect:/thong-bao";
         } else {

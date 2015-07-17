@@ -18,10 +18,10 @@
             <a href="javascript:void(0)" onclick="showViewPage('list-notifies')">
                 <p class="part-float">Thông báo</p>
                 <c:if test="${numberOfNotify > 0}">
-                    <p class="part-float right active">${numberOfNotify}</p>
+                    <p class="number-of-notifies part-float right active" data-value="${numberOfNotify}">${numberOfNotify}</p>
                 </c:if>
                 <c:if test="${numberOfNotify == 0}">
-                    <p class="part-float right">${numberOfNotify}</p>
+                    <p class="number-of-notifies part-float right" data-value="0">${numberOfNotify}</p>
                 </c:if>
                 <p class="clear"></p>
             </a>

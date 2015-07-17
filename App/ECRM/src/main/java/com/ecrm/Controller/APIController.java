@@ -244,13 +244,15 @@ public class APIController {
             report.setEvaluate(evaluate);
             reportDAO.merge(report);
 
-            Date nowDate = new Date();
-            long time = (nowDate.getTime() - report.getCreateTime().getTime()) / 1000*60;
-            if(time > 14) {
-                resultDTO.setError_code(500);
-                resultDTO.setError("Bạn hết thời gian sửa report!");
-                return resultDTO;
-            }
+
+            // User muốn sửa lúc nào cũng được
+//            Date nowDate = new Date();
+//            long time = (nowDate.getTime() - report.getCreateTime().getTime()) / 1000*60;
+//            if(time > 14) {
+//                resultDTO.setError_code(500);
+//                resultDTO.setError("Bạn hết thời gian sửa report!");
+//                return resultDTO;
+//            }
 
 //            List<TblReportDetailEntity> reportDetails = report.getTblReportDetailsById();
 //            for(TblReportDetailEntity detail: reportDetails) {
@@ -942,6 +944,11 @@ public class APIController {
             result.add(dto);
         }
         return result;
+    }
+
+    @RequestMapping(value="/checkConnection", method = RequestMethod.GET)
+    public @ResponseBody ResultDTO checkConnection() {
+        return new ResultDTO(200, "Connect Successful");
     }
 
 

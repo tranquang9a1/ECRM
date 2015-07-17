@@ -135,14 +135,14 @@
                 </div>
                 <c:if test="${max > 1}">
                   <div class="paging">
-                    <c:if test="${page + 1 < max}">
-                      <div class="page"><a href="/giang-vien/thong-bao?trang=${page+1}">Sau</a></div>
-                      <div class="page"><a href="/giang-vien/thong-bao?trang=${page+1}">${page+1}</a></div>
+                    <c:if test="${page + 1 <= max}">
+                      <div class="pagen" style="width: auto; padding: 0 5px"><a href="/giang-vien?trang=${page+1}">Sau</a></div>
+                      <div class="pagen"><a href="/giang-vien?trang=${page+1}">${page+1}</a></div>
                     </c:if>
-                    <div class="page current">${page}</div>
+                    <div class="pagen current">${page}</div>
                     <c:if test="${page - 1 > 0}">
-                      <div class="page"><a href="/giang-vien/thong-bao?trang=${page-1}">${page-1}</a></div>
-                      <div class="page"><a href="/giang-vien/thong-bao?trang=${page-1}">Trước</a></div>
+                      <div class="pagen"><a href="/giang-vien?trang=${page-1}">${page-1}</a></div>
+                      <div class="pagen" style="width: auto; padding: 0 5px"><a href="/giang-vien?trang=${page-1}">Trước</a></div>
                     </c:if>
                   </div>
                 </c:if>

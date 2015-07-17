@@ -887,3 +887,30 @@ body {
 .notifies.active{
     display: block;
 }
+
+.paging {
+    float: right;
+    margin: 15px 0 0;
+    padding: 10px 0 0 30px;
+    border-top: 1px solid #ddd;
+}
+
+.paging .pagen{
+    float: right;
+    line-height: 25px;
+    width: 25px;
+    text-align: center;
+}
+
+.paging .pagen a{
+    text-decoration: none;
+    color: #555;
+}
+
+.paging .pagen:hover{
+    text-decoration: underline;
+}
+
+.paging .pagen.current{
+    background-color: #f1f1f1;
+}

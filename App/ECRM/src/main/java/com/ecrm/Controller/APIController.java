@@ -1,5 +1,6 @@
 package com.ecrm.Controller;
 
+import com.ecrm.DAO.ClassroomDAO;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ReportDAO;
 import com.ecrm.DAO.ReportDetailDAO;
@@ -949,6 +950,13 @@ public class APIController {
     @RequestMapping(value="/checkConnection", method = RequestMethod.GET)
     public @ResponseBody ResultDTO checkConnection() {
         return new ResultDTO(200, "Connect Successful");
+    }
+
+    @RequestMapping(value="/getClassroom", method = RequestMethod.GET)
+    public @ResponseBody ClassDTO getClassroom(@RequestParam("classId") int classId) {
+        TblClassroomEntity entity = classroomDAO.getClassroomById(classId);
+        ClassDTO result = new ClassDTO(entity.getId(), entity.getName(), entity.getDamagedLevel());
+        return result;
     }
 
 

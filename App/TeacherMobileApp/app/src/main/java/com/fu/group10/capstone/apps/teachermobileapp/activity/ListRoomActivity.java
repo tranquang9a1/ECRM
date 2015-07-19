@@ -1,6 +1,7 @@
 package com.fu.group10.capstone.apps.teachermobileapp.activity;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -159,7 +160,7 @@ public class ListRoomActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //if (requestCode == 1) {
-        if (resultCode == 2) {
+        if (resultCode == RESULT_OK) {
             finish();
         }
 

@@ -294,6 +294,7 @@ public class EquipmentFragment extends Fragment{
 
                             createReportDialog = new CreateReportDialog();
                             createReportDialog.setParams(getActivity(),username, classId, damaged, position, evaluate, description, type);
+                            getActivity().setResult(Activity.RESULT_OK);
                             createReportDialog.show(getActivity().getFragmentManager(), "haha");
                         } else {
                             SparseBooleanArray selected = adapter
@@ -310,6 +311,7 @@ public class EquipmentFragment extends Fragment{
                             }
                             createReportDialogOffline = new CreateReportDialogOffline();
                             createReportDialogOffline.setParams(getActivity(), username, classId, className, listDamaged );
+                            getActivity().setResult(Activity.RESULT_OK);
                             createReportDialogOffline.show(getActivity().getFragmentManager(), "haha");
                         }
 

@@ -3,6 +3,7 @@ package com.fu.group10.capstone.apps.teachermobileapp.utils;
 
 import android.util.Log;
 
+import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ClassroomInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
@@ -171,5 +172,24 @@ public class ParseUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static ClassroomDAO parseClassroomDAO(String json) {
+        ClassroomDAO result = new ClassroomDAO();
+        if (json == null) {
+            return result;
+        }
+
+        try {
+            JSONObject object = new JSONObject(json);
+
+            result = new ClassroomDAO(object.getInt("classId"), object.getString("className"), object.getInt("damageLevel"));
+            return result;
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Parse Class", "Json format incorrect!");
+
+        }
+        return result;
     }
 }

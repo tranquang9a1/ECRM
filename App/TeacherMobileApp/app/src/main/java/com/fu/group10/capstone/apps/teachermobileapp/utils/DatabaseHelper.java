@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
@@ -380,6 +381,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateDamageLevel(int classId, int damageLevel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(CLASSROOM_DAMAGE_LEVEL, damageLevel);
+        db.update(TABLE_CLASSROOM, values, CLASSROOM_ID + " = " + classId, null);
+        db.close();
+    }
+
     public User login(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USER + " WHERE " + USER_USERNAME + " = '" +username + "' AND " +
@@ -477,5 +486,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_USER, null, null);
     }
 
+    public void insertClassroom(ClassroomDAO dao) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(CLASSROOM_DAMAGE_LEVEL, dao.getDamageLevel());
+        values.put(CLASSROOM_ID, dao.getClassId());
+        values.put(CLASSROOM_NAME, dao.getClassName());
+        values.put(CLASSROOM_TYPE, dao.getRoomType());
+
+        db.insert(TABLE_CLASSROOM, null, values);
+        db.close();
+    }
+
+    public int getDamageLevel(int classId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_CLASSROOM + " WHERE " + CLASSROOM_ID + " = " + classId;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+
+        return c.getInt(c.getColumnIndex(CLASSROOM_DAMAGE_LEVEL));
+    }
 
 }

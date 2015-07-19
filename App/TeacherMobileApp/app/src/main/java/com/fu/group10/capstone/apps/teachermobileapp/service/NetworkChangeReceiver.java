@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
@@ -167,14 +168,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 }
 
 
-
                 RequestSender sender1 = new RequestSender();
                 String url1 = Constants.API_GET_REPORT_BY_USERNAME + user.getUsername() + "&offset=" + 0 + "&limit=" + 10;
                 sender1.start(url1, new RequestSender.IRequestSenderComplete() {
                     @Override
                     public void onRequestComplete(String result) {
                         List<ReportInfo> classrooms = ParseUtils.parseReportFromJSON(result);
-                        for (int i = 0; i< classrooms.size(); i++) {
+                        for (int i = 0; i < classrooms.size(); i++) {
                             syncReport(classrooms.get(i));
 
 
@@ -206,9 +206,23 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                     syncEquipment(id + "", ParseUtils.parseEquipmentJson(result));
                 }
             });
+
+            String url1 = Constants.API_GET_CLASSROOM + id;
+            RequestSender sender = new RequestSender();
+            sender.start(url1, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                    syncClassroom(result);
+                }
+            });
         }
     }
 
+
+    public void syncClassroom(String result ) {
+        ClassroomDAO dao = ParseUtils.parseClassroomDAO(result);
+        db.insertClassroom(dao);
+    }
 
 
 

@@ -222,9 +222,9 @@ public class LoginActivity  extends ActionBarActivity {
     }
 
 
-
-
     void openMainActivity(String username) {
+
+
 
         Intent intent = new Intent(this, ListRoomActivity.class);
         //intent.putParcelableArrayListExtra("listClass", listClassroom);

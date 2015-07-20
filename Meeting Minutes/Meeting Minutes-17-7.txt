@@ -1,0 +1,3 @@
+Can highline cac tiet dang day hien thoi tren tran XEP LICH
+Chi can gui tin nhan khi bao cao offline khi do hu hai khi bao cao > 50%
+CASE: Can them chuc nang ho tro doc cu phap tin nhan, khi tin nhan duoc gui tu bao cao offline cua teacher. Va doi phong cho teacher ke ca khi su dung offline app.

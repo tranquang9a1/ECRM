@@ -1,0 +1,5 @@
+- Trong tuan nay can lay lich cua bao ve, de nhap vao file excel chuan bi demo cho taun sau.
+- Can thong cao la: 
+	+ Ti le lout phong dc doi trong 1 thang la bao (ti le thiet bi bat on cao), 
+	+ So sanh ti le doi phong giua phong nay so voi phong truoc.
+- cau hinh tiet hoc can dieu chinh nhung bien cau hinh chung luon (thoi gian moi tiet, thoi gian nghi giua gio,...)

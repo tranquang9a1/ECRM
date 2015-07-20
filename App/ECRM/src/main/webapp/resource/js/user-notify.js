@@ -558,24 +558,25 @@ function getRoom(select) {
 
 
 function loadReportHistory(reportId, roomId){
-    waitLoading();
-    var report = $("#report-history").attr("data-report");
-    if(report != reportId) {
+    $(".loading-page").addClass("active");
+
+    var report = $("#hitory-report-"+ reportId);
+    if(report.length == 0) {
         $.ajax({
             method: "GET",
-            url: "/giang-vien/viewHistory",
-            data: {ReportId: reportId, RoomId: roomId},
+            url: "/giang-vien/chi-tiet",
+            data: {'bao-cao': reportId},
             success: function (result) {
-                $("#report-history").html(result);
-                $("#list-equipment-history").text($("#list-" + reportId).html());
-                $("#report-history").attr("data-report", reportId);
-                closeLoading();
-                showModal(1, 'modal-3');
+                $(".list-data-report").html(result);
+                $(".list-data-report script").remove();
+                $("#room-name").html($("#room-name-" + reportId).val());
+                $(".loading-page").removeClass("active");
+                changePage('history-report');
             }
         });
     } else {
-        closeLoading();
-        showModal(1, 'modal-3');
+        $(".loading-page").removeClass("active");
+        changePage('history-report');
     }
 }
 

@@ -123,25 +123,43 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
     }
 
     @Override
-    public List<TblEquipmentEntity> getActiveEquipments(int roomId) {
+    public List<TblEquipmentEntity> getDamagedEquipmentsInReport(int reportId) {
+        Query query = entityManager.createQuery("SELECT e " +
+                                                "FROM TblEquipmentEntity e " +
+                                                "WHERE e.id IN (SELECT rd.equipmentId " +
+                                                                "FROM TblReportDetailEntity rd " +
+                                                                "WHERE rd.reportId = :reportId " +
+                                                                "GROUP BY rd.equipmentId)");
+        query.setParameter("reportId", reportId);
 
-        Query query = entityManager.createQuery("SELECT c " +
-                "FROM TblEquipmentEntity c " +
-                "WHERE c.classroomId = :roomId " +
-                "AND c.position != null");
-        query.setParameter("roomId", roomId);
-
-        List queryResult = query.getResultList();
-        List<TblEquipmentEntity> result = new ArrayList<TblEquipmentEntity>();
-        if (!queryResult.isEmpty()) {
-            for (Iterator i = queryResult.iterator(); i.hasNext(); ) {
-                TblEquipmentEntity item = (TblEquipmentEntity) i.next();
-                result.add(item);
-            }
+        List result = query.getResultList();
+        if(!result.isEmpty()) {
+            return result;
         }
 
-        return result;
+        return new ArrayList<TblEquipmentEntity>();
     }
+
+    //    @Override
+//    public List<TblEquipmentEntity> getActiveEquipments(int roomId) {
+//
+//        Query query = entityManager.createQuery("SELECT c " +
+//                "FROM TblEquipmentEntity c " +
+//                "WHERE c.classroomId = :roomId " +
+//                "AND c.position != null");
+//        query.setParameter("roomId", roomId);
+//
+//        List queryResult = query.getResultList();
+//        List<TblEquipmentEntity> result = new ArrayList<TblEquipmentEntity>();
+//        if (!queryResult.isEmpty()) {
+//            for (Iterator i = queryResult.iterator(); i.hasNext(); ) {
+//                TblEquipmentEntity item = (TblEquipmentEntity) i.next();
+//                result.add(item);
+//            }
+//        }
+//
+//        return result;
+//    }
 
     @Override
     public List<TblEquipmentEntity> getDamagedEquipments(int roomId) {

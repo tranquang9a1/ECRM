@@ -26,9 +26,7 @@
   </div>
 
   <div class="data-tab map-info">
-    <div id="classroom-map-${room.id}">
-
-    </div>
+    <div id="classroom-map-${room.id}"></div>
   </div>
 </div>
 <script>

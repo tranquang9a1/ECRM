@@ -124,7 +124,7 @@
                           </div>
                           <div class="width-15">
                             <div class="group-button">
-                              <div onclick="loadReportHistory(${reports[i].reportId}, ${reports[i].room})" class="btn btn-normal btn-text">Xem</div>
+                              <div onclick="loadReportHistory(${reports[i].reportId})" class="btn btn-normal btn-text">Xem</div>
                             </div>
                           </div>
                           <p class="clear"></p>
@@ -173,7 +173,15 @@
             </div>
             <div class="list-room-content"></div>
           </div>
-          <div class="page" id="history-report"></div>
+          <div class="page" id="history-report">
+            <div class="title">
+              <p>Gửi báo cáo phòng <span id="room-name"></span></p>
+              <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report')"/>
+            </div>
+            <div class="list-data-report">
+
+            </div>
+          </div>
           <div class="loading-page">
             <img src="/resource/img/500.GIF">
             <div>Đang tải! Vui lòng chờ trong giây lát!</div>

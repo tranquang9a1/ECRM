@@ -15,20 +15,19 @@
 <script>
     var roomEquipments = {};
     <c:forEach items="${equipments}" var="item">
-        <c:if test="${(item.position != null || '[0]'.equals(item.position) != false) && item.status == false}">
-            roomEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
-        </c:if>
+        <%--<c:if test="${'[0]'.equals(item.position) != false}">--%>
+            roomEquipments["${item.position.trim()}"] = {id: ${item.id}, status: false};
+        <%--</c:if>--%>
     </c:forEach>
 </script>
-<div class="tab">
-    <div class="tab-medium">
-        <ul>
-            <li class="active" onclick="changeTab('tab1', this)">Chi tiết</li>
-            <li onclick="changeTab('tab2', this)">Sơ đồ</li>
-        </ul>
+<div id="hitory-report-${report.id}">
+    <input type="hidden" value="${room.name}" id="room-name-${report.id}"/>
+    <div class="list-control-report">
+        <div class="title-tab active" onclick="changeTabInfo(1, this)">Thông tin</div>
+        <div class="title-tab" onclick="changeTabInfo(0, this)">Bản đồ</div>
     </div>
-    <div class="content-tab">
-        <div id="tab1" class="body-tab active">
+    <div class="room-content" style="  position: relative; float: left; margin: 15px 0 0 15px;">
+        <div class="data-tab main-info active">
             <div class="group-control">
                 <div class="name">Phòng</div>
                 <div class="value">${room.name}</div>
@@ -74,12 +73,12 @@
                 </div>
             </c:if>
         </div>
-        <div id="tab2" class="body-tab">
-            <div id="room-map"></div>
+        <div class="data-tab map-info">
+            <div id="report-map-${report.id}"></div>
         </div>
     </div>
 </div>
 <script>
-    showMap('room-map', roomEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
+    showMap('report-map-${report.id}', roomEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
             ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
 </script>

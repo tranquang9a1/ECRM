@@ -294,11 +294,11 @@ public class UserController {
         return "user/ReportRoom";
     }
 
-    @RequestMapping(value = "viewHistory")
-    public String viewReportByUser(HttpServletRequest request, @RequestParam("ReportId") int reportId, @RequestParam("RoomId") String roomId) {
-        TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomId);
-        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(classroom.getId());
+    @RequestMapping(value = "chi-tiet")
+    public String viewReportByUser(HttpServletRequest request, @RequestParam("bao-cao") int reportId) {
         TblReportEntity report = reportDAO.find(reportId);
+        TblClassroomEntity classroom = report.getTblClassroomByClassRoomId();
+        List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipmentsInReport(reportId);
 
         request.setAttribute("ROOM", classroom);
         request.setAttribute("REPORT", report);

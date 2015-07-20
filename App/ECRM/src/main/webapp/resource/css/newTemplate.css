@@ -647,12 +647,12 @@ body {
 }
 
 .left-category{
-    width: 155px;
+    width: 170px;
     height: 530px;
     padding: 0;
-    margin: 0 15px 0 0;
+    margin: 0;
     border: 0;
-    background-color: #f1f1f1;
+    background-color: #e6e6e6;
 }
 
 .left-category ul{
@@ -678,7 +678,7 @@ body {
 }
 
 .left-category ul li.active, .left-category ul li:hover{
-    background-color: #e6e6e6;
+    background-color: white;
 }
 
 .left-category ul li.active p, .left-category ul li:hover p{
@@ -699,11 +699,13 @@ body {
     margin: 5px 0;
     border-radius: 3px;
     background-color: #ccc;
+    display: none;
 }
 
 .left-category ul li .part-float.right.active {
     color: white;
     background-color: orangered;
+    display: block;
 }
 
 .layout-background .right-content{

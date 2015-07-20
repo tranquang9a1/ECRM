@@ -51,7 +51,12 @@
             </div>
             <div class="group-control">
                 <div class="name">Danh sách thiết bị</div>
-                <div class="value" id="list-equipment-history"></div>
+                <div class="value">
+                    <c:forEach items="${equipments}" var="item">
+                        ${item.tblEquipmentCategoryByCategoryId.name}
+                        <c:if test="${item.id != equipments.get(equipments.size()-1).id}">,</c:if>
+                    </c:forEach>
+                </div>
             </div>
             <div class="group-control">
                 <div class="name">Ngày báo cáo</div>

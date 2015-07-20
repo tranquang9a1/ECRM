@@ -151,7 +151,7 @@
           <div class="page" id="list-room">
             <input id="roomId" type="hidden"/>
             <div class="title">
-              <p>Gửi báo cáo phòng <span id="room"></span></p>
+              <p>Báo cáo phòng <span id="room"></span></p>
               <c:if test="${finishSchedule.size() > 0}">
                 <p style="float: right; padding: 0; text-transform: none"> Phòng
                   <select id="list-active-room" onchange="getRoomReport()" style="  background-color: white;  border: 1px solid #ddd;  padding: 6px 10px;  margin: 0 0 0 10px;">

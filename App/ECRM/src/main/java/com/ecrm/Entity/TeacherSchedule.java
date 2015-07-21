@@ -8,6 +8,7 @@ public class TeacherSchedule {
     private String date;
     private boolean isActive;
     private String note;
+    private String style;
 
     public TeacherSchedule() {
     }
@@ -15,6 +16,14 @@ public class TeacherSchedule {
     public TeacherSchedule(String teacher, String date) {
         this.teacher = teacher;
         this.date = date;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     public String getTeacher() {

@@ -25,6 +25,7 @@
     <mapping class="com.ecrm.Entity.TeacherSchedule"/>
     <mapping class="com.ecrm.Entity.TblNotificationEntity"/>
     <mapping class="com.ecrm.Entity.TblScheduleConfigEntity"/>
+    <mapping class="com.ecrm.Entity.TblMessageEntity"/>
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->

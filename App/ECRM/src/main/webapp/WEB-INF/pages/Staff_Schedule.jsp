@@ -231,8 +231,8 @@
 
                                                 <c:forEach var="tis" items="${cs.timeSchedules}">
                                                     <c:if test="${ not empty tis.teacherSchedules}">
-                                                        <tr>
-                                                            <td bgcolor="#3177BC">${tis.timeFrom} - ${tis.timeTo}</td>
+                                                        <tr class="${tis.style}">
+                                                            <td style="color: white;background-color:rgb(49, 119, 188);">${tis.timeFrom} - ${tis.timeTo}</td>
 
                                                             <c:forEach items="${teachingDate}" var="td">
                                                                 <td>
@@ -240,7 +240,7 @@
                                                                                items="${tis.teacherSchedules}">
                                                                         <c:if test="${tes.date == td.toString()}">
                                                                             ${tes.teacher} <span
-                                                                                style="font-style: italic; color: red">${tes.note}</span>
+                                                                                style="${tes.style}">${tes.note}</span>
                                                                         </c:if>
                                                                     </c:forEach>
                                                                 </td>

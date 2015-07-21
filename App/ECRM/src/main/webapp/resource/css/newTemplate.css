@@ -916,3 +916,7 @@ body {
 .paging .pagen.current{
     background-color: #f1f1f1;
 }
+
+.tr-active{
+    background-color:rgb(252, 87, 27) !important;
+}

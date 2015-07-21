@@ -1,13 +1,7 @@
 package com.ecrm.Controller;
 
-import com.ecrm.DAO.Impl.ClassroomDAOImpl;
-import com.ecrm.DAO.Impl.ScheduleDAOImpl;
-import com.ecrm.DAO.Impl.UserDAOImpl;
-import com.ecrm.DAO.Impl.UserInfoDAOImpl;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblScheduleEntity;
-import com.ecrm.Entity.TblUserEntity;
-import com.ecrm.Entity.TblUserInfoEntity;
+import com.ecrm.DAO.Impl.*;
+import com.ecrm.Entity.*;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
@@ -16,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -36,16 +31,22 @@ public class GetSMSController {
     ClassroomDAOImpl classroomDAO;
     @Autowired
     ScheduleDAOImpl scheduleDAO;
+    @Autowired
+    MessageDAOImpl messageDAO;
 
     @RequestMapping(value = "getSMS", method = RequestMethod.POST)
     public void getSMS(HttpServletRequest request) throws TwilioRestException {
         String body = request.getParameter("Body");
-        System.out.println("Message body: "+body);
+        System.out.println("Message body: " + body);
         String from = request.getParameter("From");
-        System.out.println("Message from:" +from);
-        SmsUtils.sendMessage("+84962067505", "Thanh Cong");
+        System.out.println("Message from:" + from);
         String classroomId = body.split("-")[1];
-        TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(classroomId));
+        TblMessageEntity tblMessageEntity = new TblMessageEntity();
+        tblMessageEntity.setBody(classroomId);
+        tblMessageEntity.setPhone(from);
+        tblMessageEntity.setIsRead(false);
+        messageDAO.persist(tblMessageEntity);
+        /*TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(classroomId));
         List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
         LocalTime localTime = new LocalTime();
         LocalTime noon = new LocalTime("12:00:00");
@@ -89,7 +90,7 @@ public class GetSMSController {
             }
         } else {
             System.out.println("Can't find any available room");
-        }
+        }*/
     }
 
     public String changeRoom(TblScheduleEntity tblScheduleEntity, TblClassroomEntity changeClassroomEntity) {
@@ -108,4 +109,18 @@ public class GetSMSController {
         return message;
     }
 
+    @RequestMapping(value = "getBody")
+    @ResponseBody
+    public String getBody(){
+        List<TblMessageEntity> tblMessageEntities = messageDAO.getUnreadMessage();
+        String result="";
+        for(TblMessageEntity tblMessageEntity: tblMessageEntities){
+            result+=tblMessageEntity.getBody()+"-";
+            tblMessageEntity.setIsRead(true);
+            messageDAO.merge(tblMessageEntity);
+        }
+        System.out.println("Nhan duoc: "+tblMessageEntities.size()+" tin nhan!");
+
+    return result;
+    }
 }

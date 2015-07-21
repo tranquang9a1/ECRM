@@ -6,12 +6,21 @@ import java.util.List;
  * Created by Htang on 7/4/2015.
  */
 public class TimeSchedule {
+    private String style;
     private String timeFrom;
     private String timeTo;
     private int scheduleConfigId;
     private List<TeacherSchedule> teacherSchedules;
 
     public TimeSchedule() {
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     public String getTimeFrom() {

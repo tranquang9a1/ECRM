@@ -14,7 +14,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Time;
 import java.util.*;
 
@@ -251,4 +257,66 @@ public class CheckDamagedClassroomSchedule {
         return message;
     }
 
+    @Scheduled(fixedDelay = 60000)
+    @ResponseBody
+    public void test() throws IOException, TwilioRestException {
+        System.out.println("Run test");
+        URL url = new URL("http://128.199.208.93/offline/getBody");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+        String line;
+        while ((line = bufferedReader.readLine())!=null){
+            String[]array = line.split("-");
+            if(array.length>0){
+                for(int i = 0; i<array.length; i++){
+                    String classroomId = array[i];
+                    TblClassroomEntity classroomEntity = classroomDAO.find(Integer.parseInt(classroomId));
+                    List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
+                    LocalTime localTime = new LocalTime();
+                    LocalTime noon = new LocalTime("12:00:00");
+                    List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
+                    if (localTime.isBefore(noon)) {
+                        currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(Integer.parseInt(classroomId), "Morning");
+                    } else {
+                        currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(Integer.parseInt(classroomId), "Noon");
+                    }
+                    List<String> availableClassroom = new ArrayList<String>();
+                    for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
+                        List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+                        if (!classroom.isEmpty()) {
+                            if (availableClassroom.isEmpty()) {
+                                availableClassroom = classroom;
+                            } else {
+                                Iterator<String> it = availableClassroom.iterator();
+                                while (it.hasNext()) {
+                                    String room = it.next();
+                                    if (!classroom.contains(room)) {
+                                        it.remove();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (!availableClassroom.isEmpty()) {
+
+                        System.out.println("Total: " + availableClassroom.size() + " available room");
+                        availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
+                        availableClassroom.remove(classroomEntity.getName());
+                        TblClassroomEntity changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+
+                        //change room
+                        GCMController gcmController = new GCMController();
+                        System.out.println("Kiem lich hien tai: " + currentSchedule.size());
+                        for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
+                            String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
+                            SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                        }
+                    } else {
+                        System.out.println("Can't find any available room");
+                    }
+                }
+            }
+        }
+        bufferedReader.close();
+    }
 }

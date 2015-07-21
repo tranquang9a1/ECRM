@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -388,8 +389,7 @@ public class ScheduleController {
             }
 
             String room = "";
-            String time = "";
-
+            LocalTime localTime = new LocalTime();
             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                 for (int i = 0; i < crSdEntities.size(); i++) {
                     room = tblScheduleEntity.getTblClassroomByClassroomId().getName();
@@ -402,7 +402,11 @@ public class ScheduleController {
                                 teacherSchedule.setTeacher(tblScheduleEntity.getUsername());
                                 teacherSchedule.setDate(tblScheduleEntity.getDate().toString());
                                 teacherSchedule.setNote(tblScheduleEntity.getNote());
-                                teacherSchedule.setIsActive(tblScheduleEntity.getIsActive());
+                                if(tblScheduleEntity.getIsActive()){
+                                    teacherSchedule.setStyle("font-style: italic;color:blue");
+                                }else{
+                                    teacherSchedule.setStyle("font-style: italic;color:red");
+                                }
                                 List<TeacherSchedule> teacherSchedules = timeSchedules1.get(j).getTeacherSchedules();
                                 if (teacherSchedules == null) {
                                     teacherSchedules = new ArrayList<TeacherSchedule>();
@@ -422,6 +426,14 @@ public class ScheduleController {
                 List<TimeSchedule> timeSchedules = crSdEntity.getTimeSchedules();
                 for (TimeSchedule timeSchedule : timeSchedules) {
                     if (timeSchedule.getTeacherSchedules() != null) {
+                        LocalTime timeFrom = LocalTime.parse(timeSchedule.getTimeFrom());
+                        LocalTime timeTo = LocalTime.parse(timeSchedule.getTimeTo());
+                        if(localTime.isBefore(timeTo)&& localTime.isAfter(timeFrom)){
+                            timeSchedule.setStyle("tr-active");
+                        }else{
+                            timeSchedule.setStyle("");
+                        }
+
                         isEmpty = false;
                         rowspan += 1;
                     }

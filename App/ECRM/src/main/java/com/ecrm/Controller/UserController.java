@@ -5,6 +5,7 @@ import com.ecrm.DTO.ReportRequestDTO;
 import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.DTO.ScheduleDTO;
 import com.ecrm.Entity.*;
+import com.ecrm.Service.GCMService;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Enumerable.MessageType;
 import com.ecrm.Utils.Enumerable.NotifyType;
@@ -51,6 +52,9 @@ public class UserController {
     NotificationDAOImp notificationDAOImp;
     @Autowired
     UserNotificationDAOImpl userNotificationDAO;
+
+    @Autowired
+    GCMService gcmService;
 
     @RequestMapping(value = "")
     public String homePage(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
@@ -270,7 +274,7 @@ public class UserController {
                 }
 
                 SmsUtils.sendMessage(staff.getTblUserInfoByUsername().getPhone(), message);
-                gcm.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
+                gcmService.sendNotification(message, staff.getTblUserInfoByUsername().getDeviceId());
             }
         } catch (TwilioRestException e) {
             System.out.println("Khong the gui SMS!");

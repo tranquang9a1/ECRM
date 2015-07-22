@@ -6,6 +6,7 @@ import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Entity.TblScheduleEntity;
+import com.ecrm.Service.GCMService;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
@@ -34,6 +35,9 @@ public class ChangeRoomController {
     ClassroomDAOImpl classroomDAO;
     @Autowired
     ReportDAOImpl reportDAO;
+
+    @Autowired
+    private GCMService gcmService;
 
     @RequestMapping(value = "getAvailableRoom")
     public
@@ -95,7 +99,7 @@ public class ChangeRoomController {
                     + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
             scheduleDAO.persist(newSchedule);
             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+            gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
         }
         //update status report
         List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroomEntity.getId());

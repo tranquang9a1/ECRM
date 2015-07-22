@@ -4,6 +4,7 @@ import com.ecrm.Controller.GCMController;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.*;
+import com.ecrm.Service.GCMService;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
@@ -40,6 +41,9 @@ public class CheckDamagedClassroomSchedule {
     EquipmentDAOImpl equipmentDAO;
     @Autowired
     ReportDAOImpl reportDAO;
+
+    @Autowired
+    private GCMService gcmService;
 
 
     @Scheduled(cron = "${cron.expression}")
@@ -113,7 +117,7 @@ public class CheckDamagedClassroomSchedule {
                                     TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(classroom.get(0));
                                     String message = changeRoom(tblScheduleEntity, newClassroom);
                                     SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                                    gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                                    gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
 
                                 }
                             }
@@ -123,7 +127,7 @@ public class CheckDamagedClassroomSchedule {
                             for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                                 String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
                                 SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                                gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                                gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                             }
                             System.out.println("End changing room!");
                         }
@@ -151,7 +155,7 @@ public class CheckDamagedClassroomSchedule {
                             if (equipmentEntity.getTimeRemain() <= 50) {
                                 String message = "Bóng đèn của projector: " + equipmentEntity.getName() + " số serial: " + equipmentEntity.getSerialNumber() +
                                         " của phòng: " + equipmentEntity.getTblClassroomByClassroomId().getName() + " sắp hết thời gian sử dụng!";
-                                gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                                gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                             }
                         }
 
@@ -221,7 +225,7 @@ public class CheckDamagedClassroomSchedule {
                         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
                             String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
                             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                            gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                         }
                     }
 
@@ -309,7 +313,7 @@ public class CheckDamagedClassroomSchedule {
                         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
                             String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
                             SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                            gcmController.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                            gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                         }
                     } else {
                         System.out.println("Can't find any available room");

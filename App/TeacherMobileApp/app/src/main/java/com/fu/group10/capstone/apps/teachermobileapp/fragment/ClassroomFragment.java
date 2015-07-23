@@ -38,16 +38,14 @@ public class ClassroomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_classroom, container, false);
-
         initView(rootView);
-
         return rootView;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initView(final View rootView) {
         classmap = (WebView) rootView.findViewById(R.id.classmap);
-        final JsInterface jsInterface = new JsInterface(DummyApplication.getAppContext());
+        final JsInterface jsInterface = new JsInterface(getActivity());
         classmap.getSettings().setJavaScriptEnabled(true);
         classmap.setWebViewClient(new WebViewClient());
         classmap.addJavascriptInterface(jsInterface, "Android");

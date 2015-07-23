@@ -113,7 +113,7 @@ public class CreateReportDialog extends DialogFragment {
         params.put("evaluate", evaluate);
         params.put("classId", classId + "");
         params.put("username", username);
-
+        params.put("createTime", "1");
 
         RequestSender sender = new RequestSender();
         sender.method ="POST";

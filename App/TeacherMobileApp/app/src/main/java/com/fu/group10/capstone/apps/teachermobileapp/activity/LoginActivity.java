@@ -44,7 +44,7 @@ public class LoginActivity  extends ActionBarActivity {
 
     private static final String result ="";
     private static final String defaultPassword = "123ecrm";
-    private AutoCompleteTextView usernameTextView;
+    private EditText usernameTextView;
     private EditText passwordTextView;
     Context context;
     ProgressDialog progress;
@@ -85,7 +85,7 @@ public class LoginActivity  extends ActionBarActivity {
 
             context = getApplicationContext();
 
-            usernameTextView = (AutoCompleteTextView) findViewById(R.id.username);
+            usernameTextView = (EditText) findViewById(R.id.username);
 
             passwordTextView = (EditText) findViewById(R.id.password);
             passwordTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

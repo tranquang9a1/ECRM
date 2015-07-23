@@ -71,6 +71,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 params.put("evaluate", report.getEvaluate());
                 params.put("classId", report.getClassId() + "");
                 params.put("username", report.getUsername());
+                params.put("createTime", report.getCreateTime());
 
 
                 RequestSender sender = new RequestSender();

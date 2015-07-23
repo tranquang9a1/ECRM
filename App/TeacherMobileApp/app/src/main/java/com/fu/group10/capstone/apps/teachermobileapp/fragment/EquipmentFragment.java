@@ -22,6 +22,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.JsInterface;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
@@ -65,6 +66,12 @@ public class EquipmentFragment extends Fragment{
         return rootView;
     }
 
+    public EquipmentFragment() {
+
+    }
+
+
+
     private void initListView(View rootView) {
         Log.d("demo", "Load list view");
         listView = (ListView) rootView.findViewById(R.id.lv_sample_list);
@@ -89,40 +96,39 @@ public class EquipmentFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 hideSoftKeyboard(getActivity());
-                    final Equipment equip = listEquipments.get(i);
-                    if (isExist(listEquipments.get(i).getEquipmentName())) {
+                final Equipment equip = listEquipments.get(i);
+                if (isExist(listEquipments.get(i).getEquipmentName())) {
 
-                        DialogUtils.showAlert(getActivity(), "Bạn muốn xóa thiết bị này khỏi danh sách báo cáo", new DialogUtils.IOnOkClicked() {
-                            @Override
-                            public void onClick() {
-                                removeEquipment(equip.getEquipmentName());
-                                equip.setIsReport(false);
-                                equip.setIsDamaged(true);
-                                adapter.notifyDataSetChanged();
-                            }
-                        }, new DialogUtils.IOnCancelClicked() {
-                            @Override
-                            public void onClick() {
+                    DialogUtils.showAlert(getActivity(), "Bạn muốn xóa thiết bị này khỏi danh sách báo cáo", new DialogUtils.IOnOkClicked() {
+                        @Override
+                        public void onClick() {
+                            removeEquipment(equip.getEquipmentName());
+                            equip.setIsReport(false);
+                            equip.setIsDamaged(true);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }, new DialogUtils.IOnCancelClicked() {
+                        @Override
+                        public void onClick() {
 
-                            }
-                        });
+                        }
+                    });
 
-                    } else if(!listEquipments.get(i).isDamaged()) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Thiết bị này đã được báo cáo!", Toast.LENGTH_LONG).show();
-                    } else {
-                        chooseEquipmentDialog = new ChooseEquipmentDialog();
-                        chooseEquipmentDialog.setParams(getActivity(), listEquipments.get(i), new ChooseEquipmentDialog.OnMsgEnteredListener() {
-                            @Override
-                            public void onMsgEnteredListener(Equipment equipment) {
-                                listDamaged.add(equipment);
-                                adapter.notifyDataSetChanged();
+                } else if (!listEquipments.get(i).isDamaged()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Thiết bị này đã được báo cáo!", Toast.LENGTH_LONG).show();
+                } else {
+                    chooseEquipmentDialog = new ChooseEquipmentDialog();
+                    chooseEquipmentDialog.setParams(getActivity(), listEquipments.get(i), new ChooseEquipmentDialog.OnMsgEnteredListener() {
+                        @Override
+                        public void onMsgEnteredListener(Equipment equipment) {
+                            listDamaged.add(equipment);
+                            adapter.notifyDataSetChanged();
 
-                            }
-                        });
-                        chooseEquipmentDialog.show(getActivity().getFragmentManager(), "Enter Information");
+                        }
+                    });
+                    chooseEquipmentDialog.show(getActivity().getFragmentManager(), "Enter Information");
 
-                    }
-
+                }
 
 
             }
@@ -133,6 +139,7 @@ public class EquipmentFragment extends Fragment{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addEquipmentToList();
                 if (listDamaged.size() == 0) {
                     Toast.makeText(getActivity().getApplicationContext(), "Bạn phải chọn ít nhất 1 thiết bị", Toast.LENGTH_LONG).show();
                 } else {
@@ -144,7 +151,7 @@ public class EquipmentFragment extends Fragment{
                         String listPosition = "";
 
 
-                        for (int i = 0; i< listDamaged.size(); i++) {
+                        for (int i = 0; i < listDamaged.size(); i++) {
                             listDamage += listDamaged.get(i).getEquipmentName() + ",";
                             listEvaluate += listDamaged.get(i).getDamageLevel() + ",";
                             listDescription += listDamaged.get(i).getEvaluate() + ",";
@@ -157,19 +164,17 @@ public class EquipmentFragment extends Fragment{
                         final String description = listDescription.substring(0, listDescription.length() > 0 ? listDescription.length() - 1 : 0);
                         createReportDialog = new CreateReportDialog();
                         if (type.equalsIgnoreCase("create")) {
-                            createReportDialog.setParams(getActivity(),username, classId, damaged, position, evaluate, description, type);
+                            createReportDialog.setParams(getActivity(), username, classId, damaged, position, evaluate, description, type);
                         } else {
-                            createReportDialog.setParams(getActivity(),report.getUsername(), report.getReportId(),classId, damaged, position, evaluate, description, type);
+                            createReportDialog.setParams(getActivity(), report.getUsername(), report.getReportId(), classId, damaged, position, evaluate, description, type);
                         }
 
                         createReportDialog.show(getActivity().getFragmentManager(), "haha");
                     } else {
                         createReportDialogOffline = new CreateReportDialogOffline();
-                        createReportDialogOffline.setParams(getActivity(), username, classId, className, listDamaged );
+                        createReportDialogOffline.setParams(getActivity(), username, classId, className, listDamaged);
                         createReportDialogOffline.show(getActivity().getFragmentManager(), "haha");
                     }
-
-
 
 
                 }
@@ -355,6 +360,13 @@ public class EquipmentFragment extends Fragment{
         }
     }
 
+    public void addEquipmentToList() {
+        List<Equipment> equipmentList = JsInterface.getListEquipments();
+        for (Equipment equipment : equipmentList) {
+            listDamaged.add(equipment);
+        }
+    }
+
     public void removeEquipment(String equipmentName) {
         Iterator<Equipment> iter = listDamaged.iterator();
         while (iter.hasNext()) {
@@ -362,5 +374,21 @@ public class EquipmentFragment extends Fragment{
                 iter.remove();
             }
         }
+    }
+
+    public void updateStatus(String name) {
+        for (Equipment equip : listEquipments) {
+            if (equip.getEquipmentName().equalsIgnoreCase(name)) {
+                equip.setIsReport(true);
+                equip.setIsDamaged(false);
+            }
+        }
+    }
+
+    public void notifyAddEquipment(Equipment equipment) {
+        listDamaged.add(equipment);
+        updateStatus(equipment.getEquipmentName());
+        //adapter.notifyDataSetChanged();
+
     }
 }

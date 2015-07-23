@@ -1,12 +1,19 @@
 package com.fu.group10.capstone.apps.teachermobileapp.utils;
 
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
 
+import com.fu.group10.capstone.apps.teachermobileapp.R;
+import com.fu.group10.capstone.apps.teachermobileapp.dialog.ChooseEquipmentDialog;
+import com.fu.group10.capstone.apps.teachermobileapp.fragment.EquipmentFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.DamagedEquipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
 
 import java.util.*;
 
@@ -14,12 +21,18 @@ import java.util.*;
  * Created by QuangTV on 6/2/2015.
  */
 public class JsInterface {
-    Context context;
+    static Context context;
     static List<DamagedEquipment> result = new ArrayList<DamagedEquipment>();
+    static List<Equipment> listEquipments = new ArrayList<Equipment>();
     List<Integer> valueChoose = new ArrayList<Integer>();
+    static ChooseEquipmentDialog chooseEquipmentDialog;
+
+    static EquipmentFragment equipmentFragment;
+
     static Map<String, Boolean> selected = new HashMap<String, Boolean>();
     public JsInterface(Context context) {
         this.context = context;
+
     }
 
     @JavascriptInterface
@@ -38,9 +51,24 @@ public class JsInterface {
 
     @JavascriptInterface
     public static void addEquipment(String name, String position) {
-        DamagedEquipment damagedEquipment = new DamagedEquipment(name, position);
-        result.add(damagedEquipment);
-        selected.put(name, true);
+        chooseEquipmentDialog = new ChooseEquipmentDialog();
+        Equipment equipment = new Equipment(name, null, null, position);
+        chooseEquipmentDialog.setParams((Activity) context, equipment, new ChooseEquipmentDialog.OnMsgEnteredListener() {
+            @Override
+            public void onMsgEnteredListener(Equipment equipment) {
+                listEquipments.add(equipment);
+                //equipmentFragment.notifyAddEquipment(equipment);
+            }
+        });
+        chooseEquipmentDialog.show(((Activity) context).getFragmentManager(), "Haha");
+
+//        DamagedEquipment damagedEquipment = new DamagedEquipment(name, position);
+//        result.add(damagedEquipment);
+//        selected.put(name, true);
+    }
+
+    public static List<Equipment> getListEquipments() {
+        return listEquipments.size() > 0 ? listEquipments : new ArrayList<Equipment>();
     }
 
     public static void deviceAddEquipment(String name, String position) {

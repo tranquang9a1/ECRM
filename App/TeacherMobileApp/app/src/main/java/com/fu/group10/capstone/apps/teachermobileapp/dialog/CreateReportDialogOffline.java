@@ -18,6 +18,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 
 import java.util.List;
 
@@ -100,13 +101,27 @@ public class CreateReportDialogOffline extends DialogFragment {
         int damageLevel = checkDamageLevel();
         db.insertReport(report, false);
         progress.dismiss();
-        String msg = "Phòng " + className + " bị hư hại nặng! Cần đổi phòng ngay";
-        if (evaluate.equalsIgnoreCase("Phải đổi phòng")) {
-            //sendSMSOffline(msg);
-            removeSMS();
-        }
+        final String msg =  username + "-" +classId;
         db.updateDamageLevel(classId, damageLevel);
-        openMain();
+        if (damageLevel > 50) {
+            DialogUtils.showAlert(activity, "Hệ thống đánh giá phòng hư hại nặng! Bạn có muốn gửi " +
+                    "tin nhắn đến nhân viên ? Việc này sẽ gây tốn phí!",
+                    new DialogUtils.IOnOkClicked() {
+                @Override
+                public void onClick() {
+                    sendSMSOffline(msg);
+                    openMain();
+                }
+            }, new DialogUtils.IOnCancelClicked() {
+                @Override
+                public void onClick() {
+                    openMain();
+                }
+            });
+        }
+
+
+
     }
 
     public void openMain() {
@@ -125,6 +140,7 @@ public class CreateReportDialogOffline extends DialogFragment {
         int damageLevel = db.getDamageLevel(classId);
         for (int i = 0; i <listDamaged.size(); i++) {
             Equipment equipment = listDamaged.get(i);
+            equipment.setPosition(Constants.getPosition(equipment.getEquipmentName()));
 
             if (equipment.getPosition().equals(Constants.PROJECTOR)) {
                 if (equipment.getDamageLevel().equalsIgnoreCase("3")) {

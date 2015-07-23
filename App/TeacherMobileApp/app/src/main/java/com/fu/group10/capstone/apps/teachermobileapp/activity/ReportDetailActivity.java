@@ -128,6 +128,7 @@ public class ReportDetailActivity extends FragmentActivity {
         Intent intent = new Intent(this, EditReportActivity.class);
         intent.putExtra("report", report);
         intent.putExtra("type", "edit");
+        intent.putExtra("classId", report.getClassId());
         startActivity(intent);
     }
 

@@ -43,7 +43,7 @@ public class AboutActivity extends Activity {
         bunlde.putInt("number1", n1);
         bunlde.putInt("number2", n2);
 
-        Intent intent = new Intent(AboutActivity.this, AddActivity.class);
+        Intent intent = new Intent(AboutActivity.this, AboutActivity.class);
         intent.putExtras(bunlde);
         startActivityForResult(intent, REQUEST_CODE);
 

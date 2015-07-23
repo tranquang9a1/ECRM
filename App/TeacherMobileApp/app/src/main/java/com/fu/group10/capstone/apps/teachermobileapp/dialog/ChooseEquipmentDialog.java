@@ -82,7 +82,10 @@ public class ChooseEquipmentDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //JsInterface.addEquipment(equipment.getEquipmentName(), Constants.getPosition(equipment.getEquipmentName()));
-                equipment.setPosition(Constants.getPosition(equipment.getEquipmentName()));
+                if (equipment.getPosition().equalsIgnoreCase("")) {
+                    equipment.setPosition(Constants.getPosition(equipment.getEquipmentName()));
+                }
+
                 equipment.setIsReport(true);
                 onMsgEnteredListener.onMsgEnteredListener(equipment);
             }
@@ -107,6 +110,8 @@ public class ChooseEquipmentDialog extends DialogFragment {
     public interface OnMsgEnteredListener {
         void onMsgEnteredListener(Equipment equipment);
     }
+
+
 
 
 

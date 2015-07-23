@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
@@ -36,10 +37,12 @@ public class SynchronizeService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        db = new DatabaseHelper(getApplicationContext());
-        Log.d("SynchronizeService", "Start Service");
-        syncData();
+
     }
+
+
+
+
 
     public void syncData() {
         if (Utils.isOnline()) {
@@ -59,6 +62,9 @@ public class SynchronizeService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startid)
     {
+        db = new DatabaseHelper(getApplicationContext());
+        Log.d("SynchronizeService", "Start Service");
+        syncData();
         return START_STICKY;
     }
 
@@ -136,10 +142,24 @@ public class SynchronizeService extends Service {
                     syncEquipment(id + "", ParseUtils.parseEquipmentJson(result));
                 }
             });
+
+            String url1 = Constants.API_GET_CLASSROOM + id;
+            RequestSender sender = new RequestSender();
+            sender.start(url1, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                    syncClassroom(result);
+                }
+            });
+
         }
     }
 
 
+    public void syncClassroom(String result ) {
+        ClassroomDAO dao = ParseUtils.parseClassroomDAO(result);
+        db.insertClassroom(dao);
+    }
 
 
     public void syncEquipment(String classId, List<Equipment> listEquipments) {

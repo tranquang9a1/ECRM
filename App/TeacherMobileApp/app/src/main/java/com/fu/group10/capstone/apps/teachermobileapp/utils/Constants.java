@@ -28,7 +28,7 @@ public class Constants {
     public static final String BULB = "[6]";
     public static final String TABLE = "[0]";
     public static final String APP_SERVER_URL = SOURCE + "/notification/register";
-    public static final String STAFF_PHONE = "+84962067505";
+    public static final String STAFF_PHONE = "+17164063801";
 
     public static final int REMOVE_TIME = 15 * 60 * 1000;
 

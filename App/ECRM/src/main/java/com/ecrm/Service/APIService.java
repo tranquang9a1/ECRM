@@ -528,12 +528,27 @@ public class APIService {
     public List<ScheduleDTO> getSchedule(String username) {
         List<ScheduleDTO> result = new ArrayList<ScheduleDTO>();
         List<TblScheduleEntity> listSchedule = scheduleDAO.getSchedulesOfUser(username);
-        for (TblScheduleEntity scheduleEntity : listSchedule) {
+        for (int i = 0; i < listSchedule.size(); i++) {
+            TblScheduleEntity scheduleEntity = listSchedule.get(i);
             ScheduleDTO dto = new ScheduleDTO();
             dto.setClassId(scheduleEntity.getClassroomId());
             dto.setClassName(scheduleEntity.getTblClassroomByClassroomId().getName());
             dto.setTimeFrom(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getTime() + "");
-            dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
+            int j = i + 1;
+            if (j == listSchedule.size()) {
+                dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
+            } else {
+                TblScheduleEntity nextSchedule = listSchedule.get(j);
+                if (nextSchedule.getClassroomId() == dto.getClassId() &&
+                        nextSchedule.getScheduleConfigId() - scheduleEntity.getScheduleConfigId() == 1) {
+                    dto.setTimeTo(nextSchedule.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
+                    i = i + 1;
+                } else {
+                    dto.setTimeTo(scheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo().getTime() + "");
+                }
+            }
+
+
             dto.setDate(scheduleEntity.getDate() + "");
             result.add(dto);
         }

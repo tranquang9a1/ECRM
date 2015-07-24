@@ -1,0 +1,3 @@
+﻿Cronjob cần hổ trợ vẫn chạy được khi lùi thời gian hệ thống
+CASE: Cần đồng bộ và hiển thị giờ hệ thống trên app mobile
+Nên khắc phục nhiều phòng cùng lúc

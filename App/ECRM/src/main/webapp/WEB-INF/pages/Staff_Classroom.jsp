@@ -140,7 +140,7 @@
                 <div class="black-background"></div>
             </div>
                 <%--Modal hien len khi nhap vao nut tao phong cua CLASSROOM--%>
-            <form action="/staff/createClassroom" id="createClassroomForm" name="CreateClassroomForm">
+            <form action="/staff/createClassroom" id="createClassroomForm" name="CreateClassroomForm" method="post">
                 <input type="hidden" name="Action" id="ClassroomAction">
 
                 <div class="modal modal-small" id="modal-1">
@@ -312,7 +312,7 @@
                 <div class="black-background"></div>
             </div>
                 <%--Modal hien len khi nhap vao nut Xem truoc kieu phong khi tao ROOMTYPE--%>
-            <form action="/staff/createRoomType" id="createRoomType" name="CreateRoomType">
+            <form action="/staff/createRoomType" id="createRoomType" name="CreateRoomType" method="post">
                 <div class="modal modal-medium" id="modal-4">
                     <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="">
                     <input type="hidden" id="name" name="RoomtypeName" value="">

@@ -1,0 +1,144 @@
+package com.ecrm.Service;
+
+import com.ecrm.DAO.Impl.ClassroomDAOImpl;
+import com.ecrm.DAO.Impl.ScheduleDAOImpl;
+import com.ecrm.Entity.TblClassroomEntity;
+import com.ecrm.Entity.TblScheduleEntity;
+import com.ecrm.Utils.SmsUtils;
+import com.ecrm.Utils.Utils;
+import com.twilio.sdk.TwilioRestException;
+import org.joda.time.LocalTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * Created by Htang on 7/24/2015.
+ */
+@Service
+public class ChangeRoomService {
+    @Autowired
+    ClassroomDAOImpl classroomDAO;
+    @Autowired
+    GCMService gcmService;
+    @Autowired
+    ScheduleDAOImpl scheduleDAO;
+
+    public void changingRoom(List<TblScheduleEntity> currentSchedule, List<TblClassroomEntity> validClassrooms,
+                             String classroomName, TblClassroomEntity currentClassroom) throws TwilioRestException {
+        TblClassroomEntity changeClassroomEntity = null;
+        List<String> availableClassroom = new ArrayList<String>();
+        System.out.println("Find available classroom!");
+        for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+            if (!classroom.isEmpty()) {
+                if (availableClassroom.isEmpty()) {
+                    availableClassroom = classroom;
+                } else {
+                    Iterator<String> it = availableClassroom.iterator();
+                    while (it.hasNext()) {
+                        String room = it.next();
+                        if (!classroom.contains(room)) {
+                            it.remove();
+                        }
+                    }
+                }
+            }
+        }
+        if (!availableClassroom.isEmpty()) {
+            System.out.println("Total: " + availableClassroom.size() + " classroom!");
+            if (classroomName.trim().length() > 0 && availableClassroom.contains(classroomName)) {
+                changeClassroomEntity = classroomDAO.getClassroomByName(classroomName);
+            } else {
+                availableClassroom = Utils.sortClassroom(availableClassroom, currentClassroom.getName());
+                availableClassroom.remove(currentClassroom.getName());
+                changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+            }
+        } else {
+            System.out.println("There are no classroom for all schedule!");
+            System.out.println("Find classroom for each schedule!");
+            for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
+                validClassrooms = classroomDAO.getValidClassroom();
+                List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+                if (!classroom.isEmpty()) {
+                    System.out.println("Change room:");
+                    TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(classroom.get(0));
+                    String message = changeRoom(tblScheduleEntity, newClassroom);
+                    /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                    gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());*/
+                }
+            }
+        }
+        if (changeClassroomEntity != null) {
+            System.out.println("Start changing room!");
+            for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
+                String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
+                /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());*/
+            }
+            System.out.println("End changing room!");
+        }
+    }
+
+
+    public String changeRoom(TblScheduleEntity tblScheduleEntity, TblClassroomEntity changeClassroomEntity) {
+        tblScheduleEntity.setIsActive(false);
+        tblScheduleEntity.setNote("Đổi sang phòng " + changeClassroomEntity.getName());
+        scheduleDAO.merge(tblScheduleEntity);
+        TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
+                tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
+                + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
+                tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
+        String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
+                tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
+                + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
+        scheduleDAO.persist(newSchedule);
+        System.out.println(message);
+        return message;
+    }
+
+    public List<String> getAvailableClassroom(int classroomId) {
+        List<String> availableClassroom = new ArrayList<String>();
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
+        List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            if (!classroom.isEmpty()) {
+                if (availableClassroom.isEmpty()) {
+                    availableClassroom = classroom;
+                } else {
+                    Iterator<String> it = availableClassroom.iterator();
+                    while (it.hasNext()) {
+                        String room = it.next();
+                        if (!classroom.contains(room)) {
+                            it.remove();
+                        }
+                    }
+                }
+            }
+        }
+        if (!availableClassroom.isEmpty()) {
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
+            availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
+            availableClassroom.remove(classroomEntity.getName());
+        }
+        return availableClassroom;
+    }
+
+    public List<TblScheduleEntity> getScheduleByDayTime(int currentClassroomId){
+        LocalTime localTime =  new LocalTime();
+        LocalTime noon = new LocalTime("12:00:00");
+        List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
+        if(localTime.isBefore(noon)){
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomId, "Morning");
+        }else{
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroomId, "Noon");
+        }
+
+        return currentSchedule;
+    }
+}

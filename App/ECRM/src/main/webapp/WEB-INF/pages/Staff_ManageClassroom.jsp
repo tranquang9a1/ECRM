@@ -30,7 +30,7 @@
         <p class="clear"></p>
     </div>
     <div class="body-table">
-        <form action="/staff/removeClassroom" id="removeClassroom">
+        <form action="/staff/removeClassroom" id="removeClassroom" method="post">
             <input type="hidden" value="" id="removeClassroomName" name="classroomName"/>
             <c:forEach items="${classrooms}" var="cl">
                 <div class="row">

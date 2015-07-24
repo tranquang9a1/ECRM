@@ -305,7 +305,7 @@
                         <i class="fa fa-times" onclick="showModal(0, 'Manual'); clearFormManual();"></i>
                     </div>
                     <form action="/staff/importManually" id="importManually"
-                          name="ImportManually">
+                          name="ImportManually" method="post">
                         <div class="body-modal">
 
                             <br/>

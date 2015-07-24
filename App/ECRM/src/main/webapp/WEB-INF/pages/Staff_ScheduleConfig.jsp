@@ -8,6 +8,7 @@
     <c:set var="list" value="${requestScope.LIST}"/>
     <c:set var="counter" value="${requestScope.SIZE}"/>
     <c:set var="tab" value="${requestScope.TABCONTROL}"/>
+    <c:set var="duration" value="${requestScope.DURATION}"/>
 
     <script type="text/javascript" src="/resource/js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="/resource/js/jquery.ui.timepicker.js"></script>
@@ -21,11 +22,13 @@
         div {
             padding: 8px;
         }
-        label{
+
+        label {
             font-size: medium;
             font-weight: 600;
         }
-        .timepicker{
+
+        .timepicker {
             border-radius: 5px;
         }
     </style>
@@ -44,16 +47,22 @@
             var counter = ${counter};
 
             $("#addButton").click(function () {
-
+                var oldTime = "";
+                if (counter > 1) {
+                    var i = counter - 1;
+                    var id = "time-to" + i;
+                    oldTime = document.getElementById(id).value;
+                }
                 var newTextBoxDiv = $(document.createElement('div'))
                         .attr("id", 'TextBoxDiv' + counter);
 
                 newTextBoxDiv.after().html('<label>Slot ' + counter + ' : </label>' +
-                '<input type="text" class="timepicker" value="" /> ~ <input type="text"  class="timepicker" value=""/>');
+                '<input type="text" class="timepicker" value="' + oldTime + '" id="time-from' + counter + '" onchange="changeText(' + counter + ')"/> ~ <input type="text" value="" disabled id="time-to' + counter + '"/>');
 
                 newTextBoxDiv.appendTo("#sub-text");
-
-
+                if(counter>1){
+                    changeText(counter);
+                }
                 counter++;
                 $('.timepicker').timepicker({
                     hours: {starts: 7, ends: 20},
@@ -62,6 +71,7 @@
                     showPeriodLabels: true,
                     minuteText: 'Min'
                 });
+
             });
 
             $("#removeButton").click(function () {
@@ -76,14 +86,43 @@
 
             });
             $('#update').click(function () {
-                var y = document.getElementsByClassName("timepicker");
-                for (i = 0; i < y.length; i++) {
-                    y[i].disabled = false;
+
+
+                var minutes = parseInt(prompt("Số phút mỗi tiết: ", ""));
+                if (checkNumber(minutes)) {
+                    var y = document.getElementsByClassName("timepicker");
+                    for (i = 0; i < y.length; i++) {
+                        y[i].disabled = false;
+                    }
+                    document.getElementById("edit").style.display = 'block';
+                    document.getElementById("action").style.display = 'block';
+                    document.getElementById("update").style.display = 'none';
+                    document.getElementById("minutes").value = minutes;
                 }
-                document.getElementById("edit").style.display = 'block';
-                document.getElementById("action").style.display = 'block';
-                document.getElementById("update").style.display = 'none';
+
             });
+
+            function promptForNumber(text) {
+                if (text == '') {
+                    text = "Số phút mỗi tiết: ";
+                }
+                var number = parseInt(window.prompt(text, ""));
+                checkNumber(number);
+
+            }
+
+            function checkNumber(number) {
+                if (isNaN(number)) {
+                    alert("Số phút không hợp lệ!");
+                    promptForNumber("");
+                }
+                if (number <= 0) {
+                    alert("Số phút không hợp lệ!");
+                    promptForNumber("");
+                }
+                return true;
+            }
+
             $('#cancel').click(function () {
                 location.reload();
             });
@@ -113,7 +152,8 @@
                         <div class="clear"></div>
                     </div>
                     <div class="body-content">
-                        <div id="edit" style="display: none"><input type='button' class="btn btn-normal" value='Thêm Slot' id='addButton'>
+                        <div id="edit" style="display: none"><input type='button' class="btn btn-normal"
+                                                                    value='Thêm Slot' id='addButton'>
                             <input type='button' class="btn btn-normal" value='Xóa Slot' id='removeButton'></div>
 
                         <input type='button' class="btn btn-primary" value='Cập Nhật' id='update'>
@@ -124,18 +164,27 @@
                             <input type="hidden" name="size" id="size" value="">
 
                             <div id='TextBoxesGroup' style="overflow-y: auto; height: 374px; width: 550px">
+                                <div><label>Số phút mỗi tiết</label>
+
+                                    <input type="text" disabled id="minutes" VALUE="${duration}">
+                                </div>
                                 <div style="width: 500px; margin: 0 auto;" id="sub-text">
                                     <c:forEach var="l" items="${list}" varStatus="count">
                                         <div id="TextBoxDiv${count.count}">
-                                            <label>Slot ${count.count} : </label><input type='text' class='timepicker' value="${l.timeFrom}"/>
-                                            ~ <input type='text' class='timepicker' value="${l.timeTo}"/>
+                                            <label>Slot ${count.count} : </label><input type='text' class='timepicker'
+                                                                                        value="${l.timeFrom}"
+                                                                                        id="time-from${count.count}"
+                                                                                        onchange="changeText('${count.count}');"/>
+                                            ~ <input type='text' value="${l.timeTo}" disabled
+                                                     id="time-to${count.count}"/>
                                         </div>
                                     </c:forEach>
                                 </div>
                             </div>
                             <div style="display: none" id="action">
                                 <input type='button' class="btn btn-primary" value='Hủy' id='cancel'>
-                                <input type='button' class="btn btn-primary" value='Lưu' id='save' onclick="submitForm();">
+                                <input type='button' class="btn btn-primary" value='Lưu' id='save'
+                                       onclick="submitForm();">
                             </div>
                         </form>
                     </div>
@@ -143,6 +192,7 @@
                 <c:import url="/bao-cao/thong-bao?little=false&quay-lai=scheduleconfig"/>
                 <div class="loading-page">
                     <img src="/resource/img/500.GIF">
+
                     <div>Đang tải! Vui lòng chờ trong giây lát!</div>
                 </div>
             </div>
@@ -193,6 +243,28 @@
             document.getElementById('updateScheduleConfig').submit();
         } else {
             alert("Kiểu giờ phải là hh:MM:ss");
+        }
+    }
+
+    function changeText(count) {
+        var id = "time-from" + count;
+        var timeFrom = document.getElementById(id).value;
+        var date = new Date();
+        var a = timeFrom.split(":");
+        date.setHours(a[0], a[1], 0);
+        var duration = document.getElementById("minutes").value;
+        date.setTime(date.getTime() + duration * 60000);
+        var time = date.getHours();
+        var minute = date.getMinutes()+"";
+        if(minute.length==1){
+            minute = "0"+minute;
+        }
+        var timeTo = "time-to" + count;
+        var result = time +":"+minute+":00";
+        alert(result);
+        var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(result);
+        if(isValid){
+            document.getElementById(timeTo).value = time + ":" + minute + ":00";
         }
     }
     document.getElementById("${tab}").className += " active";

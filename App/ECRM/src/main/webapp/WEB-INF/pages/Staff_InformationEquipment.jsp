@@ -48,7 +48,7 @@
                             <div class="title"><p>Cập Nhật Thông Tin Thiết Bị</p>
                                 <input class="btn-normal" type="button" value="Quay Lại">
                             </div>
-                            <form action="/staff/updateInformation" id="information">
+                            <form action="/staff/updateInformation" id="information" method="post">
                                 <input hidden value="${classroomId}" name="classroomId"/>
                                 <c:if test="${not empty projector }">
                                     Chọn projector trong kho:

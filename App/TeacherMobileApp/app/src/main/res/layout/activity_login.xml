@@ -9,27 +9,7 @@
               android:background="@mipmap/classroom"
               android:focusableInTouchMode="true">
 
-    <LinearLayout
-        android:paddingTop="40dp"
-            android:id="@+id/ll1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal"
-        >
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="ECRM TEACHER"
-                android:id="@+id/textView2"
-            android:textStyle="bold"
-                android:textSize="40dp"
-            android:background="#80ffffff"
-                android:textColor="@color/background" />
-
-
-    </LinearLayout>
 
     <LinearLayout
             android:id="@+id/ll2"
@@ -47,25 +27,27 @@
 
                 <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
                               android:layout_height="match_parent" android:orientation="vertical"
-                    android:background="#80ffffff" android:paddingTop="20dp">
+                    android:paddingTop="20dp">
 
                     <EditText android:id="@+id/username" android:layout_width="match_parent"
-                                          android:layout_height="wrap_content" android:hint="@string/prompt_username"
+                                          android:layout_height="50dp" android:hint="@string/prompt_username"
                                           android:inputType="text" android:maxLines="1"
                                           android:singleLine="true"
                                           android:layout_marginBottom="10dp"
                                         android:textSize="20dp"
-                                          android:textColorHint="@color/background"
-                                          android:textColor="@color/background" />
+                                        android:background="@color/white"
+                                          android:textColorHint="#ffa3a3a3"
+                                          android:textColor="#000000" />
 
                     <EditText android:id="@+id/password" android:layout_width="match_parent"
-                              android:layout_height="wrap_content" android:hint="@string/prompt_password"
+                              android:layout_height="50dp" android:hint="@string/prompt_password"
                               android:imeActionLabel="@string/action_sign_in"
                               android:imeOptions="actionUnspecified" android:inputType="textPassword"
                               android:maxLines="1" android:singleLine="true"
                               android:layout_marginBottom="10dp"
-                              android:textColorHint="@color/background"
-                              android:textColor="@color/background"
+                        android:background="@color/white"
+                              android:textColorHint="#ffa3a3a3"
+                              android:textColor="#000000"
                             android:textSize="20dp"/>
 
                     <Button android:id="@+id/sign_in_button" style="?android:textAppearanceSmall"

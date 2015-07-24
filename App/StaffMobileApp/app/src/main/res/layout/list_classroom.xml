@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+        >
+
+    <com.fu.group10.capstone.apps.staffmobileapp.model.RoundedLetterView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rlv_name_view"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="15dp"
+            tools:visibility="visible"
+            app:backgroundColorValue="@color/green"
+            app:titleColor="@android:color/white"
+            app:titleSize="35dp"
+            app:titleText="101" />
+
+        <ImageView
+                android:id="@+id/checkImg"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="15dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_check"
+                android:contentDescription="@string/highlight_image"
+                android:visibility="gone"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Giáo viên: "
+                android:textColor="@color/gray_dark"
+                android:id="@+id/txtText1"
+                android:layout_marginStart="30dp"
+                android:layout_toEndOf="@+id/rlv_name_view"
+                />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="KhanhKT"
+            android:id="@+id/txtUser"
+            android:textColor="@color/gray_dark"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@+id/txtText1"
+            android:layout_toEndOf="@+id/rlv_name_view"
+            />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Mức độ hư hại: "
+                android:textColor="@color/gray_dark"
+                android:id="@+id/txtText2"
+                android:layout_below="@id/txtText1"
+                android:layout_marginStart="30dp"
+                android:layout_toEndOf="@+id/rlv_name_view"
+                />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="45"
+            android:textColor="@color/gray_dark"
+            android:id="@+id/txtDamage"
+            android:layout_below="@id/txtUser"
+            android:layout_toRightOf="@id/txtText2"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/rlv_name_view"
+            />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Cần phải đổi phòng"
+                android:textColor="@color/gray_dark"
+                android:id="@+id/txtEvaluate"
+                android:layout_below="@id/txtDamage"
+                android:layout_marginStart="30dp"
+                android:layout_toEndOf="@+id/rlv_name_view"
+                />
+
+
+
+
+
+</RelativeLayout>

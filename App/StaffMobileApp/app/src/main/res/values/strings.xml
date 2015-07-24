@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ECRM STAFF</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_change_pass">Update Password</string>
+    <string name="invalid_password">Password is too short</string>
+    <string name="incorrect_password">Password is incorrect</string>
+    <string name="field_required">This field is required</string>
+    <string name="checkingConnection">Đang kiểm tra kết nối…</string>
+    <string name="noConnection">Không thể kết nối đến máy chủ!</string>
+    <string name="tryAgain">Thử lại</string>
+    <string name="search_movie_hint">Search!</string>
+    <string name="tabAccount">ACCOUNT</string>
+    <string name="no_network_connection_toast">Can not connect to network!</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="no_report_found">Không có báo cáo nào</string>
+    <string name="highlight_image">Highlight Image</string>
+    <string name="delete">Xóa</string>
+    <string name="fixed">Đã sửa</string>
+    <string name="enter_keyword">Nhập lớp học</string>
+    <string name="action_view_map">Xem bản đồ</string>
+    <string name="action_choose_room">Đổi phòng học</string>
+    <string name="action_resolve">Khắc phục</string>
+    <string name="choose_room_dialog_title">Chọn phòng học</string>
+    <string name="alert">Thông báo</string>
+    <string name="cancel">Hủy</string>
+
+    <string name="resolve_hint">Nhập cách sửa chửa</string>
+    <string name="resolve_title">Nhập cách sửa chữa</string>
+    <string name="action_ok">OK</string>
+
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+    <string name="logout_title">Đăng xuất</string>
+    <string name="logout">Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập</string>
+    <string name="room">Phòng</string>
+    <string name="detail">đã được chuyển sang phòng</string>
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item >Trang chủ</item>
+        <item >Báo cáo đang sửa</item>
+        <item >Báo cáo đã sửa</item>
+        <item >Báo cáo đã xóa</item>
+        <item >Đăng xuất</item>
+
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+</resources>

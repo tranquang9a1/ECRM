@@ -1,0 +1,67 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="windowActionBar">false</item>
+        <item name="drawerArrowStyle">@style/AppTheme.Arrow</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/colorPrimaryDark</item>
+
+    </style>
+
+    <style name="AppTheme.Arrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <style name="AppTheme.Mode" parent="Widget.AppCompat.ActionMode">
+        <item name="background">@color/colorPrimaryDark</item>
+        <item name="android:backgroundSplit">?android:attr/actionModeSplitBackground</item>
+        <item name="android:titleTextStyle">@color/white</item>
+    </style>
+
+    <color name="accent">#ffffff</color>
+    <style name="tab">
+        <item name="android:background">@drawable/tab</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/font</item>
+        <item name="android:selectable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+    <style name="tabActive" parent="tab">
+        <item name="android:background">@color/tabActive</item>
+    </style>
+    <style name="tabArrow">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+
+    <style name="RootTheme" parent="android:Theme.Holo">
+    </style>
+
+    <style name="PlayerTheme" parent="@style/RootTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
+    <style name="DemoButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">40dp</item>
+    </style>
+
+</resources>

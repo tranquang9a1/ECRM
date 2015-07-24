@@ -1,8 +1,8 @@
 /**
  * Created by ChiDNMSE60717 on 6/16/2015.
  */
-//var socket = io.connect('http://192.168.1.21:3000');
-var socket = io.connect('http://10.82.134.241:3000');
+var socket = io.connect('http://192.168.1.151:3000');
+//var socket = io.connect('http://10.82.134.241:3000');
 function connectToSocket(username, role) {
     var jsonObject = {socketId: "", username: username, role: role, deviceType: 1};
     socket.emit('connectServer', jsonObject);

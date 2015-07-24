@@ -1,11 +1,13 @@
 package com.ecrm.Service;
 
-import com.ecrm.DAO.Impl.ClassroomDAOImpl;
-import com.ecrm.DAO.Impl.EquipmentDAOImpl;
+import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.ClassDTO;
-import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblEquipmentEntity;
-import com.ecrm.Entity.TblRoomTypeEntity;
+import com.ecrm.Entity.*;
+import com.ecrm.Utils.Enumerable;
+import com.ecrm.Utils.Utils;
+import com.ecrm.Utils.socket.SocketIO;
+import org.joda.time.LocalTime;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,18 @@ import java.util.*;
 
 @Service
 public class ClassroomService {
-
+    @Autowired
+    private ReportDAOImpl reportDAO;
+    @Autowired
+    private ScheduleDAOImpl scheduleDAO;
+    @Autowired
+    private EquipmentDAOImpl equipmentDAO;
     @Autowired
     private ClassroomDAOImpl classroomDAO;
     @Autowired
-    EquipmentDAOImpl equipmentDAO;
+    private NotificationDAOImp notificationDAO;
+    @Autowired
+    private UserNotificationDAOImpl userNotificationDAO;
 
 
     public ClassDTO getClassroom(int classId) {
@@ -213,5 +222,110 @@ public class ClassroomService {
                 equipmentDAO.remove(currentEquipment);
             }
         }
+    }
+
+
+    public List<String> getAvailableRoom(int classroomId) {
+        List<String> availableClassroom = new ArrayList<String>();
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
+        List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
+        for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            if (!classroom.isEmpty()) {
+                if (availableClassroom.isEmpty()) {
+                    availableClassroom = classroom;
+                } else {
+                    Iterator<String> it = availableClassroom.iterator();
+                    while (it.hasNext()) {
+                        String room = it.next();
+                        if (!classroom.contains(room)) {
+                            it.remove();
+                        }
+                    }
+                }
+            }
+        }
+        if(!availableClassroom.isEmpty()){
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
+            availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
+            availableClassroom.remove(classroomEntity.getName());
+        }
+        return availableClassroom;
+    }
+
+    public String changeRoom(String currentRoom, String changeRoom) {
+        TblClassroomEntity currentClassroom = classroomDAO.getClassroomByName(currentRoom);
+        TblClassroomEntity changeClassroom = classroomDAO.getClassroomByName(changeRoom);
+
+        LocalTime localTime =  new LocalTime();
+        LocalTime noon = new LocalTime("12:00:00");
+        List<TblScheduleEntity> currentSchedule;
+        if(localTime.isBefore(noon)){
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Morning");
+        }else{
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(changeClassroom.getId(), "Noon");
+        }
+
+        if(currentSchedule != null && currentSchedule.size() > 0) {
+            String message = "Đổi phòng từ " + currentRoom + " sang phòng " + changeRoom;
+            //Group schedule by user
+            List<GroupUser> groupUsers = new ArrayList<GroupUser>();
+            for (TblScheduleEntity schedule : currentSchedule) {
+                GroupUser group = GroupUser.checkContainIn(groupUsers, schedule.getUsername());
+                if (group == null) {
+                    group = new GroupUser(schedule.getUsername(), schedule.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), currentRoom, changeRoom);
+                    groupUsers.add(group);
+                }
+
+                List<String> listTime = group.getListTime();
+                listTime.add(schedule.getTimeFrom().getHours() + "h" + schedule.getTimeFrom().getMinutes());
+
+                schedule.setIsActive(false);
+                schedule.setNote("Đổi sang phòng "+changeRoom);
+                scheduleDAO.merge(schedule);
+
+                TblScheduleEntity newSchedule = new TblScheduleEntity(schedule.getUsername(), changeClassroom.getId(),
+                        schedule.getNumberOfStudents(), message, schedule.getTimeFrom(),
+                        schedule.getSlots(), schedule.getDate(), true, schedule.getScheduleConfigId());
+                scheduleDAO.persist(newSchedule);
+            }
+
+            TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(currentClassroom.getId(), Enumerable.MessageType.CHANGEROOM.getValue());
+            if (notify == null) {
+                notify = new TblNotificationEntity(currentClassroom.getId(), message, "/giang-vien/lich-day", Enumerable.MessageType.CHANGEROOM.getValue());
+                notificationDAO.persist(notify);
+            }
+
+            SocketIO socket = new SocketIO();
+            for (GroupUser user : groupUsers) {
+                TblUserNotificationEntity userNotification = new TblUserNotificationEntity(user.getUsername(), notify.getId(), false);
+                userNotificationDAO.persist(userNotification);
+
+                //Message object for socket
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("currentRoom", currentRoom);
+                jsonObject.put("currentRoomId", currentClassroom.getId());
+                jsonObject.put("changeRoom", changeRoom);
+                jsonObject.put("changeRoomId", changeClassroom.getId());
+                jsonObject.put("listTime", user.getListTime());
+                jsonObject.put("redirectLink", "/giang-vien/notify?link=" + userNotification.getId());
+
+                //Sent notifies to user
+                socket.sendNotifyObjectToStaff(user.getUsername(), Enumerable.NotifyType.TEACHERCHANGEROOM.getValue(), jsonObject);
+                /*SmsUtils.sendMessage(user.getPhone(), user.toString());*/
+            }
+
+            //update status report
+            List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
+            for (TblReportEntity tblReportEntity : tblReportEntities) {
+                tblReportEntity.setChangedRoom(changeRoom);
+                tblReportEntity.setStatus(2);
+                reportDAO.merge(tblReportEntity);
+            }
+            return "Đổi phòng thành công!";
+        }
+
+        return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
 }

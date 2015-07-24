@@ -22,7 +22,6 @@ public class CheckDamageService {
     @Autowired
     private ReportDetailDAOImpl reportDetailDAO;
 
-
     public int checkDamagedLevel(List<TblEquipmentEntity> damagedEquipment, TblClassroomEntity tblClassroomEntity) {
         int damagedLevel = 0;
         int projectorDamagedLevel = 0;

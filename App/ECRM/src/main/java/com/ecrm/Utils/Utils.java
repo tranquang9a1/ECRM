@@ -25,7 +25,6 @@ public class Utils {
 
     static ClassroomDAOImpl classroomDAO;
 
-
     public static AccountDTO convertFromUserToAccountDTO(TblUserEntity userEntity) {
         AccountDTO accountDTO = new AccountDTO();
         try {
@@ -121,7 +120,6 @@ public class Utils {
 
     //Tìm phòng trống
     public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, List<TblClassroomEntity> tblClassroomEntities) {
-
         //lay so cho ngoi
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
         //lay so tiet hoc
@@ -243,8 +241,8 @@ public class Utils {
         }
         return lstRoom;
     }
-    public static boolean isNumeric(String str)
-    {
+
+    public static boolean isNumeric(String str) {
         try
         {
             int d = Integer.parseInt(str);
@@ -258,6 +256,7 @@ public class Utils {
         }
         return true;
     }
+
     public static String convertTime(long time){
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy-MM-dd");

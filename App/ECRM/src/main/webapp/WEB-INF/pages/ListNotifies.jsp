@@ -55,19 +55,19 @@
       <div class="left-col width-40">
         <div class="tab"><div class="tab-medium"><ul><li class="active">Giảng viên</li></ul></div></div>
         <div class="block-content">
+          <div class="unread-notify">
           <c:if test="${unreadNotifies.size() > 0}">
             <c:forEach var="item" items="${unreadNotifies}">
-              <div class="unread-notify">
-                <div class="row">
-                  <a href="/bao-cao/notify?link=${item.id}">
-                    <div class="time"><fmt:formatDate type="time" timeStyle="short" value="${item.tblNotificationById.createTime}"/></div>
-                    <div class="message">${item.tblNotificationById.message}</div>
-                    <div class="clear"></div>
-                  </a>
-                </div>
+              <div class="row">
+                <a href="/bao-cao/notify?link=${item.id}">
+                  <div class="time"><fmt:formatDate type="time" timeStyle="short" value="${item.tblNotificationById.createTime}"/></div>
+                  <div class="message">${item.tblNotificationById.message}</div>
+                  <div class="clear"></div>
+                </a>
               </div>
             </c:forEach>
           </c:if>
+          </div>
           <c:if test="${unreadNotifies.size() <= 0}">
             <div class="none-message">Không có thông báo</div>
           </c:if>

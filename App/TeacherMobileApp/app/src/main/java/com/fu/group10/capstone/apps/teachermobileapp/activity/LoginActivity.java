@@ -194,6 +194,11 @@ public class LoginActivity  extends ActionBarActivity {
             } else {
                 loginNoInternet(username, password);
                 if (user != null) {
+                    SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("LoginState", true);
+                    editor.putString("username", user.getUsername());
+                    editor.commit();
                     openMainActivity(user.getUsername());
                 } else {
                     Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng!", Toast.LENGTH_LONG).show();
@@ -376,6 +381,7 @@ public class LoginActivity  extends ActionBarActivity {
     public void loginNoInternet(String username, String password) {
         db = new DatabaseHelper(getApplicationContext());
         user = db.login(username, password);
+
     }
 
     public void syncData() {

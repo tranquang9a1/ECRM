@@ -398,14 +398,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null) {
             c.moveToFirst();
         }
-
         User user = new User();
-        user.setUsername(c.getString(c.getColumnIndex(USER_USERNAME)));
-        user.setPassword(c.getString(c.getColumnIndex(USER_PASSWORD)));
-        user.setPhone(c.getString(c.getColumnIndex(USER_PHONE)));
-        user.setFullname(c.getString(c.getColumnIndex(USER_FULLNAME)));
+        if (c.getCount() > 0) {
+            user.setUsername(c.getString(c.getColumnIndex(USER_USERNAME)));
+            user.setPassword(c.getString(c.getColumnIndex(USER_PASSWORD)));
+            user.setPhone(c.getString(c.getColumnIndex(USER_PHONE)));
+            user.setFullname(c.getString(c.getColumnIndex(USER_FULLNAME)));
+            return user;
+        }
 
-        return user;
+
+
+        return null;
 
     }
 

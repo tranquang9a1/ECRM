@@ -2,6 +2,7 @@ package com.fu.group10.capstone.apps.teachermobileapp.activity;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -26,6 +27,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dialog.LogoutDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.AccountFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.ScheduleFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.NavDrawerItem;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 
 import java.util.ArrayList;
 
@@ -138,9 +140,23 @@ public class ListRoomActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 3) {
-                    logoutDialog = new LogoutDialog();
-                    logoutDialog.setParams(ListRoomActivity.this);
-                    logoutDialog.show(getFragmentManager(), "Logout");
+                    DialogUtils.showAlert(ListRoomActivity.this,
+                            "Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập",
+                            new DialogUtils.IOnOkClicked() {
+                        @Override
+                        public void onClick() {
+                            SharedPreferences sp = getSharedPreferences("LoginState", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.clear();
+                            editor.commit();
+                            startMain();
+                        }
+                    }, new DialogUtils.IOnCancelClicked() {
+                        @Override
+                        public void onClick() {
+
+                        }
+                    });
                 } else {
                     displayView(i);
                 }
@@ -278,5 +294,11 @@ public class ListRoomActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void startMain() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -248,6 +248,12 @@ public class AjaxController {
         }
         String airConditioning = request.getParameter("airConditioning");
         if(airConditioning!=null){
+            if(airConditioning.equals("")){
+                alert = "Số lượng không được bỏ trống!";
+                status = false;
+                validateEntity = new ValidateEntity(alert,status);
+                return validateEntity;
+            }
             if(!Utils.isNumeric(airConditioning)){
                 alert = "Số lượng không được là chữ!";
                 status = false;

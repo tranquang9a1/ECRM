@@ -119,7 +119,7 @@
                 <div class="content-modal">
                     <div class="header-modal title">
                         <p class="roomtypename"></p>
-                        <i class="fa fa-times" onclick="showModal(0, 'modal-view')"></i>
+                        <i class="fa fa-times" onclick="showModal(0, 'modal-manageroomtype')"></i>
                     </div>
                     <div class="body-modal">
                         <div class="group-control">
@@ -153,8 +153,8 @@
                             <div class="group-control">
                                 <div class="name">Số phòng</div>
                                 <div class="control">
-                                    <input id="roomNameId" type="text" value="" name="RoomName"
-                                           placeholder="Nhập loại phòng"/>
+                                    <input id="roomNameId" type="text" value="" name="RoomName" maxlength="30"
+                                           placeholder="Nhập tên phòng"/>
                                 </div>
                             </div>
                             <div class="group-control">
@@ -220,7 +220,7 @@
                         <div class="group-control" style="margin: 15px 0 0">
                             <div class="name">Tên loại phòng</div>
                             <div class="control">
-                                <input type="text" id="roomTypeName"/>
+                                <input type="text" id="roomTypeName" maxlength="30"/>
                             </div>
                         </div>
                         <div class="group-control" style="margin: 15px 0 0">
@@ -239,7 +239,7 @@
                             <div class="name">Máy lạnh</div>
                             <div class="control">
                                 <input class="check-box" type="checkbox" id="mayLanh" onclick="checkMayLanh();"/>
-                                Số lượng: <input disabled id="quantityAir" style="width: 20px" onkeydown="return ( event.ctrlKey || event.altKey
+                                Số lượng: <input disabled maxlength="2" id="quantityAir" style="width: 20px" onkeydown="return ( event.ctrlKey || event.altKey
                     || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
@@ -311,7 +311,7 @@
             <form action="/staff/createRoomType" id="createRoomType" name="CreateRoomType" method="post">
                 <div class="modal modal-medium" id="modal-4">
                     <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="">
-                    <input type="hidden" id="name" name="RoomtypeName" value="">
+                    <input type="hidden" id="name" name="RoomtypeName" value="" maxlength="30">
                     <input type="hidden" id="Slots" name="Slots" value="">
                     <input type="hidden" id="VerticalRows" name="VerticalRows" value="">
                     <input type="hidden" id="HorizontalRows" name="HorizontalRows" value="">
@@ -462,9 +462,13 @@
                 })
             }
 
-            function validateCreateRoomType() {
+            function    validateCreateRoomType() {
                 var roomtypeName = document.forms["CreateRoomType"]["RoomtypeName"].value;
-                var airConditioning = document.forms["CreateRoomType"]["AirConditioning"].value;
+                if(document.getElementById('mayLanh').checked){
+                    var airConditioning = document.forms["CreateRoomType"]["AirConditioning"].value;
+                }else{
+                    var airConditioning = 1;
+                }
                 var action = document.forms["CreateRoomType"]["Action"].value;
                 $.ajax({
                     type: "get",

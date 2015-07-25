@@ -154,14 +154,14 @@
                                 <div class="name">Số phòng</div>
                                 <div class="control">
                                     <input id="roomNameId" type="text" value="" name="RoomName"
-                                           placeholder=".........................."/>
+                                           placeholder="Nhập loại phòng"/>
                                 </div>
                             </div>
                             <div class="group-control">
                                 <div class="name">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-1','modal-2')"
+                                <input type="button" class="btn btn-detail" onclick="showModal(2, 'modal-1','modal-2')"
                                        value="Chọn"/>
                             </div>
                         </div>

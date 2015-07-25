@@ -298,6 +298,10 @@ body {
     color: #555;
     background-color: rgb(237, 237, 237);
 }
+.btn btn-gray{
+    background-color: rgb(237, 237, 237);
+    color: white;
+}
 
 .btn.btn-normal:hover{
     color: orangered;

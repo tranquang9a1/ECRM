@@ -78,6 +78,7 @@
 
         _source: function (request, response) {
             $('#search').removeAttr('disabled');
+            $("#search").attr('class', 'btn btn-primary');
             var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
             response(this.element.children("option").map(function () {
                 var text = $(this).text();
@@ -117,6 +118,7 @@
                 .attr("title", value + " không tồn tại!")
                 .tooltip("open");
             $('#search').attr('disabled','disabled');
+            $("#search").attr('class', 'btn btn-gray');
             this.element.val("");
             this._delay(function () {
                 this.input.tooltip("close").attr("title", "");
@@ -148,5 +150,6 @@ $(function () {
 setInterval(function() {
     if($("#teacherBox > span > input").val()==""){
         $('#search').removeAttr('disabled');
+        $("#search").attr('class', 'btn btn-primary');
     }
 }, 100);

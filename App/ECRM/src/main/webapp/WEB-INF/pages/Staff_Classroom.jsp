@@ -97,9 +97,6 @@
                         <i class="fa fa-times" onclick="showModal(0, 'modal-manageclassroom')"></i>
                     </div>
                     <div class="body-modal">
-                        <div class="group-control">
-                            <div class="name">Sơ đồ</div>
-                        </div>
                         <div id="class-roommap">
                         </div>
                     </div>
@@ -122,9 +119,6 @@
                         <i class="fa fa-times" onclick="showModal(0, 'modal-manageroomtype')"></i>
                     </div>
                     <div class="body-modal">
-                        <div class="group-control">
-                            <div class="name">Sơ đồ</div>
-                        </div>
                         <div id="roomtype-map">
                         </div>
                     </div>

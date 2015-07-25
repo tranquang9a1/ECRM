@@ -148,7 +148,11 @@ $(function () {
 });
 
 setInterval(function() {
-    if($("#teacherBox > span > input").val()==""){
+    if($("#teacherBox > span > input").val()=="" && $("#selectSearch").selectedIndex==0){
+        $('#search').removeAttr('disabled');
+        $("#search").attr('class', 'btn btn-primary');
+    }
+    if($("#classroomBox > span > input").val()=="" && $("#selectSearch").selectedIndex==1){
         $('#search').removeAttr('disabled');
         $("#search").attr('class', 'btn btn-primary');
     }

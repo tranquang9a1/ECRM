@@ -4,7 +4,7 @@
 function showClassroomMap(roomname, mapId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
     var a = document.get
     //add roomname
-    document.getElementById('roomname').innerHTML = "Phòng" + roomname;
+    document.getElementById('roomname').innerHTML = "Sơ đồ phòng " + roomname;
     //
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');

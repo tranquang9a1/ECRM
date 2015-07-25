@@ -148,14 +148,14 @@
                                 <div class="name">Số phòng</div>
                                 <div class="control">
                                     <input id="roomNameId" type="text" value="" name="RoomName" maxlength="30"
-                                           placeholder="Nhập tên phòng"/>
+                                           placeholder="Nhập số phòng"/>
                                 </div>
                             </div>
                             <div class="group-control">
                                 <div class="name">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-detail" onclick="showModal(2, 'modal-1','modal-2'); createMap();"
+                                <input type="button" class="btn btn-detail" style="float: left" onclick="showModal(2, 'modal-1','modal-2'); createMap();"
                                        value="Chọn"/>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                             <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()"
                                    value="Thoát"/>
                             <input type="button" class="btn btn-orange" onclick="validateCreateClassroomForm();"
-                                   value="Thêm"/>
+                                   value="Tạo Phòng"/>
                         </div>
                     </div>
                     <div class="black-background"></div>
@@ -378,7 +378,7 @@
                         selectedValue.television);
                 $(".thietBi").remove();
                 document.getElementById("loaiphong").innerHTML = "";
-                $('#vrow option:first-child').attr("selected", "selected");
+                $('#vrow option:second-child').attr("selected", "selected");
                 createDetailMap();
                 $(".check-box").prop("checked", false);
                 var classroommap = document.getElementsByClassName('classroom-map');

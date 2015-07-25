@@ -264,7 +264,7 @@
                             <div class="control">
                                 <select id="vrow" onchange="createDetailMap()">
                                     <option value="1">1</option>
-                                    <option value="2">2</option>
+                                    <option value="2" selected>2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                     <option value="5">5</option>
@@ -357,35 +357,6 @@
 
         <script>
             window.onload = createDetailMap;
-            function doAction(choose, object) {
-                closeConform();
-                switch (choose) {
-                    case 1:
-                        showModal(0, 'modal-1');
-                        document.getElementById('createClassroom').submit();
-                        alert("Phong hoc đã được lưu thành công!");
-                        clearthietbi();
-                        break;
-                    case 2:
-                        showModal(0, 'modal-4');
-                        document.getElementById('createRoomType').submit();
-                        alert("Loại phòng đã được lưu thành công!");
-                        clearthietbi();
-                        break;
-                    case 3:
-                        getRoomTypeId(object);
-                        document.getElementById('removeRoomtype').submit();
-                        alert("Loai phong da xoa thanh cong!");
-                        clearthietbi();
-                        break;
-                    case 4:
-                        getClassroomName(object);
-                        document.getElementById('removeClassroom').submit();
-                        alert("Phong hoc da xoa thanh cong!");
-                        clearthietbi();
-                        break;
-                }
-            }
             function getRoomTypeId(roomtypeId) {
                 document.getElementById('removeRoomtypeID').value = roomtypeId;
             }
@@ -412,7 +383,7 @@
                         classroommap[i].removeChild(classroommap[i].lastChild);
                     }
                 }
-                document.getElementsByClassName('roomtypename')[1].innerHTML = "Tao Loai Phong";
+                document.getElementsByClassName('roomtypename')[1].innerHTML = "Tạo Loại Phòng";
                 document.getElementById('RoomtypeId').innerHTML = "";
                 document.getElementById('classroomName').innerHTML = "Tạo Phòng";
                 document.getElementById('roomNameId').value = "";
@@ -450,8 +421,10 @@
                     data: 'roomName=' + roomName + '&roomType=' + roomType + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
+                            showModal(0,'modal-1')
                             document.getElementById('createClassroomForm').submit();
-                            clearthietbi();
+                            $(".loading-page").addClass("active");
+                            $(".page").removeClass("active");
                         } else {
                             alert(data.alert);
                         }
@@ -477,8 +450,10 @@
                     data: 'roomtypeName=' + roomtypeName + '&airConditioning=' + airConditioning + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
+                            showModal(0, 'modal-roomtypedetail');
                             document.getElementById('createRoomType').submit();
-                            clearthietbi();
+                            $(".loading-page").addClass("active");
+                            $(".page").removeClass("active");
                         } else {
                             alert(data.alert);
                         }
@@ -494,7 +469,7 @@
                 var items = $("#removeClassroom > div");
 
                 var numItems = items.length;
-                var perPage = 5;
+                var perPage = 7;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();
@@ -519,7 +494,7 @@
                 var items = $("#removeRoomtype > div");
 
                 var numItems = items.length;
-                var perPage = 5;
+                var perPage = 7;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();

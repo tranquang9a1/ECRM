@@ -9,11 +9,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="classrooms" value="${requestScope.ALLCLASSROOM}"/>
 <div class="search" style="  margin: 0 0 15px;">
-    <input type="text" placeholder="............."/>
+    <input type="text" placeholder="Nhập phòng học"/>
     <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
 </div>
 <div class="clear"></div>
-<div class="table small-table" style="height: 210px">
+<div class="table small-table" style="height: 280px">
     <div class="header-table">
         <div class="room-number">
             <div>Số phòng</div>
@@ -41,11 +41,17 @@
                         <div>${cl.tblRoomTypeByRoomTypeId.name}</div>
                     </div>
                     <div class="statusS">
-                    <c:if test="${ not cl.isAllInformation}">
+                        <c:if test="${ not cl.isAllInformation}">
 
                             <a href="/staff/EquipmentInformation?ClassroomId=${cl.id}">Cập nhật thiết bị!</a>
 
-                    </c:if>
+                        </c:if>
+                        <c:if test="${cl.damagedLevel > 0}">
+                            <div>Độ hư hại: ${cl.damagedLevel}</div>
+                        </c:if>
+                        <c:if test="${cl.damagedLevel == 0}">
+                            <div>Bình thường</div>
+                        </c:if>
                     </div>
                     <div class="control">
                         <div class="group-button">
@@ -55,7 +61,9 @@
                                          , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television});editClassroom(${cl.roomTypeId})">
                                 <i class="fa fa-eye"></i>
                             </div>
-                            <div class="btn btn-remove" onclick="conform(4, ${cl.name})" title="Xóa"><i
+                            <div class="btn btn-remove"
+                                 onclick="conformData(2, {message:'Bạn có muốn xóa phòng học ${cl.name}!', btnName:'Xóa',link:'/staff/removeClassroom?classroomName=${cl.name}'})"
+                                 title="Xóa"><i
                                     class="fa fa-times"></i>
                             </div>
                         </div>
@@ -69,14 +77,14 @@
 </div>
 <div id="pagination" style="padding-left: 150px;"></div>
 <script>
-    function editClassroom(id){
-        $('#selectBox option[value="' + id + '"]').prop('selected',true);
-            var selectedValue = $('#selectBox option[value="' + id + '"]').data("value");
-            document.getElementById('loaiphong').innerHTML = selectedValue.name;
-            document.getElementById('roomtype').value = selectedValue.id;
-            showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
-                    , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
-                    selectedValue.television);
+    function editClassroom(id) {
+        $('#selectBox option[value="' + id + '"]').prop('selected', true);
+        var selectedValue = $('#selectBox option[value="' + id + '"]').data("value");
+        document.getElementById('loaiphong').innerHTML = selectedValue.name;
+        document.getElementById('roomtype').value = selectedValue.id;
+        showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+                , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+                selectedValue.television);
 
     }
 </script>

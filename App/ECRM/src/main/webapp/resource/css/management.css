@@ -101,7 +101,7 @@
 .room-map #detail{
     width: 365px;
     float: left;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 

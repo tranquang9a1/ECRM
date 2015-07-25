@@ -76,7 +76,7 @@ public class StaffController {
     }
 
     //remove roomtype
-    @RequestMapping(value = "removeRoomType", method = RequestMethod.POST)
+    @RequestMapping(value = "removeRoomType")
     @Transactional
     public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
         HttpSession session  =  request.getSession();
@@ -110,7 +110,7 @@ public class StaffController {
     }
 
     //remove classroom
-    @RequestMapping(value = "removeClassroom", method = RequestMethod.POST)
+    @RequestMapping(value = "removeClassroom")
     @Transactional
     public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
         HttpSession session  =  request.getSession();
@@ -131,6 +131,7 @@ public class StaffController {
     public String createEquipmentInformation(HttpServletRequest request, @RequestParam("ClassroomId") int classroomId) {
         HttpSession session  =  request.getSession();
         if(session!=null) {
+            TblClassroomEntity classroomEntity = classroomService.getClassroomById(classroomId);
             List<TblEquipmentEntity> projector = new ArrayList<TblEquipmentEntity>();
             List<TblEquipmentEntity> tivi = new ArrayList<TblEquipmentEntity>();
             List<TblEquipmentEntity> air = new ArrayList<TblEquipmentEntity>();
@@ -153,6 +154,7 @@ public class StaffController {
             request.setAttribute("AIR", air);
             request.setAttribute("AVAILABLEAIR", availableAir);
             request.setAttribute("CLASSROOMID", classroomId);
+            request.setAttribute("CLASSROOMNAME", classroomEntity.getName());
             return "Staff_InformationEquipment";
         }else {
              return "Login";

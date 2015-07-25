@@ -738,6 +738,11 @@ body {
     border: 0;
     background-color: white;
 }
+.tab .tab-medium li.active {
+    border-bottom: 3px solid darkorange;
+    background-color: #e8e8e8;
+}
+
 
 .btn.btn-orange {
     background-color: #FC571B;

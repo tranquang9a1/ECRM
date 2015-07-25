@@ -17,11 +17,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
 <div class="search" style="  margin: 0 0 15px;">
-    <input type="text" placeholder="............."/>
+    <input type="text" placeholder="Nhập loại phòng"/>
     <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
 </div>
 <div class="clear"></div>
-<div class="table small-table" style="height: 210px">
+<div class="table small-table" style="height: 280px">
     <div class="header-table">
         <div class="room-number">
             <div>Loai Phong</div>
@@ -55,7 +55,8 @@
                                          , ${r.speaker}, ${r.television})">
                                 <i class="fa fa-eye"></i>
                             </div>
-                            <div class="btn btn-remove" onclick="conform(3, ${r.id})" title="Xóa"><i
+                            <div class="btn btn-remove" onclick="conformData(2, {message:'Bạn có muốn xóa loại phòng ${r.name}!',
+                                    btnName:'Xóa',link:'/staff/removeRoomType?RoomtypeId=${r.id}'})" title="Xóa"><i
                                     class="fa fa-times"></i>
                             </div>
 

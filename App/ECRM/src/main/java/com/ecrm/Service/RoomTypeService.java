@@ -82,7 +82,7 @@ public class RoomTypeService {
             }
             roomTypeEntity.setIsDelete(true);
             roomTypeDAO.merge(roomTypeEntity);
-            return false;
+            return true;
         }catch (Exception e){
             return false;
         }

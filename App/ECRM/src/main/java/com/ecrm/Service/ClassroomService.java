@@ -45,6 +45,11 @@ public class ClassroomService {
         return classroomEntity;
     }
 
+    public TblClassroomEntity getClassroomById(int classroomId){
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+        return classroomEntity;
+    }
+
     public List<TblClassroomEntity> getAllClassroom() {
         List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
         List<TblClassroomEntity> tblClassroomEntities = new ArrayList<TblClassroomEntity>();
@@ -68,7 +73,7 @@ public class ClassroomService {
                         equipmentDAO.merge(tblEquipmentEntity);
                     }
                     classroom = new TblClassroomEntity(classroom.getId(), roomTypeId, roomName, classroom.getCreateTime(),
-                            new Timestamp(date.getTime()), false, true, 0);
+                            new Timestamp(date.getTime()), false, false, 0);
                     classroomDAO.merge(classroom);
                     insertEquipment(roomName);
                 } else {
@@ -184,6 +189,7 @@ public class ClassroomService {
             int pro = 0;
             int air = 0;
             int te = 0;
+            classroomEntity = classroomDAO.find(classroomId);
             List<TblEquipmentEntity> tblEquipmentEntities1 = classroomEntity.getTblEquipmentsById();
             for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities1) {
                 if (tblEquipmentEntity.getName() != null && tblEquipmentEntity.getSerialNumber() != null) {
@@ -217,9 +223,9 @@ public class ClassroomService {
         for (TblEquipmentEntity currentEquipment : tblEquipmentEntities) {
             if (currentEquipment.getCategoryId() == category) {
                 targetEquipmentEntity.setClassroomId(currentEquipment.getClassroomId());
-                targetEquipmentEntity.setPosition(currentEquipment.getPosition());
                 equipmentDAO.merge(targetEquipmentEntity);
-                equipmentDAO.remove(currentEquipment);
+                currentEquipment.setClassroomId(null);
+                equipmentDAO.merge(currentEquipment);
             }
         }
     }

@@ -52,7 +52,7 @@
                             <div class="btn btn-view" title="Xem sơ đồ"
                                  onclick="document.getElementById('loaiphong').innerHTML = '${cl.tblRoomTypeByRoomTypeId.name}' ;showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
                                          , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
-                                         , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television});">
+                                         , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television});editClassroom(${cl.roomTypeId})">
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="btn btn-remove" onclick="conform(4, ${cl.name})" title="Xóa"><i
@@ -68,5 +68,17 @@
 
 </div>
 <div id="pagination" style="padding-left: 150px;"></div>
+<script>
+    function editClassroom(id){
+        $('#selectBox option[value="' + id + '"]').prop('selected',true);
+            var selectedValue = $('#selectBox option[value="' + id + '"]').data("value");
+            document.getElementById('loaiphong').innerHTML = selectedValue.name;
+            document.getElementById('roomtype').value = selectedValue.id;
+            showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+                    , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+                    selectedValue.television);
+
+    }
+</script>
 
 

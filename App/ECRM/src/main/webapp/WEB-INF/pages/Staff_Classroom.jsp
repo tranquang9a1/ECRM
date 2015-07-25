@@ -190,7 +190,7 @@
                                 <select id="selectBox">
                                     <option value="" selected>...</option>
                                     <c:forEach var="r" items="${roomtypes}">
-                                        <option data-value='{"id" :${r.id}, "verticalRows":${r.verticalRows}, "horizontalRows":"${r.horizontalRows}", "noSlotsEachHRows":"${r.numberOfSlotsEachHRows}",
+                                        <option value="${r.id}" data-value='{"id" :${r.id}, "verticalRows":${r.verticalRows}, "horizontalRows":"${r.horizontalRows}", "noSlotsEachHRows":"${r.numberOfSlotsEachHRows}",
                             "airConditioning":${r.airConditioning},
                             "fan":${r.fan}, "projector":${r.projector}, "speaker":${r.speaker}, "television":${r.television},"name":"${r.name}"}'>
                                             ${r.name}</option>

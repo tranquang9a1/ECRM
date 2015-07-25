@@ -50,10 +50,10 @@
                 }
             </style>
             <script>
-                function checkSMS(){
-                    if(document.getElementById('chckSMS').checked){
+                function checkSMS() {
+                    if (document.getElementById('chckSMS').checked) {
                         document.getElementById('sms').value = "1";
-                    }else{
+                    } else {
                         document.getElementById('sms').value = "0";
                     }
                 }
@@ -120,6 +120,7 @@
                                             <option value="0">Giáo viên</option>
                                             <option value="1">Phòng học</option>
                                         </select>
+
                                         <div class="ui-widget" style="display: block" id="teacherBox">
                                             <select name="username" style="width: 150px" id="combobox2"
                                                     style="display: none">
@@ -174,7 +175,7 @@
                                         <div>
                                             <div style="padding: 0px 0px 0px 0px;">
                                                 <button type="submit" class="btn btn-primary"
-                                                        style="margin-left: 15px">
+                                                        style="margin-left: 15px" id="search">
                                                     Tìm Kiếm
                                                 </button>
                                             </div>
@@ -232,7 +233,8 @@
                                                 <c:forEach var="tis" items="${cs.timeSchedules}">
                                                     <c:if test="${ not empty tis.teacherSchedules}">
                                                         <tr class="${tis.style}">
-                                                            <td style="color: white;background-color:rgb(49, 119, 188);">${tis.timeFrom} - ${tis.timeTo}</td>
+                                                            <td style="color: white;background-color:rgb(49, 119, 188);">${tis.timeFrom}
+                                                                - ${tis.timeTo}</td>
 
                                                             <c:forEach items="${teachingDate}" var="td">
                                                                 <td>
@@ -287,6 +289,7 @@
                               enctype="multipart/form-data" id="uploadSchedule">
                             <input type="file" id="fileUpload" name="scheduleFile" size="50" accept=".csv,
                         application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+
                             <p id="lblError" style="color: red;"></p>
                         </form>
                     </div>
@@ -327,7 +330,7 @@
                                 <div class="name">Tiết bắt đầu(*):</div>
                                 <div class="control">
                                     <select name="slot" id="slot" onchange="createNumberOfSlot()">
-                                        <c:forEach items="${scheduleConfig}" var="sc" >
+                                        <c:forEach items="${scheduleConfig}" var="sc">
                                             <option value="${sc.slot}">${sc.slot}
                                                 - ${sc.timeFrom}</option>
                                         </c:forEach>
@@ -377,6 +380,7 @@
                                 <div class="control">
                                     <input type="checkbox" onclick="findAvailableRoom()"
                                            id="chckBox"><label for="chckBox">Tìm phòng trống</label>
+
                                     <div id="classroom">
                                         <div class="ui-widget">
                                             <select id="all" name="all">
@@ -398,8 +402,10 @@
                             </div>
                             <div class="group-control">
                                 <input type="hidden" id="sms" name="sms" value="0">
+
                                 <div class="name">Gửi tin nhắn:</div>
-                                <div class="control"><input type="checkbox" id="chckSMS" onclick="checkSMS();"><label for="chckSMS">Gửi tin nhắn</label></div>
+                                <div class="control"><input type="checkbox" id="chckSMS" onclick="checkSMS();"><label
+                                        for="chckSMS">Gửi tin nhắn</label></div>
                             </div>
                         </div>
                         <div class="footer-modal">
@@ -423,15 +429,14 @@
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
         <script src="/resource/js/jquery.stickyheader.js"></script>
         <script>
-            function createNumberOfSlot(){
+            function createNumberOfSlot() {
                 var select = document.getElementById('numberOfSlots');
-                for(i=select.options.length-1;i>=0;i--)
-                {
+                for (i = select.options.length - 1; i >= 0; i--) {
                     select.remove(i);
                 }
                 var size = ${fn:length(scheduleConfig)};
                 var current = document.getElementById('slot').selectedIndex;
-                for(var i = 1; i<=(size-current);i++){
+                for (var i = 1; i <= (size - current); i++) {
                     var option = document.createElement("option");
                     option.value = i;
                     option.text = i;
@@ -450,7 +455,7 @@
             }
 
             function submitImport() {
-                if(ValidateExtension()){
+                if (ValidateExtension()) {
                     showModal(0, 'Upload')
                     document.getElementById('uploadSchedule').submit();
                     $(".loading-page").addClass("active");
@@ -529,7 +534,7 @@
                 $('.date').toggle();
             }
 
-            function clearFormManual(){
+            function clearFormManual() {
                 document.getElementById('ui-username').selectedIndex = 0;
                 document.getElementById('slot').selectedIndex = 0;
                 document.getElementById('numberOfSlots').selectedIndex = 0;
@@ -545,6 +550,11 @@
             }
 
 
+/*
+            $("#classroomBox > span > input").change(function () {
+                    alert("s");
+            });
+*/
 
             document.getElementById("${tab}").className += " active";
             document.getElementById("${tab}").setAttribute("data-main", "1");

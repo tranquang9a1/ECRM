@@ -77,6 +77,7 @@
         },
 
         _source: function (request, response) {
+            $('#search').removeAttr('disabled');
             var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
             response(this.element.children("option").map(function () {
                 var text = $(this).text();
@@ -89,8 +90,7 @@
             }));
         },
 
-        /*_removeIfInvalid: function (event, ui) {
-
+        _removeIfInvalid: function (event, ui) {
             // Selected an item, nothing to do
             if (ui.item) {
                 return;
@@ -114,15 +114,15 @@
 
             // Remove invalid value
             this.input
-                .val("")
-                .attr("title", value + " didn't match any item")
+                .attr("title", value + " không tồn tại!")
                 .tooltip("open");
+            $('#search').attr('disabled','disabled');
             this.element.val("");
             this._delay(function () {
                 this.input.tooltip("close").attr("title", "");
             }, 2500);
             this.input.autocomplete("instance").term = "";
-        },*/
+        },
 
         _destroy: function () {
             this.wrapper.remove();
@@ -145,3 +145,8 @@ $(function () {
     $("#dateto").datepicker({dateFormat: "yy-mm-dd"});
 });
 
+setInterval(function() {
+    if($("#teacherBox > span > input").val()==""){
+        $('#search').removeAttr('disabled');
+    }
+}, 100);

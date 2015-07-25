@@ -64,14 +64,7 @@ public class ScheduleController {
     public String mappingSchedule(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
-            List<TblClassroomEntity> tblClassroomEntities = classroomService.getAllClassroom();
-            List<TblUserEntity> tblUserEntities = userService.getAllTeacher();
-            List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigService.findAll();
-            request.setAttribute("SCHEDULECONFIG", tblScheduleConfigEntities);
-            request.setAttribute("CLASSROOMS", tblClassroomEntities);
-            request.setAttribute("TEACHERS", tblUserEntities);
-            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
-            return "Staff_Schedule";
+            return "redirect:/staff/searchSchedule?username=0&classroomId=0&datefrom=&dateto=";
         } else {
             return "Login";
         }

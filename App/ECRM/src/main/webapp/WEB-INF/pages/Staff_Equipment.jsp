@@ -24,6 +24,7 @@
 
             <script src="/resource/js/jquery-1.11.3.js"></script>
             <script src="/resource/js/jquery-1.11.3.min.js"></script>
+            <script src="/resource/js/newTemplate.js"></script>
 
         </head>
         < >
@@ -79,7 +80,7 @@
                                         <p class="clear"></p>
                                     </div>
                                     <div class="body-table">
-                                        <form action="/staff/removeClassroom" id="removeClassroom">
+                                        <form action="/staff/removeEqipment" id="removeClassroom">
                                             <input type="hidden" value="" id="removeClassroomName"
                                                    name="classroomName"/>
                                             <c:forEach items="${equipments}" var="e">
@@ -155,7 +156,8 @@
                                                                         </c:when>
                                                                     </c:choose>
                                                                     <div class="btn btn-remove"
-                                                                         onclick="conform(4, ${e.id})"
+                                                                         onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
+                                                                                 btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}'})"
                                                                          title="Xóa"><i
                                                                             class="fa fa-times"></i>
                                                                     </div>
@@ -185,14 +187,14 @@
             </div>
         </div>
         <div class="content-modal">
-            <form action="/staff/createEquipment" id="createEquipment">
-                <div class="modal modal-large" id="modal-1">
-                    <div class="content-modal">
+            <form action="/staff/createEquipment" id="createEquipment" name="createEquipment">
+                <div class="modal modal-medium" id="modal-1">
+                    <div class="content-modal" style="height: 260px">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
                         </div>
-                        <div class="body-modal">
+                        <div class="body-modal" style="padding-top: 10px">
                             <div class="group-control">
                                 <div class="name">Loại thiết bị</div>
                                 <div class="control">
@@ -216,7 +218,7 @@
                             <input type="button" class="btn btn-normal"
                                    onclick="showModal(0, 'modal-1')"
                                    value="Thoát"/>
-                            <input type="button" class="btn btn-orange" onclick="conform(1);"
+                            <input type="button" class="btn btn-orange" onclick="validateEquipment();"
                                    value="Tạo"/>
                         </div>
                     </div>
@@ -231,13 +233,29 @@
         <script src="/resource/js/jquery.simplePagination.js"></script>
 
         <script>
-            function doAction(choose, object) {
-                closeConform();
-                switch (choose) {
-                    case 1:
-                        document.getElementById('createEquipment').submit();
-                        break;
-                }
+            function    validateEquipment() {
+                var name = document.forms["createEquipment"]["name"].value;
+                var serialNumber = document.forms["createEquipment"]["serialNumber"].value;
+
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/checkEquipment",
+                    cache: false,
+                    data: 'name=' + name + '&serialNumber=' + serialNumber,
+                    success: function (data) {
+                        if (data.status == true) {
+                            showModal(0, 'modal-1');
+                            document.getElementById('createEquipment').submit();
+                            $(".loading-page").addClass("active");
+                            $(".page").removeClass("active");
+                        } else {
+                            conformData(1,{message:data.alert});
+                        }
+                    },
+                    error: function () {
+                        conformData(1,{message:'Xin Hãy Nhập Đầy Đủ Thông Tin!'});
+                    }
+                })
             }
 
             //phan trang

@@ -35,6 +35,8 @@ public class AjaxController {
     ScheduleConfigDAOImpl scheduleConfigDAO;
     @Autowired
     RoomTypeDAOImpl roomTypeDAO;
+    @Autowired
+    EquipmentDAOImpl equipmentDAO;
 
     @RequestMapping(value = "findClassroom")
     public
@@ -47,9 +49,9 @@ public class AjaxController {
             int numberOfSlot = Integer.parseInt(request.getParameter("numberOfSlots"));
             List<Integer> listSlot = new ArrayList<Integer>();
             listSlot.add(slot);
-            if(numberOfSlot>1){
-                for(int i = 2; i<=numberOfSlot; i++){
-                    listSlot.add(slot+1);
+            if (numberOfSlot > 1) {
+                for (int i = 2; i <= numberOfSlot; i++) {
+                    listSlot.add(slot + 1);
                 }
             }
             String date = request.getParameter("date");
@@ -66,7 +68,7 @@ public class AjaxController {
             Iterator<TblClassroomEntity> iterator = fitClassroom.iterator();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             boolean isMatch = false;
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 isMatch = false;
                 TblClassroomEntity classroomEntity = iterator.next();
                 Collection<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
@@ -76,15 +78,15 @@ public class AjaxController {
                         if (tblScheduleEntity1.getDate().getTime() == format.parse(date).getTime() && tblScheduleEntity1.getIsActive()) {
                             //So sanh gio
                             int targetSlot = tblScheduleEntity1.getTblScheduleConfigByScheduleConfigId().getSlot();
-                            for(int i = 0; i< listSlot.size(); i++){
-                                if(targetSlot==listSlot.get(i)){
+                            for (int i = 0; i < listSlot.size(); i++) {
+                                if (targetSlot == listSlot.get(i)) {
                                     iterator.remove();
                                     isMatch = true;
                                     break;
                                 }
                             }
                         }
-                        if(isMatch){
+                        if (isMatch) {
                             break;
                         }
                     }
@@ -148,7 +150,7 @@ public class AjaxController {
             validateEntity.setStatus(false);
             return validateEntity;
         }
-        if (dateFrom != null && dateFrom.trim().length()!=0 && dateTo != null && dateTo.trim().length() !=0) {
+        if (dateFrom != null && dateFrom.trim().length() != 0 && dateTo != null && dateTo.trim().length() != 0) {
             LocalDate date1 = new LocalDate(dateFrom);
             LocalDate date2 = new LocalDate(dateTo);
             if (date2.isBefore(date1)) {
@@ -183,7 +185,7 @@ public class AjaxController {
     @RequestMapping(value = "checkCreateClassroom")
     public
     @ResponseBody
-    ValidateEntity checkCreateClassroom(HttpServletRequest request){
+    ValidateEntity checkCreateClassroom(HttpServletRequest request) {
         String alert = "";
         boolean status = true;
         ValidateEntity validateEntity = new ValidateEntity();
@@ -191,28 +193,28 @@ public class AjaxController {
         validateEntity.setStatus(status);
 
         String roomName = request.getParameter("roomName");
-        if(roomName==null || roomName.trim().length()==0){
+        if (roomName == null || roomName.trim().length() == 0) {
             alert = "Tên phòng không được bỏ trống!";
             status = false;
-            validateEntity = new ValidateEntity(alert,status);
+            validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
-        }else{
+        } else {
             String action = request.getParameter("action");
-            if(action.equals("create")){
+            if (action.equals("create")) {
                 TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName);
-                if(classroomEntity!=null){
+                if (classroomEntity != null) {
                     alert = "Tên phòng đã tồn tại!";
                     status = false;
-                    validateEntity = new ValidateEntity(alert,status);
+                    validateEntity = new ValidateEntity(alert, status);
                     return validateEntity;
                 }
             }
         }
         String roomType = request.getParameter("roomType");
-        if(roomType==null || roomType.trim().length()==0){
+        if (roomType == null || roomType.trim().length() == 0) {
             alert = "Phải chọn loại phòng!";
             status = false;
-            validateEntity = new ValidateEntity(alert,status);
+            validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
         }
         return validateEntity;
@@ -221,7 +223,7 @@ public class AjaxController {
     @RequestMapping(value = "checkCreateRoomType")
     public
     @ResponseBody
-    ValidateEntity checkCreateRoomType(HttpServletRequest request){
+    ValidateEntity checkCreateRoomType(HttpServletRequest request) {
         String alert = "";
         boolean status = true;
         ValidateEntity validateEntity = new ValidateEntity();
@@ -229,35 +231,71 @@ public class AjaxController {
         validateEntity.setStatus(status);
 
         String roomTypeName = request.getParameter("roomtypeName");
-        if(roomTypeName==null || roomTypeName.trim().length()==0){
+        if (roomTypeName == null || roomTypeName.trim().length() == 0) {
             alert = "Tên loại phòng không được bỏ trống!";
             status = false;
-            validateEntity = new ValidateEntity(alert,status);
+            validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
-        }else{
+        } else {
             String action = request.getParameter("action");
-            if(action.equals("create")){
+            if (action.equals("create")) {
                 TblRoomTypeEntity roomTypeEntity = roomTypeDAO.getRoomTypeByName(roomTypeName.trim());
-                if(roomTypeEntity!=null){
+                if (roomTypeEntity != null) {
                     alert = "Tên loại phòng đã tồn tại!";
                     status = false;
-                    validateEntity = new ValidateEntity(alert,status);
+                    validateEntity = new ValidateEntity(alert, status);
                     return validateEntity;
                 }
             }
         }
         String airConditioning = request.getParameter("airConditioning");
-        if(airConditioning!=null){
-            if(airConditioning.equals("")){
+        if (airConditioning != null) {
+            if (airConditioning.equals("")) {
                 alert = "Số lượng không được bỏ trống!";
                 status = false;
-                validateEntity = new ValidateEntity(alert,status);
+                validateEntity = new ValidateEntity(alert, status);
                 return validateEntity;
             }
-            if(!Utils.isNumeric(airConditioning)){
+            if (!Utils.isNumeric(airConditioning)) {
                 alert = "Số lượng không được là chữ!";
                 status = false;
-                validateEntity = new ValidateEntity(alert,status);
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+
+        }
+        return validateEntity;
+    }
+
+    @RequestMapping(value = "checkEquipment")
+    public
+    @ResponseBody
+    ValidateEntity checkEquipment(HttpServletRequest request) {
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+
+        String name = request.getParameter("name");
+        if (name == null || name.trim().length() == 0) {
+            alert = "Tên thiết bị không được bỏ trống!";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
+        }
+        String serialNumber = request.getParameter("serialNumber");
+        if (serialNumber == null || serialNumber.trim().length() == 0) {
+            alert = "Số serial không được bỏ trống!";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
+        } else {
+            List<TblEquipmentEntity> equipmentEntities = equipmentDAO.getEquipmentBySN(serialNumber);
+            if (!equipmentEntities.isEmpty()) {
+                alert = "Số serial đã tồn tại!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
                 return validateEntity;
             }
 

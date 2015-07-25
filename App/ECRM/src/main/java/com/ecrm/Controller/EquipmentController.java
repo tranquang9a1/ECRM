@@ -66,4 +66,18 @@ public class EquipmentController {
             return "Login";
         }
     }
+
+    @RequestMapping("/removeEquipment")
+    public String removeEquipment(HttpServletRequest request, @RequestParam("equipmentId")int equipmentId){
+        HttpSession session  =  request.getSession();
+        if(session!=null) {
+            TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
+            tblEquipmentEntity.setClassroomId(null);
+            equipmentDAO.merge(tblEquipmentEntity);
+            return "redirect:/staff/equipment";
+        }else {
+            return "Login";
+        }
+    }
+
 }

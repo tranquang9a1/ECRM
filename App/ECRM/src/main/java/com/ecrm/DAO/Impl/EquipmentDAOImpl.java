@@ -212,4 +212,11 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         List<TblEquipmentEntity> tblEquipmentEntities = q.getResultList();
         return tblEquipmentEntities;
     }
+
+    public List<TblEquipmentEntity> getEquipmentBySN(String serialNumber){
+        Query q = entityManager.createQuery("select e from TblEquipmentEntity e where e.serialNumber =:serialNumber");
+        q.setParameter("serialNumber", serialNumber);
+        List<TblEquipmentEntity> tblEquipmentEntities = q.getResultList();
+        return tblEquipmentEntities;
+    }
 }

@@ -13,4 +13,6 @@ public class Constant {
     public static int BULB= 6;
     public static int TABLE= 7;
     public static int CHAIR=8;
+    public static String DEFAULT_PASSWORD="123456";
+
 }

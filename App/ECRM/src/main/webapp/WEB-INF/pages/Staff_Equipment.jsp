@@ -53,7 +53,7 @@
                             </div>
                             <div class="body-content">
                                 <div class="clear"></div>
-                                <div class="table" style="width:100%; height: 315px">
+                                <div class="table" style="width:100%; height: 385px">
                                     <div class="header-table">
                                         <div style="width:10%">
                                             <div>Loại</div>
@@ -245,7 +245,7 @@
                 var items = $("#removeClassroom > div");
 
                 var numItems = items.length;
-                var perPage = 8;
+                var perPage = 10;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();

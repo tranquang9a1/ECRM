@@ -27,8 +27,9 @@ public class ChangeRoomService {
     @Autowired
     ScheduleDAOImpl scheduleDAO;
 
-    public void changingRoom(List<TblScheduleEntity> currentSchedule, List<TblClassroomEntity> validClassrooms,
+    public String changingRoom(List<TblScheduleEntity> currentSchedule, List<TblClassroomEntity> validClassrooms,
                              String classroomName, TblClassroomEntity currentClassroom) throws TwilioRestException {
+        String changeRoom ="";
         TblClassroomEntity changeClassroomEntity = null;
         List<String> availableClassroom = new ArrayList<String>();
         System.out.println("Find available classroom!");
@@ -52,10 +53,12 @@ public class ChangeRoomService {
             System.out.println("Total: " + availableClassroom.size() + " classroom!");
             if (classroomName.trim().length() > 0 && availableClassroom.contains(classroomName)) {
                 changeClassroomEntity = classroomDAO.getClassroomByName(classroomName);
+                changeRoom = classroomName;
             } else {
                 availableClassroom = Utils.sortClassroom(availableClassroom, currentClassroom.getName());
                 availableClassroom.remove(currentClassroom.getName());
                 changeClassroomEntity = classroomDAO.getClassroomByName(availableClassroom.get(0));
+                changeRoom = availableClassroom.get(0);
             }
         } else {
             System.out.println("There are no classroom for all schedule!");
@@ -64,6 +67,7 @@ public class ChangeRoomService {
                 validClassrooms = classroomDAO.getValidClassroom();
                 List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
                 if (!classroom.isEmpty()) {
+                    changeRoom = classroom.get(0);
                     System.out.println("Change room:");
                     TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(classroom.get(0));
                     String message = changeRoom(tblScheduleEntity, newClassroom);
@@ -81,6 +85,7 @@ public class ChangeRoomService {
             }
             System.out.println("End changing room!");
         }
+        return changeRoom;
     }
 
 

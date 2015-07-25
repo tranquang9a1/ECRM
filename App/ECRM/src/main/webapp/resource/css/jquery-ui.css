@@ -837,7 +837,7 @@ body .ui-tooltip {
 	font-size: 1em;
 	width: 200px;
 	height: 35px;
-	margin-left: 5px;
+	/*margin-left: 5px;*/
 }
 .ui-widget input,
 .ui-widget select,

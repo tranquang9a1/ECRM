@@ -8,6 +8,7 @@ import com.ecrm.DAO.Impl.UserDAOImpl;
 import com.ecrm.DAO.UserDAO;
 import com.ecrm.DTO.ScheduleDTO;
 import com.ecrm.Entity.*;
+import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.SmsUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.joda.time.LocalDate;
@@ -138,7 +139,7 @@ public class ScheduleService {
                         if (cell.getColumnIndex() > 1) {
                             teacher = cell.getStringCellValue();
                             if (teacher.trim().length() > 0) {
-                                insertSchedule(teacher, classroomEntity,
+                                insertSchedule(teacher.trim(), classroomEntity,
                                         numberOfSlot, timeFrom, day.get(count), formatter, scheduleConfigId);
                             }
                             count += 1;

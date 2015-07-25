@@ -52,9 +52,8 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-
-    @Scheduled(cron = "${cron.expression}")
-    public void checkChangeClassroom() throws Exception {
+    /*@Scheduled(cron = "${cron.expression}")
+     public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
         GCMController gcmController = new GCMController();
@@ -62,41 +61,41 @@ public class CheckDamagedClassroomSchedule {
         if (localDate.getDayOfWeek() != 7) {
             if ((hour == 6 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0)
                     || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0)) {
-                System.out.println("Task check change room run!!! Current time is : " + new Date());
+                System.out.println("Task 1: Task check change room run!!! Current time is : " + new Date());
                 //tim nhung phong bi hu hai ma chua sua
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
                 String dayTime = Integer.toString(hour).concat(":00:00");
                 for (TblClassroomEntity currentClassroom : tblClassroomEntities) {
                     //tim nhung phong chua hu hai
                     List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
-                    System.out.println("Get suitable classroom!");
+                    System.out.println("Task 1: Get suitable classroom!");
                     int classroomId = currentClassroom.getId();
 
                     List<TblScheduleEntity> currentSchedule = scheduleDAO.findAllScheduleInClassroomByDayTime(classroomId,
                             dayTime);
                     if (!currentSchedule.isEmpty()) {
-                        System.out.println("Get all schedule in classroom: " + currentClassroom.getName());
-                        System.out.println("Total: " + currentSchedule.size() + " schedules!");
+                        System.out.println("Task 1: Get all schedule in classroom: " + currentClassroom.getName());
+                        System.out.println("Task 1: Total: " + currentSchedule.size() + " schedules!");
                         String classroomName = "";
                         List<TblReportEntity> liveReportsInRoom = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
-                        System.out.println("Get all reports in classroom: " + liveReportsInRoom.size() + " reports");
+                        System.out.println("Task 1: Get all reports in classroom: " + liveReportsInRoom.size() + " reports");
                         for (TblReportEntity tblReportEntity : liveReportsInRoom) {
                             if (tblReportEntity.getChangedRoom() != null) {
                                 classroomName = tblReportEntity.getChangedRoom();
-                                System.out.println("Classroom was changed to last day: " + classroomName);
+                                System.out.println("Task 1: Classroom was changed to last day: " + classroomName);
                             }
                         }
                         if (classroomName.trim().length() == 0) {
-                            System.out.println("Last day, classroom " + currentClassroom.getName() + " was not changed to any classroom!");
+                            System.out.println("Task 1: Last day, classroom " + currentClassroom.getName() + " was not changed to any classroom!");
                         }
                         changeRoomService.changingRoom(currentSchedule, validClassrooms, classroomName, currentClassroom);
                     }
                 }
-                System.out.println("End changing room at:" + new Date());
+                System.out.println("Task 1: End changing room at:" + new Date());
 
             }
             if (hour == 7 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0) {
-                System.out.println("Task check time using run!!! Current time is: " + new Date());
+                System.out.println("Task 1: Task check time using run!!! Current time is: " + new Date());
                 List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
                 for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
                     TblScheduleConfigEntity scheduleConfigEntity = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId();
@@ -121,7 +120,7 @@ public class CheckDamagedClassroomSchedule {
                     }
 
                 }
-                System.out.println("Kết thúc cronjob check equipment vào lúc:" + new Date());
+                System.out.println("Task 1: Kết thúc cronjob check equipment vào lúc:" + new Date());
 
             }
         }
@@ -135,34 +134,38 @@ public class CheckDamagedClassroomSchedule {
             if ((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
                     localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) {
                 LocalTime noon = new LocalTime("12:00:00");
-                System.out.println("Bắt đầu cronjob changeroom lúc: " + new Date());
+                System.out.println("Task 2: Start cronjob changeroom lúc: " + new Date());
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
-                System.out.println("Get all damaged class. Total: " + tblClassroomEntities.size());
+                System.out.println("Task 2: Get all damaged class. Total: " + tblClassroomEntities.size());
                 for (TblClassroomEntity currentClassroom : tblClassroomEntities) {
                     List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
-                    System.out.println("Get all report in class: " + currentClassroom.getName() + ". Total: " + tblReportEntities.size());
+                    System.out.println("Task 2: Get all report in class: " + currentClassroom.getName() + ". Total: " + tblReportEntities.size());
                     List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
-                    System.out.println("Get all valid class. Total: " + validClassrooms.size());
-                    List<String> availableClassroom = new ArrayList<String>();
+                    System.out.println("Task 2: Get all valid class. Total: " + validClassrooms.size());
                     int i = 0;
                     for (TblReportEntity tblReportEntity : tblReportEntities) {
-                        System.out.println("Set report " + i + 1);
+                        System.out.println("Task 2: Set report " + i + 1);
                         List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
                         if (localTime.isBefore(noon)) {
                             currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Morning");
                         } else {
                             currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Noon");
                         }
-                        changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
+                        if(currentSchedule.isEmpty()){
+                            System.out.println("Task 2: There are no schedule!");
+                            break;
+                        }
+                        String changeRoom = "";
+                        changeRoom = changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
                         //update status report
-
-                        tblReportEntity.setChangedRoom(availableClassroom.get(0));
+                        System.out.println("Task 2: Change report status!");
+                        tblReportEntity.setChangedRoom(changeRoom);
                         tblReportEntity.setStatus(2);
                         reportDAO.merge(tblReportEntity);
                         i++;
                     }
                 }
-                System.out.println("End cronjob changeroom at: " + new Date());
+                System.out.println("Task 2: End cronjob changeroom at: " + new Date());
                 System.out.println("");
             }
         }
@@ -177,7 +180,7 @@ public class CheckDamagedClassroomSchedule {
         if (localDate.getDayOfWeek() != 7) {
             if ((localTime.isAfter(new LocalTime("07:00:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
                     localTime.isAfter(new LocalTime("12:15:00")) && localTime.isBefore(new LocalTime("21:00:00"))) {
-                System.out.println("Run cronjob offline at:" + new Date());
+                System.out.println("Task 3: Run cronjob offline at:" + new Date());
                 URL url = new URL("http://128.199.208.93/offline/getBody");
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
                 String line;
@@ -189,7 +192,7 @@ public class CheckDamagedClassroomSchedule {
                             TblClassroomEntity currentClassroom = classroomDAO.find(Integer.parseInt(classroomId));
                             List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
                             List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
-                            changeRoomService.getScheduleByDayTime(currentClassroom.getId());
+                            currentSchedule = changeRoomService.getScheduleByDayTime(currentClassroom.getId());
                             changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
                         }
                     }
@@ -198,5 +201,5 @@ public class CheckDamagedClassroomSchedule {
             }
         }
 
-    }
+    }*/
 }

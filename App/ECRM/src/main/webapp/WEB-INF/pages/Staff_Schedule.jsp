@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="user" value="${sessionScope.USER}"/>
 
 <c:choose>
@@ -273,27 +274,28 @@
         </div>
         <div class="content-modal">
             <div class="modal modal-small" id="Upload">
-                <div class="content-modal">
+                <div class="content-modal" style="  height: 220px;">
                     <div class="header-modal title">
                         <p>Nhập Lịch</p>
                         <i class="fa fa-times" onclick="showModal(0, 'Upload')"></i>
                     </div>
-                    <div class="body-modal">
+                    <div class="body-modal" style="padding-top: 10px">
                         <a href="/staff/download">Bấm vào để tải mẫu!</a>
 
                         <p>Chọn file excel:</p>
 
                         <form action="/staff/import" method="post"
                               enctype="multipart/form-data" id="uploadSchedule">
-                            <input type="file" name="scheduleFile" size="50" accept=".csv,
+                            <input type="file" id="fileUpload" name="scheduleFile" size="50" accept=".csv,
                         application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
                             <br/>
+                            <span id="lblError" style="color: red;"></span>
                         </form>
                     </div>
                     <div class="footer-modal">
                         <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload')"
                                value="Thoát"/>
-                        <input type="button" class="btn btn-orange" onclick="submitImport();"
+                        <input type="button" class="btn btn-primary" onclick="submitImport();"
                                value="Nhập lịch"/>
                     </div>
                 </div>
@@ -326,8 +328,8 @@
                             <div class="group-control">
                                 <div class="name">Tiết bắt đầu(*):</div>
                                 <div class="control">
-                                    <select name="slot" id="slot">
-                                        <c:forEach items="${scheduleConfig}" var="sc">
+                                    <select name="slot" id="slot" onchange="createNumberOfSlot()">
+                                        <c:forEach items="${scheduleConfig}" var="sc" >
                                             <option value="${sc.slot}">${sc.slot}
                                                 - ${sc.timeFrom}</option>
                                         </c:forEach>
@@ -339,11 +341,12 @@
                                 <div class="control">
                                     <select name="numberOfSlots" id="numberOfSlots">
                                         <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
+                                        <option value="1">2</option>
+                                        <option value="1">3</option>
+                                        <option value="1">4</option>
+                                        <option value="1">5</option>
+                                        <option value="1">6</option>
+                                        <option value="1">7</option>
                                     </select>
                                 </div>
                             </div>
@@ -375,8 +378,7 @@
                                 <div class="name">Phòng học(*):</div>
                                 <div class="control">
                                     <input type="checkbox" onclick="findAvailableRoom()"
-                                           id="chckBox">Tìm
-                                    phòng trống
+                                           id="chckBox"><label for="chckBox">Tìm phòng trống</label>
                                     <div id="classroom">
                                         <div class="ui-widget">
                                             <select id="all" name="all">
@@ -399,14 +401,14 @@
                             <div class="group-control">
                                 <input type="hidden" id="sms" name="sms" value="0">
                                 <div class="name">Gửi tin nhắn:</div>
-                                <div class="control"><input type="checkbox" id="chckSMS" onclick="checkSMS();">Gửi tin nhắn</div>
+                                <div class="control"><input type="checkbox" id="chckSMS" onclick="checkSMS();"><label for="chckSMS">Gửi tin nhắn</label></div>
                             </div>
                         </div>
                         <div class="footer-modal">
                             <input type="button" class="btn btn-normal"
                                    onclick="showModal(0, 'Manual'); clearFormManual();"
                                    value="Thoát"/>
-                            <button type="button" class="btn btn-orange"
+                            <button type="button" class="btn btn-primary"
                                     onclick="validateImportForm()">
                                 Tạo
                             </button>
@@ -423,6 +425,22 @@
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
         <script src="/resource/js/jquery.stickyheader.js"></script>
         <script>
+            function createNumberOfSlot(){
+                var select = document.getElementById('numberOfSlots');
+                for(i=select.options.length-1;i>=0;i--)
+                {
+                    select.remove(i);
+                }
+                var size = ${fn:length(scheduleConfig)};
+                var current = document.getElementById('slot').selectedIndex;
+                for(var i = 1; i<=(size-current);i++){
+                    var option = document.createElement("option");
+                    option.value = i;
+                    option.text = i;
+                    select.appendChild(option);
+                }
+            }
+
             if ('${teacher}' != 0) {
                 var select = document.getElementById("selectSearch").selectedIndex = 0;
 
@@ -434,11 +452,26 @@
             }
 
             function submitImport() {
-                showModal(0, 'Upload')
-                document.getElementById('uploadSchedule').submit();
-                $(".loading-page").addClass("active");
-                $(".page").removeClass("active");
+                if(ValidateExtension()){
+                    showModal(0, 'Upload')
+                    document.getElementById('uploadSchedule').submit();
+                    $(".loading-page").addClass("active");
+                    $(".page").removeClass("active");
+                }
             }
+
+            function ValidateExtension() {
+                var fileUpload = document.getElementById("fileUpload");
+                var lblError = document.getElementById("lblError");
+                var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$");
+                if (!regex.test(fileUpload.value.toLowerCase())) {
+                    lblError.innerHTML = "Hãy chọn tập tin có đuôi là: <b>" + ".xls|.xlsx" + "</b>";
+                    return false;
+                }
+                lblError.innerHTML = "";
+                return true;
+            }
+
             function validateImportForm() {
                 var username = document.forms["ImportManually"]["username"].value;
                 var numberOfStudent = document.forms["ImportManually"]["numberOfStudent"].value;
@@ -512,6 +545,8 @@
                 document.getElementById('chckSMS').checked = false;
 
             }
+
+
 
             document.getElementById("${tab}").className += " active";
             document.getElementById("${tab}").setAttribute("data-main", "1");

@@ -22,6 +22,16 @@ public class TblUserEntity {
     private TblRoleEntity tblRoleByRoleId;
     private TblUserInfoEntity tblUserInfoByUsername;
 
+    public TblUserEntity() {
+    }
+
+    public TblUserEntity(String username, String password, boolean status) {
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.roleId = 1;
+    }
+
     @Basic
     @Column(name = "RoleId")
     public int getRoleId() {

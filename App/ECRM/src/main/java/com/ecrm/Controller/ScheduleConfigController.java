@@ -30,11 +30,14 @@ public class ScheduleConfigController {
 
     @RequestMapping(value = "scheduleConfig")
     public String scheduleConfig(HttpServletRequest request) {
+        long duration=0;
         List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findAll();
-        Time timeTo = tblScheduleConfigEntities.get(0).getTimeTo();
-        Time timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom();
-        long duration = timeTo.getTime()-timeFrom.getTime();
-        duration = duration/60000;
+        if(!tblScheduleConfigEntities.isEmpty()){
+            Time timeTo = tblScheduleConfigEntities.get(0).getTimeTo();
+            Time timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom();
+            duration = timeTo.getTime()-timeFrom.getTime();
+            duration = duration/60000;
+        }
         request.setAttribute("LIST", tblScheduleConfigEntities);
         request.setAttribute("TABCONTROL", "STAFF_SCHEDULECONFIG");
         request.setAttribute("SIZE", tblScheduleConfigEntities.size() + 1);

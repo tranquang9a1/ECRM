@@ -3,7 +3,7 @@
  */
 $("#selectBox").change(function () {
     var selectedValue = $(this).find(":selected").data("value");
-    document.getElementById('loaiphong').innerHTML = selectedValue.id;
+    document.getElementById('loaiphong').innerHTML = selectedValue.name;
     document.getElementById('roomtype').value = selectedValue.id;
     showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
         , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,

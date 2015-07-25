@@ -94,7 +94,7 @@
                 <div class="content-modal">
                     <div class="header-modal title">
                         <p id="roomname"></p>
-                        <i class="fa fa-times" onclick="showModal(0, 'modal-view')"></i>
+                        <i class="fa fa-times" onclick="showModal(0, 'modal-manageclassroom')"></i>
                     </div>
                     <div class="body-modal">
                         <div class="group-control">
@@ -192,7 +192,7 @@
                                     <c:forEach var="r" items="${roomtypes}">
                                         <option data-value='{"id" :${r.id}, "verticalRows":${r.verticalRows}, "horizontalRows":"${r.horizontalRows}", "noSlotsEachHRows":"${r.numberOfSlotsEachHRows}",
                             "airConditioning":${r.airConditioning},
-                            "fan":${r.fan}, "projector":${r.projector}, "speaker":${r.speaker}, "television":${r.television}}'>
+                            "fan":${r.fan}, "projector":${r.projector}, "speaker":${r.speaker}, "television":${r.television},"name":"${r.name}"}'>
                                             Loai ${r.name}</option>
                                     </c:forEach>
                                 </select>

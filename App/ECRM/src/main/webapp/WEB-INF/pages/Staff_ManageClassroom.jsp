@@ -49,12 +49,10 @@
                     </div>
                     <div class="control">
                         <div class="group-button">
-                            <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
-                            </div>
                             <div class="btn btn-view" title="Xem sơ đồ"
-                                 onclick="showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
+                                 onclick="document.getElementById('loaiphong').innerHTML = '${cl.tblRoomTypeByRoomTypeId.name}' ;showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
                                          , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
-                                         , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television})">
+                                         , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television});">
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="btn btn-remove" onclick="conform(4, ${cl.name})" title="Xóa"><i

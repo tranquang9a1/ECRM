@@ -62,7 +62,7 @@
                                     <div class="content-tab">
                                         <div id="tab1" class="body-tab">
                                             <div><input type="button" class="btn btn-orange"
-                                                        onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1')"
+                                                        onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');"
                                                         value="Tạo phòng học"/></div>
                                             <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                         </div>
@@ -155,7 +155,7 @@
                                 <div class="name">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-detail" onclick="showModal(2, 'modal-1','modal-2')"
+                                <input type="button" class="btn btn-detail" onclick="showModal(2, 'modal-1','modal-2'); createMap();"
                                        value="Chọn"/>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                 <div class="content-modal" style="height: 598px;">
                     <div class="header-modal title">
                         <p>Loại phòng học</p>
-                        <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1'); clearthietbi();"></i>
+                        <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1');"></i>
                     </div>
                     <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
                     <div class="body-modal">
@@ -350,6 +350,16 @@
         <script src="/resource/js/jquery.simplePagination.js"></script>
 
         <script>
+            function createMap(){
+                $('#selectBox option:first-child').attr("selected", "selected");
+                var selectedValue = $('#selectBox option:first-child').data("value");
+                document.getElementById('loaiphong').innerHTML = selectedValue.name;
+                document.getElementById('roomtype').value = selectedValue.id;
+                showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+                        , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+                        selectedValue.television);
+            }
+
             window.onload = createDetailMap;
             function getRoomTypeId(roomtypeId) {
                 document.getElementById('removeRoomtypeID').value = roomtypeId;
@@ -420,11 +430,11 @@
                             $(".loading-page").addClass("active");
                             $(".page").removeClass("active");
                         } else {
-                            alert(data.alert);
+                            conformData(1,{message:data.alert});
                         }
                     },
                     error: function () {
-                        alert('Error while request..');
+                        conformData(1,{message:'Xin Hãy Nhập Đầy Đủ Thông Tin!'});
                     }
                 })
             }
@@ -449,11 +459,12 @@
                             $(".loading-page").addClass("active");
                             $(".page").removeClass("active");
                         } else {
-                            alert(data.alert);
+                            conformData(1,{message:data.alert});
+
                         }
                     },
                     error: function () {
-                        alert('Error while request..');
+                        conformData(1,{message:'Xin Hãy Nhập Đầy Đủ Thông Tin!'});
                     }
                 })
             }

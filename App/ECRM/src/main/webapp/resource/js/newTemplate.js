@@ -22,6 +22,7 @@ function conformData(type, object) {
     titleDiv.innerHTML = object.message;
     contentDiv.appendChild(titleDiv);
 
+
     switch (type) {
         case 1:
             var btnConform = document.createElement("input");
@@ -64,6 +65,7 @@ function conformData(type, object) {
             contentDiv.appendChild(btnNo);
             contentDiv.appendChild(btnYes);
             break;
+
     }
 
     var bgDiv = document.createElement("div");

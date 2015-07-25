@@ -81,7 +81,6 @@
                         document.getElementById("avai").selectedIndex = 0;
 
                     }
-
                 }
             </script>
         </head>

@@ -24,10 +24,10 @@
 <div class="table small-table" style="height: 280px">
     <div class="header-table">
         <div class="room-number">
-            <div>Loai Phong</div>
+            <div>Loại Phòng</div>
         </div>
         <div class="room-type">
-            <div>So cho ngoi</div>
+            <div>Số chỗ ngồi</div>
         </div>
         <div class="control">
             <div>Quản lý</div>
@@ -47,8 +47,6 @@
                     </div>
                     <div class="control">
                         <div class="group-button">
-                            <div class="btn btn-detail" title="Chỉnh sửa"><i class="fa fa-pencil"></i>
-                            </div>
                             <div class="btn btn-view" title="Xem sơ đồ"
                                  onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},'${r.name}', ${r.verticalRows},'${r.horizontalRows}', '${r.numberOfSlotsEachHRows}'
                                          , ${r.airConditioning}, ${r.fan}, ${r.projector}

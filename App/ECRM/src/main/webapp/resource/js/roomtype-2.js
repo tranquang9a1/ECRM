@@ -223,7 +223,7 @@ function viewMap() {
         divQuat.id = 'idQuat';
         divQuat.className='equipment subThietBi quat';
         document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
-        document.getElementById("Fan").value = document.getElementById('quantityFan').value;
+        document.getElementById("Fan").value = 1;
     }else{
         document.getElementById("Fan").value = 0;
     }

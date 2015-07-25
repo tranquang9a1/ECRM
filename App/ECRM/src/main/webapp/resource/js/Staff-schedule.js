@@ -89,7 +89,7 @@
             }));
         },
 
-        _removeIfInvalid: function (event, ui) {
+        /*_removeIfInvalid: function (event, ui) {
 
             // Selected an item, nothing to do
             if (ui.item) {
@@ -122,7 +122,7 @@
                 this.input.tooltip("close").attr("title", "");
             }, 2500);
             this.input.autocomplete("instance").term = "";
-        },
+        },*/
 
         _destroy: function () {
             this.wrapper.remove();

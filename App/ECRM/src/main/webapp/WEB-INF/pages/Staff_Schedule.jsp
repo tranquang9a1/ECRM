@@ -120,11 +120,10 @@
                                             <option value="0">Giáo viên</option>
                                             <option value="1">Phòng học</option>
                                         </select>
-
                                         <div class="ui-widget" style="display: block" id="teacherBox">
                                             <select name="username" style="width: 150px" id="combobox2"
                                                     style="display: none">
-                                                <option value="0"></option>
+                                                <option value="0" selected></option>
                                                 <c:choose>
                                                     <c:when test="${not empty teacher}">
                                                         <c:forEach items="${teachers}" var="t">

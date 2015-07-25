@@ -50,14 +50,6 @@ import java.util.*;
 @RequestMapping("/staff")
 public class ScheduleController {
     public static final String ERROR = "Error";
-    @Autowired
-    ScheduleDAOImpl scheduleDAO;
-    @Autowired
-    ClassroomDAOImpl classroomDAO;
-    @Autowired
-    UserDAOImpl userDAO;
-    @Autowired
-    ScheduleConfigDAOImpl scheduleConfigDAO;
 
     @Autowired
     ScheduleConfigService scheduleConfigService;
@@ -189,8 +181,8 @@ public class ScheduleController {
             , @RequestParam("classroomId") String classroomId, @RequestParam("username") String username) {
         HttpSession session = request.getSession();
         if (session != null) {
-            List<TblClassroomEntity> tblClassroomEntities = classroomDAO.findAll();
-            List<TblUserEntity> tblUserEntities = userDAO.findTeacher();
+            List<TblClassroomEntity> tblClassroomEntities = classroomService.getAllClassroom();
+            List<TblUserEntity> tblUserEntities = userService.getAllTeacher();
             request.setAttribute("CLASSROOMS", tblClassroomEntities);
             request.setAttribute("TEACHERS", tblUserEntities);
             request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");

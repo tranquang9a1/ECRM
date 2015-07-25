@@ -274,7 +274,7 @@
         </div>
         <div class="content-modal">
             <div class="modal modal-small" id="Upload">
-                <div class="content-modal" style="  height: 220px;">
+                <div class="content-modal" style="  height: 235px;">
                     <div class="header-modal title">
                         <p>Nhập Lịch</p>
                         <i class="fa fa-times" onclick="showModal(0, 'Upload')"></i>
@@ -288,8 +288,7 @@
                               enctype="multipart/form-data" id="uploadSchedule">
                             <input type="file" id="fileUpload" name="scheduleFile" size="50" accept=".csv,
                         application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
-                            <br/>
-                            <span id="lblError" style="color: red;"></span>
+                            <p id="lblError" style="color: red;"></p>
                         </form>
                     </div>
                     <div class="footer-modal">

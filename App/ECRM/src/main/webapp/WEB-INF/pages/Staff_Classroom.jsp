@@ -147,7 +147,7 @@
                     <div class="content-modal">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo Phòng</p>
-                            <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearthietbi()"></i>
                         </div>
                         <div class="body-modal">
                             <div class="group-control">
@@ -177,10 +177,10 @@
             </form>
                 <%--Modal hien len khi nhap vao nut chon kieu phong khi tao phong cua CLASSROOM--%>
             <div class="modal modal-medium" id="modal-2">
-                <div class="content-modal" style="height: 660px;">
+                <div class="content-modal" style="height: 598px;">
                     <div class="header-modal title">
                         <p>Loại phòng học</p>
-                        <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1')"></i>
+                        <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1'); clearthietbi();"></i>
                     </div>
                     <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
                     <div class="body-modal">
@@ -188,7 +188,6 @@
                             <div class="name">Loại phòng</div>
                             <div class="control">
                                 <select id="selectBox">
-                                    <option value="" selected>...</option>
                                     <c:forEach var="r" items="${roomtypes}">
                                         <option value="${r.id}" data-value='{"id" :${r.id}, "verticalRows":${r.verticalRows}, "horizontalRows":"${r.horizontalRows}", "noSlotsEachHRows":"${r.numberOfSlotsEachHRows}",
                             "airConditioning":${r.airConditioning},
@@ -197,9 +196,6 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                        </div>
-                        <div class="group-control">
-                            <div class="name">Sơ đồ</div>
                         </div>
                         <div id="roomtype-map2">
                         </div>
@@ -398,9 +394,15 @@
             }
 
             function clearthietbi() {
+                $('#selectBox option:first-child').attr("selected", "selected");
+                var selectedValue = $('#selectBox option:first-child').data("value");
+                document.getElementById('loaiphong').innerHTML = selectedValue.name;
+                document.getElementById('roomtype').value = selectedValue.id;
+                showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+                        , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+                        selectedValue.television);
                 $(".thietBi").remove();
                 document.getElementById("loaiphong").innerHTML = "";
-                $('#selectBox option:first-child').attr("selected", "selected");
                 $('#vrow option:first-child').attr("selected", "selected");
                 createDetailMap();
                 $(".check-box").prop("checked", false);
@@ -415,6 +417,7 @@
                 document.getElementById('classroomName').innerHTML = "Tạo Phòng";
                 document.getElementById('roomNameId').value = "";
                 document.getElementById('name').value = "";
+
             }
             document.getElementById("${tab}").className = "body-tab active";
             var tab = '${tab}';

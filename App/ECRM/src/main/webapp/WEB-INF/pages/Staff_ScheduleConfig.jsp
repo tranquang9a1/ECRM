@@ -24,11 +24,10 @@
 
 
     <style type="text/css">
-        .text-label{
+        .text-label {
             font-size: medium;
             font-weight: 600;
         }
-
 
         .ui-text {
             margin-top: 8px;
@@ -90,8 +89,6 @@
             });
 
 
-
-
             $('#cancel').click(function () {
                 location.reload();
             });
@@ -125,7 +122,8 @@
                                                                     value='Thêm Tiết' id='addButton'>
                             <input type='button' class="btn btn-normal" value='Xóa Tiết' id='removeButton'></div>
 
-                        <input type='button' class="btn btn-primary" value='Cập Nhật' id='update' onclick="showModal(1, 'Upload');">
+                        <input type='button' class="btn btn-primary" value='Cập Nhật' id='update'
+                               onclick="showModal(1, 'Upload');">
 
                         <form action="/staff/updateScheduleConfig" method="get" name="updateScheduleConfig"
                               id="updateScheduleConfig">
@@ -141,10 +139,11 @@
                                 <div style="width: 500px; margin: 0 auto; margin-top: 8px" id="sub-text">
                                     <c:forEach var="l" items="${list}" varStatus="count">
                                         <div id="TextBoxDiv${count.count}" class="ui-text">
-                                            <label class="text-label">Tiết ${count.count} : </label><input type='text' class='timepicker'
-                                                                                        value="${l.timeFrom}"
-                                                                                        id="time-from${count.count}"
-                                                                                        onchange="changeText('${count.count}');"/>
+                                            <label class="text-label">Tiết ${count.count} : </label><input type='text'
+                                                                                                           class='timepicker'
+                                                                                                           value="${l.timeFrom}"
+                                                                                                           id="time-from${count.count}"
+                                                                                                           onchange="changeText('${count.count}');"/>
                                             ~ <input type='text' value="${l.timeTo}" disabled
                                                      id="time-to${count.count}"/>
                                         </div>
@@ -171,14 +170,17 @@
 </div>
 <div class="content-modal">
     <div class="modal modal-small" id="Upload">
-        <div class="content-modal" style="  height: 140px; width: 300px">
+        <div class="content-modal" style="  height: 140px; width: 300px;top: 30%;
+    left: 55%;">
             <div class="body-modal" style="padding-top: 10px">
-                <div class="group-control" style="margin-left: 20%">
-                    <div class="name" style="text-align: center;">Nhập số phút mỗi tiết: <input id="minute" maxlength="3"></div>
+                <div class="group-control" style="margin-left: 18%">
+                    <div class="name">Nhập số phút mỗi tiết: <input id="minute"
+                                                                                                maxlength="3"></div>
                 </div>
             </div>
             <div class="footer-modal">
-                <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload'); document.getElementById('minute').value='';"
+                <input type="button" class="btn btn-normal"
+                       onclick="showModal(0, 'Upload'); document.getElementById('minute').value='';"
                        value="Thoát"/>
                 <input type="button" class="btn btn-primary"
                        value="OK" onclick="showModal(0, 'Upload');getMinute();"/>
@@ -254,9 +256,9 @@
         }
     }
 
-    function getMinute(){
+    function getMinute() {
         var minute = parseInt(document.getElementById('minute').value);
-        if(checkNumber(minute)){
+        if (checkNumber(minute)) {
             var y = document.getElementsByClassName("timepicker");
             for (i = 0; i < y.length; i++) {
                 y[i].disabled = false;
@@ -265,8 +267,8 @@
             document.getElementById("action").style.display = 'block';
             document.getElementById("update").style.display = 'none';
             document.getElementById("minutes").value = minute;
-        }else{
-            showModal(1,"Upload");
+        } else {
+            showModal(1, "Upload");
         }
     }
 
@@ -280,7 +282,7 @@
             conformData(1, {message: 'Số phút không hợp lệ!'})
             return false;
         }
-        if(number >200){
+        if (number > 200) {
             conformData(1, {message: 'Số phút không hợp lệ!'})
             return false;
         }

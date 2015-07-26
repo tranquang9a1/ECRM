@@ -62,7 +62,7 @@
                                     <div class="content-tab">
                                         <div id="tab1" class="body-tab">
                                             <div><input type="button" class="btn btn-orange"
-                                                        onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');"
+                                                        onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();"
                                                         value="Tạo phòng học"/></div>
                                             <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                         </div>
@@ -141,7 +141,7 @@
                     <div class="content-modal">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo Phòng</p>
-                            <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearthietbi()"></i>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearRoomName();"></i>
                         </div>
                         <div class="body-modal">
                             <div class="group-control">
@@ -155,12 +155,12 @@
                                 <div class="name">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-detail" style="float: left" onclick="showModal(2, 'modal-1','modal-2'); createMap();"
+                                <input type="button" class="btn btn-detail" style="float: left" onclick="showModal(2, 'modal-1','modal-2');"
                                        value="Chọn"/>
                             </div>
                         </div>
                         <div class="footer-modal">
-                            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearthietbi()"
+                            <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-1'); clearRoomName();"
                                    value="Thoát"/>
                             <input type="button" class="btn btn-orange" onclick="validateCreateClassroomForm();"
                                    value="Tạo Phòng"/>
@@ -174,7 +174,7 @@
                 <div class="content-modal" style="height: 598px;">
                     <div class="header-modal title">
                         <p>Loại phòng học</p>
-                        <i class="fa fa-times" onclick="showModal(2, 'modal-2','modal-1');"></i>
+                        <i class="fa fa-times" onclick="showModal(0, 'modal-2'); clearRoomName();"></i>
                     </div>
                     <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
                     <div class="body-modal">
@@ -195,9 +195,9 @@
                         </div>
                     </div>
                     <div class="footer-modal">
-                        <input type="button" class="btn btn-normal" onclick="showModal(2, 'modal-2','modal-1')"
+                        <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-2'); clearRoomName();"
                                value="Thoát"/>
-                        <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-2','modal-1') "
+                        <input type="button" class="btn btn-orange" onclick="showModal(2, 'modal-2','modal-1'); showRoomtype(); "
                                value="Chọn"/>
                     </div>
                 </div>
@@ -389,6 +389,7 @@
                 }
                 document.getElementsByClassName('roomtypename')[1].innerHTML = "Tạo Loại Phòng";
                 document.getElementById('RoomtypeId').innerHTML = "";
+                document.getElementById('roomNameId').value = "";
                 document.getElementById('classroomName').innerHTML = "Tạo Phòng";
                 document.getElementById('roomNameId').value = "";
                 document.getElementById('name').value = "";
@@ -518,6 +519,24 @@
                     }
                 });
             });
+
+            function clearRoomName(){
+                if(document.getElementById('ClassroomAction').value=='create'){
+                    document.getElementById("roomNameId").value= "";
+                    document.getElementById("loaiphong").innerHTML= "";
+                    document.getElementById("classroomName").innerHTML= "Tạo Phòng";
+                    $('#selectBox option:first-child').attr("selected", "selected");
+                    var selectedValue = $('#selectBox option:first-child').data("value");
+                    showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
+                            , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
+                            selectedValue.television);
+                }
+            }
+
+            function showRoomtype(){
+                var selectedValue = $('#selectBox').find(":selected").data("value");
+                document.getElementById("loaiphong").innerHTML= selectedValue.name;
+            }
 
             document.getElementById("${tab1}").className += " active";
             document.getElementById("${tab1}").setAttribute("data-main", "1");

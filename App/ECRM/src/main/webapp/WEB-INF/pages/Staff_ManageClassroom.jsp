@@ -56,7 +56,7 @@
                     <div class="control">
                         <div class="group-button">
                             <div class="btn btn-view" title="Xem sơ đồ"
-                                 onclick="document.getElementById('loaiphong').innerHTML = '${cl.tblRoomTypeByRoomTypeId.name}' ;showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
+                                 onclick="document.getElementById('ClassroomAction').value='update';document.getElementById('loaiphong').innerHTML = '${cl.tblRoomTypeByRoomTypeId.name}' ;showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
                                          , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
                                          , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television});editClassroom(${cl.roomTypeId})">
                                 <i class="fa fa-eye"></i>

@@ -112,10 +112,16 @@
             if (valid) {
                 return;
             }
-
+            var text = "";
+            if(document.getElementById("selectSearch").selectedIndex==0){
+                text = "giáo viên ";
+            }
+            if(document.getElementById("selectSearch").selectedIndex==1){
+                text = "phòng học ";
+            }
             // Remove invalid value
             this.input
-                .attr("title", value + " không tồn tại!")
+                .attr("title", "Không tìm thấy " + text+ value)
                 .tooltip("open");
             $('#search').attr('disabled','disabled');
             $("#search").attr('class', 'btn btn-gray');

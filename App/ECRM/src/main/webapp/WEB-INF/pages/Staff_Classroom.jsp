@@ -37,7 +37,7 @@
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
         <c:set var="tab1" value="${requestScope.TABCONTROL}"/>
 
-        <div class="layout-background">
+        <div class="layout-background" style="height: 0px">
             <div class="container">
                 <div class="header">
                     <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>

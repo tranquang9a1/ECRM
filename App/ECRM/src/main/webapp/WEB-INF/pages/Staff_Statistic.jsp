@@ -29,9 +29,8 @@
             <link rel="stylesheet" href="/resource/css/component.css"/>
             <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
             <script type="text/javascript" src="/resource/js/canvasjs.min.js"></script>
-        <script>
+            <script type="text/javascript" src="/resource/js/newTemplate.js"></script>
 
-        </script>
         </head>
         <body>
         <div class="layout-background">
@@ -62,6 +61,12 @@
                             </div>
                             <div style="text-align: center; "><h2 style="margin-bottom: 1px">${text}</h2></div>
                             <div id="chartContainer" style="max-height: 47vh; width: 100%;"></div>
+                        </div>
+                        <c:import url="/bao-cao/thong-bao?little=false&quay-lai=statistic"/>
+                        <div class="loading-page">
+                            <img src="/resource/img/500.GIF">
+
+                            <div>Đang tải! Vui lòng chờ trong giây lát!</div>
                         </div>
                     </div>
                 </div>

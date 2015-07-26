@@ -24,14 +24,11 @@
 
 
     <style type="text/css">
-        label {
+        .text-label{
             font-size: medium;
             font-weight: 600;
         }
 
-        .timepicker {
-            border-radius: 5px;
-        }
 
         .ui-text {
             margin-top: 8px;
@@ -62,7 +59,7 @@
                         .attr("id", 'TextBoxDiv' + counter);
                 newTextBoxDiv.attr("class", "ui-text");
 
-                newTextBoxDiv.after().html('<label>Tiết ' + counter + ' : </label>' +
+                newTextBoxDiv.after().html('<label class="text-label">Tiết ' + counter + ' : </label>' +
                 '<input type="text" class="timepicker" value="' + oldTime + '" id="time-from' + counter + '" onchange="changeText(' + counter + ')"/> ~ <input type="text" value="" disabled id="time-to' + counter + '"/>');
 
                 newTextBoxDiv.appendTo("#sub-text");
@@ -93,27 +90,7 @@
             });
 
 
-            function promptForNumber(text) {
-                if (text == '') {
-                    text = "Số phút mỗi tiết: ";
-                }
-                var number = parseInt(window.prompt(text, ""));
-                checkNumber(number);
 
-            }
-
-            function checkNumber(number) {
-                if (isNaN(number)) {
-                    conformData(3, {message: 'Số phút không hợp lệ!'});
-                    promptForNumber("");
-                }
-                if (number <= 0) {
-                    conformData(1, {message: 'Số phút không hợp lệ!'})
-                    promptForNumber("");
-                }
-                document.getElementById("minutes").value = number;
-                return true;
-            }
 
             $('#cancel').click(function () {
                 location.reload();
@@ -148,7 +125,7 @@
                                                                     value='Thêm Tiết' id='addButton'>
                             <input type='button' class="btn btn-normal" value='Xóa Tiết' id='removeButton'></div>
 
-                        <input type='button' class="btn btn-primary" value='Cập Nhật' id='update'>
+                        <input type='button' class="btn btn-primary" value='Cập Nhật' id='update' onclick="showModal(1, 'Upload');">
 
                         <form action="/staff/updateScheduleConfig" method="get" name="updateScheduleConfig"
                               id="updateScheduleConfig">
@@ -157,14 +134,14 @@
 
                             <div id='TextBoxesGroup'
                                  style="overflow-y: auto; height: 374px; width: 550px; margin-top: 8px">
-                                <div style="margin-left: 20%"><label>Số phút mỗi tiết</label>
+                                <div style="margin-left: 20%"><label class="text-label">Số phút mỗi tiết</label>
 
-                                    <input type="text" disabled id="minutes" VALUE="${duration}">
+                                    <input type="text" disabled id="minutes" VALUE="${duration}" style="width: 50px">
                                 </div>
                                 <div style="width: 500px; margin: 0 auto; margin-top: 8px" id="sub-text">
                                     <c:forEach var="l" items="${list}" varStatus="count">
                                         <div id="TextBoxDiv${count.count}" class="ui-text">
-                                            <label>Tiết ${count.count} : </label><input type='text' class='timepicker'
+                                            <label class="text-label">Tiết ${count.count} : </label><input type='text' class='timepicker'
                                                                                         value="${l.timeFrom}"
                                                                                         id="time-from${count.count}"
                                                                                         onchange="changeText('${count.count}');"/>
@@ -197,14 +174,14 @@
         <div class="content-modal" style="  height: 140px; width: 300px">
             <div class="body-modal" style="padding-top: 10px">
                 <div class="group-control" style="margin-left: 20%">
-                    <div class="name" style="text-align: center;">Nhập số phút mỗi tiết: <input id="minute"></div>
+                    <div class="name" style="text-align: center;">Nhập số phút mỗi tiết: <input id="minute" maxlength="3"></div>
                 </div>
             </div>
             <div class="footer-modal">
-                <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload')"
+                <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload'); document.getElementById('minute').value='';"
                        value="Thoát"/>
                 <input type="button" class="btn btn-primary"
-                       value="OK"/>
+                       value="OK" onclick="showModal(0, 'Upload');getMinute();"/>
             </div>
         </div>
     </div>
@@ -277,21 +254,39 @@
         }
     }
 
-    $('#update').click(function () {
+    function getMinute(){
+        var minute = parseInt(document.getElementById('minute').value);
+        if(checkNumber(minute)){
+            var y = document.getElementsByClassName("timepicker");
+            for (i = 0; i < y.length; i++) {
+                y[i].disabled = false;
+            }
+            document.getElementById("edit").style.display = 'block';
+            document.getElementById("action").style.display = 'block';
+            document.getElementById("update").style.display = 'none';
+            document.getElementById("minutes").value = minute;
+        }else{
+            showModal(1,"Upload");
+        }
+    }
 
-        showModal(1, "Upload");
-        /*var minutes = parseInt(prompt("Số phút mỗi tiết: ", ""));*/
-        /*if (checkNumber(minutes)) {
-         var y = document.getElementsByClassName("timepicker");
-         for (i = 0; i < y.length; i++) {
-         y[i].disabled = false;
-         }
-         document.getElementById("edit").style.display = 'block';
-         document.getElementById("action").style.display = 'block';
-         document.getElementById("update").style.display = 'none';
-         }*/
 
-    });
+    function checkNumber(number) {
+        if (isNaN(number)) {
+            conformData(1, {message: 'Số phút không hợp lệ!'});
+            return false;
+        }
+        if (number <= 0) {
+            conformData(1, {message: 'Số phút không hợp lệ!'})
+            return false;
+        }
+        if(number >200){
+            conformData(1, {message: 'Số phút không hợp lệ!'})
+            return false;
+        }
+
+        return true;
+    }
     document.getElementById("${tab}").className += " active";
     document.getElementById("${tab}").setAttribute("data-main", "1");
 

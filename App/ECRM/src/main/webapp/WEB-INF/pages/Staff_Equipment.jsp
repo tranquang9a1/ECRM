@@ -31,10 +31,10 @@
         <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
         <c:set var="categories" value="${requestScope.CATEGORIES}"/>
         <c:set var="tab" value="${requestScope.TABCONTROL}"/>
-        <div class="layout-background">
+        <div class="layout-background" style="height: 0px">
             <div class="container">
                 <div class="header">
-                    <div class="logo">Quản lý thiết bị</div>
+                    <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
                     <div class="account-control">
                         <p>${user.tblUserInfoByUsername.fullName}</p>
                         <img src="/resource/img/gears.png"/>

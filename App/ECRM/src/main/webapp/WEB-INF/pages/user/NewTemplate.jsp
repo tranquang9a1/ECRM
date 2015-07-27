@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
 
     <script src="/resource/js/jquery-1.11.3.min.js"></script>
+    <script src="/resource/js/socket.io.js"></script>
+    <script src="/resource/js/socket-io.js"></script>
     <script src="/resource/js/user-notify.js"></script>
     <script src="/resource/js/newTemplate.js"></script>
 </head>
@@ -48,7 +50,7 @@
           </div>
           <div class="user-schedule">
             <div class="title">Lịch dạy trong ngày</div>
-            <c:if test="${allSchedule != null && allSchedule.size() > 0}">
+            <c:if test="${allSchedule != null}">
               <div class="number-of-schedule">${allSchedule.size()}</div>
             </c:if>
             <div class="content-schedule" onmouseover="stopUpdate = true" onmouseout="stopUpdate = false;">
@@ -68,7 +70,12 @@
           <div class="page active" id="list-report">
             <div class="title">
               <p>Danh sách báo cáo đã gửi</p>
-              <input type="button" class="btn btn-primary" value="Gửi báo cáo" onclick="changePage('list-room')"/>
+              <c:if test="${allSchedule != null && allSchedule.size() > 0}">
+                <input type="button" class="btn btn-primary" value="Gửi báo cáo" onclick="changePage('list-room')"/>
+              </c:if>
+              <c:if test="${allSchedule == null || allSchedule.size() <= 0}">
+                <input type="button" class="btn btn-normal" value="Gửi báo cáo" onclick="conformData(1,{message: 'Không thể tạo báo cáo, vì bạn chưa dạy tiết nào trong hôm nay!'})"/>
+              </c:if>
             </div>
             <div class="content-data">
               <c:if test="${reports.size() > 0}">
@@ -175,8 +182,16 @@
           </div>
           <div class="page" id="history-report">
             <div class="title">
-              <p>Gửi báo cáo phòng <span id="room-name"></span></p>
+              <p>Báo cáo đã gửi phòng <span id="room-name"></span></p>
               <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report')"/>
+              <div class="clear"></div>
+              <div class="title-category">
+                <ul>
+                  <li class="active">Thông tin báo cáo</li>
+                  <li>Sơ đồ phòng</li>
+                </ul>
+              </div>
+            </div>
             </div>
             <div class="list-data-report">
 
@@ -204,6 +219,7 @@
           getRoomReport();
         </c:if>
 
+        connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
         $(".need-remove").remove();
       </script>
     </div>

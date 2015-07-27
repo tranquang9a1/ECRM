@@ -185,7 +185,7 @@ body {
 
 .data-schedule .real-time{
     width: 5px;
-    height: 840px;
+    height: 960px;
     position: relative;
     background-color: #E5E5E5;
     margin: 0 0 0 60px;
@@ -194,7 +194,7 @@ body {
 
 .real-time #now-time{
     width: 5px;
-    height: 840px;
+    height: 960px;
     position: absolute;
     top: -832px;
     background-color: orangered;
@@ -225,9 +225,8 @@ body {
     position: absolute;
     left: 10px;
     line-height: 30px;
-    font-weight: bold;
-    width: 100px;
-    padding: 0 0 0 50px;
+    width: 120px;
+    padding: 0 0 0 30px;
     border-bottom: 1px solid #ddd;
     text-align: center;
 }
@@ -298,7 +297,7 @@ body {
     color: #555;
     background-color: rgb(237, 237, 237);
 }
-.btn btn-gray{
+.btn .btn-gray{
     background-color: rgb(237, 237, 237);
     color: white;
 }
@@ -734,17 +733,18 @@ body {
 .tab .tab-medium li{
     border: 0;
     margin: 0;
-    padding: 0 15px 0 0;
+    padding: 0 15px;
 }
 
 .tab .tab-medium li.active, .tab .tab-medium li:hover{
-    font-weight: bold;
+    /*font-weight: bold;*/
     border: 0;
-    background-color: white;
+    background-color: #f1f1f1;
 }
 .tab .tab-medium li.active {
     border-bottom: 3px solid darkorange;
     background-color: #e8e8e8;
+    margin-bottom: -3px;
 }
 
 
@@ -810,6 +810,12 @@ body {
     border: 0;
 }
 
+.scroll-list-equip{
+    max-height: 340px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 0 5px 0 0;
+}
 
 .list-real-equipment {
     position: absolute;
@@ -824,6 +830,10 @@ body {
     transition: all 0.2s ease-in;
     -moz-transition: all 0.2s ease-in;
     -webkit-transition: all 0.2s ease-in;
+}
+
+.scroll-list-equip .list-real-equipment {
+    width: 289px;
 }
 
 .list-real-equipment .real-equipment {

@@ -34,11 +34,11 @@
             </div>
             <div class="group-control">
               <div class="name">Thiết bị</div>
-              <div class="value">${(room.equipmentCategory).toString().substring(2, room.equipmentCategory.toString().length()-1)}</div>
+              <div class="value" style="max-width: 210px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">${(room.equipmentCategory).toString().substring(2, room.equipmentCategory.toString().length()-1)}</div>
             </div>
             <div class="group-control">
               <div class="name">Người báo cáo</div>
-              <div class="value">${room.reporters}</div>
+              <div class="value" style="max-width: 210px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">${room.reporters}</div>
             </div>
             <div class="group-control">
               <div class="name">Báo cáo mới nhất</div>
@@ -83,6 +83,10 @@
     <input type="hidden" id="ListResolve" value="" name="ListResolve">
     <input type="hidden" id="ListEquip" value="" name="ListRealEquip">
   </form>
+
+  <c:if test="${room.equipmentCategory.size() > 4}">
+  <div class="scroll-list-equip">
+  </c:if>
   <c:forEach items="${room.equipmentCategory}" var="item" >
     <div class="group-equipment">
       <c:if test="${item.serialNumber.size() == 0}">
@@ -110,10 +114,14 @@
       </c:if>
     </div>
   </c:forEach>
+  <c:if test="${room.equipmentCategory.size() > 4}">
+  </div>
+  </c:if>
   <p style="margin-bottom: 0">
     <input type="button" class="btn btn-primary" onclick="conformData(3, {message:'Bạn muốn khắc phục hư hại phòng ${room.roomName}!', btnName: 'Khắc phục', choose: 1, object: {}})"  value="Khắc phục" />
     <input type="button" class="btn btn-normal" onclick="conformData(2, {message:'Bạn muốn khắc phục tất cả hư hại phòng ${room.roomName}!', btnName: 'Khắc phục', link: '/bao-cao/sua-het?roomId=${room.roomId}'})" value="Khắc phục tất cả" />
   </p>
+
 </div>
 </div>
 

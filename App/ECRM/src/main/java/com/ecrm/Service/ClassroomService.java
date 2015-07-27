@@ -299,7 +299,7 @@ public class ClassroomService {
 
             TblNotificationEntity notify = notificationDAO.getNotifyOfRoom(currentClassroom.getId(), Enumerable.MessageType.CHANGEROOM.getValue());
             if (notify == null) {
-                notify = new TblNotificationEntity(currentClassroom.getId(), message, "/giang-vien/lich-day", Enumerable.MessageType.CHANGEROOM.getValue());
+                notify = new TblNotificationEntity(currentClassroom.getId(), message, "/giang-vien", Enumerable.MessageType.CHANGEROOM.getValue());
                 notificationDAO.persist(notify);
             }
 

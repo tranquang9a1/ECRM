@@ -26,7 +26,7 @@ function conformData(type, object) {
     switch (type) {
         case 1:
             var btnConform = document.createElement("input");
-            btnConform.className = "btn btn-orange";
+            btnConform.className = "btn btn-normal";
             btnConform.type = "button";
             btnConform.value = "Đóng";
             btnConform.addEventListener("click", closeConformData, false);
@@ -101,7 +101,7 @@ function createTimes(){
     var elementSchedule = document.getElementById("list-schedule");
     var hour = 6;
 
-    for(var i = 0; i < 14; i++) {
+    for(var i = 0; i < 16; i++) {
         var div = document.createElement("div");
         div.className = "hour-item";
         div.style.top = (i*60)+"px";
@@ -119,7 +119,7 @@ function createTimes(){
             var div = document.createElement("div");
             div.className = "schedule-item";
             div.style.top = ((hours-6)*60 + minutes - 23)+"px";
-            div.innerHTML = "Phòng " + listSchedule[key].room;
+            div.innerHTML = (hours<10?"0"+hours:hours) + ":" + (minutes<10?"0"+minutes:minutes) + " - <b>Phòng " + listSchedule[key].room + "</b>";
             elementSchedule.appendChild(div);
         }
     }
@@ -133,9 +133,18 @@ function updateTime() {
     var d = new Date();
     var nowHour = d.getHours();
     var nowMinute = d.getMinutes();
-    var time = ((nowHour - 6) * 60) + nowMinute - 832;
-    document.getElementById("now-time").style.top  = time + "px";
-    document.getElementById("time-here").innerHTML = (nowHour<10?'0'+nowHour:nowHour) + ":" + (nowMinute<10?'0'+nowMinute:nowMinute);
+
+    var time = ((nowHour - 6) * 60) + nowMinute - 952;
+    document.getElementById("time-here").innerHTML = (nowHour < 10 ? '0' + nowHour : nowHour) + ":" + (nowMinute < 10 ? '0' + nowMinute : nowMinute);
+
+    var overtime = false;
+    if(nowHour >= 21) {
+        overtime = true;
+        document.getElementById("now-time").style.top = (((nowHour - 6) * 60) - 960) + "px";
+    }
+    else {
+        document.getElementById("now-time").style.top = time + "px";
+    }
 
     if(stopUpdate == false) {
         var minTime = 100000;
@@ -156,7 +165,9 @@ function updateTime() {
         }
     }
 
-    setTimeout(function() {updateTime()}, 6000);
+    if(overtime == false) {
+        setTimeout(function() {updateTime()}, 6000);
+    }
 }
 
 function getRoomReport() {

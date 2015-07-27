@@ -51,7 +51,6 @@
                     <div class="right-content">
                         <div class="page active" id="classroom">
                             <div class="title"><p>Phòng Học</p></div>
-                            <div class="body-content" style="background-color: whitesmoke;">
                                 <div class="tab">
                                     <div class="tab-medium">
                                         <ul>
@@ -84,8 +83,6 @@
                             <div>Đang tải! Vui lòng chờ trong giây lát!</div>
                         </div>
                     </div>
-
-                </div>
             </div>
         </div>
         <div class="content-modal">

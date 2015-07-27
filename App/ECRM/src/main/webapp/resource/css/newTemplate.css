@@ -468,7 +468,7 @@ body {
 }
 
 .list-room-content{
-    float: right;
+    float: left;
     width: 450px;
     margin: 0;
     padding: 15px 0 0;
@@ -485,7 +485,7 @@ body {
 .room-content .data-room-content{
     width: 430px;
     padding: 0 20px 0 0;
-    height: 380px;
+    height: 345px;
     overflow-y: scroll;
 }
 

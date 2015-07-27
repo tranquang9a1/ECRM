@@ -252,15 +252,19 @@ function loadRoomEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
 
 
 
-function changeTabInfo(type, element){
-    $(".title-tab").removeClass("active");
+function changeTabInfo(type, element, parent){
+    var listTitle = element.parentNode.childNodes;
+    for(var i = 0; i < listTitle.length; i++) {
+        listTitle[i].className = "";
+    }
+
     $(element).addClass("active");
     if(type == 1) {
-        $('.main-info').addClass('active');
-        $('.map-info').removeClass('active');
+        $("#" + parent + ' .main-info').addClass('active');
+        $("#" + parent + ' .map-info').removeClass('active');
     } else {
-        $('.main-info').removeClass('active');
-        $('.map-info').addClass('active');
+        $("#" + parent + ' .main-info').removeClass('active');
+        $("#" + parent + ' .map-info').addClass('active');
     }
 }
 

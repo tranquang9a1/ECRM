@@ -157,8 +157,17 @@
           </div>
           <div class="page" id="list-room">
             <input id="roomId" type="hidden"/>
-            <div class="title">
+            <div class="title" style="padding: 0; height: 78px;">
               <p>Báo cáo phòng <span id="room"></span></p>
+              <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report')" style="float: right;"/>
+              <input type="button" class="btn btn-primary" value="Gửi báo cáo" onclick="sentReport()" style="float: right;"/>
+              <div class="clear" style="padding: 0 0 7px;"></div>
+              <div class="title-category" style="float: left;">
+                <ul>
+                  <li class="active" onclick="changeTabInfo(1, this, 'list-room')">Thông tin báo cáo</li>
+                  <li onclick="changeTabInfo(2, this, 'list-room')">Sơ đồ phòng</li>
+                </ul>
+              </div>
               <c:if test="${finishSchedule.size() > 0}">
                 <p style="float: right; padding: 0; text-transform: none"> Phòng
                   <select id="list-active-room" onchange="getRoomReport()" style="  background-color: white;  border: 1px solid #ddd;  padding: 6px 10px;  margin: 0 0 0 10px;">
@@ -169,35 +178,32 @@
                 </p>
               </c:if>
             </div>
-            <div class="list-control-report">
-              <div class="title-tab active" onclick="changeTabInfo(1, this)">Thông tin</div>
-              <div class="title-tab" onclick="changeTabInfo(0, this)">Bản đồ</div>
+            <%--<div class="list-control-report">--%>
+              <%--&lt;%&ndash;<div class="title-tab active" onclick="changeTabInfo(1, this)">Thông tin</div>&ndash;%&gt;--%>
+              <%--&lt;%&ndash;<div class="title-tab" onclick="changeTabInfo(0, this)">Bản đồ</div>&ndash;%&gt;--%>
 
-              <div class="control-report-button">
-                <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report')"/>
-                <input type="button" class="btn btn-primary" value="Gửi báo cáo" onclick="sentReport()"/>
-              </div>
-            </div>
+              <%--<div class="control-report-button">--%>
+              <%--</div>--%>
+            <%--</div>--%>
             <div class="list-room-content"></div>
           </div>
           <div class="page" id="history-report">
-            <div class="title">
+            <div class="title" style="padding: 0; height: 70px;">
               <p>Báo cáo đã gửi phòng <span id="room-name"></span></p>
               <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report')"/>
               <div class="clear"></div>
               <div class="title-category">
                 <ul>
-                  <li class="active">Thông tin báo cáo</li>
-                  <li>Sơ đồ phòng</li>
+                  <li class="active" onclick="changeTabInfo(1, this, 'history-report')">Thông tin báo cáo</li>
+                  <li onclick="changeTabInfo(2, this, 'history-report')">Sơ đồ phòng</li>
                 </ul>
               </div>
-            </div>
             </div>
             <div class="list-data-report">
 
             </div>
           </div>
-          <div class="loading-page">
+          <div class="loading-page" style="padding: 0; height: 515px">
             <img src="/resource/img/500.GIF">
             <div>Đang tải! Vui lòng chờ trong giây lát!</div>
           </div>

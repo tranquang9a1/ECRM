@@ -22,11 +22,7 @@
 </script>
 <div id="hitory-report-${report.id}">
     <input type="hidden" value="${room.name}" id="room-name-${report.id}"/>
-    <div class="list-control-report">
-        <div class="title-tab active" onclick="changeTabInfo(1, this)">Thông tin</div>
-        <div class="title-tab" onclick="changeTabInfo(0, this)">Bản đồ</div>
-    </div>
-    <div class="room-content" style="  position: relative; float: left; margin: 15px 0 0 15px;">
+    <div class="room-content" style="position: relative; float: left; margin: 15px 0 0 15px;">
         <div class="data-tab main-info active">
             <div class="group-control">
                 <div class="name">Phòng</div>

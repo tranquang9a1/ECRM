@@ -87,6 +87,7 @@ public class EquipmentFragment extends Fragment{
         } else {
             report = getActivity().getIntent().getParcelableExtra("report");
             classId = report.getClassId();
+            className = report.getClassName();
             convertList();
         }
 
@@ -164,9 +165,9 @@ public class EquipmentFragment extends Fragment{
                         final String description = listDescription.substring(0, listDescription.length() > 0 ? listDescription.length() - 1 : 0);
                         createReportDialog = new CreateReportDialog();
                         if (type.equalsIgnoreCase("create")) {
-                            createReportDialog.setParams(getActivity(), username, classId, damaged, position, evaluate, description, type);
+                            createReportDialog.setParams(getActivity(), username, classId,className, damaged, position, evaluate, description, type);
                         } else {
-                            createReportDialog.setParams(getActivity(), report.getUsername(), report.getReportId(), classId, damaged, position, evaluate, description, type);
+                            createReportDialog.setParams(getActivity(), report.getUsername(), report.getReportId(), classId, className, damaged, position, evaluate, description, type);
                         }
 
                         createReportDialog.show(getActivity().getFragmentManager(), "haha");
@@ -298,7 +299,7 @@ public class EquipmentFragment extends Fragment{
                             final String description = listDescription.substring(0, listDescription.length() > 0 ? listDescription.length() - 1 : 0);
 
                             createReportDialog = new CreateReportDialog();
-                            createReportDialog.setParams(getActivity(),username, classId, damaged, position, evaluate, description, type);
+                            createReportDialog.setParams(getActivity(),username, classId,className, damaged, position, evaluate, description, type);
                             getActivity().setResult(Activity.RESULT_OK);
                             createReportDialog.show(getActivity().getFragmentManager(), "haha");
                         } else {

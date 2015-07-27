@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.adapter.NavDrawerListAdapter;
@@ -27,9 +29,16 @@ import com.fu.group10.capstone.apps.teachermobileapp.dialog.LogoutDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.AccountFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.ScheduleFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.NavDrawerItem;
+import com.fu.group10.capstone.apps.teachermobileapp.model.User;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -38,6 +47,7 @@ import java.util.ArrayList;
 public class ListRoomActivity extends ActionBarActivity {
 
     LogoutDialog logoutDialog;
+    boolean isOnline = false;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -55,6 +65,10 @@ public class ListRoomActivity extends ActionBarActivity {
 
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
+    DatabaseHelper db;
+    boolean flag = false;
+    private String username;
+    private TextView txtClock;
 
 
 
@@ -64,6 +78,9 @@ public class ListRoomActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        username = getIntent().getExtras().getString("username");
+        isOnline = Utils.isOnline();
+
         SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
         boolean stateLogin = sp.getBoolean("LoginState", false);
         if (!stateLogin) {
@@ -75,7 +92,10 @@ public class ListRoomActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
-        mTitle = mDrawerTitle = getTitle();
+        txtClock = (TextView) findViewById(R.id.txtClock);
+        startTimerThread();
+
+        mTitle = mDrawerTitle = username +  " - " + getTitle();
 
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
@@ -301,4 +321,40 @@ public class ListRoomActivity extends ActionBarActivity {
         startActivity(intent);
         finish();
     }
+
+    private void startTimerThread() {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isOnline) {
+                                    RequestSender sender = new RequestSender();
+                                    String url = Constants.API_GET_CURRENT_TIME;
+                                    sender.start(url, new RequestSender.IRequestSenderComplete() {
+                                        @Override
+                                        public void onRequestComplete(String result) {
+                                            txtClock.setText(dateFormat.format(Long.parseLong(result)));
+                                        }
+                                    });
+                                } else {
+                                    txtClock.setText(dateFormat.format(System.currentTimeMillis()));
+                                }
+
+                            }
+                        });
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
+    }
+
 }

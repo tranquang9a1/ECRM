@@ -17,13 +17,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal">
-        <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
-                     android:layout_width="wrap_content" android:layout_height="wrap_content"
-                     android:visibility="gone" />
+
         <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
                     android:layout_height="wrap_content">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:orientation="vertical" android:paddingTop="40dp">
+                          android:orientation="vertical" android:paddingTop="60dp">
 
                 <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
                               android:layout_height="match_parent" android:orientation="vertical"
@@ -35,6 +33,7 @@
                                           android:singleLine="true"
                                           android:layout_marginBottom="10dp"
                                         android:textSize="20dp"
+                        android:paddingLeft="10dp"
                                         android:background="@color/white"
                                           android:textColorHint="#ffa3a3a3"
                                           android:textColor="#000000" />
@@ -42,11 +41,12 @@
                     <EditText android:id="@+id/password" android:layout_width="match_parent"
                               android:layout_height="40dp" android:hint="@string/prompt_password"
                               android:imeActionLabel="@string/action_sign_in"
-                              android:imeOptions="actionUnspecified" android:inputType="textPassword"
+                              android:inputType="textPassword"
                               android:maxLines="1" android:singleLine="true"
                               android:layout_marginBottom="10dp"
                         android:background="@color/white"
                               android:textColorHint="#ffa3a3a3"
+                        android:paddingLeft="10dp"
                               android:textColor="#000000"
                             android:textSize="20dp"/>
 

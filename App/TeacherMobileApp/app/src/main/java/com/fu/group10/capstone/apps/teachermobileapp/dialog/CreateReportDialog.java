@@ -35,6 +35,7 @@ public class CreateReportDialog extends DialogFragment {
     String listDescription;
     int reportId;
     String username;
+    String className;
     int classId;
     String type;
     ReportSuccessDialog reportSuccessDialog;
@@ -76,23 +77,25 @@ public class CreateReportDialog extends DialogFragment {
         return  alertDialog;
     }
 
-    public void setParams(Activity activity,String username, int roomId, String listDamaged, String listPosition, String listEvaluate, String listDescription, String type) {
+    public void setParams(Activity activity,String username, int roomId, String className, String listDamaged, String listPosition, String listEvaluate, String listDescription, String type) {
         this.activity = activity;
         this.listDamaged = listDamaged;
         this.listEvaluate = listEvaluate;
         this.listDescription = listDescription;
         this.username = username;
+        this.className = className;
         this.classId = roomId;
         this.listPosition = listPosition;
         this.type = type;
     }
 
-    public void setParams(Activity activity,String username, int reportId, int roomId, String listDamaged, String listPosition, String listEvaluate, String listDescription, String type) {
+    public void setParams(Activity activity,String username, int reportId, int roomId, String className, String listDamaged, String listPosition, String listEvaluate, String listDescription, String type) {
         this.activity = activity;
         this.listDamaged = listDamaged;
         this.listEvaluate = listEvaluate;
         this.listDescription = listDescription;
         this.username = username;
+        this.className = className;
         this.classId = roomId;
         this.reportId = reportId;
         this.listPosition = listPosition;
@@ -127,7 +130,7 @@ public class CreateReportDialog extends DialogFragment {
                 Result result1 = ParseUtils.parseResult(result);
                 progress.dismiss();
                 if(result1.getError_code() == 100) {
-                    String msg = username + " vừa báo cáo hư hại phòng học "+ classId ;
+                    String msg = username + " vừa báo cáo hư hại phòng học "+ className ;
                     if (evaluate.equalsIgnoreCase("Phải đổi phòng")) {
                         sendSMS(msg);
                     }

@@ -1,15 +1,12 @@
 package com.fu.group10.capstone.apps.teachermobileapp.activity;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -22,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.adapter.NavDrawerListAdapter;
@@ -29,7 +27,6 @@ import com.fu.group10.capstone.apps.teachermobileapp.dialog.LogoutDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.AccountFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.ScheduleFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.NavDrawerItem;
-import com.fu.group10.capstone.apps.teachermobileapp.model.User;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
@@ -48,6 +45,7 @@ public class ListRoomActivity extends ActionBarActivity {
 
     LogoutDialog logoutDialog;
     boolean isOnline = false;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -71,10 +69,6 @@ public class ListRoomActivity extends ActionBarActivity {
     private TextView txtClock;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +87,9 @@ public class ListRoomActivity extends ActionBarActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         txtClock = (TextView) findViewById(R.id.txtClock);
-        startTimerThread();
+        //startTimerThread();
 
-        mTitle = mDrawerTitle = username +  " - " + getTitle();
+        mTitle = mDrawerTitle = username + " - " + getTitle();
 
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
@@ -119,7 +113,6 @@ public class ListRoomActivity extends ActionBarActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
 
 
-
         // Recycle the typed array
         navMenuIcons.recycle();
 
@@ -134,7 +127,7 @@ public class ListRoomActivity extends ActionBarActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
                 R.string.app_name, // nav drawer open - description for accessibility
                 R.string.app_name // nav drawer close - description for accessibility
-        ){
+        ) {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
                 // calling onPrepareOptionsMenu() to show action bar icons
@@ -163,20 +156,20 @@ public class ListRoomActivity extends ActionBarActivity {
                     DialogUtils.showAlert(ListRoomActivity.this,
                             "Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập",
                             new DialogUtils.IOnOkClicked() {
-                        @Override
-                        public void onClick() {
-                            SharedPreferences sp = getSharedPreferences("LoginState", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.clear();
-                            editor.commit();
-                            startMain();
-                        }
-                    }, new DialogUtils.IOnCancelClicked() {
-                        @Override
-                        public void onClick() {
+                                @Override
+                                public void onClick() {
+                                    SharedPreferences sp = getSharedPreferences("LoginState", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.clear();
+                                    editor.commit();
+                                    startMain();
+                                }
+                            }, new DialogUtils.IOnCancelClicked() {
+                                @Override
+                                public void onClick() {
 
-                        }
-                    });
+                                }
+                            });
                 } else {
                     displayView(i);
                 }
@@ -184,13 +177,30 @@ public class ListRoomActivity extends ActionBarActivity {
 
             }
         });
-
-
-
+        mDrawerList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (isOnline) {
+                    RequestSender sender = new RequestSender();
+                    String url = Constants.API_GET_CURRENT_TIME;
+                    sender.start(url, new RequestSender.IRequestSenderComplete() {
+                        @Override
+                        public void onRequestComplete(String result) {
+                            Toast.makeText(ListRoomActivity.this,
+                                    dateFormat.format(Long.parseLong(result)),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(ListRoomActivity.this,
+                            dateFormat.format(new Date()), Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
 
 
     }
-
 
 
     @Override
@@ -201,16 +211,12 @@ public class ListRoomActivity extends ActionBarActivity {
         }
 
 
-//            if (resultCode == 2) {
-//                displayView(1);
-//            }
-            if (resultCode == 3) {
-                displayView(2);
-            }
+        if (resultCode == 3) {
+            displayView(2);
+        }
         //}
 
     }
-
 
 
     private void displayView(int position) {
@@ -247,7 +253,6 @@ public class ListRoomActivity extends ActionBarActivity {
     }
 
 
-
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
@@ -258,9 +263,6 @@ public class ListRoomActivity extends ActionBarActivity {
      * When using the ActionBarDrawerToggle, you must call it during
      * onPostCreate() and onConfigurationChanged()...
      */
-
-
-
 
 
     @Override
@@ -284,7 +286,7 @@ public class ListRoomActivity extends ActionBarActivity {
         }
     }
 
-    /***
+    /**
      * Called when invalidateOptionsMenu() is triggered
      */
     @Override
@@ -294,7 +296,6 @@ public class ListRoomActivity extends ActionBarActivity {
 //        menu.findItem(R.id.delete).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
-
 
 
     /**
@@ -323,7 +324,7 @@ public class ListRoomActivity extends ActionBarActivity {
     }
 
     private void startTimerThread() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -349,7 +350,7 @@ public class ListRoomActivity extends ActionBarActivity {
                             }
                         });
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

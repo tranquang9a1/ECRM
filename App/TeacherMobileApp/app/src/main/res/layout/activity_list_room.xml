@@ -20,6 +20,7 @@
             android:textSize="20dp"
             android:text="10:00:00"
             android:textColor="#ffffff"
+            android:visibility="gone"
             />
 
     </android.support.v7.widget.Toolbar>

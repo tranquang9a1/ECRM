@@ -170,12 +170,14 @@
 </div>
 <div class="content-modal">
     <div class="modal modal-small" id="Upload">
-        <div class="content-modal" style="  height: 140px; width: 300px;top: 30%;
-    left: 55%;">
-            <div class="body-modal" style="padding-top: 10px">
-                <div class="group-control" style="margin-left: 18%">
-                    <div class="name">Nhập số phút mỗi tiết: <input id="minute"
-                                                                                                maxlength="3"></div>
+        <div class="content-modal" style="top: 30%">
+            <div class="header-modal title">
+                <p>Cấu hình tiết học</p>
+            </div>
+            <div class="body-modal" style="padding: 30px 10px">
+                <div class="group-control">
+                    <div class="name">Số phút mỗi tiết </div>
+                    <div class="value"><input type="text" id="minute" maxlength="3"></div>
                 </div>
             </div>
             <div class="footer-modal">

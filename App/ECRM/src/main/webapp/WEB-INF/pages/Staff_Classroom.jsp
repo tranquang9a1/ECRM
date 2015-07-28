@@ -375,7 +375,7 @@
                         selectedValue.television);
                 $(".thietBi").remove();
                 document.getElementById("loaiphong").innerHTML = "";
-                $('#vrow option:second-child').attr("selected", "selected");
+                $('#vrow').selectedIndex = 2;
                 createDetailMap();
                 $(".check-box").prop("checked", false);
                 var classroommap = document.getElementsByClassName('classroom-map');
@@ -389,6 +389,8 @@
                 document.getElementById('roomNameId').value = "";
                 document.getElementById('classroomName').innerHTML = "Tạo Phòng";
                 document.getElementById('roomNameId').value = "";
+                document.getElementById('roomTypeName').value = "";
+                $('#quantityAir').prop('disabled', true).val('');
                 document.getElementById('name').value = "";
 
             }

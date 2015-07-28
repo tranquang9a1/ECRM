@@ -13,6 +13,7 @@ import com.twilio.sdk.TwilioRestException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -52,7 +53,7 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-    /*@Scheduled(cron = "${cron.expression}")
+    /*@Scheduled(fixedDelay = 1000)
      public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
@@ -88,10 +89,15 @@ public class CheckDamagedClassroomSchedule {
                         if (classroomName.trim().length() == 0) {
                             System.out.println("Task 1: Last day, classroom " + currentClassroom.getName() + " was not changed to any classroom!");
                         }
-                        changeRoomService.changingRoom(currentSchedule, validClassrooms, classroomName, currentClassroom);
+                        try{
+                            changeRoomService.changingRoom(currentSchedule, validClassrooms, classroomName, currentClassroom);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 }
                 System.out.println("Task 1: End changing room at:" + new Date());
+                System.out.println("");
 
             }
             if (hour == 7 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0) {
@@ -121,12 +127,12 @@ public class CheckDamagedClassroomSchedule {
 
                 }
                 System.out.println("Task 1: Kết thúc cronjob check equipment vào lúc:" + new Date());
-
+                System.out.println("");
             }
         }
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 14000)
     public void changeRoom() throws TwilioRestException {
         LocalDate localDate = new LocalDate();
         LocalTime localTime = new LocalTime();
@@ -156,7 +162,11 @@ public class CheckDamagedClassroomSchedule {
                             break;
                         }
                         String changeRoom = "";
-                        changeRoom = changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
+                        try{
+                            changeRoom = changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         //update status report
                         System.out.println("Task 2: Change report status!");
                         tblReportEntity.setChangedRoom(changeRoom);
@@ -172,14 +182,14 @@ public class CheckDamagedClassroomSchedule {
     }
 
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 30000)
     @ResponseBody
     public void test() throws IOException, TwilioRestException {
         LocalDate localDate = new LocalDate();
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
-            if ((localTime.isAfter(new LocalTime("07:00:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:15:00")) && localTime.isBefore(new LocalTime("21:00:00"))) {
+            if ((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
+                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) {
                 System.out.println("Task 3: Run cronjob offline at:" + new Date());
                 URL url = new URL("http://128.199.208.93/offline/getBody");
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -193,11 +203,17 @@ public class CheckDamagedClassroomSchedule {
                             List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
                             List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
                             currentSchedule = changeRoomService.getScheduleByDayTime(currentClassroom.getId());
-                            changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
+                            try{
+                                changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
                 bufferedReader.close();
+                System.out.println("Task 3: End cronjob offline at: " + new Date());
+                System.out.println("");
             }
         }
 

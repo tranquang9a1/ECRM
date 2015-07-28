@@ -15,7 +15,10 @@ public class TblEquipmentCategoryEntity {
     private int id;
     private String name;
     private Integer usingTime;
+    private Boolean isManaged;
+    private String imageUrl;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
+    private Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
 
     @Id
     @Column(name = "Id")
@@ -28,6 +31,31 @@ public class TblEquipmentCategoryEntity {
     }
 
     @Basic
+    @Column(name = "IsManaged")
+    public Boolean getIsManaged() {
+        return isManaged;
+    }
+
+    public void setIsManaged(Boolean isManaged) {
+        this.isManaged = isManaged;
+    }
+
+
+
+    @Basic
+    @Column(name = "ImageUrl")
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
+
+
+    @Basic
     @Column(name = "Name")
     public String getName() {
         return name;
@@ -36,7 +64,6 @@ public class TblEquipmentCategoryEntity {
     public void setName(String name) {
         this.name = name;
     }
-
     @Basic
     @Column(name = "UsingTime")
     public Integer getUsingTime() {
@@ -77,5 +104,15 @@ public class TblEquipmentCategoryEntity {
 
     public void setTblEquipmentsById(Collection<TblEquipmentEntity> tblEquipmentsById) {
         this.tblEquipmentsById = tblEquipmentsById;
+    }
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "tblEquipmentCategoryEntityByEquipmentCategoryId")
+    public Collection<TblEquipmentQuantityEntity> getTblEquipmentQuantityById() {
+        return tblEquipmentQuantityById;
+    }
+
+    public void setTblEquipmentQuantityById(Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById) {
+        this.tblEquipmentQuantityById = tblEquipmentQuantityById;
     }
 }

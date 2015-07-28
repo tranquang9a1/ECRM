@@ -22,7 +22,9 @@ public class TblClassroomEntity {
     private Boolean isDelete;
     private Boolean isAllInformation;
     private Integer damagedLevel;
+    private Integer roomTypeId2;
     private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
+    private TblRoomTypeEntity2 tblRoomType2ByRoomTypeId2;
     private List<TblEquipmentEntity> tblEquipmentsById;
     private List<TblReportEntity> tblReportsById;
     private List<TblScheduleEntity> tblSchedulesById;
@@ -46,6 +48,16 @@ public class TblClassroomEntity {
 
     public void setRoomTypeId(Integer roomTypeId) {
         this.roomTypeId = roomTypeId;
+    }
+
+    @Basic
+    @Column(name = "RoomTypeId2")
+    public Integer getRoomTypeId2() {
+        return roomTypeId2;
+    }
+
+    public void setRoomTypeId2(Integer roomTypeId2) {
+        this.roomTypeId2 = roomTypeId2;
     }
 
     @Basic
@@ -144,6 +156,16 @@ public class TblClassroomEntity {
 
     public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeByRoomTypeId) {
         this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "RoomTypeId2", referencedColumnName = "Id", insertable = false, updatable = false)
+    public TblRoomTypeEntity2 getTblRoomType2ByRoomTypeId2() {
+        return tblRoomType2ByRoomTypeId2;
+    }
+
+    public void setTblRoomType2ByRoomTypeId2(TblRoomTypeEntity2 tblRoomType2ByRoomTypeId2) {
+        this.tblRoomType2ByRoomTypeId2 = tblRoomType2ByRoomTypeId2;
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)

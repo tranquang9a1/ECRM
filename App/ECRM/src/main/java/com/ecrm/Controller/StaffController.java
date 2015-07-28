@@ -1,10 +1,7 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.EquipmentDAO;
-import com.ecrm.DAO.Impl.ClassroomDAOImpl;
-import com.ecrm.DAO.Impl.EquipmentDAOImpl;
-import com.ecrm.DAO.Impl.RoomTypeDAOImpl;
-import com.ecrm.DAO.Impl.ScheduleDAOImpl;
+import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.ClassroomService;
@@ -36,6 +33,8 @@ public class StaffController {
     ClassroomService classroomService;
     @Autowired
     RoomTypeService roomTypeService;
+    @Autowired
+    CategoryDAOImpl categoryDAO;
 
     @RequestMapping(value = "classroom")
     public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
@@ -44,10 +43,19 @@ public class StaffController {
             List<TblRoomTypeEntity> tblRoomTypeEntities = roomTypeService.getAllRoomType();
             request.setAttribute("ALLROOMTYPE", tblRoomTypeEntities);
             List<TblClassroomEntity> tblClassroomEntities = classroomService.getAllClassroom();
+            List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
+            Iterator<TblEquipmentCategoryEntity> iterator = tblEquipmentCategoryEntities.iterator();
+            while (iterator.hasNext()){
+                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = iterator.next();
+                if(tblEquipmentCategoryEntity.getName().trim().equals("Bàn")||tblEquipmentCategoryEntity.getName().trim().equals("Ghế")){
+                    iterator.remove();
+                }
+            }
             request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
             request.setAttribute("ACTIVETAB", activeTab);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
             request.setAttribute("TABCONTROL", "STAFF_CLASSROOM");
+            request.setAttribute("CATEGORY", tblEquipmentCategoryEntities);
             return "Staff_Classroom";
         }else {
             return "Login";

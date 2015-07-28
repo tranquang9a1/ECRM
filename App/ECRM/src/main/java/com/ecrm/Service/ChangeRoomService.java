@@ -71,8 +71,8 @@ public class ChangeRoomService {
                     System.out.println("Change room:");
                     TblClassroomEntity newClassroom = classroomDAO.getClassroomByName(classroom.get(0));
                     String message = changeRoom(tblScheduleEntity, newClassroom);
-                    /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                    gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());*/
+                    SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                    gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
                 }
             }
         }
@@ -80,8 +80,8 @@ public class ChangeRoomService {
             System.out.println("Start changing room!");
             for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
                 String message = changeRoom(tblScheduleEntity, changeClassroomEntity);
-                /*SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
-                gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());*/
+                SmsUtils.sendMessage(tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getPhone(), message);
+                gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
             }
             System.out.println("End changing room!");
         }

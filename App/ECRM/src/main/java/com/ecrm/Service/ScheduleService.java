@@ -163,19 +163,24 @@ public class ScheduleService {
     public void insertSchedule(String teacher, TblClassroomEntity classroomEntity,
                                int numberOfSlot, String timeFrom, String date, DateFormat formatter, int scheduleConfigId) throws ParseException {
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
-        if (checkValidSchedule(teacher, date, scheduleConfigId)) {
-            TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(teacher, classroomEntity.getId(), numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
+        int classroomId = classroomEntity.getId();
+        if (checkValidSchedule(teacher, date, scheduleConfigId, classroomId)) {
+            TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(teacher, classroomId, numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
                     teachingDate, true, scheduleConfigId);
             scheduleDAO.persist(tblScheduleEntity);
         }
 
     }
 
-    public boolean checkValidSchedule(String teacher, String teachingDate, int scheduleConfigId) {
+    public boolean checkValidSchedule(String teacher, String teachingDate, int scheduleConfigId, int classroomId) {
         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findScheduleWithDate(teacher, teachingDate, scheduleConfigId);
         if (!tblScheduleEntities.isEmpty()) {
             return false;
         }
+        if (!scheduleDAO.findSpecificSchedule(teachingDate, scheduleConfigId, classroomId).isEmpty()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -271,7 +276,7 @@ public class ScheduleService {
         return tblScheduleEntities;
     }
 
-    public List<String> classroomName(List<TblScheduleEntity> tblScheduleEntities, List<String> classroomName ){
+    public List<String> classroomName(List<TblScheduleEntity> tblScheduleEntities, List<String> classroomName) {
         for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
             if (classroomName.isEmpty()) {
                 classroomName.add(tblScheduleEntity.getTblClassroomByClassroomId().getName());
@@ -285,7 +290,7 @@ public class ScheduleService {
     }
 
     public List<CrSdEntity> getCrSdEntity(List<CrSdEntity> crSdEntities, List<String> classroomName,
-                                          List<TblScheduleConfigEntity> tblScheduleConfigEntities, List<TblScheduleEntity> tblScheduleEntities){
+                                          List<TblScheduleConfigEntity> tblScheduleConfigEntities, List<TblScheduleEntity> tblScheduleEntities) {
         for (int i = 0; i < classroomName.size(); i++) {
             List<TimeSchedule> timeSchedules = new ArrayList<TimeSchedule>();
             for (int j = -0; j < tblScheduleConfigEntities.size(); j++) {
@@ -314,9 +319,9 @@ public class ScheduleService {
                             teacherSchedule.setTeacher(tblScheduleEntity.getUsername());
                             teacherSchedule.setDate(tblScheduleEntity.getDate().toString());
                             teacherSchedule.setNote(tblScheduleEntity.getNote());
-                            if(tblScheduleEntity.getIsActive()){
+                            if (tblScheduleEntity.getIsActive()) {
                                 teacherSchedule.setStyle("font-style: italic;color:blue");
-                            }else{
+                            } else {
                                 teacherSchedule.setStyle("font-style: italic;color:red");
                             }
                             List<TeacherSchedule> teacherSchedules = timeSchedules1.get(j).getTeacherSchedules();

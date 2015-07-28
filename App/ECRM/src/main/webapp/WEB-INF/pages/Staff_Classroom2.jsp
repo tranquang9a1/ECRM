@@ -36,6 +36,7 @@
         <body>
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
         <c:set var="tab1" value="${requestScope.TABCONTROL}"/>
+        <c:set var="category" value="${requestScope.CATEGORY}"/>
 
         <div class="layout-background" style="height: 0px">
             <div class="container">
@@ -152,7 +153,7 @@
                                 <div class="name">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-detail" style="float: left; margin-left: 0px" onclick="showModal(2, 'modal-1','modal-2');"
+                                <input type="button" class="btn btn-detail" style="float: left" onclick="showModal(2, 'modal-1','modal-2');"
                                        value="Chọn"/>
                             </div>
                         </div>
@@ -428,7 +429,6 @@
                             $(".loading-page").addClass("active");
                             $(".page").removeClass("active");
                         } else {
-                            showModal(0,'modal-1');
                             conformData(1,{message:data.alert});
                         }
                     },

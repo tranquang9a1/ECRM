@@ -56,8 +56,8 @@ public class APIController {
 
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id") int classroomId) {
-        TblClassroomEntity classroomEntity = apiService.getClassroom(classroomId);
-        List<TblEquipmentEntity> equipmentEntities = classroomEntity.getTblEquipmentsById();
+        ClassroomMapDTO classroomEntity = apiService.getClassroom(classroomId);
+        List<TblEquipmentEntity> equipmentEntities = classroomEntity.getClassroom().getTblEquipmentsById();
 
         request.setAttribute("CLASSROOM", classroomEntity);
         request.setAttribute("EQUIPMENTS", equipmentEntities);

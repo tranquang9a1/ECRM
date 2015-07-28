@@ -145,9 +145,12 @@
 .projector{
 
     background-image: url("../img/equipment/projector.png");
+
+
+}
+.equip{
     background-size: 100%;
     background-repeat: no-repeat;
-
 }
 .tivi{
     background-image: url("../img/equipment/widescreen_tv.png");

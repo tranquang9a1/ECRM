@@ -3,7 +3,7 @@
  */
 var damagedEquipments = {};
 
-function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
+function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, e) {
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
     var array = [];
@@ -149,7 +149,21 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
         divBang.style.width = "100%";
     }
 
-    //projector
+
+    for(var i = 0; i< e.length; i++){
+        var divProjector = document.createElement('div');
+        if(equipments["["+ e[i].id+"]"] != undefined && equipments["["+ e[i].id+"]"].status == false) {
+            divProjector.className = 'subThietBi equip damaged';
+        } else {
+            divProjector.className = 'equipment subThietBi equip';
+        }
+        divProjector.style.backgroundImage = 'url("' + e[i].imageUrl + '")';
+        divProjector.setAttribute('data-equipment',e[i].name);
+        divProjector.setAttribute('data-position','['+ e[i].id+']');
+        divProjector.setAttribute("data-categoryId", e[i].id);
+        divT.appendChild(divProjector);
+    }
+    /*//projector
     if(projector>0){
         var divProjector = document.createElement('div');
         if(equipments["[1]"] != undefined && equipments["[1]"].status == false) {
@@ -218,7 +232,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
         divLoa.setAttribute("data-position", "[5]");
         divLoa.setAttribute("data-categoryId", "5");
         divT.appendChild(divLoa);
-    }
+    }*/
 }
 
 function setChooseEquipment(map){

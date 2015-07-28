@@ -6,6 +6,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Htang on 7/28/2015.
@@ -23,7 +24,7 @@ public class TblRoomTypeEntity2 {
     private Boolean isDelete;
     private Timestamp updateTime;
     private Collection<TblClassroomEntity> tblClassroomsById;
-    private Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
+    private List<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
 
     @Id
     @GeneratedValue
@@ -143,11 +144,11 @@ public class TblRoomTypeEntity2 {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblRoomType2ByRoomTypeId")
-    public Collection<TblEquipmentQuantityEntity> getTblEquipmentQuantityById() {
+    public List<TblEquipmentQuantityEntity> getTblEquipmentQuantityById() {
         return tblEquipmentQuantityById;
     }
 
-    public void setTblEquipmentQuantityById(Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById) {
+    public void setTblEquipmentQuantityById(List<TblEquipmentQuantityEntity> tblEquipmentQuantityById) {
         this.tblEquipmentQuantityById = tblEquipmentQuantityById;
     }
 

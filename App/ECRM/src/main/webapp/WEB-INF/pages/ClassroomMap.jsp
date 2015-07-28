@@ -53,11 +53,9 @@
 </html>
 <script src="../../resource/js/roomtype-phone.js"></script>
 <script>
-    showMap('classroom-map', positionEquipments, ${r.tblRoomTypeByRoomTypeId.verticalRows},
-            '${r.tblRoomTypeByRoomTypeId.horizontalRows}', '${r.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}',
-            ${r.tblRoomTypeByRoomTypeId.airConditioning}, ${r.tblRoomTypeByRoomTypeId.fan},
-            ${r.tblRoomTypeByRoomTypeId.projector}, ${r.tblRoomTypeByRoomTypeId.speaker},
-            ${r.tblRoomTypeByRoomTypeId.television});
+    showMap('classroom-map', positionEquipments, ${r.roomType.verticalRows},
+            '${r.roomType.horizontalRows}', '${r.roomType.numberOfSlotsEachHRows}',
+            ${r.equipment});
 
     setChooseEquipment('classroom-map');
 </script>

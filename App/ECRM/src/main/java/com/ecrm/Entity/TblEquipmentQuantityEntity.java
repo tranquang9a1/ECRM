@@ -9,9 +9,10 @@ import javax.persistence.*;
 @Table(name = "TblEquipmentQuantity")
 @IdClass(TblEquipmentQuantityEntityPK.class)
 public class TblEquipmentQuantityEntity {
-    private int roomTypeId;
+    private Integer roomTypeId;
     private int equipmentCategoryId;
     private int quantity;
+    private int priority;
 
     private TblRoomTypeEntity2 tblRoomTypeEntity2ByRoomTypeId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryEntityByEquipmentCategoryId;
@@ -19,11 +20,11 @@ public class TblEquipmentQuantityEntity {
 
     @Id
     @Column(name = "RoomTypeId")
-    public int getRoomTypeId() {
+    public Integer getRoomTypeId() {
         return roomTypeId;
     }
 
-    public void setRoomTypeId(int roomTypeId) {
+    public void setRoomTypeId(Integer roomTypeId) {
         this.roomTypeId = roomTypeId;
     }
 
@@ -44,8 +45,19 @@ public class TblEquipmentQuantityEntity {
         return quantity;
     }
 
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Basic
+    @Column(name = "Priority")
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     @ManyToOne
@@ -54,7 +66,7 @@ public class TblEquipmentQuantityEntity {
         return tblRoomTypeEntity2ByRoomTypeId;
     }
 
-    public void setTblRoomType2ByRoomTypeId(TblRoomTypeEntity2 tblEquipmentByEquipmentId) {
+    public void setTblRoomType2ByRoomTypeId(TblRoomTypeEntity2 tblRoomTypeEntity2ByRoomTypeId) {
         this.tblRoomTypeEntity2ByRoomTypeId = tblRoomTypeEntity2ByRoomTypeId;
     }
 

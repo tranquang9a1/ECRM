@@ -2,11 +2,13 @@ package com.ecrm.Service;
 
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.ClassDTO;
+import com.ecrm.DTO.ClassroomMapDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Utils;
 import com.ecrm.Utils.socket.SocketIO;
 import org.joda.time.LocalTime;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,32 @@ public class ClassroomService {
             }
         }
         return tblClassroomEntities;
+    }
+    public List<ClassroomMapDTO> getAllClassroomMap() {
+        List<ClassroomMapDTO> classroomMapDTOs = new ArrayList<ClassroomMapDTO>();
+        List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
+        List<TblClassroomEntity> tblClassroomEntities = new ArrayList<TblClassroomEntity>();
+        for (TblClassroomEntity classroomEntity : lstClassRoom) {
+            if (!classroomEntity.getIsDelete()) {
+                JSONArray jsonArray = new JSONArray();
+                ClassroomMapDTO classroomMapDTO = new ClassroomMapDTO();
+                TblRoomTypeEntity2 tblRoomTypeEntity2 = classroomEntity.getTblRoomType2ByRoomTypeId2();
+                List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity2.getTblEquipmentQuantityById();
+                for(int i = 0; i<tblEquipmentQuantityEntities.size(); i++){
+                    TblEquipmentQuantityEntity tblEquipmentQuantityEntity = tblEquipmentQuantityEntities.get(i);
+                    JSONObject formDetailsJson = new JSONObject();
+                    formDetailsJson.put("id", tblEquipmentQuantityEntity.getEquipmentCategoryId());
+                    formDetailsJson.put("name", tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getName());
+                    formDetailsJson.put("imageUrl", tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getImageUrl());
+                    jsonArray.add(formDetailsJson);
+                }
+                classroomMapDTO.setEquipment(jsonArray);
+                classroomMapDTO.setRoomType(tblRoomTypeEntity2);
+                classroomMapDTO.setClassroom(classroomEntity);
+                classroomMapDTOs.add(classroomMapDTO);
+            }
+        }
+        return classroomMapDTOs;
     }
 
     public Boolean createClassroom(int roomTypeId, String roomName) {

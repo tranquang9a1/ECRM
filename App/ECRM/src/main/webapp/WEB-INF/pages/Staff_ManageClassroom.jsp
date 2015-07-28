@@ -35,34 +35,38 @@
             <c:forEach items="${classrooms}" var="cl">
                 <div class="row">
                     <div class="room-number">
-                        <div>${cl.name}</div>
+                        <div>${cl.classroom.name}</div>
                     </div>
                     <div class="room-type">
-                        <div>${cl.tblRoomTypeByRoomTypeId.name}</div>
+                        <div>${cl.roomType.name}</div>
                     </div>
                     <div class="statusS">
-                        <c:if test="${ not cl.isAllInformation}">
+                        <c:if test="${ not cl.classroom.isAllInformation}">
 
                             <a href="/staff/EquipmentInformation?ClassroomId=${cl.id}">Cập nhật thiết bị!</a>
 
                         </c:if>
-                        <c:if test="${cl.damagedLevel > 0}">
-                            <div>Độ hư hại: ${cl.damagedLevel}</div>
+                        <c:if test="${cl.classroom.damagedLevel > 0}">
+                            <div>Độ hư hại: ${cl.classroom.damagedLevel}</div>
                         </c:if>
-                        <c:if test="${cl.damagedLevel == 0}">
+                        <c:if test="${cl.classroom.damagedLevel == 0}">
                             <div>Bình thường</div>
                         </c:if>
                     </div>
                     <div class="control">
                         <div class="group-button">
                             <div class="btn btn-view" title="Xem sơ đồ"
-                                 onclick="document.getElementById('ClassroomAction').value='update';document.getElementById('loaiphong').innerHTML = '${cl.tblRoomTypeByRoomTypeId.name}' ;showModal(1, 'modal-manageclassroom'); showClassroomMap(${cl.name},${cl.roomTypeId},${cl.tblRoomTypeByRoomTypeId.verticalRows},'${cl.tblRoomTypeByRoomTypeId.horizontalRows}', '${cl.tblRoomTypeByRoomTypeId.numberOfSlotsEachHRows}'
-                                         , ${cl.tblRoomTypeByRoomTypeId.airConditioning}, ${cl.tblRoomTypeByRoomTypeId.fan}, ${cl.tblRoomTypeByRoomTypeId.projector}
-                                         , ${cl.tblRoomTypeByRoomTypeId.speaker}, ${cl.tblRoomTypeByRoomTypeId.television});editClassroom(${cl.roomTypeId})">
+                                 onclick='document.getElementById("ClassroomAction").value="update";
+                                         document.getElementById("loaiphong").innerHTML = "${cl.roomType.name}" ;
+                                         showModal(1, "modal-manageclassroom");
+                                         showClassroomMap(${cl.classroom.name},${cl.classroom.roomTypeId},${cl.roomType.verticalRows},
+                                         "${cl.roomType.horizontalRows}", "${cl.roomType.numberOfSlotsEachHRows}"
+                                         ,${cl.equipment});
+                                         editClassroom(${cl.classroom.roomTypeId})'>
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="btn btn-remove"
-                                 onclick="conformData(2, {message:'Bạn có muốn xóa phòng học ${cl.name}!', btnName:'Xóa',link:'/staff/removeClassroom?classroomName=${cl.name}'})"
+                                 onclick="conformData(2, {message:'Bạn có muốn xóa phòng học ${cl.classroom.name}!', btnName:'Xóa',link:'/staff/removeClassroom?classroomName=${cl.classroom.name}'})"
                                  title="Xóa"><i
                                     class="fa fa-times"></i>
                             </div>
@@ -83,8 +87,7 @@
         document.getElementById('loaiphong').innerHTML = selectedValue.name;
         document.getElementById('roomtype').value = selectedValue.id;
         showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
-                , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
-                selectedValue.television);
+                , selectedValue.equipment);
 
     }
 </script>

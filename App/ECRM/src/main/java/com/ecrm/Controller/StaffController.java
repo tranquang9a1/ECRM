@@ -3,9 +3,12 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.EquipmentDAO;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ScheduleDAO;
+import com.ecrm.DTO.ClassroomMapDTO;
+import com.ecrm.DTO.RoomTypeDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.ClassroomService;
 import com.ecrm.Service.RoomTypeService;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +40,13 @@ public class StaffController {
     CategoryDAOImpl categoryDAO;
 
     @RequestMapping(value = "classroom")
-    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
+    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) throws JSONException {
         HttpSession session  =  request.getSession();
         if(session!=null) {
-            List<TblRoomTypeEntity> tblRoomTypeEntities = roomTypeService.getAllRoomType();
+            List<RoomTypeDTO> tblRoomTypeEntities = roomTypeService.getAllRoomType();
+
             request.setAttribute("ALLROOMTYPE", tblRoomTypeEntities);
-            List<TblClassroomEntity> tblClassroomEntities = classroomService.getAllClassroom();
+            List<ClassroomMapDTO> tblClassroomEntities = classroomService.getAllClassroomMap();
             List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
             Iterator<TblEquipmentCategoryEntity> iterator = tblEquipmentCategoryEntities.iterator();
             while (iterator.hasNext()){
@@ -56,14 +60,14 @@ public class StaffController {
             request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
             request.setAttribute("TABCONTROL", "STAFF_CLASSROOM");
             request.setAttribute("CATEGORY", tblEquipmentCategoryEntities);
-            return "Staff_Classroom";
+            return "Staff_Classroom2";
         }else {
             return "Login";
         }
     }
 
     //create roomtype
-    @RequestMapping(value = "createRoomType", method = RequestMethod.POST)
+    /*@RequestMapping(value = "createRoomType", method = RequestMethod.POST)
     public String createRoomType(HttpServletRequest request, @RequestParam("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
                                  @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NumberOfSlotsEachHRows") String NumberOfSlotsEachHRows,
                                  @RequestParam("AirConditioning") int airConditioning, @RequestParam("Fan") int fan,
@@ -73,6 +77,23 @@ public class StaffController {
         if(session!=null) {
             boolean createRoomType = roomTypeService.createRoomType(roomtypeId, slots, verticalRows, horizontalRows,
                     NumberOfSlotsEachHRows, airConditioning, fan, projectors, speaker, television, bulb, roomtypeName);
+            if(createRoomType){
+                return "redirect:/staff/classroom?ACTIVETAB=tab2";
+            }else {
+                return ERROR;
+            }
+        }else {
+            return "Login";
+        }
+    }*/
+    @RequestMapping(value = "createRoomType", method = RequestMethod.POST)
+    public String createRoomType(HttpServletRequest request, @RequestParam("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
+                                 @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NumberOfSlotsEachHRows") String NumberOfSlotsEachHRows,
+                                 @RequestParam("RoomtypeName") String roomtypeName, @RequestParam("equip") String equip) {
+        HttpSession session  =  request.getSession();
+        if(session!=null) {
+            boolean createRoomType = roomTypeService.createRoomType(roomtypeId, slots, verticalRows, horizontalRows,
+                    NumberOfSlotsEachHRows, roomtypeName, equip);
             if(createRoomType){
                 return "redirect:/staff/classroom?ACTIVETAB=tab2";
             }else {

@@ -40,21 +40,21 @@
             <c:forEach items="${roomtypes}" var="r">
                 <div class="row">
                     <div class="room-number">
-                        <div>${r.name}</div>
+                        <div>${r.roomType.name}</div>
                     </div>
                     <div class="room-type">
-                        <div>${r.slots}</div>
+                        <div>${r.roomType.slots}</div>
                     </div>
                     <div class="control">
                         <div class="group-button">
                             <div class="btn btn-view" title="Xem sơ đồ"
-                                 onclick="showModal(1, 'modal-manageroomtype'); showMapForEdit(${r.id},'${r.name}', ${r.verticalRows},'${r.horizontalRows}', '${r.numberOfSlotsEachHRows}'
-                                         , ${r.airConditioning}, ${r.fan}, ${r.projector}
-                                         , ${r.speaker}, ${r.television})">
+                                 onclick='showModal(1, "modal-manageroomtype"); showMapForEdit(${r.roomType.id},"${r.roomType.name}",
+                                  ${r.roomType.verticalRows},"${r.roomType.horizontalRows}", "${r.roomType.numberOfSlotsEachHRows}"
+                                         ,${r.equipment})'>
                                 <i class="fa fa-eye"></i>
                             </div>
-                            <div class="btn btn-remove" onclick="conformData(2, {message:'Bạn có muốn xóa loại phòng ${r.name}!',
-                                    btnName:'Xóa',link:'/staff/removeRoomType?RoomtypeId=${r.id}'})" title="Xóa"><i
+                            <div class="btn btn-remove" onclick="conformData(2, {message:'Bạn có muốn xóa loại phòng ${r.roomType.name}!',
+                                    btnName:'Xóa',link:'/staff/removeRoomType?RoomtypeId=${r.roomType.id}'})" title="Xóa"><i
                                     class="fa fa-times"></i>
                             </div>
 

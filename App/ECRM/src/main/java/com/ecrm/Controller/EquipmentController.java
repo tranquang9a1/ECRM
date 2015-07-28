@@ -68,12 +68,18 @@ public class EquipmentController {
     }
 
     @RequestMapping("/removeEquipment")
-    public String removeEquipment(HttpServletRequest request, @RequestParam("equipmentId")int equipmentId){
+    public String removeEquipment(HttpServletRequest request, @RequestParam("equipmentId")int equipmentId, @RequestParam("remove") boolean isRemove){
         HttpSession session  =  request.getSession();
         if(session!=null) {
-            TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
-            tblEquipmentEntity.setClassroomId(null);
-            equipmentDAO.merge(tblEquipmentEntity);
+            if(isRemove) {
+                TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
+                equipmentDAO.remove(tblEquipmentEntity);
+            } else {
+                TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
+                tblEquipmentEntity.setClassroomId(null);
+                equipmentDAO.merge(tblEquipmentEntity);
+            }
+
             return "redirect:/staff/equipment";
         }else {
             return "Login";

@@ -155,12 +155,23 @@
                                                                             </div>
                                                                         </c:when>
                                                                     </c:choose>
-                                                                    <div class="btn btn-remove"
-                                                                         onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
-                                                                                 btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}'})"
-                                                                         title="Xóa"><i
-                                                                            class="fa fa-times"></i>
-                                                                    </div>
+                                                                    <c:choose>
+                                                                        <c:when test="${e.classroomId != null}">
+                                                                            <div class="btn btn-remove"
+                                                                                 onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
+                                                                                         btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}'})"
+                                                                                 title="Xóa"><i
+                                                                                    class="fa fa-times"></i>
+                                                                            </div>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <div class="btn btn-remove"
+                                                                                 onclick="conformData(2,{message:'Bạn có muốn xóa thiết bị ${e.name} (serial: ${e.serialNumber})?', btnName:'Xóa', link:'/staff/removeEquipment?equipmentId=${e.id}&remove=true'})"
+                                                                                 title="Xóa"><i
+                                                                                    class="fa fa-times"></i>
+                                                                            </div>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
                                                                 </div>
                                                             </div>
                                                             <p class="clear"></p>

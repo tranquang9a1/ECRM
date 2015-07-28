@@ -383,12 +383,16 @@ body {
 }
 
 .loading-page{
-    position: relative;
+/*    position: relative;*/
     background-color: #fff;
 
     transition: opacity 0.2s ease;
     -moz-transition: opacity 0.2s ease;
     -webkit-transition: opacity 0.2s ease;
+}
+
+.layout-background .loading-page{
+    padding: 15px 15px 0;
 }
 
 .loading-page img{
@@ -402,7 +406,7 @@ body {
 
 .loading-page div{
     position: absolute;
-    bottom: 15px;
+    bottom: 30px;
     width: 100%;
     color: #999;
     font-weight: bold;
@@ -589,6 +593,10 @@ body {
 
 .equipment-img.table-icon, .equip.table-icon{
     background-image: url("/resource/img/equipment/Household-Table-icon.png");
+}
+
+.equipment-img.bulb, .equip.bulb{
+    background-image: url("/resource/img/equipment/light-bulb-7-icon-270x250.png");
 }
 
 .check-damaged{

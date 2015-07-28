@@ -26,10 +26,6 @@ function showReportDetail(roomId){
     }
 }
 
-function resetURL() {
-    window.history.pushState({},"", "/thong-bao");
-}
-
 function sendResolve() {
     var listCate = "";
     var listEquip = "";

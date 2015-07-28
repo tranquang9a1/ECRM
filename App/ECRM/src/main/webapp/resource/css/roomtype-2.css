@@ -143,15 +143,15 @@
     border-radius: 5px;
 }
 .projector{
-
     background-image: url("../img/equipment/projector.png");
-
-
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 .equip{
     background-size: 100%;
     background-repeat: no-repeat;
 }
+
 .tivi{
     background-image: url("../img/equipment/widescreen_tv.png");
     background-size: 100%;
@@ -170,6 +170,11 @@
 }
 .loa{
     background-image: url("../img/equipment/003386-glossy-black-icon-media-music-speaker.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.bong-den{
+    background-image: url("/resource/img/equipment/light-bulb-7-icon-270x250.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }

@@ -203,7 +203,7 @@
 
             </div>
           </div>
-          <div class="loading-page" style="padding: 0; height: 515px">
+          <div class="loading-page">
             <img src="/resource/img/500.GIF">
             <div>Đang tải! Vui lòng chờ trong giây lát!</div>
           </div>

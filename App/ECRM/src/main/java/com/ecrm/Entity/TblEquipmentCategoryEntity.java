@@ -17,10 +17,22 @@ public class TblEquipmentCategoryEntity {
     private Integer usingTime;
     private Boolean isManaged;
     private String imageUrl;
+    private Boolean isDelete;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
 
+
+    @Basic
+    @Column(name = "IsDelete")
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
+    }
     @Id
+    @GeneratedValue
     @Column(name = "Id")
     public int getId() {
         return id;
@@ -114,5 +126,16 @@ public class TblEquipmentCategoryEntity {
 
     public void setTblEquipmentQuantityById(Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById) {
         this.tblEquipmentQuantityById = tblEquipmentQuantityById;
+    }
+
+    public TblEquipmentCategoryEntity() {
+    }
+
+    public TblEquipmentCategoryEntity(String name, Integer usingTime, Boolean isManaged, String imageUrl, Boolean isDelete) {
+        this.name = name;
+        this.usingTime = usingTime;
+        this.isManaged = isManaged;
+        this.imageUrl = imageUrl;
+        this.isDelete = isDelete;
     }
 }

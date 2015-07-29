@@ -20,6 +20,7 @@ public class TblEquipmentEntity {
     private String name;
     private String serialNumber;
     private boolean status;
+    private Boolean isDelete;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
@@ -103,6 +104,16 @@ public class TblEquipmentEntity {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "IsDelete")
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Override

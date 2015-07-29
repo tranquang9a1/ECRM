@@ -106,7 +106,6 @@ public class StaffController {
 
     //remove roomtype
     @RequestMapping(value = "removeRoomType")
-    @Transactional
     public String removeRoomtype(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId) {
         HttpSession session  =  request.getSession();
         if(session!=null) {

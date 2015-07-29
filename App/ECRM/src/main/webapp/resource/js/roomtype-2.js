@@ -202,7 +202,7 @@ function viewMap() {
 
             var divProjector = document.createElement('div');
             divProjector.className = 'equipment subThietBi equip';
-            divProjector.style.backgroundImage = 'url("../resource/img/equipment/' + value[1] + '")';
+            divProjector.style.backgroundImage = 'url("http://uphinhanh.net/images/2015/07/16/abc.jpg")';
             document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
             if (quantity != null) {
                 document.getElementById("equip").value = document.getElementById("equip").value + quantity.value + "," + priority.value + "," + value[0] + "-";

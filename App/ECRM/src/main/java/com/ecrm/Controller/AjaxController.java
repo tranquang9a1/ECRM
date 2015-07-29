@@ -37,6 +37,8 @@ public class AjaxController {
     RoomTypeDAOImpl roomTypeDAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;
+    @Autowired
+    CategoryDAOImpl categoryDAO;
 
     @RequestMapping(value = "findClassroom")
     public
@@ -300,6 +302,35 @@ public class AjaxController {
             }
 
         }
+        return validateEntity;
+    }
+
+    @RequestMapping(value = "checkCategory")
+    public
+    @ResponseBody
+    ValidateEntity checkCategory(HttpServletRequest request) {
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+
+        String name = request.getParameter("name");
+        if (name == null || name.trim().length() == 0) {
+            alert = "Tên loại thiết bị không được bỏ trống!";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
+        }else {
+            List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntity = categoryDAO.getCategoryByName(name.trim());
+            if(!tblEquipmentCategoryEntity.isEmpty()){
+                alert = "Tên loại thiết bị đã tồn tại!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+        }
+
         return validateEntity;
     }
 }

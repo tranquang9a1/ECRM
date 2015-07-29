@@ -92,6 +92,7 @@ public class ClassroomService {
     public Boolean createClassroom(int roomTypeId, String roomName) {
         try {
             Date date = new Date();
+            roomName = roomName.trim();
             if (roomName != null) {
                 TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
                 if (classroom != null) {

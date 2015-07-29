@@ -212,4 +212,17 @@ public class TblClassroomEntity {
         this.isAllInformation = isAllInformation;
         this.damagedLevel = damagedLevel;
     }
+
+    public TblClassroomEntity(int id, Integer roomTypeId, String name, Timestamp createTime, Timestamp updateTime,
+                              Boolean isDelete, Boolean isAllInformation, Integer damagedLevel, Integer roomTypeId2) {
+        this.id = id;
+        this.roomTypeId = roomTypeId;
+        this.name = name;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.isDelete = isDelete;
+        this.isAllInformation = isAllInformation;
+        this.damagedLevel = damagedLevel;
+        this.roomTypeId2 = roomTypeId2;
+    }
 }

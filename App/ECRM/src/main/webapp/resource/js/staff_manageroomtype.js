@@ -179,7 +179,7 @@ function generateMap2(classroommap, horizontalRows, noSlotsEachRows, mapId, vrow
     for(var i = 0; i< r.length; i++){
         var divProjector = document.createElement('div');
         divProjector.className = 'equipment subThietBi equip';
-        divProjector.style.backgroundImage = 'url("' + r[i].imageUrl + '")';
+        divProjector.style.backgroundImage = 'url("../resource/img/equipment/' + r[i].imageUrl + '")';
         divProjector.setAttribute('data-equipment',r[i].name);
         divProjector.setAttribute('data-position','['+ r[i].id+']');
         divT.appendChild(divProjector);

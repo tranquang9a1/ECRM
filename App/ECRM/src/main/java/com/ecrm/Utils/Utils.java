@@ -10,6 +10,9 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -263,5 +266,23 @@ public class Utils {
         return format.format(date);
     }
 
+    public static final String LAST_RUN_TXT = "LastRun.txt";
+    public static boolean checkCronJob(){
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(Constant.FILE_PATH+LAST_RUN_TXT));
+            String sCurrentLine="";
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                System.out.println(sCurrentLine);
+            }
+            if(new Date().getTime()<Long.parseLong(sCurrentLine)){
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }
 

@@ -143,7 +143,8 @@ public class APIService {
                     if(!tblEquipmentCategoryEntity.getIsManaged()){
                         serialNumber = "";
                     }
-                    if (!tblEquipmentCategoryEntity.getName().equals("Bàn") || !tblEquipmentCategoryEntity.getName().equals("Ghế")) {
+
+                    if (!categoryNames[j].equalsIgnoreCase("Bàn") || !categoryNames[j].equalsIgnoreCase("Ghế")) {
                         TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId,
                                 category, positon, serialNumber);
                         if (tblEquipmentEntity == null) {

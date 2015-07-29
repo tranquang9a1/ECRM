@@ -14,5 +14,6 @@ public class Constant {
     public static int TABLE= 7;
     public static int CHAIR=8;
     public static String DEFAULT_PASSWORD="123456";
+    public static String FILE_PATH="cron/";
 
 }

@@ -7,6 +7,7 @@ import com.ecrm.Entity.*;
 import com.ecrm.Service.ChangeRoomService;
 import com.ecrm.Service.GCMService;
 import com.ecrm.Service.ReportService;
+import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
@@ -20,11 +21,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.Principal;
 import java.sql.Time;
 import java.util.*;
 
@@ -34,6 +40,7 @@ import java.util.*;
 @EnableScheduling
 @EnableAsync
 public class CheckDamagedClassroomSchedule {
+    public static final String LAST_RUN_TXT = "LastRun.txt";
     @Autowired
     ClassroomDAOImpl classroomDAO;
     @Autowired
@@ -53,15 +60,15 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-    /*@Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000)
      public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
-        GCMController gcmController = new GCMController();
         int hour = localTime.getHourOfDay();
         if (localDate.getDayOfWeek() != 7) {
+
             if ((hour == 6 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0)
-                    || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0)) {
+                    || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0)&& Utils.checkCronJob()) {
                 System.out.println("Task 1: Task check change room run!!! Current time is : " + new Date());
                 //tim nhung phong bi hu hai ma chua sua
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -100,7 +107,7 @@ public class CheckDamagedClassroomSchedule {
                 System.out.println("");
 
             }
-            if (hour == 7 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0) {
+            if (hour == 7 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0 && Utils.checkCronJob()) {
                 System.out.println("Task 1: Task check time using run!!! Current time is: " + new Date());
                 List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
                 for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
@@ -129,6 +136,21 @@ public class CheckDamagedClassroomSchedule {
                 System.out.println("Task 1: Kết thúc cronjob check equipment vào lúc:" + new Date());
                 System.out.println("");
             }
+            if (hour == 0 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0) {
+                try{
+                    System.out.println("Daily cronjob!");
+                    String date = Long.toString(new Date().getTime());
+                    File file = new File(Constant.FILE_PATH+LAST_RUN_TXT);
+
+                    FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.write(date);
+                    bw.close();
+                    System.out.println("Done");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -138,7 +160,7 @@ public class CheckDamagedClassroomSchedule {
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
             if ((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) {
+                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00")) && Utils.checkCronJob()) {
                 LocalTime noon = new LocalTime("12:00:00");
                 System.out.println("Task 2: Start cronjob changeroom lúc: " + new Date());
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -189,7 +211,7 @@ public class CheckDamagedClassroomSchedule {
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
             if ((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) {
+                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00")) && Utils.checkCronJob()) {
                 System.out.println("Task 3: Run cronjob offline at:" + new Date());
                 URL url = new URL("http://128.199.208.93/offline/getBody");
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -217,5 +239,7 @@ public class CheckDamagedClassroomSchedule {
             }
         }
 
-    }*/
+    }
+
+
 }

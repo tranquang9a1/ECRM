@@ -157,7 +157,7 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, e) {
         } else {
             divProjector.className = 'equipment subThietBi equip';
         }
-        divProjector.style.backgroundImage = 'url("' + e[i].imageUrl + '")';
+        divProjector.style.backgroundImage = 'url("../resource/img/equipment/' + e[i].imageUrl + '")';
         divProjector.setAttribute('data-equipment',e[i].name);
         divProjector.setAttribute('data-position','['+ e[i].id+']');
         divProjector.setAttribute("data-categoryId", e[i].id);

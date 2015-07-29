@@ -152,27 +152,27 @@
 }
 
 .equipment-img.air-condition, .equip.air-condition{
-    background-image: url("/resource/img/equipment/air-512.png");
+    background-image: url("/resource/img/equipment/air512.png");
 }
 
 .equipment-img.speaker, .equip.speaker{
-    background-image: url("/resource/img/equipment/003386-glossy-black-icon-media-music-speaker.png");
+    background-image: url("/resource/img/equipment/003386glossyblackiconmediamusicspeaker.png");
 }
 
 .equipment-img.tivi, .equip.tivi{
-    background-image: url("/resource/img/equipment/widescreen_tv.png");
+    background-image: url("/resource/img/equipment/widescreentv.png");
 }
 
 .equipment-img.fan, .equip.fan{
-    background-image: url("/resource/img/equipment/fan-512.png");
+    background-image: url("/resource/img/equipment/fan512.png");
 }
 
 .equipment-img.chair, .equip.chair{
-    background-image: url("/resource/img/equipment/chair_office-512.png");
+    background-image: url("/resource/img/equipment/chairoffice512.png");
 }
 
 .equipment-img.table-icon, .equip.table-icon{
-    background-image: url("/resource/img/equipment/Household-Table-icon.png");
+    background-image: url("/resource/img/equipment/HouseholdTableicon.png");
 }
 
 .check-damaged{

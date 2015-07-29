@@ -29,7 +29,7 @@
     width: 30px;
     height: 30px;
     float: left;
-    background-image: url("../img/equipment/chair_office-512.png");
+    background-image: url("../img/equipment/chairoffice512.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -153,23 +153,23 @@
 }
 
 .tivi{
-    background-image: url("../img/equipment/widescreen_tv.png");
+    background-image: url("../img/equipment/widescreentv.png");
     background-size: 100%;
     background-repeat: no-repeat;
 
 }
 .mayLanh{
-    background-image: url("../img/equipment/air-512.png");
+    background-image: url("../img/equipment/air512.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
 .quat{
-    background-image: url("../img/equipment/fan-512.png");
+    background-image: url("../img/equipment/fan512.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
 .loa{
-    background-image: url("../img/equipment/003386-glossy-black-icon-media-music-speaker.png");
+    background-image: url("../img/equipment/003386glossyblackiconmediamusicspeaker.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }

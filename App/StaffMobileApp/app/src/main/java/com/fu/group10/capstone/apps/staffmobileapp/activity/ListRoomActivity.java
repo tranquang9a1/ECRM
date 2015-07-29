@@ -1,5 +1,6 @@
 package com.fu.group10.capstone.apps.staffmobileapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.fu.group10.capstone.apps.staffmobileapp.R;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.DialogUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.adapter.NavDrawerListAdapter;
 import com.fu.group10.capstone.apps.staffmobileapp.fragment.*;
 import com.fu.group10.capstone.apps.staffmobileapp.model.NavDrawerItem;
@@ -135,9 +137,23 @@ public class ListRoomActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 4) {
-                    logoutDialog = new LogoutDialog();
-                    logoutDialog.setParams(ListRoomActivity.this);
-                    logoutDialog.show(getFragmentManager(), "Logout");
+                    DialogUtils.showAlert(ListRoomActivity.this,
+                            "Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập",
+                            new DialogUtils.IOnOkClicked() {
+                                @Override
+                                public void onClick() {
+                                    SharedPreferences sp = getSharedPreferences("LoginState", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.clear();
+                                    editor.commit();
+                                    startMain();
+                                }
+                            }, new DialogUtils.IOnCancelClicked() {
+                                @Override
+                                public void onClick() {
+
+                                }
+                            });
                 } else {
                     displayView(i);
                 }
@@ -152,6 +168,11 @@ public class ListRoomActivity extends ActionBarActivity {
 
     }
 
+    public void startMain() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
     @Override

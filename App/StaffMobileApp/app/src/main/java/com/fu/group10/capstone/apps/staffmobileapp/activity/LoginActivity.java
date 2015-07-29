@@ -61,31 +61,36 @@ public class LoginActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        context = getApplicationContext();
-        usernameTextView = (EditText) findViewById(R.id.username);
+        SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
+        boolean stateLogin = sp.getBoolean("LoginState", false);
+        String username = sp.getString("username", null);
+        if (stateLogin) {
+            openMainActivity();
+        } else {
+            context = getApplicationContext();
+            usernameTextView = (EditText) findViewById(R.id.username);
 
-        passwordTextView = (EditText) findViewById(R.id.password);
-        passwordTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_NULL) {
-                   initLogin();
-                    return true;
+            passwordTextView = (EditText) findViewById(R.id.password);
+            passwordTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == EditorInfo.IME_NULL) {
+                        initLogin();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
-        Button loginButton = (Button) findViewById(R.id.sign_in_button);
-        loginButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            Button loginButton = (Button) findViewById(R.id.sign_in_button);
+            loginButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                initLogin();
-            }
-        });
-
-
+                    initLogin();
+                }
+            });
+        }
 
     }
 
@@ -133,6 +138,7 @@ public class LoginActivity extends Activity{
                         SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putBoolean("LoginState", true);
+                        editor.putString("username", user.getUsername());
                         editor.commit();
                         if (user.getRole().equalsIgnoreCase("Staff") && user.getLastLogin() == null ) {
                             firstLogin(user.getPassword());

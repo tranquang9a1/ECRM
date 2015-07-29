@@ -135,7 +135,7 @@ CREATE TABLE `tblequipmentcategory` (
 
 LOCK TABLES `tblequipmentcategory` WRITE;
 /*!40000 ALTER TABLE `tblequipmentcategory` DISABLE KEYS */;
-INSERT INTO `tblequipmentcategory` VALUES (1,'Máy chiếu',3000,1,'projector.png'),(2,'Tivi',0,1,'widescreen_tv.png'),(3,'Máy lạnh',6000,1,'air-512.png'),(4,'Máy quạt',0,0,'fan-512.png'),(5,'Loa',0,0,'003386-glossy-black-icon-media-music-speaker.png'),(6,'Bóng đèn',0,0,NULL),(7,'Bàn',0,0,NULL),(8,'Ghế',0,0,NULL);
+INSERT INTO `tblequipmentcategory` VALUES (1,'Máy chiếu',3000,1,'projector.png'),(2,'Tivi',0,1,'widescreentv.png'),(3,'Máy lạnh',6000,1,'air512.png'),(4,'Máy quạt',0,0,'fan512.png'),(5,'Loa',0,0,'003386glossyblackiconmediamusicspeaker.png'),(6,'Bóng đèn',0,0,'lightbulb7icon270x250.png'),(7,'Bàn',0,0,'HouseholdTableicon.png'),(8,'Ghế',0,0,'chairoffice512.png');
 /*!40000 ALTER TABLE `tblequipmentcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,4 +542,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-08-01  1:47:35
+-- Dump completed on 2015-07-29  6:18:19

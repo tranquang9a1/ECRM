@@ -67,8 +67,8 @@ public class CheckDamagedClassroomSchedule {
         int hour = localTime.getHourOfDay();
         if (localDate.getDayOfWeek() != 7) {
 
-            if ((hour == 6 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0)
-                    || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0)&& Utils.checkCronJob()) {
+            if (Utils.checkCronJob()&&((hour == 6 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0)
+                    || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0))){
                 System.out.println("Task 1: Task check change room run!!! Current time is : " + new Date());
                 //tim nhung phong bi hu hai ma chua sua
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -159,8 +159,8 @@ public class CheckDamagedClassroomSchedule {
         LocalDate localDate = new LocalDate();
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
-            if ((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00")) && Utils.checkCronJob()) {
+            if (((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
+                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) && Utils.checkCronJob()) {
                 LocalTime noon = new LocalTime("12:00:00");
                 System.out.println("Task 2: Start cronjob changeroom lúc: " + new Date());
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -210,8 +210,8 @@ public class CheckDamagedClassroomSchedule {
         LocalDate localDate = new LocalDate();
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
-            if ((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00")) && Utils.checkCronJob()) {
+            if (((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
+                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) && Utils.checkCronJob()) {
                 System.out.println("Task 3: Run cronjob offline at:" + new Date());
                 URL url = new URL("http://128.199.208.93/offline/getBody");
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));

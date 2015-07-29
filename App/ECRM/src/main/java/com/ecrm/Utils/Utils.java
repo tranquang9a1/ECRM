@@ -274,11 +274,11 @@ public class Utils {
             String sCurrentLine="";
 
             while ((sCurrentLine = br.readLine()) != null) {
-                System.out.println(sCurrentLine);
+                if(new Date().getTime()<Long.parseLong(sCurrentLine)){
+                    return false;
+                }
             }
-            if(new Date().getTime()<Long.parseLong(sCurrentLine)){
-                return false;
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
+import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
@@ -17,6 +20,12 @@ import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.User;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +37,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_NAME = "ECRM_DATA";
 
@@ -96,9 +105,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String RD_STATUS = "status";
     private static final String RD_IS_SYNC = "isSync";
 
-//    private static final String EC_ID = "id";
-//    private static final String EC_NAME = "name";
-//    private static final String EC_USING_TIME = "usingTime";
+    private static final String EC_NAME = "name";
+    private static final String EC_IMAGE = "images";
 
     private static final String EQUIPMENT_ID = "equipmentId";
     private static final String EQUIPMENT_CATEGORY_ID = "categoryId";
@@ -118,8 +126,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + SCHEDULE_CLASSNAME + " TEXT," + SCHEDULE_TIMEFROM + " TEXT," + SCHEDULE_TIMETO + " TEXT," + SCHEDULE_DATE
             + " TEXT, " + SCHEDULE_IS_ACTIVE + " INTEGER" + ")";
 
-//    private static final String CREATE_TABLE_EC = "CREATE TABLE " + TABLE_EQUIPMENT_CATEGORY + "(" + EC_ID +
-//            " INTEGER PRIMARY KEY," + EC_NAME + " TEXT," + EC_USING_TIME + " INTEGER" + ")";
+    private static final String CREATE_TABLE_EQUIPMENT_CATEGORY = "CREATE TABLE " +
+            TABLE_EQUIPMENT_CATEGORY + "("  + EC_NAME + " TEXT," + EC_IMAGE + " TEXT" + ")";
 
     private static final String CREATE_TABLE_EQUIPMENT_CLASSROOM = "CREATE TABLE " + TABLE_EQUIPMENT_CLASSROOM + "("
             + EC_CLASSID + " INTEGER," + EC_EQUIPMENT_NAME + " TEXT," + EC_POSITION + " TEXT," + EC_COMPANY + " TEXT,"
@@ -163,6 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_CLASSROOM);
         sqLiteDatabase.execSQL(CREATE_TABLE_EQUIPMENT_CLASSROOM);
         sqLiteDatabase.execSQL(CREATE_TABLE_SCHEDULE);
+        sqLiteDatabase.execSQL(CREATE_TABLE_EQUIPMENT_CATEGORY);
 
     }
 
@@ -175,6 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASSROOM);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CLASSROOM);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHEDULE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CATEGORY);
 
         onCreate(sqLiteDatabase);
     }
@@ -490,6 +500,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_USER, null, null);
     }
 
+    public void deleteEquipment() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_EQUIPMENT_CATEGORY, null, null);
+    }
+
     public void insertClassroom(ClassroomDAO dao) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -514,5 +529,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return c.getInt(c.getColumnIndex(CLASSROOM_DAMAGE_LEVEL));
     }
+
+    public void insertEquipment(String name, String imageUrl) {
+        SQLiteDatabase db               =   this.getWritableDatabase();
+        byte[] image = getLogoImage(imageUrl);
+        String sql                      =   "INSERT INTO " + TABLE_EQUIPMENT_CATEGORY +" (name,images) VALUES(?,?)";
+        SQLiteStatement insertStmt      =   db.compileStatement(sql);
+        insertStmt.clearBindings();
+        insertStmt.bindString(1,name);
+        insertStmt.bindBlob(2,image);
+        insertStmt.executeInsert();
+        db.close();
+    }
+
+    private byte[] getLogoImage(String url){
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+
+            InputStream is = ucon.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+
+            ByteArrayBuffer baf = new ByteArrayBuffer(500);
+            int current = 0;
+            while ((current = bis.read()) != -1) {
+                baf.append((byte) current);
+            }
+
+            return baf.toByteArray();
+        } catch (Exception e) {
+            Log.d("ImageManager", "Error: " + e.toString());
+        }
+        return null;
+    }
+
+    public EquipmentDAO getEquipments() {
+        EquipmentDAO dao = new EquipmentDAO();
+
+        SQLiteDatabase db       =   this.getWritableDatabase();
+        String sql              =   "SELECT * FROM " + TABLE_EQUIPMENT_CATEGORY;
+        Cursor cursor           =   db.rawQuery(sql, new String[] {});
+
+        if(cursor.moveToFirst()){
+            dao.setName(cursor.getString(1));
+            dao.setImages(cursor.getBlob(2));
+        }
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        db.close();
+        if(cursor.getCount() == 0){
+            return null;
+        } else {
+            return dao;
+        }
+    }
+
 
 }

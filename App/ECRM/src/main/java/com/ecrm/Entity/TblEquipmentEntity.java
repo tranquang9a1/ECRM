@@ -21,6 +21,7 @@ public class TblEquipmentEntity {
     private String serialNumber;
     private boolean status;
     private Boolean isDelete;
+    private Double usingTime;
     private TblClassroomEntity tblClassroomByClassroomId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryByCategoryId;
     private Collection<TblReportDetailEntity> tblReportDetailsById;
@@ -116,6 +117,17 @@ public class TblEquipmentEntity {
         this.isDelete = isDelete;
     }
 
+
+    @Basic
+    @Column(name = "UsingTIme")
+    public Double getUsingTime() {
+        return usingTime;
+    }
+
+    public void setUsingTime(Double usingTime) {
+        this.usingTime = usingTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -189,5 +201,18 @@ public class TblEquipmentEntity {
         this.position = position;
         this.timeRemain = timeRemain;
         this.status = status;
+    }
+
+    public TblEquipmentEntity(int categoryId, Integer classroomId, String position, Double timeRemain, String name,
+                              String serialNumber, boolean status, Boolean isDelete, Double usingTime) {
+        this.categoryId = categoryId;
+        this.classroomId = classroomId;
+        this.position = position;
+        this.timeRemain = timeRemain;
+        this.name = name;
+        this.serialNumber = serialNumber;
+        this.status = status;
+        this.isDelete = isDelete;
+        this.usingTime = usingTime;
     }
 }

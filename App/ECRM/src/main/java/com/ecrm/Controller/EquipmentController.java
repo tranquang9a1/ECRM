@@ -1,9 +1,13 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.CategoryDAOImpl;
+import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.EquipmentDAOImpl;
+import com.ecrm.DAO.Impl.EquipmentQuantityDAOImpl;
+import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblEquipmentCategoryEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
+import com.ecrm.Entity.TblEquipmentQuantityEntity;
 import com.ecrm.Utils.Constant;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -18,10 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Htang on 6/14/2015.
@@ -33,9 +34,13 @@ public class EquipmentController {
     EquipmentDAOImpl equipmentDAO;
     @Autowired
     CategoryDAOImpl categoryDAO;
+    @Autowired
+    EquipmentQuantityDAOImpl equipmentQuantityDAO;
+    @Autowired
+    ClassroomDAOImpl classroomDAO;
 
     @RequestMapping("/equipment")
-    public String equipment(HttpServletRequest request) {
+    public String equipment(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
         HttpSession session = request.getSession();
         if (session != null) {
             List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.findAll();
@@ -57,28 +62,63 @@ public class EquipmentController {
             while (iterator.hasNext()) {
                 TblEquipmentCategoryEntity tblEquipmentCategoryEntity = iterator.next();
                 String categoryName = tblEquipmentCategoryEntity.getName();
-                if (!tblEquipmentCategoryEntity.getIsManaged() && (categoryName.equalsIgnoreCase("Bàn") || categoryName.equalsIgnoreCase("Ghế"))) {
+                if (categoryName.equalsIgnoreCase("Bàn") || categoryName.equalsIgnoreCase("Ghế")) {
                     iterator.remove();
                 }
             }
+
+            List<TblEquipmentCategoryEntity> mEquipmentCategoryEntities = tblEquipmentCategoryEntities;
+            Iterator<TblEquipmentCategoryEntity> iterator2 = mEquipmentCategoryEntities.iterator();
+            while (iterator2.hasNext()) {
+                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = iterator2.next();
+                String categoryName = tblEquipmentCategoryEntity.getName();
+                if (!tblEquipmentCategoryEntity.getIsManaged() || categoryName.equals("Empty")) {
+                    iterator2.remove();
+                }
+            }
+            request.setAttribute("CATEGORIES", tblEquipmentCategoryEntities);
+            request.setAttribute("MANAGEDCATEGORIES", mEquipmentCategoryEntities);
             request.setAttribute("EQUIPMENTS", tblEquipmentEntities);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_EQUIP");
             request.setAttribute("TABCONTROL", "STAFF_EQUIP");
-            request.setAttribute("CATEGORIES", tblEquipmentCategoryEntities);
+            request.setAttribute("ACTIVETAB", activeTab);
+
             return "Staff_Equipment";
         } else {
             return "Login";
         }
     }
 
-    @RequestMapping("/createEquipment")
-    public String createEquipment(HttpServletRequest request, @RequestParam("categoryId") int categoryId
-            , @RequestParam("name") String name, @RequestParam("serialNumber") String serialNumber) {
+    @RequestMapping(value = "/createEquipment", method = RequestMethod.POST)
+    public String createEquipment(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
-            TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, name, serialNumber, null, null, true);
-            equipmentDAO.persist(tblEquipmentEntity);
-            return "redirect:/staff/equipment";
+            String serialNumber = request.getParameter("serialNumber");
+            String action = request.getParameter("Action");
+            int equipmentId = Integer.parseInt(request.getParameter("equipmentId"));
+            double usingTime = Double.parseDouble(request.getParameter("usingTime"));
+            int classroomId = Integer.parseInt(request.getParameter("classroomId"));
+            String name = request.getParameter("name");
+            if(action.equals("insert")){
+                int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+                TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, "["+categoryId+"]", 0.0 ,name,
+                        serialNumber, true, false, usingTime);
+                equipmentDAO.persist(tblEquipmentEntity);
+            }else {
+                int category = Integer.parseInt(request.getParameter("category"));
+                TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
+                tblEquipmentEntity.setCategoryId(category);
+                tblEquipmentEntity.setClassroomId(classroomId);
+                tblEquipmentEntity.setPosition("[" + category + "]");
+                tblEquipmentEntity.setTimeRemain(0.0);
+                tblEquipmentEntity.setName(name);
+                tblEquipmentEntity.setSerialNumber(serialNumber);
+                tblEquipmentEntity.setStatus(true);
+                tblEquipmentEntity.setIsDelete(false);
+                tblEquipmentEntity.setUsingTime(usingTime);
+                equipmentDAO.merge(tblEquipmentEntity);
+            }
+            return "redirect:/staff/equipment?ACTIVETAB=tab1";
         } else {
             return "Login";
         }
@@ -90,14 +130,17 @@ public class EquipmentController {
         if (session != null) {
             if (isRemove) {
                 TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
-                equipmentDAO.remove(tblEquipmentEntity);
+                tblEquipmentEntity.setIsDelete(true);
             } else {
                 TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
                 tblEquipmentEntity.setClassroomId(null);
                 equipmentDAO.merge(tblEquipmentEntity);
+                TblClassroomEntity classroomEntity = tblEquipmentEntity.getTblClassroomByClassroomId();
+                classroomEntity.setIsAllInformation(false);
+                classroomDAO.merge(classroomEntity);
             }
 
-            return "redirect:/staff/equipment";
+            return "redirect:/staff/equipment?ACTIVETAB=tab1";
         } else {
             return "Login";
         }
@@ -137,7 +180,7 @@ public class EquipmentController {
                             fileName = fi.getName();
                             fileName = fileName.replace("-", "");
                             ServletContext servletContext = request.getSession().getServletContext();
-                            filePath = servletContext.getRealPath("/resource/img/equipment");
+                            filePath = servletContext.getRealPath("/resource/img/equipment/");
                             String saveFile = filePath + "/" + fileName;
                             // Write the file
                             file = new File(saveFile);
@@ -157,9 +200,9 @@ public class EquipmentController {
                 if (isManaged.equals("1")) {
                     managed = true;
                 }
-                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = new TblEquipmentCategoryEntity(name, 0,managed,fileName,false);
+                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = new TblEquipmentCategoryEntity(name, 0, managed, fileName, false);
                 categoryDAO.persist(tblEquipmentCategoryEntity);
-                return "redirect:/staff/equipment";
+                return "redirect:/staff/equipment?ACTIVETAB=tab1";
             } catch (Exception ex) {
                 System.out.println(ex);
                 return "Error";
@@ -168,6 +211,34 @@ public class EquipmentController {
             return "Login";
         }
 
+    }
+
+    @RequestMapping(value = "removeCategory")
+    public String removeCategory(HttpServletRequest request, @RequestParam("categoryId") int categoryId) {
+        HttpSession session = request.getSession();
+        if (session != null) {
+            try {
+                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = categoryDAO.find(categoryId);
+                tblEquipmentCategoryEntity.setIsDelete(true);
+                categoryDAO.merge(tblEquipmentCategoryEntity);
+                Collection<TblEquipmentEntity> tblEquipmentEntities = tblEquipmentCategoryEntity.getTblEquipmentsById();
+                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                    tblEquipmentEntity.setCategoryId(12);
+                    equipmentDAO.merge(tblEquipmentEntity);
+                }
+                Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblEquipmentCategoryEntity.getTblEquipmentQuantityById();
+                for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
+                    tblEquipmentQuantityEntity.setEquipmentCategoryId(12);
+                    equipmentQuantityDAO.merge(tblEquipmentQuantityEntity);
+                }
+                return "redirect:/staff/equipment?ACTIVETAB=tab1";
+            } catch (Exception ex) {
+                System.out.println(ex);
+                return "Error";
+            }
+        } else {
+            return "Login";
+        }
     }
 
 }

@@ -32,7 +32,7 @@
             </a>
         </li>
         <li id="STAFF_EQUIP">
-            <a href="/staff/equipment">
+            <a href="/staff/equipment?ACTIVETAB=tab1">
                 <p>Thiết Bị</p>
             </a>
         </li>

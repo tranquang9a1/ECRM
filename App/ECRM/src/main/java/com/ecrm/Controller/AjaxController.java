@@ -279,6 +279,7 @@ public class AjaxController {
         validateEntity.setAlert(alert);
         validateEntity.setStatus(status);
 
+        String action = request.getParameter("action");
         String name = request.getParameter("name");
         if (name == null || name.trim().length() == 0) {
             alert = "Tên thiết bị không được bỏ trống!";
@@ -293,15 +294,33 @@ public class AjaxController {
             validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
         } else {
-            List<TblEquipmentEntity> equipmentEntities = equipmentDAO.getEquipmentBySN(serialNumber);
-            if (!equipmentEntities.isEmpty()) {
-                alert = "Số serial đã tồn tại!";
+            if (action.equals("insert")) {
+                List<TblEquipmentEntity> equipmentEntities = equipmentDAO.getEquipmentBySN(serialNumber);
+                if (!equipmentEntities.isEmpty()) {
+                    alert = "Số serial đã tồn tại!";
+                    status = false;
+                    validateEntity = new ValidateEntity(alert, status);
+                    return validateEntity;
+                }
+            }
+        }
+        String usingTime =request.getParameter("usingTime");
+        if (usingTime != null) {
+            if (usingTime.equals("")) {
+                alert = "Số lượng không được bỏ trống!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+            if (!Utils.isDouble(usingTime)) {
+                alert = "Số lượng không được là chữ!";
                 status = false;
                 validateEntity = new ValidateEntity(alert, status);
                 return validateEntity;
             }
 
         }
+
         return validateEntity;
     }
 
@@ -321,9 +340,9 @@ public class AjaxController {
             status = false;
             validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
-        }else {
+        } else {
             List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntity = categoryDAO.getCategoryByName(name.trim());
-            if(!tblEquipmentCategoryEntity.isEmpty()){
+            if (!tblEquipmentCategoryEntity.isEmpty()) {
                 alert = "Tên loại thiết bị đã tồn tại!";
                 status = false;
                 validateEntity = new ValidateEntity(alert, status);

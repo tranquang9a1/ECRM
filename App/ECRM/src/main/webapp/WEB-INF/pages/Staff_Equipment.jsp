@@ -36,8 +36,9 @@
             }
         </style>
         <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
-        <c:set var="categories" value="${requestScope.CATEGORIES}"/>
+        <c:set var="mCategories" value="${requestScope.MANAGEDCATEGORIES}"/>
         <c:set var="tab" value="${requestScope.TABCONTROL}"/>
+        <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
         <div class="layout-background" style="height: 0px">
             <div class="container">
                 <div class="header">
@@ -64,143 +65,15 @@
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
                                         <div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
-                                                    onclick="showModal(1, 'modal-1')"/></div>
+                                                    onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
+                                                            document.getElementById('equipment-classroomId').value = '0';
+                                                            document.getElementById('equipment-category-select').disabled = false"/></div>
                                         <div class="search" style="  margin: 0 0 15px;">
                                             <input type="text" placeholder="Nhập thiết bị"/>
                                             <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
                                         </div>
                                         <div class="clear"></div>
-                                        <div class="table" style="width:77%; height: 280px">
-                                            <div class="header-table">
-                                                <div style="width:10%">
-                                                    <div>Loại</div>
-                                                </div>
-                                                <div style="width:12%;">
-                                                    <div>Tên</div>
-                                                </div>
-                                                <div style="width:20%;">
-                                                    <div>Số Serial</div>
-                                                </div>
-                                                <div style="width:100px;">
-                                                    <div>Giờ sử dụng</div>
-                                                </div>
-                                                <div style="width:100px;">
-                                                    <div>Giờ còn lại</div>
-                                                </div>
-                                                <div style="width:50px;">
-                                                    <div>Phòng</div>
-                                                </div>
-                                                <div style="width: 100px">
-                                                    <div></div>
-                                                </div>
-                                                <p class="clear"></p>
-                                            </div>
-                                            <div class="body-table">
-                                                <form action="/staff/removeEqipment" id="removeClassroom">
-                                                    <input type="hidden" value="" id="removeClassroomName"
-                                                           name="classroomName"/>
-                                                    <c:forEach items="${equipments}" var="e">
-                                                        <c:choose>
-                                                            <c:when test="${e.timeRemain <=50}">
-                                                                <div class="row" style="background-color: #cd0a0a">
-                                                                    <div style="width:10%;">
-                                                                        <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
-                                                                    </div>
-                                                                    <div style="width:12%;">
-                                                                        <div>${e.name}</div>
-                                                                    </div>
-                                                                    <div style="width:20%;">
-                                                                        <div>${e.serialNumber}</div>
-                                                                    </div>
-                                                                    <div style="width:100px;">
-                                                                        <div>${e.tblEquipmentCategoryByCategoryId.usingTime}</div>
-                                                                    </div>
-                                                                    <div style="width:100px;">
-                                                                        <div>${e.timeRemain}</div>
-                                                                    </div>
-                                                                    <div style="width:50px;">
-                                                                        <div>${e.tblClassroomByClassroomId.name}</div>
-                                                                    </div>
-                                                                    <div style="width: 100px">
-                                                                        <div class="group-button">
-                                                                            <c:choose>
-                                                                                <c:when test="${e.timeRemain<=50 and e.tblEquipmentCategoryByCategoryId.id==1}">
-                                                                                    <div class="btn btn-detail"
-                                                                                         title="Chỉnh sửa"><i
-                                                                                            class="fa fa-pencil"></i>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            <div class="btn btn-remove"
-                                                                                 onclick="conform(4, ${e.id})"
-                                                                                 title="Xóa"><i
-                                                                                    class="fa fa-times"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <p class="clear"></p>
-                                                                </div>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <div class="row">
-                                                                    <div style="width:10%;">
-                                                                        <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
-                                                                    </div>
-                                                                    <div style="width:12%;">
-                                                                        <div>${e.name}</div>
-                                                                    </div>
-                                                                    <div style="width:20%;">
-                                                                        <div>${e.serialNumber}</div>
-                                                                    </div>
-                                                                    <div style="width:100px;">
-                                                                        <div>${e.tblEquipmentCategoryByCategoryId.usingTime}</div>
-                                                                    </div>
-                                                                    <div style="width:100px;">
-                                                                        <div>${e.timeRemain}</div>
-                                                                    </div>
-                                                                    <div style="width:50px;">
-                                                                        <div>${e.tblClassroomByClassroomId.name}</div>
-                                                                    </div>
-                                                                    <div style="width: 100px">
-                                                                        <div class="group-button">
-                                                                            <c:choose>
-                                                                                <c:when test="${e.timeRemain<=50 and e.tblEquipmentCategoryByCategoryId.id==1}">
-                                                                                    <div class="btn btn-detail"
-                                                                                         title="Chỉnh sửa"><i
-                                                                                            class="fa fa-pencil"></i>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            <c:choose>
-                                                                                <c:when test="${e.classroomId != null}">
-                                                                                    <div class="btn btn-remove"
-                                                                                         onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
-                                                                                                 btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}'})"
-                                                                                         title="Xóa"><i
-                                                                                            class="fa fa-times"></i>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <div class="btn btn-remove"
-                                                                                         onclick="conformData(2,{message:'Bạn có muốn xóa thiết bị ${e.name} (serial: ${e.serialNumber})?', btnName:'Xóa', link:'/staff/removeEquipment?equipmentId=${e.id}&remove=true'})"
-                                                                                         title="Xóa"><i
-                                                                                            class="fa fa-times"></i>
-                                                                                    </div>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </div>
-                                                                    </div>
-                                                                    <p class="clear"></p>
-                                                                </div>
-                                                            </c:otherwise>
-                                                        </c:choose>
-
-
-                                                    </c:forEach>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div id="pagination" style="padding-left: 150px;"></div>
+                                        <jsp:include flush="false" page="Staff_ManageEquipment.jsp"/>
                                     </div>
                                     <div id="tab2" class="body-tab">
                                         <div>
@@ -212,57 +85,7 @@
                                             <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
                                         </div>
                                         <div class="clear"></div>
-                                        <div class="table" style="width:77%; height: 350px">
-                                            <div class="header-table">
-                                                <div style="width:100px">
-                                                    <div>Hình ảnh</div>
-                                                </div>
-                                                <div style="width:100px;">
-                                                    <div>Tên</div>
-                                                </div>
-                                                <div style="width:100px;">
-                                                    <div>Quản lý</div>
-                                                </div>
-                                                <div style="width: 100px">
-                                                    <div></div>
-                                                </div>
-                                                <p class="clear"></p>
-                                            </div>
-                                            <div class="body-table">
-                                                <form action="/staff/removeEqipment" id="removeCategory">
-                                                    <input type="hidden" value="" id="removeClassroomName"
-                                                           name="classroomName"/>
-                                                    <c:forEach items="${categories}" var="c">
-                                                        <div class="row" style="height: 35px">
-                                                            <div style="width: 100px">
-                                                                <div class="equip"
-                                                                     style="background-image: url('../../resource/img/equipment/${c.imageUrl}')">
-                                                                </div>
-                                                            </div>
-                                                            <div style="width: 100px">${c.name}</div>
-                                                                <div style="width: 100px"><c:choose>
-                                                                    <c:when test="${c.isManaged}">
-                                                                        Có
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        Không
-                                                                    </c:otherwise>
-                                                                </c:choose></div>
-                                                            <div style="width: 100px">
-                                                                <div class="control">
-                                                                    <div class="group-button">
-                                                                        <div class="btn btn-remove" title="Xóa"><i
-                                                                                class="fa fa-times"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </c:forEach>
-                                                </form>
-                                            </div>
-                                        </div>
+                                        <jsp:include flush="false" page="Staff_ManageCategory.jsp"/>
                                     </div>
                                 </div>
                             </div>
@@ -277,19 +100,23 @@
             </div>
         </div>
         <div class="content-modal">
-            <form action="/staff/createEquipment" id="createEquipment" name="createEquipment">
+            <form action="/staff/createEquipment" id="createEquipment" name="createEquipment" method="post">
+                <input type="hidden" name="Action" id="equipment-action">
+                <input type="hidden" name="classroomId" id="equipment-classroomId">
+                <input type="hidden" name="equipmentId" id="equipment-id">
+                <input type="hidden" name="category" id="equipment-category">
                 <div class="modal modal-medium" id="modal-1">
-                    <div class="content-modal" style="height: 260px">
+                    <div class="content-modal" style="height: 350px">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo thiết bị</p>
-                            <i class="fa fa-times" onclick="showModal(0,'modal-1')"></i>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearEquipment()"></i>
                         </div>
                         <div class="body-modal" style="padding-top: 10px">
                             <div class="group-control">
                                 <div class="name">Loại thiết bị</div>
                                 <div class="control">
-                                    <select name="categoryId">
-                                        <c:forEach items="${categories}" var="ca">
+                                    <select name="categoryId" id="equipment-category-select">
+                                        <c:forEach items="${mCategories}" var="ca">
                                             <option value="${ca.id}">${ca.name}</option>
                                         </c:forEach>
                                     </select>
@@ -297,18 +124,36 @@
                             </div>
                             <div class="group-control">
                                 <div class="name">Tên thiết bị</div>
-                                <input type="text" name="name">
+                                <input type="text" name="name" id="equipment-name">
                             </div>
                             <div class="group-control">
                                 <div class="name">Số seri</div>
-                                <input type="text" name="serialNumber">
+                                <input type="text" name="serialNumber" id="equipment-number">
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Thời gian sử dụng</div>
+                                <input type="text" name="usingTime" onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )" maxlength="4" id="equipment-time">
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Thời gian sử dụng</div>
+                                <input disabled type="text" name="timeRemain" onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )" maxlength="4" id="equipment-remain">
                             </div>
                         </div>
                         <div class="footer-modal">
                             <input type="button" class="btn btn-normal"
-                                   onclick="showModal(0, 'modal-1')"
+                                   onclick="showModal(0, 'modal-1'); clearEquipment();"
                                    value="Thoát"/>
-                            <input type="button" class="btn btn-orange" onclick="validateEquipment();"
+                            <input type="button" class="btn btn-orange" onclick="validateEquipment();" id="equipment-button"
                                    value="Tạo"/>
                         </div>
                     </div>
@@ -364,14 +209,17 @@
 
         <script>
             function validateEquipment() {
+                var action = document.forms["createEquipment"]["Action"].value;
                 var name = document.forms["createEquipment"]["name"].value;
                 var serialNumber = document.forms["createEquipment"]["serialNumber"].value;
+                var usingTime = document.forms["createEquipment"]["usingTime"].value;
 
                 $.ajax({
                     type: "get",
                     url: "/ajax/checkEquipment",
                     cache: false,
-                    data: 'name=' + name + '&serialNumber=' + serialNumber,
+                    data: 'name=' + name + '&serialNumber=' + serialNumber+ '&usingTime=' + usingTime
+                    + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
                             showModal(0, 'modal-1');
@@ -458,7 +306,15 @@
 
             document.getElementById("${tab}").className += " active";
             document.getElementById("${tab}").setAttribute("data-main", "1");
-
+            document.getElementById("${tab}").className = "body-tab active";
+            var tab = '${tab}';
+            if (tab === 'tab1') {
+                document.getElementById("tab1-1").className = "active";
+                document.getElementById("tab2-2").className = "";
+            } else {
+                document.getElementById("tab2-2").className = "active";
+                document.getElementById("tab1-1").className = "";
+            }
 
         </script>
         </html>

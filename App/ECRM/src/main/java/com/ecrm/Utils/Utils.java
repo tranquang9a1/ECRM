@@ -260,6 +260,21 @@ public class Utils {
         return true;
     }
 
+    public static boolean isDouble(String str) {
+        try
+        {
+            double d = Double.parseDouble(str);
+            if(d<=0){
+                return false;
+            }
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public static String convertTime(long time){
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy-MM-dd");

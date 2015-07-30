@@ -15,5 +15,8 @@ public class Constant {
     public static int CHAIR=8;
     public static String DEFAULT_PASSWORD="123456";
     public static String FILE_PATH="cron/";
+    public static String DATA_NEWEST = "category_newest";
+    public static String DATA_UPDATED = "category_updated";
+    public static String CATEGORY_FILE = "task.txt";
 
 }

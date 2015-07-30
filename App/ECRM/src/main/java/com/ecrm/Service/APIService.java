@@ -83,8 +83,14 @@ public class APIService {
     }
 
     public List<ReportDTO> getReportByUsername(String username, int offset, int limit) {
-        List<TblReportEntity> entities = reportDAO.getReportByUserId(username, offset, limit);
-        return Utils.convertFromListEntityToListDTO(entities);
+        TblUserEntity user = userDAO.findUser(username);
+        if (user.isStatus()) {
+            List<TblReportEntity> entities = reportDAO.getReportByUserId(username, offset, limit);
+            return Utils.convertFromListEntityToListDTO(entities);
+        } else {
+            return new ArrayList<>();
+        }
+
     }
 
 
@@ -96,6 +102,11 @@ public class APIService {
     public ResultDTO createReport(String username, String classId, String listDamaged, String listPosition,
                                   String listDescription, String evaluate, String listEvaluate, String createTime) {
         long time;
+
+        TblUserEntity user = userDAO.findUser(username);
+        if (!user.isStatus()) {
+            return new ResultDTO(400, "Tai khoan bi khoa ");
+        }
 
         if (createTime.equals("1")) {
             time = new Date().getTime();
@@ -237,8 +248,13 @@ public class APIService {
         }
     }
 
-    public boolean removeReport(int reportId) {
+    public ResultDTO removeReport(String username, int reportId) {
         try {
+            TblUserEntity user = userDAO.findUser(username);
+            if (!user.isStatus()) {
+                return new ResultDTO(400, "Tai khoan bi khoa");
+            }
+
             TblReportEntity report = reportDAO.find(reportId);
             List<TblReportDetailEntity> details = report.getTblReportDetailsById();
             for (TblReportDetailEntity detail : details) {
@@ -250,17 +266,21 @@ public class APIService {
             }
             report.setStatus(Enumerable.ReportStatus.REMOVE.getValue());
             reportDAO.merge(report);
-            return true;
+            return new ResultDTO(200, "Success");
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return new ResultDTO(500, e.getMessage());
         }
     }
 
-    public ResultDTO editReport(String reportID, String classId, String listDamaged, String listPosition,
+    public ResultDTO editReport(String reportID, String username, String classId, String listDamaged, String listPosition,
                                 String listDescription, String evaluate, String listEvaluate) {
         ResultDTO resultDTO = new ResultDTO();
         try {
+            TblUserEntity user = userDAO.findUser(username);
+            if (!user.isStatus()) {
+                return new ResultDTO(400, "Tai khoan bi khoa");
+            }
             int classroomId = Integer.parseInt(classId);
             TblClassroomEntity room = classroomDAO.find(classroomId);
 
@@ -547,6 +567,12 @@ public class APIService {
     }
 
     public List<ScheduleDTO> getSchedule(String username) {
+
+        TblUserEntity user = userDAO.findUser(username);
+        if (!user.isStatus()) {
+            return new ArrayList<>();
+        }
+
         List<ScheduleDTO> result = new ArrayList<ScheduleDTO>();
         List<TblScheduleEntity> listSchedule = scheduleDAO.getSchedulesOfUser(username);
         for (int i = 0; i < listSchedule.size(); i++) {

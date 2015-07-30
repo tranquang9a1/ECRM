@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
@@ -79,6 +80,7 @@ public class APIController {
     @ResponseBody
     List<ReportDTO> getReport(@RequestParam("username") String username, @RequestParam("offset") int offset,
                               @RequestParam("limit") int limit) {
+
         return apiService.getReportByUsername(username, offset, limit);
     }
 
@@ -107,12 +109,12 @@ public class APIController {
     public
     @ResponseBody
     ResultDTO editReport(@RequestParam("reportId") String reportID, @RequestParam("classId") String classId,
-                         @RequestParam("listDamaged") String listDamaged,
+                         @RequestParam("listDamaged") String listDamaged, @RequestParam("username") String username,
                          @RequestParam("listPosition") String listPosition,
                          @RequestParam("listDescription") String listDescription,
                          @RequestParam("evaluate") String evaluate,
                          @RequestParam("listEvaluate") String listEvaluate) {
-        return apiService.editReport(reportID, classId, listDamaged, listPosition, listDescription, evaluate,
+        return apiService.editReport(reportID, username, classId, listDamaged, listPosition, listDescription, evaluate,
                 listEvaluate);
     }
 
@@ -183,8 +185,8 @@ public class APIController {
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
     public
     @ResponseBody
-    boolean removeReport(@RequestParam("reportId") int reportId) {
-        return apiService.removeReport(reportId);
+    ResultDTO removeReport(@RequestParam("username") String username, @RequestParam("reportId") int reportId) {
+        return apiService.removeReport(username, reportId);
     }
 
     @RequestMapping(value = "/getCurrentTime", method = RequestMethod.GET)
@@ -215,8 +217,33 @@ public class APIController {
 
     @RequestMapping(value="/getCategory", method = RequestMethod.GET)
     public @ResponseBody List<EquipmentCategoryDTO> getCategory() {
-        return apiService.getEquipment();
+        BufferedReader br = null;
+        try {
+
+            String sCurrentLine;
+
+            br = new BufferedReader(new FileReader(Constant.CATEGORY_FILE));
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                if (sCurrentLine.equalsIgnoreCase(Constant.DATA_NEWEST)) {
+                    Utils.writeFile(Constant.CATEGORY_FILE, Constant.DATA_UPDATED);
+                    return apiService.getEquipment();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)br.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return new ArrayList<EquipmentCategoryDTO>();
+
     }
+
+
 
 
 }

@@ -22,6 +22,7 @@ import android.widget.*;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.UserDAO;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.teachermobileapp.model.User;
 import com.fu.group10.capstone.apps.teachermobileapp.service.ShareExternalServer;
 import com.fu.group10.capstone.apps.teachermobileapp.service.SynchronizeService;
@@ -32,7 +33,14 @@ import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -384,9 +392,71 @@ public class LoginActivity  extends ActionBarActivity {
 
     }
 
+
     public void syncData() {
         startService(new Intent(this, SynchronizeService.class));
     }
 
+    public void syncCategory() {
+        new BackgroundTask(this).execute();
+
+    }
+
+    private class BackgroundTask extends AsyncTask<String, Void, Void> {
+        private HttpURLConnection connection = null;
+        private Context context;
+        List<EquipmentCategory> listEquipments = new ArrayList<>();
+        String url = Constants.API_GET_CATEGORY;
+        DatabaseHelper db;
+
+        public BackgroundTask(Context context) {
+            this.context = context;
+            db = new DatabaseHelper(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            RequestSender sender = new RequestSender();
+            sender.start(url, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                    listEquipments = ParseUtils.parseEquipmentCategory(result);
+                }
+            });
+
+
+        }
+
+        private byte[] getLogoImage(String url) {
+            try {
+                URL imageUrl = new URL(url);
+                URLConnection ucon = imageUrl.openConnection();
+
+                InputStream is = ucon.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+
+                ByteArrayBuffer baf = new ByteArrayBuffer(500);
+                int current = 0;
+                while ((current = bis.read()) != -1) {
+                    baf.append((byte) current);
+                }
+
+                return baf.toByteArray();
+            } catch (Exception e) {
+                Log.d("ImageManager", "Error: " + e.toString());
+            }
+            return null;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            for (int i = 0; i < listEquipments.size(); i++) {
+                EquipmentCategory ec = listEquipments.get(i);
+                db.insertEquipment(ec.getName(), getLogoImage(ec.getImageUrl()));
+            }
+            return null;
+        }
+    }
 
 }

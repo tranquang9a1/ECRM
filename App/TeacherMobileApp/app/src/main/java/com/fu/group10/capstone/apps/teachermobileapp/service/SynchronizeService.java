@@ -1,7 +1,9 @@
 package com.fu.group10.capstone.apps.teachermobileapp.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -12,6 +14,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.UserDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ClassroomInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
@@ -20,6 +23,14 @@ import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +52,6 @@ public class SynchronizeService extends Service {
     }
 
 
-
-
-
     public void syncData() {
         if (Utils.isOnline()) {
             Log.d("Sync Data", "Start get User");
@@ -55,13 +63,12 @@ public class SynchronizeService extends Service {
                 importSchedule();
                 db.closeDB();
             }
-            Log.d("Sync Data",  "End sync data at " + new Date() );
+            Log.d("Sync Data", "End sync data at " + new Date());
         }
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startid)
-    {
+    public int onStartCommand(Intent intent, int flags, int startid) {
         db = new DatabaseHelper(getApplicationContext());
         Log.d("SynchronizeService", "Start Service");
         syncData();
@@ -75,8 +82,7 @@ public class SynchronizeService extends Service {
     }
 
 
-    public  void importSchedule() {
-
+    public void importSchedule() {
 
 
         String url = Constants.API_GET_ALL_SCHEDULE + user.getUsername();
@@ -103,14 +109,13 @@ public class SynchronizeService extends Service {
                 }
 
 
-
                 RequestSender sender1 = new RequestSender();
                 String url1 = Constants.API_GET_REPORT_BY_USERNAME + user.getUsername() + "&offset=" + 0 + "&limit=" + 10;
                 sender1.start(url1, new RequestSender.IRequestSenderComplete() {
                     @Override
                     public void onRequestComplete(String result) {
                         List<ReportInfo> classrooms = ParseUtils.parseReportFromJSON(result);
-                        for (int i = 0; i< classrooms.size(); i++) {
+                        for (int i = 0; i < classrooms.size(); i++) {
                             syncReport(classrooms.get(i));
 
 
@@ -124,7 +129,6 @@ public class SynchronizeService extends Service {
 
 
     }
-
 
 
     public void truncateDB() {
@@ -156,7 +160,8 @@ public class SynchronizeService extends Service {
     }
 
 
-    public void syncClassroom(String result ) {
+
+    public void syncClassroom(String result) {
         ClassroomDAO dao = ParseUtils.parseClassroomDAO(result);
         db.insertClassroom(dao);
     }
@@ -185,7 +190,7 @@ public class SynchronizeService extends Service {
 
         List<EquipmentReportInfo> equipments = report.getEquipments();
         for (EquipmentReportInfo e : equipments) {
-            ReportDetailDAO detail = new ReportDetailDAO(e.getEquipmentName(),e.getDescription(),e.getDamaged(),e.isStatus());
+            ReportDetailDAO detail = new ReportDetailDAO(e.getEquipmentName(), e.getDescription(), e.getDamaged(), e.isStatus());
             db.insertReportDetail(reportId, detail, true);
 
         }
@@ -194,9 +199,10 @@ public class SynchronizeService extends Service {
     }
 
 
-
-
     public void getCurrentUser() {
         user = db.getUser();
     }
+
+
+
 }

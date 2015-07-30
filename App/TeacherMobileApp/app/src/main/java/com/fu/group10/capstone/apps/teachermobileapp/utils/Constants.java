@@ -20,6 +20,7 @@ public class Constants {
     public static final String API_GET_CURRENT_TIME = API_SOURCE + "getCurrentTime";
     public static final String API_CHECK_CONNECTION = API_SOURCE + "checkConnection";
     public static final String API_GET_CLASSROOM = API_SOURCE + "getClassroom?classId=";
+    public static final String API_GET_CATEGORY = API_SOURCE + "getCategory";
     public static final String PROJECTOR = "[1]";
     public static final String TELEVISION = "[2]";
     public static final String AIR = "[3]";

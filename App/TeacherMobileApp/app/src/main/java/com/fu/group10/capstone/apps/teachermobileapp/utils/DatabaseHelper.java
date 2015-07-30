@@ -530,38 +530,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return c.getInt(c.getColumnIndex(CLASSROOM_DAMAGE_LEVEL));
     }
 
-    public void insertEquipment(String name, String imageUrl) {
+    public void insertEquipment(String name, byte[] image) {
         SQLiteDatabase db               =   this.getWritableDatabase();
-        byte[] image = getLogoImage(imageUrl);
         String sql                      =   "INSERT INTO " + TABLE_EQUIPMENT_CATEGORY +" (name,images) VALUES(?,?)";
         SQLiteStatement insertStmt      =   db.compileStatement(sql);
         insertStmt.clearBindings();
-        insertStmt.bindString(1,name);
-        insertStmt.bindBlob(2,image);
+        insertStmt.bindString(0, name);
+        insertStmt.bindBlob(1, image);
         insertStmt.executeInsert();
         db.close();
     }
 
-    private byte[] getLogoImage(String url){
-        try {
-            URL imageUrl = new URL(url);
-            URLConnection ucon = imageUrl.openConnection();
 
-            InputStream is = ucon.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-
-            ByteArrayBuffer baf = new ByteArrayBuffer(500);
-            int current = 0;
-            while ((current = bis.read()) != -1) {
-                baf.append((byte) current);
-            }
-
-            return baf.toByteArray();
-        } catch (Exception e) {
-            Log.d("ImageManager", "Error: " + e.toString());
-        }
-        return null;
-    }
 
     public EquipmentDAO getEquipments() {
         EquipmentDAO dao = new EquipmentDAO();
@@ -571,8 +551,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor           =   db.rawQuery(sql, new String[] {});
 
         if(cursor.moveToFirst()){
-            dao.setName(cursor.getString(1));
-            dao.setImages(cursor.getBlob(2));
+            dao.setName(cursor.getString(0));
+            dao.setImages(cursor.getBlob(1));
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();

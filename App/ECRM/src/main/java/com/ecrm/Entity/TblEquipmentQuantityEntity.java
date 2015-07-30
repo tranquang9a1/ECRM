@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Htang on 7/28/2015.
  */
 @Entity
-@Table(name = "TblEquipmentQuantity")
+@Table(name = "tblEquipmentQuantity")
 @IdClass(TblEquipmentQuantityEntityPK.class)
 public class TblEquipmentQuantityEntity {
     private Integer roomTypeId;

@@ -213,6 +213,11 @@ public class APIController {
         return classroomService.getClassroom(classId);
     }
 
+    @RequestMapping(value="/getCategory", method = RequestMethod.GET)
+    public @ResponseBody List<EquipmentCategoryDTO> getCategory() {
+        return apiService.getEquipment();
+    }
+
 
 }
 

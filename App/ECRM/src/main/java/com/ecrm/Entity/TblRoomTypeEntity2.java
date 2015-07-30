@@ -23,7 +23,7 @@ public class TblRoomTypeEntity2 {
     private Timestamp createTime;
     private Boolean isDelete;
     private Timestamp updateTime;
-    private Collection<TblClassroomEntity> tblClassroomsById;
+    private List<TblClassroomEntity> tblClassroomsById;
     private List<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
 
     @Id
@@ -134,11 +134,11 @@ public class TblRoomTypeEntity2 {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "tblRoomType2ByRoomTypeId2")
-    public Collection<TblClassroomEntity> getTblClassroomsById() {
+    public List<TblClassroomEntity> getTblClassroomsById() {
         return tblClassroomsById;
     }
 
-    public void setTblClassroomsById(Collection<TblClassroomEntity> tblClassroomsById) {
+    public void setTblClassroomsById(List<TblClassroomEntity> tblClassroomsById) {
         this.tblClassroomsById = tblClassroomsById;
     }
 

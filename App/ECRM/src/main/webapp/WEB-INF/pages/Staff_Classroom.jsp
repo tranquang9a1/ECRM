@@ -455,7 +455,7 @@
                     data: 'roomtypeName=' + roomtypeName + '&airConditioning=' + airConditioning + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
-                            showModal(0, 'modal-roomtypedetail');
+                            showModal(0, 'modal-4');
                             document.getElementById('createRoomType').submit();
                             $(".loading-page").addClass("active");
                             $(".page").removeClass("active");

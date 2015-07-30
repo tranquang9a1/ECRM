@@ -53,11 +53,6 @@
                                          ,${r.equipment})'>
                                 <i class="fa fa-eye"></i>
                             </div>
-                            <div class="btn btn-remove" onclick="conformData(2, {message:'Bạn có muốn xóa loại phòng ${r.roomType.name}!',
-                                    btnName:'Xóa',link:'/staff/removeRoomType?RoomtypeId=${r.roomType.id}'})" title="Xóa"><i
-                                    class="fa fa-times"></i>
-                            </div>
-
                         </div>
                     </div>
                     <p class="clear"></p>

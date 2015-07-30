@@ -36,6 +36,8 @@ public class AjaxController {
     @Autowired
     RoomTypeDAOImpl roomTypeDAO;
     @Autowired
+    RoomType2DAOImpl roomType2DAO;
+    @Autowired
     EquipmentDAOImpl equipmentDAO;
     @Autowired
     CategoryDAOImpl categoryDAO;
@@ -241,7 +243,7 @@ public class AjaxController {
         } else {
             String action = request.getParameter("action");
             if (action.equals("create")) {
-                TblRoomTypeEntity roomTypeEntity = roomTypeDAO.getRoomTypeByName(roomTypeName.trim());
+                TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
                 if (roomTypeEntity != null) {
                     alert = "Tên loại phòng đã tồn tại!";
                     status = false;

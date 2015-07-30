@@ -79,7 +79,7 @@ function viewMap() {
         container.removeChild(container.lastChild);
     }
     var divT = document.createElement('div');
-    divT.className = 'thietBi';
+    divT.className = 'thietBi1';
     container.appendChild(divT);
     //tao div map
     var div = document.createElement('div');
@@ -202,8 +202,8 @@ function viewMap() {
 
             var divProjector = document.createElement('div');
             divProjector.className = 'equipment subThietBi equip';
-            divProjector.style.backgroundImage = 'url("http://uphinhanh.net/images/2015/07/16/abc.jpg")';
-            document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
+            divProjector.style.backgroundImage = 'url("../resource/img/equipment/' + value[1] + '")';
+            document.getElementsByClassName('thietBi1')[0].appendChild(divProjector);
             if (quantity != null) {
                 document.getElementById("equip").value = document.getElementById("equip").value + quantity.value + "," + priority.value + "," + value[0] + "-";
             } else {
@@ -213,59 +213,7 @@ function viewMap() {
             document.getElementById("equip").value = document.getElementById("equip").value + "0" + "," + priority.value + "," + value[0] + "-";
         }
     }
-    /*//projector
-     if(document.getElementById('projector').checked){
-     var divProjector = document.createElement('div');
-     divProjector.id = 'idProjector';
-     divProjector.className='equipment subThietBi projector';
-     document.getElementsByClassName('thietBi')[0].appendChild(divProjector);
-     document.getElementById("Projectors").value = 1;
-     }else{
-     document.getElementById("Projectors").value = 0;
-     }
-     //tivi
-     if(document.getElementById('tivi').checked){
-     var divTivi = document.createElement('div');
-     divTivi.id = 'idTivi';
-     divTivi.className='equipment subThietBi tivi';
-     document.getElementsByClassName('thietBi')[0].appendChild(divTivi);
-     document.getElementById("Television").value = 1;
-     }else{
-     document.getElementById("Television").value = 0;
-     }
-     //may lanh
-     if(document.getElementById('mayLanh').checked){
-     var divMayLanh = document.createElement('div');
-     divMayLanh.id = 'idMayLanh';
-     divMayLanh.className='equipment subThietBi mayLanh';
-     document.getElementsByClassName('thietBi')[0].appendChild(divMayLanh);
-     document.getElementById("AirConditioning").value = document.getElementById('quantityAir').value;
-     }else{
-     document.getElementById("AirConditioning").value = 0;
-     }
-     //quat
-     if(document.getElementById('quat').checked){
-     var divQuat = document.createElement('div');
-     divQuat.id = 'idQuat';
-     divQuat.className='equipment subThietBi quat';
-     document.getElementsByClassName('thietBi')[0].appendChild(divQuat);
-     document.getElementById("Fan").value = 1;
-     }else{
-     document.getElementById("Fan").value = 0;
-     }
-     //loa
-     if(document.getElementById('loa').checked){
-     var divLoa = document.createElement('div');
-     divLoa.id = 'idLoa';
-     divLoa.className='equipment subThietBi loa';
-     document.getElementsByClassName('thietBi')[0].appendChild(divLoa);
-     document.getElementById("Speaker").value = 1;
-     }else{
-     document.getElementById("Speaker").value = 0;
-     }
-     document.getElementById("Bulb").value = 1;
 
-     }*/
     var temp1 = "";
     var temp2 = "";
     document.getElementById("Slots").value = slots;
@@ -282,7 +230,7 @@ function viewMap() {
     }
 }
 
-function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
+/*function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
     var array = [];
@@ -439,14 +387,13 @@ function showMap(mapId, typeId, vrows, sDayNgang, sChoNgoi, mayLanh, quat, proje
         divLoa.setAttribute('data-position', '[5]');
         divT.appendChild(divLoa);
     }
-}
+}*/
 
 $("#selectBox").change(function () {
     var selectedValue = $(this).find(":selected").data("value");
     document.getElementById('loaiphong').innerHTML = selectedValue.name;
     document.getElementById('roomtype').value = selectedValue.id;
     showMap(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
-        , selectedValue.airConditioning, selectedValue.fan, selectedValue.projector, selectedValue.speaker,
-        selectedValue.television);
+        , selectedValue.equipment);
     document.getElementById('roomtype-map2').style.height = 440 + "px";
 });

@@ -37,7 +37,7 @@
             </a>
         </li>
         <li id="STAFF_CLASSROOM">
-            <a href="/staff/classroom?ACTIVETAB=tab1">
+            <a href="/staff/classroom?ACTIVETAB=tab1&MESSAGE=0">
                 <p>Phòng Học</p>
             </a>
         </li>

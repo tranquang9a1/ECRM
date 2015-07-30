@@ -101,7 +101,7 @@ public class EquipmentController {
             String name = request.getParameter("name");
             if(action.equals("insert")){
                 int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-                TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, "["+categoryId+"]", 0.0 ,name,
+                TblEquipmentEntity tblEquipmentEntity = new TblEquipmentEntity(categoryId, null, "["+categoryId+"]", usingTime ,name,
                         serialNumber, true, false, usingTime);
                 equipmentDAO.persist(tblEquipmentEntity);
             }else {
@@ -110,7 +110,7 @@ public class EquipmentController {
                 tblEquipmentEntity.setCategoryId(category);
                 tblEquipmentEntity.setClassroomId(classroomId);
                 tblEquipmentEntity.setPosition("[" + category + "]");
-                tblEquipmentEntity.setTimeRemain(0.0);
+                tblEquipmentEntity.setTimeRemain(usingTime);
                 tblEquipmentEntity.setName(name);
                 tblEquipmentEntity.setSerialNumber(serialNumber);
                 tblEquipmentEntity.setStatus(true);
@@ -222,14 +222,23 @@ public class EquipmentController {
                 tblEquipmentCategoryEntity.setIsDelete(true);
                 categoryDAO.merge(tblEquipmentCategoryEntity);
                 Collection<TblEquipmentEntity> tblEquipmentEntities = tblEquipmentCategoryEntity.getTblEquipmentsById();
-                for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                    tblEquipmentEntity.setCategoryId(12);
-                    equipmentDAO.merge(tblEquipmentEntity);
+                if(!tblEquipmentEntities.isEmpty()){
+                    for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                        tblEquipmentEntity.setIsDelete(true);
+                        tblEquipmentEntity.setClassroomId(null);
+                        equipmentDAO.merge(tblEquipmentEntity);
+                        TblClassroomEntity classroomEntity = tblEquipmentEntity.getTblClassroomByClassroomId();
+                        classroomEntity.setIsAllInformation(false);
+                        classroomDAO.merge(classroomEntity);
+                    }
                 }
+
                 Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblEquipmentCategoryEntity.getTblEquipmentQuantityById();
-                for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
-                    tblEquipmentQuantityEntity.setEquipmentCategoryId(12);
-                    equipmentQuantityDAO.merge(tblEquipmentQuantityEntity);
+                if(!tblEquipmentQuantityEntities.isEmpty()){
+                    for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
+                        tblEquipmentQuantityEntity.setIsDelete(true);
+                        equipmentQuantityDAO.merge(tblEquipmentQuantityEntity);
+                    }
                 }
                 return "redirect:/staff/equipment?ACTIVETAB=tab1";
             } catch (Exception ex) {

@@ -10,16 +10,29 @@ import javax.persistence.*;
 @IdClass(TblEquipmentQuantityEntityPK.class)
 public class TblEquipmentQuantityEntity {
     private Integer roomTypeId;
-    private int equipmentCategoryId;
+    private Integer equipmentCategoryId;
     private int quantity;
     private int priority;
+    private boolean isDelete;
+    private int id;
 
     private TblRoomTypeEntity2 tblRoomTypeEntity2ByRoomTypeId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryEntityByEquipmentCategoryId;
 
 
+
     @Id
-    @Column(name = "RoomTypeId")
+    @GeneratedValue
+    @Column(name = "Id")
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    @Id
+    @Column(name = "RoomTypeId", nullable = true)
     public Integer getRoomTypeId() {
         return roomTypeId;
     }
@@ -31,11 +44,11 @@ public class TblEquipmentQuantityEntity {
 
     @Id
     @Column(name = "EquipmentCategoryId")
-    public int getEquipmentCategoryId() {
+    public Integer getEquipmentCategoryId() {
         return equipmentCategoryId;
     }
 
-    public void setEquipmentCategoryId(int equipmentCategoryId) {
+    public void setEquipmentCategoryId(Integer equipmentCategoryId) {
         this.equipmentCategoryId = equipmentCategoryId;
     }
 
@@ -59,6 +72,17 @@ public class TblEquipmentQuantityEntity {
     public void setPriority(int priority) {
         this.priority = priority;
     }
+
+    @Basic
+    @Column(name = "IsDelete")
+    public boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)

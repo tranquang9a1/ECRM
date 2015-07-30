@@ -41,11 +41,6 @@
                         <div>${cl.roomType.name}</div>
                     </div>
                     <div class="statusS">
-                        <c:if test="${ not cl.classroom.isAllInformation}">
-
-                            <a href="/staff/EquipmentInformation?ClassroomId=${cl.id}">Cập nhật thiết bị!</a>
-
-                        </c:if>
                         <c:if test="${cl.classroom.damagedLevel > 0}">
                             <div>Độ hư hại: ${cl.classroom.damagedLevel}</div>
                         </c:if>
@@ -59,10 +54,10 @@
                                  onclick='document.getElementById("ClassroomAction").value="update";
                                          document.getElementById("loaiphong").innerHTML = "${cl.roomType.name}" ;
                                          showModal(1, "modal-manageclassroom");
-                                         showClassroomMap(${cl.classroom.name},${cl.classroom.roomTypeId},${cl.roomType.verticalRows},
+                                         showClassroomMap(${cl.classroom.name},${cl.classroom.roomTypeId2},${cl.roomType.verticalRows},
                                          "${cl.roomType.horizontalRows}", "${cl.roomType.numberOfSlotsEachHRows}"
                                          ,${cl.equipment});
-                                         editClassroom(${cl.classroom.roomTypeId})'>
+                                         editClassroom(${cl.classroom.roomTypeId2})'>
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="btn btn-remove"

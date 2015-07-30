@@ -659,4 +659,18 @@ public class APIService {
         }
         return tblEquipmentEntity;
     }
+
+    public List<EquipmentCategoryDTO> getEquipment() {
+        List<EquipmentCategoryDTO> result  = new ArrayList<EquipmentCategoryDTO>();
+        List<TblEquipmentCategoryEntity> listEquipment = equipmentCategoryDAO.getAllEquipment();
+
+        for (int i = 0; i < listEquipment.size(); i++) {
+            TblEquipmentCategoryEntity equipment = listEquipment.get(i);
+            EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
+            dto.setName(equipment.getName());
+            dto.setImageUrl(equipment.getImageUrl());
+            result.add(dto);
+        }
+        return result;
+    }
 }

@@ -4,6 +4,7 @@ import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.EquipmentCategoryDAO;
 import com.ecrm.Entity.TblEquipmentCategoryEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
+import com.ecrm.Entity.TblEquipmentQuantityEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -49,6 +50,15 @@ public class EquipmentCategoryDAOImpl extends BaseDAO<TblEquipmentCategoryEntity
         query.setParameter("name", name);
         TblEquipmentCategoryEntity entity = (TblEquipmentCategoryEntity) query.getSingleResult();
         return entity.getId();
+    }
+
+    @Override
+    public List<TblEquipmentCategoryEntity> getAllEquipment() {
+        List<TblEquipmentCategoryEntity> result = new ArrayList<TblEquipmentCategoryEntity>();
+        Query query = entityManager.createQuery("SELECT e FROM TblEquipmentCategoryEntity  e");
+        result = query.getResultList();
+        return result;
+
     }
 
 }

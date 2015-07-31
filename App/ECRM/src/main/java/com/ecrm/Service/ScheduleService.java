@@ -125,7 +125,7 @@ public class ScheduleService {
                     if (row.getCell(0).getNumericCellValue() != 0) {
                         classroom = (int) row.getCell(0).getNumericCellValue();
                         classroomEntity = classroomDAO.getClassroomByName(Integer.toString(classroom));
-                        numberOfSlot = classroomEntity.getTblRoomTypeByRoomTypeId().getSlots();
+                        numberOfSlot = classroomEntity.getTblRoomType2ByRoomTypeId2().getSlots();
                     }
                     slot = row.getCell(1).getStringCellValue();
                     String[] array = slot.split("-");

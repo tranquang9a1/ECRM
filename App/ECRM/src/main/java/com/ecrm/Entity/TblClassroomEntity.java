@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name = "tblClassroom")
 public class TblClassroomEntity {
     private int id;
-    private Integer roomTypeId;
     private String name;
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -23,7 +22,6 @@ public class TblClassroomEntity {
     private Boolean isAllInformation;
     private Integer damagedLevel;
     private Integer roomTypeId2;
-    private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
     private TblRoomTypeEntity2 tblRoomType2ByRoomTypeId2;
     private List<TblEquipmentEntity> tblEquipmentsById;
     private List<TblReportEntity> tblReportsById;
@@ -39,17 +37,6 @@ public class TblClassroomEntity {
     public void setId(int id) {
         this.id = id;
     }
-
-    @Basic
-    @Column(name = "RoomTypeId")
-    public Integer getRoomTypeId() {
-        return roomTypeId;
-    }
-
-    public void setRoomTypeId(Integer roomTypeId) {
-        this.roomTypeId = roomTypeId;
-    }
-
     @Basic
     @Column(name = "RoomTypeId2")
     public Integer getRoomTypeId2() {
@@ -128,7 +115,6 @@ public class TblClassroomEntity {
         TblClassroomEntity that = (TblClassroomEntity) o;
 
         if (id != that.id) return false;
-        if (roomTypeId != null ? !roomTypeId.equals(that.roomTypeId) : that.roomTypeId != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
@@ -140,7 +126,6 @@ public class TblClassroomEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (roomTypeId != null ? roomTypeId.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
@@ -148,15 +133,6 @@ public class TblClassroomEntity {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id", insertable = false, updatable = false)
-    public TblRoomTypeEntity getTblRoomTypeByRoomTypeId() {
-        return tblRoomTypeByRoomTypeId;
-    }
-
-    public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeByRoomTypeId) {
-        this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
-    }
 
     @ManyToOne
     @JoinColumn(name = "RoomTypeId2", referencedColumnName = "Id", insertable = false, updatable = false)
@@ -201,10 +177,9 @@ public class TblClassroomEntity {
     public TblClassroomEntity() {
     }
 
-    public TblClassroomEntity(int id, Integer roomTypeId, String name, Timestamp createTime,
+    public TblClassroomEntity(int id, String name, Timestamp createTime,
                               Timestamp updateTime, Boolean isDelete, Boolean isAllInformation, Integer damagedLevel) {
         this.id = id;
-        this.roomTypeId = roomTypeId;
         this.name = name;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -213,10 +188,9 @@ public class TblClassroomEntity {
         this.damagedLevel = damagedLevel;
     }
 
-    public TblClassroomEntity(int id, Integer roomTypeId, String name, Timestamp createTime, Timestamp updateTime,
+    public TblClassroomEntity(int id, String name, Timestamp createTime, Timestamp updateTime,
                               Boolean isDelete, Boolean isAllInformation, Integer damagedLevel, Integer roomTypeId2) {
         this.id = id;
-        this.roomTypeId = roomTypeId;
         this.name = name;
         this.createTime = createTime;
         this.updateTime = updateTime;

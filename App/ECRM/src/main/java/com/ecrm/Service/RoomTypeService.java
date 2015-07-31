@@ -26,8 +26,6 @@ import java.util.List;
 public class RoomTypeService {
     public static final String ERROR = "ERROR";
     @Autowired
-    RoomTypeDAOImpl roomTypeDAO;
-    @Autowired
     RoomType2DAOImpl roomType2DAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;

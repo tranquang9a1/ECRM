@@ -3,7 +3,7 @@ package com.ecrm.DTO;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
 import com.ecrm.Entity.TblReportEntity;
-import com.ecrm.Entity.TblRoomTypeEntity;
+import com.ecrm.Entity.TblRoomTypeEntity2;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +22,7 @@ public class DamagedRoomDTO {
     private String evaluate;
 
     private List<String> suggestRooms;
-    private TblRoomTypeEntity roomtype;
+    private TblRoomTypeEntity2 roomtype;
     private List<EquipmentDamaged> equipmentCategory;
     private List<TblEquipmentEntity> equipments;
 
@@ -138,11 +138,11 @@ public class DamagedRoomDTO {
         this.suggestRooms = suggestRooms;
     }
 
-    public TblRoomTypeEntity getRoomtype() {
+    public TblRoomTypeEntity2 getRoomtype() {
         return roomtype;
     }
 
-    public void setRoomtype(TblRoomTypeEntity roomtype) {
+    public void setRoomtype(TblRoomTypeEntity2 roomtype) {
         this.roomtype = roomtype;
     }
 

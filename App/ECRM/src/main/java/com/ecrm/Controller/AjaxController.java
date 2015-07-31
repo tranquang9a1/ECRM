@@ -34,8 +34,6 @@ public class AjaxController {
     @Autowired
     ScheduleConfigDAOImpl scheduleConfigDAO;
     @Autowired
-    RoomTypeDAOImpl roomTypeDAO;
-    @Autowired
     RoomType2DAOImpl roomType2DAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;
@@ -63,7 +61,7 @@ public class AjaxController {
             List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
             for (int i = 0; i < tblClassroomEntities.size(); i++) {
-                int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
+                int numberOfStudent = tblClassroomEntities.get(i).getTblRoomType2ByRoomTypeId2().getSlots();
                 if (numberOfStudent >= Integer.parseInt(currentSlots)) {
                     fitClassroom.add(tblClassroomEntities.get(i));
                 }

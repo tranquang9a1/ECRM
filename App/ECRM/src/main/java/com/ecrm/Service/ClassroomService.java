@@ -111,12 +111,12 @@ public class ClassroomService {
                             tblEquipmentEntity.setClassroomId(null);
                             equipmentDAO.merge(tblEquipmentEntity);
                         }
-                        classroom = new TblClassroomEntity(classroom.getId(), null, roomName, classroom.getCreateTime(),
+                        classroom = new TblClassroomEntity(classroom.getId(),  roomName, classroom.getCreateTime(),
                                 new Timestamp(date.getTime()), false, true, 0, roomTypeId);
                         classroomDAO.merge(classroom);
                         message = "Cập nhật phòng " + roomName + " thành công!";
                     } else {
-                        classroom = new TblClassroomEntity(0, null, roomName.trim(), new Timestamp(date.getTime()), null, false, true, 0
+                        classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), null, false, true, 0
                                 , roomTypeId);
                         classroomDAO.insert(classroom);
                         message = "Tạo phòng " + roomName + " thành công!";

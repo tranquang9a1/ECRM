@@ -53,6 +53,11 @@
                                          ,${r.equipment})'>
                                 <i class="fa fa-eye"></i>
                             </div>
+                            <div class="btn btn-remove"
+                                 onclick="checkDeleteRoomType(${r.roomType.id},'${r.roomType.name}');"
+                                 title="Xóa"><i
+                                    class="fa fa-times"></i>
+                            </div>
                         </div>
                     </div>
                     <p class="clear"></p>

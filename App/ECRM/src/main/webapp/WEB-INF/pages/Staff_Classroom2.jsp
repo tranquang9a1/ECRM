@@ -125,7 +125,7 @@
                 <div class="content-modal">
                     <div class="header-modal title">
                         <p class="roomtypename"></p>
-                        <i class="fa fa-times" onclick="showModal(0, 'modal-manageroomtype')"></i>
+                        <i class="fa fa-times" onclick="showModal(0, 'modal-manageroomtype'); clearRoomType()"></i>
                     </div>
                     <div class="body-modal">
                         <div id="roomtype-map">
@@ -134,7 +134,7 @@
                     </div>
                     <div class="footer-modal">
                         <input type="button" class="btn btn-normal"
-                               onclick="showModal(0, 'modal-manageroomtype');clearthietbi()"
+                               onclick="showModal(0, 'modal-manageroomtype');clearRoomType()"
                                value="Thoát"/>
                         <input type="button" class="btn btn-orange"
                                onclick="document.getElementById('RoomTypeAction').value='update';showModal(2, 'modal-manageroomtype','modal-roomtypedetail')"
@@ -420,10 +420,16 @@
                     data: 'roomName=' + roomName + '&roomType=' + roomType + '&action=' + action + '&classroomId=' + classroomId,
                     success: function (data) {
                         if (data.status == true) {
-                            showModal(0, 'modal-1')
-                            document.getElementById('createClassroomForm').submit();
-                            $(".loading-page").addClass("active");
-                            $(".page").removeClass("active");
+                            if(data.alert!=''){
+                                showModal(0, 'modal-1');
+                                conformData(3, {message: data.alert, btnName: 'Cập nhật', choose: 2, object: {id: 'createClassroomForm'}});
+                            }else{
+                                showModal(0, 'modal-1');
+                                document.getElementById('createClassroomForm').submit();
+                                $(".loading-page").addClass("active");
+                                $(".page").removeClass("active");
+                            }
+
                         } else {
                             conformData(1, {message: data.alert});
                         }
@@ -486,13 +492,18 @@
                         type: "get",
                         url: "/ajax/checkCreateRoomType",
                         cache: false,
-                        data: 'roomtypeName=' + roomtypeName + '&action=' + action+ '&roomtypeId=' + roomtypeId,
+                        data: 'roomtypeName=' + roomtypeName + '&action=' + action + '&roomtypeId=' + roomtypeId,
                         success: function (data) {
                             if (data.status == true) {
-                                showModal(0, 'modal-4');
-                                $(".loading-page").addClass("active");
-                                $(".page").removeClass("active");
-                                document.getElementById('createRoomType').submit();
+                                if(data.alert!=''){
+                                    showModal(0, 'modal-4');
+                                    conformData(3, {message: data.alert, btnName: 'Cập nhật', choose: 2, object: {id: 'createRoomType'}});
+                                }else{
+                                    showModal(0, 'modal-4');
+                                    document.getElementById('createRoomType').submit();
+                                    $(".loading-page").addClass("active");
+                                    $(".page").removeClass("active");
+                                }
                             } else {
                                 conformData(1, {message: data.alert});
 
@@ -504,6 +515,26 @@
                     })
                 }
             }
+
+            function checkDeleteRoomType(roomTypeId, roomTypeName) {
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/checkDeleteRoomType",
+                    cache: false,
+                    data: 'roomTypeId=' + roomTypeId,
+                    success: function (data) {
+                        if (data.status == true) {
+                            conformData(2, {message:'Bạn có muốn xóa loại phòng'+ roomTypeName+'!', btnName:'Xóa',link:'/staff/removeRoomType?roomTypeId='+roomTypeId})
+                        } else {
+                            conformData(1, {message: data.alert});
+                        }
+                    },
+                    error: function () {
+                        conformData(1, {message: 'Xin Hãy Nhập Đầy Đủ Thông Tin!'});
+                    }
+                })
+            }
+
             function clearRoomType() {
                 var control = document.getElementsByClassName('control-roomtype');
                 for (i = 0; i < control.length; i++) {

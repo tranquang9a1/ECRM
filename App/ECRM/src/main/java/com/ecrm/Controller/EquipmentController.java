@@ -98,7 +98,6 @@ public class EquipmentController {
         if (session != null) {
             String serialNumber = request.getParameter("serialNumber");
             String action = request.getParameter("Action");
-            int equipmentId = Integer.parseInt(request.getParameter("equipmentId"));
             double usingTime = Double.parseDouble(request.getParameter("usingTime"));
             int classroomId = Integer.parseInt(request.getParameter("classroomId"));
             String name = request.getParameter("name");
@@ -108,12 +107,14 @@ public class EquipmentController {
                         serialNumber, true, false, usingTime);
                 equipmentDAO.persist(tblEquipmentEntity);
             } else {
+                double timeRemain = Double.parseDouble(request.getParameter("timeRemain"));
+                int equipmentId = Integer.parseInt(request.getParameter("equipmentId"));
                 int category = Integer.parseInt(request.getParameter("category"));
                 TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
                 tblEquipmentEntity.setCategoryId(category);
                 tblEquipmentEntity.setClassroomId(classroomId);
                 tblEquipmentEntity.setPosition("[" + category + "]");
-                tblEquipmentEntity.setTimeRemain(usingTime);
+                tblEquipmentEntity.setTimeRemain(timeRemain);
                 tblEquipmentEntity.setName(name);
                 tblEquipmentEntity.setSerialNumber(serialNumber);
                 tblEquipmentEntity.setStatus(true);

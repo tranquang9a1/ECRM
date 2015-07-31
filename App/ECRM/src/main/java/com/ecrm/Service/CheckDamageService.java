@@ -39,8 +39,7 @@ public class CheckDamageService {
                             !categoryName.equals("Ghế")) {
                         Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = equipment.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getTblEquipmentQuantityById();
                         for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
-                            if (roomTypeEntity.getId() == tblEquipmentQuantityEntity.getRoomTypeId()) {
-
+                            if (roomTypeEntity.getId() == tblEquipmentQuantityEntity.getRoomTypeId() && !tblEquipmentQuantityEntity.getIsDelete()) {
                                 if (equipment.getTblEquipmentByEquipmentId().getCategoryId() == tblEquipmentQuantityEntity.getEquipmentCategoryId()) {
                                     int priority = tblEquipmentQuantityEntity.getPriority();
                                     if (priority == 3) {

@@ -88,7 +88,7 @@ public class APIService {
             List<TblReportEntity> entities = reportDAO.getReportByUserId(username, offset, limit);
             return Utils.convertFromListEntityToListDTO(entities);
         } else {
-            return new ArrayList<>();
+            return new ArrayList<ReportDTO>();
         }
 
     }
@@ -571,7 +571,7 @@ public class APIService {
 
         TblUserEntity user = userDAO.findUser(username);
         if (!user.isStatus()) {
-            return new ArrayList<>();
+            return new ArrayList<ScheduleDTO>();
         }
 
         List<ScheduleDTO> result = new ArrayList<ScheduleDTO>();

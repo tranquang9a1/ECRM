@@ -13,7 +13,7 @@
     <c:set var="categories" value="${requestScope.CATEGORIES}"/>
 </head>
 <body>
-<div class="table" style="width:77%; height: 350px">
+<div class="table" style="width:77%; height: 350px; margin-top: 10px">
     <div class="header-table">
         <div style="width:100px">
             <div>Hình ảnh</div>
@@ -70,5 +70,6 @@
         </form>
     </div>
 </div>
+<div id="pagination2" style="padding-left: 150px;"></div>
 </body>
 </html>

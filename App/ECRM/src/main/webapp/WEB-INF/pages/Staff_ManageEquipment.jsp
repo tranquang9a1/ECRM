@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
-<div class="table" style="width:100%; height: 280px">
+<div class="table" style="width:100%; height: 280px; margin-top: 10px">
     <div class="header-table">
         <div style="width:10%">
             <div>Loại</div>
@@ -64,12 +64,26 @@
                             </div>
                             <div style="width: 100px">
                                 <div class="group-button">
-                                    <div class="btn btn-detail"
-                                         title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
-                                        ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
-                                        ${e.usingTime}, ${e.timeRemain}); "><i
-                                            class="fa fa-pencil"></i>
-                                    </div>
+                                    <c:choose>
+                                        <c:when test="${e.classroomId != null}">
+                                            <div class="btn btn-detail"
+                                                 title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
+                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
+                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                    class="fa fa-pencil"></i>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="btn btn-detail"
+                                                 title="Chỉnh sửa" onclick="editEquipment(0,
+                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
+                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                    class="fa fa-pencil"></i>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <c:choose>
                                         <c:when test="${e.classroomId != null}">
                                             <div class="btn btn-remove"
@@ -116,12 +130,27 @@
                             </div>
                             <div style="width: 100px">
                                 <div class="group-button">
-                                    <div class="btn btn-detail"
-                                         title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
-                                          ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
-                                            ${e.usingTime}, ${e.timeRemain},${e.id}); "><i
-                                            class="fa fa-pencil"></i>
-                                    </div>
+                                    <c:choose>
+                                        <c:when test="${e.classroomId != null}">
+                                            <div class="btn btn-detail"
+                                                 title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
+                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
+                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                    class="fa fa-pencil"></i>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="btn btn-detail"
+                                                 title="Chỉnh sửa" onclick="editEquipment(0,
+                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                ${e.usingTime}, ${e.timeRemain},${e.id});
+                                                    document.getElementById('time-remain').style.display = 'block';
+                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                    class="fa fa-pencil"></i>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <c:choose>
                                         <c:when test="${e.classroomId != null}">
                                             <div class="btn btn-remove"
@@ -154,7 +183,7 @@
 <div id="pagination" style="padding-left: 150px;"></div>
 
 <script>
-    function editEquipment(classroomId, category, name, serialNumber, usingTime, timeRemain, equipmentId){
+    function editEquipment(classroomId, category, name, serialNumber, usingTime, timeRemain, equipmentId) {
         document.getElementById('classroomName').innerHTML = 'Cập nhật thiết bị';
         document.getElementById('equipment-button').value = 'Cập nhật';
         document.getElementById('equipment-action').value = 'update';
@@ -166,11 +195,11 @@
         document.getElementById('equipment-time').value = usingTime;
         document.getElementById('equipment-remain').value = timeRemain;
         document.getElementById('equipment-category-select').disabled = true;
-        $('#equipment-category-select option[value="'+category+'"]').attr("selected", "selected");
+        $('#equipment-category-select option[value="' + category + '"]').attr("selected", "selected");
         showModal(1, 'modal-1');
     }
 
-    function clearEquipment(){
+    function clearEquipment() {
         document.getElementById('classroomName').innerHTML = 'Tạo thiết bị';
         document.getElementById('equipment-button').value = 'Tạo';
         document.getElementById('equipment-name').value = '';

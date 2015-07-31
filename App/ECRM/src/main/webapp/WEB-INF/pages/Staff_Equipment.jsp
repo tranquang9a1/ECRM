@@ -37,7 +37,7 @@
         </style>
         <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
         <c:set var="mCategories" value="${requestScope.MANAGEDCATEGORIES}"/>
-        <c:set var="tab" value="${requestScope.TABCONTROL}"/>
+        <c:set var="tab1" value="${requestScope.TABCONTROL}"/>
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
         <div class="layout-background" style="height: 0px">
             <div class="container">
@@ -67,11 +67,10 @@
                                         <div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
                                                     onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
                                                             document.getElementById('equipment-classroomId').value = '0';
-                                                            document.getElementById('equipment-category-select').disabled = false"/>
-                                        </div>
-                                        <div class="search" style="  margin: 0 0 15px;">
-                                            <input type="text" placeholder="Nhập thiết bị"/>
-                                            <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
+                                                            document.getElementById('time-remain').style.display = 'none';
+                                                            $('#modal-1 > div.content-modal').css('height','307px');
+                                                            document.getElementById('equipment-category-select').disabled = false;
+                                                            "/>
                                         </div>
                                         <div class="clear"></div>
                                         <jsp:include flush="false" page="Staff_ManageEquipment.jsp"/>
@@ -81,10 +80,6 @@
                                             <div></div>
                                             <input type="button" class="btn btn-orange" style="margin: 0"
                                                    value="Tạo loại thiết bị" onclick="showModal(1, 'modal-category')"/>
-                                        </div>
-                                        <div class="search" style="  margin: 0 0 15px;">
-                                            <input type="text" placeholder="Nhập thiết bị"/>
-                                            <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
                                         </div>
                                         <div class="clear"></div>
                                         <jsp:include flush="false" page="Staff_ManageCategory.jsp"/>
@@ -143,9 +138,9 @@
                     || (event.keyCode>34 && event.keyCode<40)
                     || (event.keyCode==46) )" maxlength="4" id="equipment-time">
                             </div>
-                            <div class="group-control">
-                                <div class="name">Thời gian sử dụng</div>
-                                <input disabled type="text" name="timeRemain" onkeydown="return ( event.ctrlKey || event.altKey
+                            <div class="group-control" id="time-remain">
+                                <div class="name">Thời gian còn lại</div>
+                                <input type="text" name="timeRemain" onkeydown="return ( event.ctrlKey || event.altKey
                     || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
@@ -258,12 +253,13 @@
                 var name = document.forms["createEquipment"]["name"].value;
                 var serialNumber = document.forms["createEquipment"]["serialNumber"].value;
                 var usingTime = document.forms["createEquipment"]["usingTime"].value;
+                var timeRemain = document.forms["createEquipment"]["timeRemain"].value;
 
                 $.ajax({
                     type: "get",
                     url: "/ajax/checkEquipment",
                     cache: false,
-                    data: 'name=' + name + '&serialNumber=' + serialNumber + '&usingTime=' + usingTime
+                    data: 'name=' + name + '&serialNumber=' + serialNumber + '&usingTime=' + usingTime+ '&timeRemain=' + timeRemain
                     + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
@@ -400,9 +396,33 @@
                     }
                 });
             });
+            //phan trang
+            jQuery(function ($) {
+                var items = $("#removeClassroom > div");
 
-            document.getElementById("${tab}").className += " active";
-            document.getElementById("${tab}").setAttribute("data-main", "1");
+                var numItems = items.length;
+                var perPage = 7;
+
+                // only show the first 2 (or "first per_page") items initially
+                items.slice(perPage).hide();
+                // now setup pagination
+                $("#pagination2").pagination({
+                    items: numItems,
+                    itemsOnPage: perPage,
+                    cssStyle: "compact-theme",
+                    onPageClick: function (pageNumber) { // this is where the magic happens
+                        // someone changed page, lets hide/show trs appropriately
+                        var showFrom = perPage * (pageNumber - 1);
+                        var showTo = showFrom + perPage;
+
+                        items.hide() // first hide everything, then show for the new page
+                                .slice(showFrom, showTo).show();
+                    }
+                });
+            });
+
+            document.getElementById("${tab1}").className += " active";
+            document.getElementById("${tab1}").setAttribute("data-main", "1");
             document.getElementById("${tab}").className = "body-tab active";
             var tab = '${tab}';
             if (tab === 'tab1') {

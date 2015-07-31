@@ -25,4 +25,10 @@ public class UserInfoDAOImpl extends BaseDAO<TblUserInfoEntity, String> implemen
         return tblUserInfoEntities;
     }
 
+    public TblUserInfoEntity getUserInfoByUsername(String username) {
+        Query query = entityManager.createQuery("SELECT u FROM TblUserInfoEntity u WHERE u.username = :username");
+        query.setParameter("username", username);
+        return (TblUserInfoEntity) query.getSingleResult();
+    }
+
 }

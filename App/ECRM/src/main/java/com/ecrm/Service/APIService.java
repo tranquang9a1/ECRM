@@ -50,6 +50,9 @@ public class APIService {
     @Autowired
     CategoryDAOImpl categoryDAO;
 
+    @Autowired
+    UserInfoDAOImpl userInfoDAO;
+
 
     public ClassroomMapDTO getClassroom(int classId) {
         TblClassroomEntity classroomEntity = classroomDAO.find(classId);
@@ -692,8 +695,8 @@ public class APIService {
     }
 
     public List<EquipmentCategoryDTO> getEquipment(String username) {
-        TblUserEntity userInfo = userDAO.findUser(username);
-        Long updateTime = userInfo.getTblUserInfoByUsername().getDownloadTime();
+        TblUserInfoEntity userInfo = userInfoDAO.getUserInfoByUsername(username);
+        Long updateTime = userInfo.getDownloadTime();
         List<EquipmentCategoryDTO> result  = new ArrayList<EquipmentCategoryDTO>();
         List<TblEquipmentCategoryEntity> listEquipment = equipmentCategoryDAO.getAllEquipment();
 
@@ -706,6 +709,8 @@ public class APIService {
                 result.add(dto);
             }
         }
+        userInfo.setDownloadTime(System.currentTimeMillis());
+        userInfoDAO.merge(userInfo);
         return result;
     }
 }

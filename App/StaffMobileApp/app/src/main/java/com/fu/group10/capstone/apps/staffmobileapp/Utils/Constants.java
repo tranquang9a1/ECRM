@@ -16,6 +16,8 @@ public class Constants {
     public static final String API_CHANGE_ROOM = SOURCE + "/staff/changeRoom?from=";
     public static final String API_CHECK_SCHEDULE = API_SOURCE + "checkSchedule?classId=";
     public static final String API_CHECK_CONNECTION = API_SOURCE + "checkConnection";
+    public static final String RESOURCE_URL = SOURCE + "/resource/img/equipment/";
+    public static final String API_GET_CATEGORY = API_SOURCE + "getCategory?username=";
 
     public static final String API_GET_AVAILABLE_ROOM = SOURCE + "/staff/getAvailableRoom?classroomId=";
 

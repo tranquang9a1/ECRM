@@ -3,6 +3,7 @@ package com.fu.group10.capstone.apps.staffmobileapp.Utils;
 
 import android.util.Log;
 import com.fu.group10.capstone.apps.staffmobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.staffmobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.staffmobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.staffmobileapp.model.Result;
 import com.fu.group10.capstone.apps.staffmobileapp.model.User;
@@ -144,5 +145,30 @@ public class ParseUtils {
 
         }
         return null;
+    }
+
+    public static List<EquipmentCategory> parseEquipmentCategory(String json) {
+
+        List<EquipmentCategory> result = new ArrayList<EquipmentCategory>();
+        try {
+
+            if (json == null) {
+                return  result;
+            }
+
+            JSONArray listEquipments = new JSONArray(json);
+            for (int i = 0; i < listEquipments.length(); i++) {
+                JSONObject object = listEquipments.getJSONObject(i);
+                EquipmentCategory equipment = new EquipmentCategory();
+                equipment.setName(object.getString("name"));
+                equipment.setImageUrl(object.getString("imageUrl"));
+                result.add(equipment);
+
+            }
+            return result;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

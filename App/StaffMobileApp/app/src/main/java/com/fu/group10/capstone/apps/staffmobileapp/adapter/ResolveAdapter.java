@@ -2,6 +2,8 @@ package com.fu.group10.capstone.apps.staffmobileapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -12,8 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.component.InfinityListView;
+import com.fu.group10.capstone.apps.staffmobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.staffmobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.staffmobileapp.model.ReportInfo;
 
@@ -32,12 +36,16 @@ public class ResolveAdapter extends BaseAdapter implements InfinityListView.IInf
     public List<Equipment> items;
     private final SimpleDateFormat dateFormater;
     private SparseBooleanArray mSelectedItemsIds;
-
+    DatabaseHelper db;
+    List<EquipmentDAO> listCategory = new ArrayList<>();
     public ResolveAdapter(Context appContext, List<Equipment> items) {
         mSelectedItemsIds = new SparseBooleanArray();
         this.mContext = appContext;
         this.items = items;
         dateFormater = new SimpleDateFormat("HH:mm");
+        db = new DatabaseHelper(appContext);
+        listCategory = db.getEquipments();
+
     }
 
 
@@ -88,7 +96,7 @@ public class ResolveAdapter extends BaseAdapter implements InfinityListView.IInf
         }
 
 
-        holder.equipmentImg.setImageResource(setImage(items.get(i)));
+        holder.equipmentImg.setImageBitmap(setImage(items.get(i).getEquipmentName()));
 
 
 
@@ -125,23 +133,16 @@ public class ResolveAdapter extends BaseAdapter implements InfinityListView.IInf
         ImageView equipmentImg;
     }
 
-    public int setImage(Equipment report) {
-        if (report.getEquipmentName().equalsIgnoreCase("Bàn")) {
-            return R.mipmap.ic_table;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Máy Quạt")) {
-            return R.mipmap.ic_fan;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Máy Lạnh")) {
-            return R.mipmap.ic_air;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Tivi")) {
-            return R.mipmap.ic_tv;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Ghế")) {
-            return R.mipmap.ic_chair;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Bóng Đèn")) {
-            return R.mipmap.ic_bulb;
-        } else if (report.getEquipmentName().equalsIgnoreCase("Máy Chiếu")) {
-            return R.mipmap.ic_projector;
-        } else  {
-            return R.mipmap.ic_speaker;
+    public Bitmap setImage(String equipName) {
+        for (int i = 0; i < listCategory.size(); i++) {
+            EquipmentDAO dao = listCategory.get(i);
+            if (dao.getName().equalsIgnoreCase(equipName)) {
+                return BitmapFactory.decodeByteArray(dao.getImages(),
+                        0, dao.getImages().length);
+            }
         }
-        }
+        return null;
+    }
+
+
 }

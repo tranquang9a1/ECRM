@@ -18,14 +18,23 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
+import com.fu.group10.capstone.apps.staffmobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.staffmobileapp.model.User;
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.service.ShareExternalServer;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
 
 
 /**
@@ -37,6 +46,7 @@ public class LoginActivity extends Activity{
     private static final String defaultPassword = "123ecrm";
     private EditText usernameTextView;
     private EditText passwordTextView;
+    DatabaseHelper db;
     ProgressDialog progress;
 
 
@@ -65,6 +75,7 @@ public class LoginActivity extends Activity{
         boolean stateLogin = sp.getBoolean("LoginState", false);
         String username = sp.getString("username", null);
         if (stateLogin) {
+            syncCategory("staff");
             openMainActivity();
         } else {
             context = getApplicationContext();
@@ -134,13 +145,13 @@ public class LoginActivity extends Activity{
                 public void onRequestComplete(String result) {
                     user = ParseUtils.parseUserJson(result);
                     progress.dismiss();
-                    if (user != null ) {
+                    if (user != null) {
                         SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putBoolean("LoginState", true);
                         editor.putString("username", user.getUsername());
                         editor.commit();
-                        if (user.getRole().equalsIgnoreCase("Staff") && user.getLastLogin() == null ) {
+                        if (user.getRole().equalsIgnoreCase("Staff") && user.getLastLogin() == null) {
                             firstLogin(user.getPassword());
                         } else {
                             if (TextUtils.isEmpty(regId)) {
@@ -150,7 +161,7 @@ public class LoginActivity extends Activity{
                                 Log.d("RegisterActivity", "Already Registered with GCM Server!");
                             }
                             registerWithServer(user.getUsername());
-
+                            syncCategory(user.getUsername());
 
 
                             openMainActivity();
@@ -308,9 +319,76 @@ public class LoginActivity extends Activity{
 
     }
 
+    public void syncCategory(String username) {
+        RequestSender sender = new RequestSender();
+        sender.start(Constants.API_GET_CATEGORY + username, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                List<EquipmentCategory> equipments = ParseUtils.parseEquipmentCategory(result);
+                Log.d("Sync category", equipments.size() + "");
+                new ImageDownloader().execute(equipments);
+            }
+        });
+    }
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    private class ImageDownloader extends AsyncTask<List<EquipmentCategory>, Void, Void> {
+
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected Void doInBackground(List<EquipmentCategory>... lists) {
+            for (int i =0; i < lists[0].size(); i++) {
+                EquipmentCategory ec = lists[0].get(i);
+                insertCategory(ec.getName(),getLogoImage(Constants.RESOURCE_URL + ec.getImageUrl()));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+
+        }
+
+    }
+
+
+    private byte[] getLogoImage(String url) {
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+            InputStream is = ucon.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            ByteArrayBuffer baf = new ByteArrayBuffer(500);
+            int current = 0;
+
+            while ((current = bis.read()) != -1) {
+                baf.append((byte) current);
+
+            }
+            return baf.toByteArray();
+
+
+        } catch (Exception e) {
+            Log.d("ImageManager", "Error: " + e.toString());
+            return null;
+        }
+
+    }
+    public void insertCategory(String name, byte[] image) {
+        db = new DatabaseHelper(this);
+        db.insertEquipment(name, image);
     }
 
 }

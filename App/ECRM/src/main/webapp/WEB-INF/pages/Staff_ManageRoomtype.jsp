@@ -16,12 +16,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
-<div class="search" style="  margin: 0 0 15px;">
-    <input type="text" placeholder="Nhập loại phòng"/>
-    <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
-</div>
 <div class="clear"></div>
-<div class="table small-table" style="height: 280px">
+<div class="table small-table" style="height: 280px;margin-top: 10px">
     <div class="header-table">
         <div class="room-number">
             <div>Loại Phòng</div>

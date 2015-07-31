@@ -91,7 +91,12 @@ function doAction(choose, object) {
             $(".loading-page").addClass("active");
             sendResolve();
             break;
+        case 2:
+            document.getElementById(object.id).submit();
+            $(".loading-page").addClass("active");
+            $(".page").removeClass("active");
     }
+
 }
 
 

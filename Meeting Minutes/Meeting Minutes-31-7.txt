@@ -1,0 +1,5 @@
+﻿Đội ưu tiên khi chọn thiết bị trong tạo phòng cần đổi thành text, dễ hiểu hơn
+Cần auto set số hàng trong dãy bằng nhau
+Cần quản lý bảng phòng học
+Tạo phòng khi gặp trường hợp phòng đã tồn tại cần hỏi người dùng có muốn ghi đè không
+Cho phép xóa loại phòng khi vừa cấp nhật 

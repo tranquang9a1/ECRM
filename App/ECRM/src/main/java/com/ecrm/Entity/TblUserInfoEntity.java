@@ -14,6 +14,7 @@ public class TblUserInfoEntity {
     private String phone;
     private Timestamp lastLogin;
     private String deviceId;
+    private Long downloadTime;
     private TblUserEntity tblUserByUsername;
 
     @Id
@@ -64,6 +65,16 @@ public class TblUserInfoEntity {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    @Basic
+    @Column(name="DownloadTime")
+    public Long getDownloadTime() {
+        return downloadTime;
+    }
+
+    public void setDownloadTime(Long downloadTime) {
+        this.downloadTime = downloadTime;
     }
 
     @Override

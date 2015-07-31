@@ -18,6 +18,7 @@ public class TblEquipmentCategoryEntity {
     private Boolean isManaged;
     private String imageUrl;
     private Boolean isDelete;
+    private Long updateTime;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
 
@@ -86,6 +87,15 @@ public class TblEquipmentCategoryEntity {
         this.usingTime = usingTime;
     }
 
+    @Basic
+    @Column(name = "UpdateTime")
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -16,6 +16,7 @@ public class TblEquipmentQuantityEntity {
     private boolean isDelete;
     private int id;
 
+
     private TblRoomTypeEntity2 tblRoomTypeEntity2ByRoomTypeId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryEntityByEquipmentCategoryId;
 
@@ -82,6 +83,7 @@ public class TblEquipmentQuantityEntity {
     public void setIsDelete(boolean isDelete) {
         this.isDelete = isDelete;
     }
+
 
 
     @ManyToOne

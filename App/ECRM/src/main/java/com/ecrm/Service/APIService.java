@@ -702,7 +702,7 @@ public class APIService {
 
         for (int i = 0; i < listEquipment.size(); i++) {
             TblEquipmentCategoryEntity equipment = listEquipment.get(i);
-            if (equipment.getUpdateTime() > updateTime) {
+            if (updateTime == null || equipment.getUpdateTime() > updateTime) {
                 EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
                 dto.setName(equipment.getName());
                 dto.setImageUrl(equipment.getImageUrl());

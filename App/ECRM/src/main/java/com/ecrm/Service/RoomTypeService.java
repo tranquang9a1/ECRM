@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -128,7 +129,7 @@ public class RoomTypeService {
                 }
             }
 
-            return "redirect:/staff/classroom?ACTIVETAB=tab2&MESSAGE=" + message;
+            return "redirect:/staff/classroom?ACTIVETAB=tab2&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
         }catch (Exception e){
             e.printStackTrace();
             return ERROR;

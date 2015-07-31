@@ -24,7 +24,7 @@
         <div style="width:100px;">
             <div>Quản lý</div>
         </div>
-        <div style="width: 100px">
+        <div style="width: 200px">
             <div></div>
         </div>
         <p class="clear"></p>
@@ -49,9 +49,9 @@
                             Không
                         </c:otherwise>
                     </c:choose></div>
-                    <div style="width: 100px">
+                    <div style="width: 200px">
                         <div class="control">
-                            <div class="group-button">
+                            <div class="group-button" style="border: 0px">
                                 <div class="btn btn-detail" title="Chỉnh sửa" onclick="showModal(1,'modal-edit-category');
                 document.getElementById('edit-categoryName').value = '${c.name}';
                 document.getElementById('edit-categoryId').value  = ${c.id}; "><i class="fa fa-pencil"></i>

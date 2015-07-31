@@ -60,15 +60,15 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-    /*@Scheduled(fixedDelay = 1000)
-     public void checkChangeClassroom() throws Exception {
+    @Scheduled(fixedDelay = 1000)
+    public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
         int hour = localTime.getHourOfDay();
         if (localDate.getDayOfWeek() != 7) {
 
-            if (Utils.checkCronJob()&&((hour == 6 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0)
-                    || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0))){
+            if (Utils.checkCronJob() && ((hour == 6 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0)
+                    || (hour == 12 && localTime.getMinuteOfHour() == 15 && localTime.getSecondOfMinute() == 0))) {
                 System.out.println("Task 1: Task check change room run!!! Current time is : " + new Date());
                 //tim nhung phong bi hu hai ma chua sua
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -96,9 +96,9 @@ public class CheckDamagedClassroomSchedule {
                         if (classroomName.trim().length() == 0) {
                             System.out.println("Task 1: Last day, classroom " + currentClassroom.getName() + " was not changed to any classroom!");
                         }
-                        try{
+                        try {
                             changeRoomService.changingRoom(currentSchedule, validClassrooms, classroomName, currentClassroom);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -137,17 +137,17 @@ public class CheckDamagedClassroomSchedule {
                 System.out.println("");
             }
             if (hour == 0 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0) {
-                try{
+                try {
                     System.out.println("Daily cronjob!");
                     String date = Long.toString(new Date().getTime());
-                    File file = new File(Constant.FILE_PATH+LAST_RUN_TXT);
+                    File file = new File(Constant.FILE_PATH + LAST_RUN_TXT);
 
                     FileWriter fw = new FileWriter(file.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(date);
                     bw.close();
                     System.out.println("Done");
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -179,14 +179,14 @@ public class CheckDamagedClassroomSchedule {
                         } else {
                             currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Noon");
                         }
-                        if(currentSchedule.isEmpty()){
+                        if (currentSchedule.isEmpty()) {
                             System.out.println("Task 2: There are no schedule!");
                             break;
                         }
                         String changeRoom = "";
-                        try{
+                        try {
                             changeRoom = changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         //update status report
@@ -225,9 +225,9 @@ public class CheckDamagedClassroomSchedule {
                             List<TblClassroomEntity> validClassrooms = classroomDAO.getValidClassroom();
                             List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();
                             currentSchedule = changeRoomService.getScheduleByDayTime(currentClassroom.getId());
-                            try{
+                            try {
                                 changeRoomService.changingRoom(currentSchedule, validClassrooms, "", currentClassroom);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -241,5 +241,4 @@ public class CheckDamagedClassroomSchedule {
 
     }
 
-*/
 }

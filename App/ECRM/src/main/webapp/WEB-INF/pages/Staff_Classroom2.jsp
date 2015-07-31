@@ -6,16 +6,17 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <c:set var="user" value="${sessionScope.USER}"/>
 <c:choose>
     <c:when test="${empty user}">
         <jsp:forward page="Login.jsp"/>
     </c:when>
     <c:otherwise>
+        <%@ page contentType="text/html;charset=UTF-8" language="java" %>
         <html>
         <head>
-            <meta charset="UTF-8"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>ECRM - Equipment Classroom Management</title>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="/resource/css/layout.css"/>
@@ -40,8 +41,10 @@
         <script>
             <c:set var="message" value="${requestScope.MESSAGE}"/>
             <c:if test="${message!= '0'}">
-            var m = '${message}';
-            conformData(1, {message: m});
+            <c:if test="${message=='update-equipment-fail'}">
+            var m = "Không đủ thiết bị để cập nhật!"
+            </c:if>
+            conformData(1, {message: '${message}'});
             </c:if>
         </script>
         <div class="layout-background" style="height: 0px">
@@ -76,7 +79,7 @@
                                         <div>
                                             <div></div>
                                             <input type="button" class="btn btn-orange" style="margin: 0"
-                                                   onclick="document.getElementById('RoomTypeAction').value='update';showModal(1, 'modal-roomtypedetail')"
+                                                   onclick="document.getElementById('RoomTypeAction').value='create';showModal(1, 'modal-roomtypedetail')"
                                                    value="Tạo loại phòng"/></div>
                                         <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
                                     </div>
@@ -143,6 +146,7 @@
                 <%--Modal hien len khi nhap vao nut tao phong cua CLASSROOM--%>
             <form action="/staff/createClassroom" id="createClassroomForm" name="CreateClassroomForm" method="post">
                 <input type="hidden" name="Action" id="ClassroomAction">
+                <input type="hidden" name="classroomId" id="classroomId">
 
                 <div class="modal modal-small" id="modal-1">
                     <div class="content-modal">
@@ -408,11 +412,12 @@
                 var roomName = document.forms["CreateClassroomForm"]["RoomName"].value;
                 var roomType = document.forms["CreateClassroomForm"]["RoomType"].value;
                 var action = document.forms["CreateClassroomForm"]["Action"].value;
+                var classroomId = document.forms["CreateClassroomForm"]["classroomId"].value;
                 $.ajax({
                     type: "get",
                     url: "/ajax/checkCreateClassroom",
                     cache: false,
-                    data: 'roomName=' + roomName + '&roomType=' + roomType + '&action=' + action,
+                    data: 'roomName=' + roomName + '&roomType=' + roomType + '&action=' + action + '&classroomId=' + classroomId,
                     success: function (data) {
                         if (data.status == true) {
                             showModal(0, 'modal-1')
@@ -475,12 +480,13 @@
             function validateCreateRoomType() {
                 var roomtypeName = document.forms["CreateRoomType"]["RoomtypeName"].value;
                 var action = document.forms["CreateRoomType"]["Action"].value;
+                var roomtypeId = document.forms["CreateRoomType"]["RoomtypeId"].value;
                 if (checkNumber()) {
                     $.ajax({
                         type: "get",
                         url: "/ajax/checkCreateRoomType",
                         cache: false,
-                        data: 'roomtypeName=' + roomtypeName + '&action=' + action,
+                        data: 'roomtypeName=' + roomtypeName + '&action=' + action+ '&roomtypeId=' + roomtypeId,
                         success: function (data) {
                             if (data.status == true) {
                                 showModal(0, 'modal-4');

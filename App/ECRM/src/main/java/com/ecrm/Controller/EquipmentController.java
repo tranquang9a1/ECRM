@@ -229,7 +229,6 @@ public class EquipmentController {
                 String filePath = "";
                 String contentType = request.getContentType();
                 Hashtable<String, String> params = new Hashtable<String, String>();
-
                 if ((contentType.indexOf("multipart/form-data") >= 0)) {
                     DiskFileItemFactory factory = new DiskFileItemFactory();
                     // maximum size that will be stored in memory

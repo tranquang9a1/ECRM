@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -111,14 +112,14 @@ public class ClassroomService {
                             equipmentDAO.merge(tblEquipmentEntity);
                         }
                         classroom = new TblClassroomEntity(classroom.getId(), null, roomName, classroom.getCreateTime(),
-                                new Timestamp(date.getTime()), false, false, 0, roomTypeId);
+                                new Timestamp(date.getTime()), false, true, 0, roomTypeId);
                         classroomDAO.merge(classroom);
-                        message = "Cập nhật phòng "+roomName+" thành công!";
+                        message = "Cập nhật phòng " + roomName + " thành công!";
                     } else {
                         classroom = new TblClassroomEntity(0, null, roomName.trim(), new Timestamp(date.getTime()), null, false, true, 0
                                 , roomTypeId);
                         classroomDAO.insert(classroom);
-                        message = "Tạo phòng "+roomName+" thành công!";
+                        message = "Tạo phòng " + roomName + " thành công!";
                     }
                     for (TblEquipmentEntity tblEquipmentEntity : insertEquipments) {
                         tblEquipmentEntity.setClassroomId(classroom.getId());
@@ -126,10 +127,10 @@ public class ClassroomService {
                     }
                 }
             } else {
-                return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=Không có đủ thiết bị trong " +
-                        "để tạo phòng! Vui lòng tạo thêm thiết bị!";
+                message = "Không có đủ thiết bị trong để tạo phòng! Vui lòng tạo thêm thiết bị!";
+                return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE="+  URLEncoder.encode(message, "UTF-8");
             }
-            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + message;
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
             return ERROR;
@@ -168,15 +169,59 @@ public class ClassroomService {
             }
             classroomEntity.setIsDelete(true);
             classroomDAO.merge(classroomEntity);
-            String message = "Xóa phòng "+classroomName+" thành công!";
-            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + message;
+            String message = "Xóa phòng " + classroomName + " thành công!";
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
             return ERROR;
         }
     }
 
+    public String updateEquipment(int classroomId) {
+        try {
+            String message = "";
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+            TblRoomTypeEntity2 tblRoomTypeEntity2 = classroomEntity.getTblRoomType2ByRoomTypeId2();
+            List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity2.getTblEquipmentQuantityById();
+            for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
+                //get category
+                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId();
+                //get equipment
+                if (!tblEquipmentQuantityEntity.getIsDelete() && tblEquipmentCategoryEntity.getIsManaged()) {
+                    //get quantity
+                    int quantity = tblEquipmentQuantityEntity.getQuantity();
+                    // get categoryId
+                    int categoryId = tblEquipmentCategoryEntity.getId();
+                    //get equipment already have in classroom
+                    List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getEquipmentByCategoryAndClassroomId(categoryId,
+                            classroomEntity.getId());
+                    //quantity missing equipment
+                    int insertQuantity = quantity - tblEquipmentEntities.size();
+                    if (insertQuantity > 0) {
+                        //get available equipment
+                        List<TblEquipmentEntity> insertEquipment = equipmentDAO.getEquipmentByCategory(categoryId);
+                        if (insertEquipment.size() >= insertQuantity) {
+                            for (int i = 0; i < insertQuantity; i++) {
+                                insertEquipment.get(i).setClassroomId(classroomId);
+                                equipmentDAO.merge(insertEquipment.get(i));
+                            }
+                        } else {
+                            message = "Không đủ "+ tblEquipmentCategoryEntity.getName();
+                            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
+                        }
+                    }
 
+                }
+            }
+            classroomEntity.setIsAllInformation(true);
+            classroomDAO.merge(classroomEntity);
+            message = "Cập nhật thiết bị thành công!";
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ERROR;
+        }
+    }
 
 
     public List<String> getAvailableRoom(int classroomId) {
@@ -282,4 +327,6 @@ public class ClassroomService {
 
         return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
+
+
 }

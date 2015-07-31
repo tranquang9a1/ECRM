@@ -205,12 +205,24 @@ public class AjaxController {
         } else {
             String action = request.getParameter("action");
             if (action.equals("create")) {
-                TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName);
+                TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName.trim());
                 if (classroomEntity != null) {
                     alert = "Tên phòng đã tồn tại!";
                     status = false;
                     validateEntity = new ValidateEntity(alert, status);
                     return validateEntity;
+                }
+            }else{
+                int classroomId = Integer.parseInt(request.getParameter("classroomId"));
+                TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+                if(!classroomEntity.getName().equals(roomName.trim())){
+                    TblClassroomEntity classroomEntity1 = classroomDAO.getClassroomByName(roomName.trim());
+                    if (classroomEntity1 != null) {
+                        alert = "Tên phòng đã tồn tại!";
+                        status = false;
+                        validateEntity = new ValidateEntity(alert, status);
+                        return validateEntity;
+                    }
                 }
             }
         }
@@ -249,6 +261,18 @@ public class AjaxController {
                     status = false;
                     validateEntity = new ValidateEntity(alert, status);
                     return validateEntity;
+                }
+            }else{
+                int roomtypeId = Integer.parseInt(request.getParameter("roomtypeId"));
+                TblRoomTypeEntity2 tblRoomTypeEntity2 = roomType2DAO.find(roomtypeId);
+                if(!tblRoomTypeEntity2.getName().equals(roomTypeName)){
+                    TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
+                    if (roomTypeEntity != null) {
+                        alert = "Tên loại phòng đã tồn tại!";
+                        status = false;
+                        validateEntity = new ValidateEntity(alert, status);
+                        return validateEntity;
+                    }
                 }
             }
         }

@@ -41,6 +41,9 @@
                         <div>${cl.roomType.name}</div>
                     </div>
                     <div class="statusS">
+                        <c:if test="${not cl.classroom.isAllInformation}">
+                            <div><a href="/staff/updateEquipment?classroomId=${cl.classroom.id}">Cập nhật thiết bị</a></div>
+                        </c:if>
                         <c:if test="${cl.classroom.damagedLevel > 0}">
                             <div>Độ hư hại: ${cl.classroom.damagedLevel}</div>
                         </c:if>
@@ -57,7 +60,7 @@
                                          showClassroomMap(${cl.classroom.name},${cl.classroom.roomTypeId2},${cl.roomType.verticalRows},
                                          "${cl.roomType.horizontalRows}", "${cl.roomType.numberOfSlotsEachHRows}"
                                          ,${cl.equipment});
-                                         editClassroom(${cl.classroom.roomTypeId2})'>
+                                         editClassroom(${cl.classroom.roomTypeId2}, ${cl.classroom.id})'>
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="btn btn-remove"
@@ -76,14 +79,14 @@
 </div>
 <div id="pagination" style="padding-left: 150px;"></div>
 <script>
-    function editClassroom(id) {
+    function editClassroom(id, classroomId) {
         $('#selectBox option[value="' + id + '"]').prop('selected', true);
         var selectedValue = $('#selectBox option[value="' + id + '"]').data("value");
         document.getElementById('loaiphong').innerHTML = selectedValue.name;
         document.getElementById('roomtype').value = selectedValue.id;
         showRoomtypeMapByDropDownList(selectedValue.id, selectedValue.verticalRows, selectedValue.horizontalRows, selectedValue.noSlotsEachHRows
                 , selectedValue.equipment);
-
+        document.getElementById('classroomId').value = classroomId;
     }
 </script>
 

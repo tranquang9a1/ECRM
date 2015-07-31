@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -40,7 +41,7 @@ public class StaffController {
     CategoryDAOImpl categoryDAO;
 
     @RequestMapping(value = "classroom")
-    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab, @RequestParam("MESSAGE") String message) throws JSONException {
+    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab, @RequestParam("MESSAGE") String message) throws JSONException, UnsupportedEncodingException {
         HttpSession session  =  request.getSession();
         if(session!=null) {
             List<RoomTypeDTO> tblRoomTypeEntities = roomTypeService.getAllRoomType();
@@ -56,6 +57,7 @@ public class StaffController {
                     iterator.remove();
                 }
             }
+            request.setCharacterEncoding("UTF-8");
             request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
             request.setAttribute("ACTIVETAB", activeTab);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
@@ -95,11 +97,21 @@ public class StaffController {
 
     //remove classroom
     @RequestMapping(value = "removeClassroom")
-    @Transactional
     public String removeClassroom(HttpServletRequest request, @RequestParam("classroomName") String classroomName) {
         HttpSession session  =  request.getSession();
         if(session!=null) {
             return classroomService.removeClassroom(classroomName);
+
+        }else {
+            return "Login";
+        }
+    }
+
+    @RequestMapping(value = "updateEquipment")
+    public String updateEquipment(HttpServletRequest request, @RequestParam("classroomId")int classroomId){
+        HttpSession session  =  request.getSession();
+        if(session!=null) {
+            return classroomService.updateEquipment(classroomId);
 
         }else {
             return "Login";

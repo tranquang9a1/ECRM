@@ -117,4 +117,15 @@ public class StaffController {
             return "Login";
         }
     }
+
+    @RequestMapping(value = "removeRoomType")
+    public String removeRoomType(HttpServletRequest request, @RequestParam("roomTypeId")int roomTypeId){
+        HttpSession session  =  request.getSession();
+        if(session!=null) {
+            return roomTypeService.removeRoomType(roomTypeId);
+
+        }else {
+            return "Login";
+        }
+    }
 }

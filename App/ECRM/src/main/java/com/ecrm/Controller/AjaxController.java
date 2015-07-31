@@ -201,27 +201,12 @@ public class AjaxController {
             validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
         } else {
-            String action = request.getParameter("action");
-            if (action.equals("create")) {
-                TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName.trim());
-                if (classroomEntity != null) {
-                    alert = "Tên phòng đã tồn tại!";
-                    status = false;
-                    validateEntity = new ValidateEntity(alert, status);
-                    return validateEntity;
-                }
-            }else{
-                int classroomId = Integer.parseInt(request.getParameter("classroomId"));
-                TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
-                if(!classroomEntity.getName().equals(roomName.trim())){
-                    TblClassroomEntity classroomEntity1 = classroomDAO.getClassroomByName(roomName.trim());
-                    if (classroomEntity1 != null) {
-                        alert = "Tên phòng đã tồn tại!";
-                        status = false;
-                        validateEntity = new ValidateEntity(alert, status);
-                        return validateEntity;
-                    }
-                }
+            TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName.trim());
+            if (classroomEntity != null) {
+                alert = "Bạn có muốn cập nhật cho phòng "+ classroomEntity.getName();
+                status = true;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
             }
         }
         String roomType = request.getParameter("roomType");
@@ -255,40 +240,34 @@ public class AjaxController {
             if (action.equals("create")) {
                 TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
                 if (roomTypeEntity != null) {
-                    alert = "Tên loại phòng đã tồn tại!";
-                    status = false;
+                    alert = "Bạn có muốn cập nhật cho loại phòng "+roomTypeName;
+                    status = true;
                     validateEntity = new ValidateEntity(alert, status);
                     return validateEntity;
                 }
-            }else{
-                int roomtypeId = Integer.parseInt(request.getParameter("roomtypeId"));
-                TblRoomTypeEntity2 tblRoomTypeEntity2 = roomType2DAO.find(roomtypeId);
-                if(!tblRoomTypeEntity2.getName().equals(roomTypeName)){
-                    TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
-                    if (roomTypeEntity != null) {
-                        alert = "Tên loại phòng đã tồn tại!";
-                        status = false;
-                        validateEntity = new ValidateEntity(alert, status);
-                        return validateEntity;
-                    }
-                }
             }
         }
-        String airConditioning = request.getParameter("airConditioning");
-        if (airConditioning != null) {
-            if (airConditioning.equals("")) {
-                alert = "Số lượng không được bỏ trống!";
-                status = false;
-                validateEntity = new ValidateEntity(alert, status);
-                return validateEntity;
-            }
-            if (!Utils.isNumeric(airConditioning)) {
-                alert = "Số lượng không được là chữ!";
-                status = false;
-                validateEntity = new ValidateEntity(alert, status);
-                return validateEntity;
-            }
+        return validateEntity;
+    }
 
+    @RequestMapping(value = "checkDeleteRoomType")
+    public
+    @ResponseBody
+    ValidateEntity checkDeleteRoomType(HttpServletRequest request) {
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+
+        int roomTypeId = Integer.parseInt(request.getParameter("roomTypeId"));
+        TblRoomTypeEntity2 tblRoomTypeEntity2 = roomType2DAO.find(roomTypeId);
+        List<TblClassroomEntity> tblClassroomEntities = tblRoomTypeEntity2.getTblClassroomsById();
+        if (!tblClassroomEntities.isEmpty()) {
+            alert = "Không thể xóa loại phòng này! Bạn phải gỡ ra khỏi phòng học trước!";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
         }
         return validateEntity;
     }
@@ -328,7 +307,7 @@ public class AjaxController {
                 }
             }
         }
-        String usingTime =request.getParameter("usingTime");
+        String usingTime = request.getParameter("usingTime");
         if (usingTime != null) {
             if (usingTime.equals("")) {
                 alert = "Số lượng không được bỏ trống!";
@@ -396,7 +375,7 @@ public class AjaxController {
         } else {
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
             TblEquipmentCategoryEntity tblEquipmentCategoryEntity = categoryDAO.find(categoryId);
-            if(!tblEquipmentCategoryEntity.getName().equals(name.trim())){
+            if (!tblEquipmentCategoryEntity.getName().equals(name.trim())) {
                 List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.getCategoryByName(name.trim());
                 if (!tblEquipmentCategoryEntities.isEmpty()) {
                     alert = "Tên loại thiết bị đã tồn tại!";

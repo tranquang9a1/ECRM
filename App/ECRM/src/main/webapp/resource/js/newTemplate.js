@@ -140,7 +140,7 @@ function updateTime() {
     var overtime = false;
     if(nowHour >= 21) {
         overtime = true;
-        document.getElementById("now-time").style.top = (((nowHour - 6) * 60) - 960) + "px";
+        document.getElementById("now-time").style.top = "0px";
     }
     else {
         document.getElementById("now-time").style.top = time + "px";

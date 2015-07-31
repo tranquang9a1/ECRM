@@ -15,7 +15,7 @@
   <div class="data-tab main-info active">
       <div class="group-control" style="margin: 0 0 5px; padding: 0 0 15px; border-bottom: 1px solid #ddd">
         <div class="name">Đánh giá của bạn</div>
-        <div class="control" style="width: 270px">
+        <div class="control" style="float: right">
           <select id="report-evaluate" style="width: 200px; float: right">
             <option value="1">Đổi phòng</option>
             <option value="2" selected="selected">Không cần đổi phòng</option>

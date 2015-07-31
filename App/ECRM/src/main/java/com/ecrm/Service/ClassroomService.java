@@ -94,14 +94,19 @@ public class ClassroomService {
         return classroomMapDTOs;
     }
 
-    public String createClassroom(int roomTypeId, String roomName) {
+    public String createClassroom(int roomTypeId, String roomName, String action, int classroomId) {
         try {
             String message = "";
             Date date = new Date();
             roomName = roomName.trim();
+
             if (roomName != null) {
                 TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
-                if (classroom != null) {
+                if ( action.equals("update")) {
+                    if(classroom==null){
+                        classroom = classroomDAO.find(classroomId);
+                    }
+                    String oldClass = classroom.getName();
                     Collection<TblEquipmentEntity> tblEquipmentEntities = classroom.getTblEquipmentsById();
                     for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
                         tblEquipmentEntity.setClassroomId(null);
@@ -110,8 +115,9 @@ public class ClassroomService {
                     classroom = new TblClassroomEntity(classroom.getId(), roomName, classroom.getCreateTime(),
                             new Timestamp(date.getTime()), false, false, 0, roomTypeId);
                     classroomDAO.merge(classroom);
-                    message = "Cập nhật phòng " + roomName + " thành công!";
-                } else {
+                    message = "Cập nhật phòng " + oldClass + " thành công!";
+                }
+                if(action.equals("create") && classroom==null) {
                     classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), null, false, false, 0
                             , roomTypeId);
                     classroomDAO.insert(classroom);

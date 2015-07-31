@@ -68,9 +68,9 @@ public class RoomTypeService {
     }
 
 
-    public String createRoomType( String roomtypeId,int slots, int verticalRows,
+    public String createRoomType( int roomtypeId,int slots, int verticalRows,
                                    String horizontalRows,String NumberOfSlotsEachHRows,
-                                   String roomtypeName, String equip){
+                                   String roomtypeName, String equip, String action){
         try {
             TblRoomTypeEntity2 roomType = new TblRoomTypeEntity2();
             horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
@@ -79,7 +79,11 @@ public class RoomTypeService {
             String message = "";
             if (roomtypeName != "") {
                 roomType = roomType2DAO.getRoomTypeByName(roomtypeName);
-                if(roomType!=null){
+                if ( action.equals("update")) {
+                    if(roomType==null){
+                        roomType = roomType2DAO.find(roomtypeId);
+                    }
+                    String oldRoomType = roomType.getName();
                     List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = roomType.getTblEquipmentQuantityById();
                     if(!tblEquipmentQuantityEntities.isEmpty()){
                         for(TblEquipmentQuantityEntity tblEquipmentQuantityEntity: tblEquipmentQuantityEntities){
@@ -103,8 +107,9 @@ public class RoomTypeService {
                             roomType.getCreateTime(), false, new Timestamp(date.getTime()));
 
                     roomType2DAO.merge(roomType);
-                    message = "Cập nhật "+roomtypeName+" thành công!";
-                }else {
+                    message = "Cập nhật "+oldRoomType+" thành công!";
+                }
+                if(action.equals("create") && roomType==null) {
                     roomType = new TblRoomTypeEntity2(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
                             new Timestamp(date.getTime()), false, null);
                     roomType2DAO.insert(roomType);

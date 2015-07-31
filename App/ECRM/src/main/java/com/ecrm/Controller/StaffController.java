@@ -71,13 +71,13 @@ public class StaffController {
     }
 
     @RequestMapping(value = "createRoomType", method = RequestMethod.POST)
-    public String createRoomType(HttpServletRequest request, @RequestParam("RoomtypeId") String roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
+    public String createRoomType(HttpServletRequest request, @RequestParam("RoomtypeId") int roomtypeId, @RequestParam("Slots") int slots, @RequestParam("VerticalRows") int verticalRows,
                                  @RequestParam("HorizontalRows") String horizontalRows, @RequestParam("NumberOfSlotsEachHRows") String NumberOfSlotsEachHRows,
-                                 @RequestParam("RoomtypeName") String roomtypeName, @RequestParam("equip") String equip) {
+                                 @RequestParam("RoomtypeName") String roomtypeName, @RequestParam("equip") String equip, @RequestParam("Action") String action) {
         HttpSession session  =  request.getSession();
         if(session!=null) {
             return roomTypeService.createRoomType(roomtypeId, slots, verticalRows, horizontalRows,
-                    NumberOfSlotsEachHRows, roomtypeName, equip);
+                    NumberOfSlotsEachHRows, roomtypeName, equip, action);
         }else {
             return "Login";
         }
@@ -86,10 +86,11 @@ public class StaffController {
     //create classroom
     @RequestMapping(value = "createClassroom", method = RequestMethod.POST)
     public String createClassroom(HttpServletRequest request, @RequestParam("RoomType") int roomTypeId,
-                                  @RequestParam("RoomName") String roomName) {
+                                  @RequestParam("RoomName") String roomName, @RequestParam("Action") String action,
+                                  @RequestParam("classroomId") int classroomId) {
         HttpSession session  =  request.getSession();
         if(session!=null) {
-            return classroomService.createClassroom(roomTypeId, roomName);
+            return classroomService.createClassroom(roomTypeId, roomName, action, classroomId);
         }else {
             return "Login";
         }

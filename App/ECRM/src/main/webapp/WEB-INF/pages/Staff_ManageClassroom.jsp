@@ -60,7 +60,8 @@
                                          showClassroomMap(${cl.classroom.name},${cl.classroom.roomTypeId2},${cl.roomType.verticalRows},
                                          "${cl.roomType.horizontalRows}", "${cl.roomType.numberOfSlotsEachHRows}"
                                          ,${cl.equipment});
-                                         editClassroom(${cl.classroom.roomTypeId2}, ${cl.classroom.id})'>
+                                         editClassroom(${cl.classroom.roomTypeId2}, ${cl.classroom.id});
+                                         document.getElementById("classroom-create").value="Cập nhật"'>
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="btn btn-remove"

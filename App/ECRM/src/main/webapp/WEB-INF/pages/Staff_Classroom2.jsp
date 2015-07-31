@@ -71,7 +71,8 @@
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
                                         <div><input type="button" class="btn btn-orange"
-                                                    onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();"
+                                                    onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();
+                                                    document.getElementById('classroom-create').value='Tạo phòng'"
                                                     value="Tạo phòng học"/></div>
                                         <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                     </div>
@@ -146,7 +147,7 @@
                 <%--Modal hien len khi nhap vao nut tao phong cua CLASSROOM--%>
             <form action="/staff/createClassroom" id="createClassroomForm" name="CreateClassroomForm" method="post">
                 <input type="hidden" name="Action" id="ClassroomAction">
-                <input type="hidden" name="classroomId" id="classroomId">
+                <input type="hidden" name="classroomId" id="classroomId" value="0">
 
                 <div class="modal modal-small" id="modal-1">
                     <div class="content-modal">
@@ -176,7 +177,7 @@
                                    onclick="showModal(0, 'modal-1'); clearRoomName();"
                                    value="Thoát"/>
                             <input type="button" class="btn btn-orange" onclick="validateCreateClassroomForm();"
-                                   value="Tạo Phòng"/>
+                                   value="Tạo Phòng" id="classroom-create"/>
                         </div>
                     </div>
                     <div class="black-background"></div>
@@ -314,7 +315,7 @@
                 <%--Modal hien len khi nhap vao nut Xem truoc kieu phong khi tao ROOMTYPE--%>
             <form action="/staff/createRoomType" id="createRoomType" name="CreateRoomType" method="post">
                 <div class="modal modal-medium" id="modal-4">
-                    <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="">
+                    <input type="hidden" id="RoomtypeId" name="RoomtypeId" value="0">
                     <input type="hidden" id="name" name="RoomtypeName" value="" maxlength="30">
                     <input type="hidden" id="Slots" name="Slots" value="">
                     <input type="hidden" id="VerticalRows" name="VerticalRows" value="">

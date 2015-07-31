@@ -354,4 +354,36 @@ public class AjaxController {
 
         return validateEntity;
     }
+
+    @RequestMapping(value = "checkEditCategory")
+    public
+    @ResponseBody
+    ValidateEntity checkEditCategory(HttpServletRequest request) {
+        String alert = "";
+        boolean status = true;
+        ValidateEntity validateEntity = new ValidateEntity();
+        validateEntity.setAlert(alert);
+        validateEntity.setStatus(status);
+
+        String name = request.getParameter("name");
+        if (name == null || name.trim().length() == 0) {
+            alert = "Tên loại thiết bị không được bỏ trống!";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
+        } else {
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+            TblEquipmentCategoryEntity tblEquipmentCategoryEntity = categoryDAO.find(categoryId);
+            if(!tblEquipmentCategoryEntity.getName().equals(name.trim())){
+                List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.getCategoryByName(name.trim());
+                if (!tblEquipmentCategoryEntities.isEmpty()) {
+                    alert = "Tên loại thiết bị đã tồn tại!";
+                    status = false;
+                    validateEntity = new ValidateEntity(alert, status);
+                    return validateEntity;
+                }
+            }
+        }
+        return validateEntity;
+    }
 }

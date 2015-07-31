@@ -166,9 +166,6 @@ public class APIController {
         return apiService.getEquipments(classId);
     }
 
-
-
-
     @RequestMapping(value = "/sendSMS", method = RequestMethod.GET)
     public void sendSMS(@RequestParam("message") String message, @RequestParam("ListUser") String listUsers) {
         smsService.sendSMS(listUsers, message);

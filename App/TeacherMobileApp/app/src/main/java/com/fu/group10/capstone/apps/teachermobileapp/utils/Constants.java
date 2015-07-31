@@ -4,9 +4,9 @@ package com.fu.group10.capstone.apps.teachermobileapp.utils;
  * Created by QuangTV on 5/30/2015.
  */
 public class Constants {
-    public static final String SOURCE = "http://192.168.43.80:8080";
+    //public static final String SOURCE = "http://192.168.43.80:8080";
     public static final int TIMEOUT = 10000;
-    //private static final String SOURCE = "http://128.199.208.93";
+    private static final String SOURCE = "http://128.199.208.93";
     public static final String API_SOURCE = SOURCE + "/api/";
     public static final String API_LOGIN = API_SOURCE + "login";
     public static final String API_SCHEDULE = API_SOURCE + "schedule?username=";
@@ -30,7 +30,8 @@ public class Constants {
     public static final String TABLE = "[0]";
     public static final String APP_SERVER_URL = SOURCE + "/notification/register";
     public static final String STAFF_PHONE = "+17164063801";
-    public static final String RESOURCE_URL = "/resource/img/";
+    public static final String RESOURCE_URL = SOURCE + "/resource/img/equipment/";
+
 
     public static final int REMOVE_TIME = 15 * 60 * 1000;
 

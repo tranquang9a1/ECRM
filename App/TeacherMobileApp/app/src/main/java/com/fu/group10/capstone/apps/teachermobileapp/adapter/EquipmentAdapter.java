@@ -1,6 +1,8 @@
 package com.fu.group10.capstone.apps.teachermobileapp.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
+import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,8 @@ public class EquipmentAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
     private Context mContext;
     private SparseBooleanArray mSelectedItemsIds;
+    DatabaseHelper db;
+    List<EquipmentDAO> listCategory = new ArrayList<>();
 
 
     public EquipmentAdapter(Context context, List<Equipment> listEquipment){
@@ -30,6 +37,9 @@ public class EquipmentAdapter extends BaseAdapter {
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         mSelectedItemsIds = new SparseBooleanArray();
+        db = new DatabaseHelper(context);
+        listCategory = db.getEquipments();
+
     }
 
     @Override
@@ -90,9 +100,9 @@ public class EquipmentAdapter extends BaseAdapter {
 
 
             if (mSelectedItemsIds.get(position)) {
-                mViewHolder.equipmentImg.setImageResource(R.mipmap.ic_check);
+                mViewHolder.equipmentImg.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_check));
             } else {
-                mViewHolder.equipmentImg.setImageResource(setImage(items.getEquipmentName()));
+                mViewHolder.equipmentImg.setImageBitmap(setImage(items.getEquipmentName()));
             }
             mViewHolder.txtEquipmentName.setText(items.getEquipmentName());
             setText(mViewHolder, items);
@@ -134,31 +144,15 @@ public class EquipmentAdapter extends BaseAdapter {
     }
 
 
-
-
-
-
-    public int setImage(String name) {
-        if (name.equalsIgnoreCase("Máy Quạt")) {
-            return R.mipmap.ic_fan;
-        } else if (name.equalsIgnoreCase("Máy Lạnh")) {
-            return R.mipmap.ic_air;
-        } else if (name.equalsIgnoreCase("Tivi")) {
-            return R.mipmap.ic_tv;
-        } else if (name.equalsIgnoreCase("Ghế")) {
-            return R.mipmap.ic_chair;
-        } else if (name.equalsIgnoreCase("Máy Chiếu")) {
-            return R.mipmap.ic_projector;
-        } else if (name.equalsIgnoreCase("Bàn")) {
-            return R.mipmap.ic_table;
-        } else if (name.equalsIgnoreCase("Bóng Đèn")) {
-            return R.mipmap.ic_bulb;
-        } else {
-            return R.mipmap.ic_speaker;
+    public Bitmap setImage(String name) {
+        for (EquipmentDAO ec : listCategory) {
+            if (ec.getName().equalsIgnoreCase(name)) {
+                return BitmapFactory.decodeByteArray(ec.getImages(),
+                        0, ec.getImages().length);
+            }
         }
+        return null;
     }
-
-
 
 
     public void toggleSelection(int position) {

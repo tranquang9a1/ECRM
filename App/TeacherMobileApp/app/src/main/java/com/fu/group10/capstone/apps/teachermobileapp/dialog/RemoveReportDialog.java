@@ -70,7 +70,7 @@ public class RemoveReportDialog extends DialogFragment {
 
     public void remove() {
         //startMain();
-        String url = Constants.API_REMOVE_REPORT + reportId;
+        String url = Constants.API_REMOVE_REPORT + reportId + "&username="+username;
         RequestSender sender = new RequestSender();
         sender.start(url, new RequestSender.IRequestSenderComplete() {
             @Override

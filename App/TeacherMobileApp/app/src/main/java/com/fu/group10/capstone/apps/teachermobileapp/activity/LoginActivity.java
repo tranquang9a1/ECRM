@@ -54,6 +54,7 @@ public class LoginActivity  extends ActionBarActivity {
     private static final String defaultPassword = "123ecrm";
     private EditText usernameTextView;
     private EditText passwordTextView;
+    private String name;
     Context context;
     ProgressDialog progress;
 
@@ -72,6 +73,7 @@ public class LoginActivity  extends ActionBarActivity {
     ShareExternalServer appUtil;
     String regId;
     AsyncTask<Void, Void, String> shareRegidTask;
+    AsyncTask<String, Void, byte[]> BackgroundTask;
 
     DatabaseHelper db;
 
@@ -361,6 +363,7 @@ public class LoginActivity  extends ActionBarActivity {
                 Log.d("RegisterActivity", result);
             }
 
+
         };
         shareRegidTask.execute(null, null, null);
 
@@ -394,69 +397,81 @@ public class LoginActivity  extends ActionBarActivity {
 
 
     public void syncData() {
+        syncCategory();
         startService(new Intent(this, SynchronizeService.class));
     }
 
     public void syncCategory() {
-        new BackgroundTask(this).execute();
-
+        RequestSender sender = new RequestSender();
+        sender.start(Constants.API_GET_CATEGORY, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                List<EquipmentCategory> equipments = ParseUtils.parseEquipmentCategory(result);
+                Log.d("Sync category", equipments.size() + "");
+                new ImageDownloader().execute(equipments);
+            }
+        });
     }
 
-    private class BackgroundTask extends AsyncTask<String, Void, Void> {
-        private HttpURLConnection connection = null;
-        private Context context;
-        List<EquipmentCategory> listEquipments = new ArrayList<>();
-        String url = Constants.API_GET_CATEGORY;
-        DatabaseHelper db;
 
-        public BackgroundTask(Context context) {
-            this.context = context;
-            db = new DatabaseHelper(context);
+
+    private byte[] getLogoImage(String url) {
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+            InputStream is = ucon.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            ByteArrayBuffer baf = new ByteArrayBuffer(500);
+            int current = 0;
+
+            while ((current = bis.read()) != -1) {
+                baf.append((byte) current);
+
+            }
+            return baf.toByteArray();
+
+
+        } catch (Exception e) {
+            Log.d("ImageManager", "Error: " + e.toString());
+            return null;
+        }
+
+    }
+    public void insertCategory(String name, byte[] image) {
+        db = new DatabaseHelper(this);
+        db.insertEquipment(name, image);
+    }
+
+    private class ImageDownloader extends AsyncTask<List<EquipmentCategory>, Void, Void> {
+
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected Void doInBackground(List<EquipmentCategory>... lists) {
+            for (int i =0; i < lists[0].size(); i++) {
+                EquipmentCategory ec = lists[0].get(i);
+                insertCategory(ec.getName(),getLogoImage(Constants.RESOURCE_URL + ec.getImageUrl()));
+            }
+            return null;
         }
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            RequestSender sender = new RequestSender();
-            sender.start(url, new RequestSender.IRequestSenderComplete() {
-                @Override
-                public void onRequestComplete(String result) {
-                    listEquipments = ParseUtils.parseEquipmentCategory(result);
-                }
-            });
 
 
-        }
 
-        private byte[] getLogoImage(String url) {
-            try {
-                URL imageUrl = new URL(url);
-                URLConnection ucon = imageUrl.openConnection();
-
-                InputStream is = ucon.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
-
-                ByteArrayBuffer baf = new ByteArrayBuffer(500);
-                int current = 0;
-                while ((current = bis.read()) != -1) {
-                    baf.append((byte) current);
-                }
-
-                return baf.toByteArray();
-            } catch (Exception e) {
-                Log.d("ImageManager", "Error: " + e.toString());
-            }
-            return null;
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
-            for (int i = 0; i < listEquipments.size(); i++) {
-                EquipmentCategory ec = listEquipments.get(i);
-                db.insertEquipment(ec.getName(), getLogoImage(ec.getImageUrl()));
-            }
-            return null;
+        protected void onPostExecute(Void result) {
+
+
         }
+
     }
+
+
+
+
 
 }

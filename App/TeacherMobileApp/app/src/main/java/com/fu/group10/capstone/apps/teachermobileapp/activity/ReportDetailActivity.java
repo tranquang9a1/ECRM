@@ -13,9 +13,11 @@ import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.adapter.ReportDetailAdapter;
 import com.fu.group10.capstone.apps.teachermobileapp.dialog.RemoveReportDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
+import com.fu.group10.capstone.apps.teachermobileapp.model.Result;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.InfinityListView;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 
 import java.text.SimpleDateFormat;
@@ -143,15 +145,23 @@ public class ReportDetailActivity extends FragmentActivity {
     }
 
     public void remove(int reportId, final String username) {
-        String url = Constants.API_REMOVE_REPORT + reportId;
+        String url = Constants.API_REMOVE_REPORT + reportId + "&username="+username;
         RequestSender sender = new RequestSender();
         sender.start(url, new RequestSender.IRequestSenderComplete() {
             @Override
             public void onRequestComplete(String result) {
-                if (result.equalsIgnoreCase("true")) {
+                Result rs = ParseUtils.parseResult(result);
+                if (rs.getError_code() == 200) {
                     startMain(username);
+                } else if (rs.getError_code() == 400) {
+                    DialogUtils.showAlert(ReportDetailActivity.this, rs.getError(), new DialogUtils.IOnOkClicked() {
+                        @Override
+                        public void onClick() {
+
+                        }
+                    });
                 } else {
-                    Toast.makeText(ReportDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ReportDetailActivity.this, "Co loi xay ra", Toast.LENGTH_LONG).show();
                 }
             }
         });

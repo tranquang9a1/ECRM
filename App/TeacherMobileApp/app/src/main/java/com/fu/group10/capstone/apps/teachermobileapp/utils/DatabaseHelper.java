@@ -535,24 +535,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sql                      =   "INSERT INTO " + TABLE_EQUIPMENT_CATEGORY +" (name,images) VALUES(?,?)";
         SQLiteStatement insertStmt      =   db.compileStatement(sql);
         insertStmt.clearBindings();
-        insertStmt.bindString(0, name);
-        insertStmt.bindBlob(1, image);
+        insertStmt.bindString(1, name);
+        insertStmt.bindBlob(2, image);
         insertStmt.executeInsert();
         db.close();
     }
 
 
 
-    public EquipmentDAO getEquipments() {
-        EquipmentDAO dao = new EquipmentDAO();
+    public List<EquipmentDAO> getEquipments() {
+        List<EquipmentDAO> result = new ArrayList<>();
 
         SQLiteDatabase db       =   this.getWritableDatabase();
         String sql              =   "SELECT * FROM " + TABLE_EQUIPMENT_CATEGORY;
         Cursor cursor           =   db.rawQuery(sql, new String[] {});
 
         if(cursor.moveToFirst()){
-            dao.setName(cursor.getString(0));
-            dao.setImages(cursor.getBlob(1));
+            do {
+                EquipmentDAO dao = new EquipmentDAO();
+                dao.setName(cursor.getString(0));
+                dao.setImages(cursor.getBlob(1));
+                result.add(dao);
+            } while (cursor.moveToNext());
+
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
@@ -561,8 +566,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.getCount() == 0){
             return null;
         } else {
-            return dao;
+            return result;
         }
+
     }
 
 

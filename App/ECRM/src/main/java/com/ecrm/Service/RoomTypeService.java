@@ -77,38 +77,39 @@ public class RoomTypeService {
             NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
             java.util.Date date = new java.util.Date();
             String message = "";
-            if (roomtypeId != "") {
-                roomType = roomType2DAO.find(Integer.parseInt(roomtypeId));
-                List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = roomType.getTblEquipmentQuantityById();
-                if(!tblEquipmentQuantityEntities.isEmpty()){
-                    for(TblEquipmentQuantityEntity tblEquipmentQuantityEntity: tblEquipmentQuantityEntities){
-                        tblEquipmentQuantityEntity.setIsDelete(true);
-                        equipmentQuantityDAO.merge(tblEquipmentQuantityEntity);
-                    }
-                }
-                Collection<TblClassroomEntity> tblClassroomEntities = roomType.getTblClassroomsById();
-                if(!tblClassroomEntities.isEmpty()){
-                    for(TblClassroomEntity classroomEntity: tblClassroomEntities){
-                        List<TblEquipmentEntity>tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
-                        for(TblEquipmentEntity tblEquipmentEntity: tblEquipmentEntities){
-                            tblEquipmentEntity.setClassroomId(null);
-                            equipmentDAO.merge(tblEquipmentEntity);
+            if (roomtypeName != "") {
+                roomType = roomType2DAO.getRoomTypeByName(roomtypeName);
+                if(roomType!=null){
+                    List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = roomType.getTblEquipmentQuantityById();
+                    if(!tblEquipmentQuantityEntities.isEmpty()){
+                        for(TblEquipmentQuantityEntity tblEquipmentQuantityEntity: tblEquipmentQuantityEntities){
+                            tblEquipmentQuantityEntity.setIsDelete(true);
+                            equipmentQuantityDAO.merge(tblEquipmentQuantityEntity);
                         }
-                        classroomEntity.setIsAllInformation(false);
-                        classroomDAO.merge(classroomEntity);
                     }
+                    Collection<TblClassroomEntity> tblClassroomEntities = roomType.getTblClassroomsById();
+                    if(!tblClassroomEntities.isEmpty()){
+                        for(TblClassroomEntity classroomEntity: tblClassroomEntities){
+                            List<TblEquipmentEntity>tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+                            for(TblEquipmentEntity tblEquipmentEntity: tblEquipmentEntities){
+                                tblEquipmentEntity.setClassroomId(null);
+                                equipmentDAO.merge(tblEquipmentEntity);
+                            }
+                            classroomEntity.setIsAllInformation(false);
+                            classroomDAO.merge(classroomEntity);
+                        }
+                    }
+                    roomType = new TblRoomTypeEntity2(roomType.getId(), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
+                            roomType.getCreateTime(), false, new Timestamp(date.getTime()));
+
+                    roomType2DAO.merge(roomType);
+                    message = "Cập nhật "+roomtypeName+" thành công!";
+                }else {
+                    roomType = new TblRoomTypeEntity2(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
+                            new Timestamp(date.getTime()), false, null);
+                    roomType2DAO.insert(roomType);
+                    message = "Tạo "+roomtypeName+" thành công!";
                 }
-                roomType = new TblRoomTypeEntity2(Integer.parseInt(roomtypeId), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
-                         roomType.getCreateTime(), false, new Timestamp(date.getTime()));
-
-                roomType2DAO.merge(roomType);
-                message = "Cập nhật "+roomtypeName+" thành công!";
-
-            } else {
-                roomType = new TblRoomTypeEntity2(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
-                         new Timestamp(date.getTime()), false, null);
-                roomType2DAO.insert(roomType);
-                message = "Tạo "+roomtypeName+" thành công!";
             }
             String []array = equip.split("-");
             for(int i = 0; i<array.length; i++){
@@ -134,27 +135,16 @@ public class RoomTypeService {
         }
     }
 
-    /*public Boolean removeRoomType(int roomtypeId){
+    public String removeRoomType(int roomTypeId){
         try {
-            TblRoomTypeEntity roomTypeEntity = roomTypeDAO.find(roomtypeId);
-            Collection<TblClassroomEntity> tblClassroomEntities = roomTypeEntity.getTblClassroomsById();
-            if (tblClassroomEntities.size() > 0) {
-                for (TblClassroomEntity tblClassroomEntity : tblClassroomEntities) {
-                    tblClassroomEntity.setIsDelete(true);
-                    classroomDAO.merge(tblClassroomEntity);
-                    Collection<TblEquipmentEntity> tblEquipmentEntities = tblClassroomEntity.getTblEquipmentsById();
-                    for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                        tblEquipmentEntity.setClassroomId(null);
-                        equipmentDAO.merge(tblEquipmentEntity);
-                    }
-                }
-            }
+            TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.find(roomTypeId);
             roomTypeEntity.setIsDelete(true);
-            roomTypeDAO.merge(roomTypeEntity);
-            return true;
+            roomType2DAO.merge(roomTypeEntity);
+            String message = "Xóa loại phòng "+roomTypeEntity.getName()+" thành công!";
+            return "redirect:/staff/classroom?ACTIVETAB=tab2&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
         }catch (Exception e){
-            return false;
+            return ERROR;
         }
 
-    }*/
+    }
 }

@@ -99,37 +99,26 @@ public class ClassroomService {
             String message = "";
             Date date = new Date();
             roomName = roomName.trim();
-            TblRoomTypeEntity2 tblRoomTypeEntity2 = roomType2DAO.find(roomTypeId);
-            List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity2.getTblEquipmentQuantityById();
-            List<TblEquipmentEntity> insertEquipments = getInsertEquipment(tblEquipmentQuantityEntities);
-            if (insertEquipments != null) {
-                if (roomName != null) {
-                    TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
-                    if (classroom != null) {
-                        Collection<TblEquipmentEntity> tblEquipmentEntities = classroom.getTblEquipmentsById();
-                        for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
-                            tblEquipmentEntity.setClassroomId(null);
-                            equipmentDAO.merge(tblEquipmentEntity);
-                        }
-                        classroom = new TblClassroomEntity(classroom.getId(),  roomName, classroom.getCreateTime(),
-                                new Timestamp(date.getTime()), false, true, 0, roomTypeId);
-                        classroomDAO.merge(classroom);
-                        message = "Cập nhật phòng " + roomName + " thành công!";
-                    } else {
-                        classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), null, false, true, 0
-                                , roomTypeId);
-                        classroomDAO.insert(classroom);
-                        message = "Tạo phòng " + roomName + " thành công!";
-                    }
-                    for (TblEquipmentEntity tblEquipmentEntity : insertEquipments) {
-                        tblEquipmentEntity.setClassroomId(classroom.getId());
+            if (roomName != null) {
+                TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
+                if (classroom != null) {
+                    Collection<TblEquipmentEntity> tblEquipmentEntities = classroom.getTblEquipmentsById();
+                    for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                        tblEquipmentEntity.setClassroomId(null);
                         equipmentDAO.merge(tblEquipmentEntity);
                     }
+                    classroom = new TblClassroomEntity(classroom.getId(), roomName, classroom.getCreateTime(),
+                            new Timestamp(date.getTime()), false, false, 0, roomTypeId);
+                    classroomDAO.merge(classroom);
+                    message = "Cập nhật phòng " + roomName + " thành công!";
+                } else {
+                    classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), null, false, false, 0
+                            , roomTypeId);
+                    classroomDAO.insert(classroom);
+                    message = "Tạo phòng " + roomName + " thành công!";
                 }
-            } else {
-                message = "Không có đủ thiết bị trong để tạo phòng! Vui lòng tạo thêm thiết bị!";
-                return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE="+  URLEncoder.encode(message, "UTF-8");
             }
+
             return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +126,7 @@ public class ClassroomService {
         }
     }
 
-    public List<TblEquipmentEntity> getInsertEquipment(List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities) {
+    /*public List<TblEquipmentEntity> getInsertEquipment(List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities) {
         List<TblEquipmentEntity> insertEquipments = new ArrayList<TblEquipmentEntity>();
         for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
             if (!tblEquipmentQuantityEntity.getIsDelete()) {
@@ -156,7 +145,7 @@ public class ClassroomService {
             }
         }
         return insertEquipments;
-    }
+    }*/
 
 
     public String removeClassroom(String classroomName) {
@@ -170,7 +159,7 @@ public class ClassroomService {
             classroomEntity.setIsDelete(true);
             classroomDAO.merge(classroomEntity);
             String message = "Xóa phòng " + classroomName + " thành công!";
-            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
             return ERROR;
@@ -206,8 +195,8 @@ public class ClassroomService {
                                 equipmentDAO.merge(insertEquipment.get(i));
                             }
                         } else {
-                            message = "Không đủ "+ tblEquipmentCategoryEntity.getName();
-                            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
+                            message = "Không đủ " + tblEquipmentCategoryEntity.getName();
+                            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
                         }
                     }
 
@@ -216,7 +205,7 @@ public class ClassroomService {
             classroomEntity.setIsAllInformation(true);
             classroomDAO.merge(classroomEntity);
             message = "Cập nhật thiết bị thành công!";
-            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" +  URLEncoder.encode(message, "UTF-8");
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
             return ERROR;

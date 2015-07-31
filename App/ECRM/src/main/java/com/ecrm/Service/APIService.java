@@ -105,7 +105,7 @@ public class APIService {
 
         TblUserEntity user = userDAO.findUser(username);
         if (!user.isStatus()) {
-            return new ResultDTO(400, "Tai khoan bi khoa ");
+            return new ResultDTO(400, "Tài khoản này đã bị khóa");
         }
 
         if (createTime.equals("1")) {
@@ -252,7 +252,7 @@ public class APIService {
         try {
             TblUserEntity user = userDAO.findUser(username);
             if (!user.isStatus()) {
-                return new ResultDTO(400, "Tai khoan bi khoa");
+                return new ResultDTO(400, "Tài khoản này đã bị khóa");
             }
 
             TblReportEntity report = reportDAO.find(reportId);
@@ -279,7 +279,7 @@ public class APIService {
         try {
             TblUserEntity user = userDAO.findUser(username);
             if (!user.isStatus()) {
-                return new ResultDTO(400, "Tai khoan bi khoa");
+                return new ResultDTO(400, "Tài khoản này đã bị khóa");
             }
             int classroomId = Integer.parseInt(classId);
             TblClassroomEntity room = classroomDAO.find(classroomId);
@@ -528,6 +528,7 @@ public class APIService {
                         equip.setStatus(true);
                         equipmentDAO.merge(equip);
                     }
+					
                 }
 
                 List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(Integer.parseInt(roomId[i]));
@@ -637,17 +638,19 @@ public class APIService {
         List<EquipmentClassDTO> result = new ArrayList<EquipmentClassDTO>();
         TblClassroomEntity classroomEntity = classroomDAO.find(classId);
         List<TblEquipmentEntity> listEquipments = classroomEntity.getTblEquipmentsById();
-        List<TblEquipmentQuantityEntity> equipmentQuantity = classroomEntity.getTblRoomType2ByRoomTypeId2().getTblEquipmentQuantityById();
+        List<TblEquipmentQuantityEntity> equipmentQuantity =
+                classroomEntity.getTblRoomType2ByRoomTypeId2().getTblEquipmentQuantityById();
         TblEquipmentEntity equipmentEntity = new TblEquipmentEntity();
         for (int i = 0; i < equipmentQuantity.size(); i++) {
             TblEquipmentQuantityEntity entity = equipmentQuantity.get(i);
 
-            if (entity.getQuantity() > 0) {
+            if (entity.getQuantity() > 0 && !entity.getIsDelete()) {
                 String name = entity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getName();
                 int categoryId = entity.getEquipmentCategoryId();
                 equipmentEntity = getEquipment(listEquipments, categoryId);
                 if (equipmentEntity != null) {
-                    result.add(new EquipmentClassDTO(name, equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+                    result.add(new EquipmentClassDTO(name, equipmentEntity.getTimeRemain()+"",
+                            equipmentEntity.getName(), equipmentEntity.isStatus()));
                 } else {
                     result.add(new EquipmentClassDTO(name, null, null, true));
                 }
@@ -657,13 +660,15 @@ public class APIService {
         }
         equipmentEntity = getEquipment(listEquipments, 7);
         if (equipmentEntity != null) {
-            result.add(new EquipmentClassDTO("Bàn", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            result.add(new EquipmentClassDTO("Bàn", equipmentEntity.getTimeRemain()+"",
+                    equipmentEntity.getName(), equipmentEntity.isStatus()));
         } else {
             result.add(new EquipmentClassDTO("Bàn", null, null, true));
         }
         equipmentEntity = getEquipment(listEquipments, 8);
         if (equipmentEntity != null) {
-            result.add(new EquipmentClassDTO("Ghế", equipmentEntity.getTimeRemain()+"", equipmentEntity.getName(), equipmentEntity.isStatus()));
+            result.add(new EquipmentClassDTO("Ghế", equipmentEntity.getTimeRemain()+"",
+                    equipmentEntity.getName(), equipmentEntity.isStatus()));
         } else {
             result.add(new EquipmentClassDTO("Ghế", null, null, true));
         }

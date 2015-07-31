@@ -67,7 +67,8 @@
                                         <div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
                                                     onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
                                                             document.getElementById('equipment-classroomId').value = '0';
-                                                            document.getElementById('equipment-category-select').disabled = false"/></div>
+                                                            document.getElementById('equipment-category-select').disabled = false"/>
+                                        </div>
                                         <div class="search" style="  margin: 0 0 15px;">
                                             <input type="text" placeholder="Nhập thiết bị"/>
                                             <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
@@ -79,7 +80,8 @@
                                         <div>
                                             <div></div>
                                             <input type="button" class="btn btn-orange" style="margin: 0"
-                                                   value="Tạo loại thiết bị" onclick="showModal(1, 'modal-category')"/></div>
+                                                   value="Tạo loại thiết bị" onclick="showModal(1, 'modal-category')"/>
+                                        </div>
                                         <div class="search" style="  margin: 0 0 15px;">
                                             <input type="text" placeholder="Nhập thiết bị"/>
                                             <input type="button" class="btn btn-orange" value="Tìm kiếm"/>
@@ -93,6 +95,7 @@
                         <c:import url="/bao-cao/thong-bao?little=false&quay-lai=equipment"/>
                         <div class="loading-page">
                             <img src="/resource/img/500.GIF">
+
                             <div>Đang tải! Vui lòng chờ trong giây lát!</div>
                         </div>
                     </div>
@@ -105,6 +108,7 @@
                 <input type="hidden" name="classroomId" id="equipment-classroomId">
                 <input type="hidden" name="equipmentId" id="equipment-id">
                 <input type="hidden" name="category" id="equipment-category">
+
                 <div class="modal modal-medium" id="modal-1">
                     <div class="content-modal" style="height: 350px">
                         <div class="header-modal title">
@@ -153,7 +157,8 @@
                             <input type="button" class="btn btn-normal"
                                    onclick="showModal(0, 'modal-1'); clearEquipment();"
                                    value="Thoát"/>
-                            <input type="button" class="btn btn-orange" onclick="validateEquipment();" id="equipment-button"
+                            <input type="button" class="btn btn-orange" onclick="validateEquipment();"
+                                   id="equipment-button"
                                    value="Tạo"/>
                         </div>
                     </div>
@@ -161,12 +166,13 @@
                 </div>
             </form>
 
-            <form action="/staff/createCategory" id="createCategory" name="createCategory" enctype="multipart/form-data" method="post">
+            <form action="/staff/createCategory" id="createCategory" name="createCategory" enctype="multipart/form-data"
+                  method="post">
                 <div class="modal modal-medium" id="modal-category">
                     <div class="content-modal" style="height: 260px">
                         <div class="header-modal title">
-                            <p>Tạo thiết bị</p>
-                            <i class="fa fa-times" onclick="showModal(0,'modal-category')"></i>
+                            <p>Tạo loại thiết bị</p>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-category'); clearCategory();"></i>
                         </div>
                         <div class="body-modal" style="padding-top: 10px">
                             <div class="group-control">
@@ -177,7 +183,9 @@
                             </div>
                             <div class="group-control">
                                 <div class="name">Hình ảnh</div>
-                                <div class="control"> <input type="file" id="fileUpload" name="scheduleFile" size="50" accept="image/*"/>
+                                <div class="control"><input type="file" id="fileUpload" name="scheduleFile" size="50"
+                                                            accept="image/*"/>
+
                                     <p id="lblError" style="color: red;"></p>
                                 </div>
 
@@ -185,16 +193,53 @@
                             </div>
                             <div class="group-control">
                                 <div class="name">Quản lý</div>
-                                <input type="checkbox"  id="checkManage" onclick="checkManaged();">
+                                <input type="checkbox" id="checkManage" onclick="checkManaged();">
                                 <input type="hidden" id="isManaged" name="isManaged" value="0">
                             </div>
                         </div>
                         <div class="footer-modal">
                             <input type="button" class="btn btn-normal"
-                                   onclick="showModal(0, 'modal-category')"
+                                   onclick="showModal(0, 'modal-category'); clearCategory();"
                                    value="Thoát"/>
                             <input type="button" class="btn btn-orange"
                                    value="Tạo" onclick="validateCreateCategory();"/>
+                        </div>
+                    </div>
+                    <div class="black-background"></div>
+                </div>
+            </form>
+
+            <form action="/staff/editCategory" id="editCategory" name="editCategory" enctype="multipart/form-data"
+                  method="post">
+                <div class="modal modal-medium" id="modal-edit-category">
+                    <div class="content-modal" style="height: 200px">
+                        <div class="header-modal title">
+                            <p>Cập nhật loại thiết bị</p>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-category'); clearEditCategory();"></i>
+                        </div>
+                        <input type="hidden" id="edit-categoryId" name="categoryId">
+                        <div class="body-modal" style="padding-top: 10px">
+                            <div class="group-control">
+                                <div class="name">Tên loại</div>
+                                <div class="control">
+                                    <input name="name" type="text" id="edit-categoryName">
+                                </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Hình ảnh</div>
+                                <div class="control"><input type="file" id="edit-fileUpload" name="scheduleFile"
+                                                            size="50" accept="image/*"/>
+
+                                    <p id="edit-lblError" style="color: red;"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-modal">
+                            <input type="button" class="btn btn-normal"
+                                   onclick="showModal(0, 'modal-edit-category'); clearEditCategory();"
+                                   value="Thoát"/>
+                            <input type="button" class="btn btn-orange"
+                                   value="Cập nhật" onclick="validateEditCategory();"/>
                         </div>
                     </div>
                     <div class="black-background"></div>
@@ -218,7 +263,7 @@
                     type: "get",
                     url: "/ajax/checkEquipment",
                     cache: false,
-                    data: 'name=' + name + '&serialNumber=' + serialNumber+ '&usingTime=' + usingTime
+                    data: 'name=' + name + '&serialNumber=' + serialNumber + '&usingTime=' + usingTime
                     + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
@@ -246,8 +291,13 @@
                 lblError.innerHTML = "";
                 return true;
             }
+            function clearCategory(){
+                document.getElementById('categoryName').value = '';
+                document.getElementById('fileUpload').value = '';
+                document.getElementById('checkManage').checked = false;
+            }
             function validateCreateCategory() {
-                if(ValidateExtension()){
+                if (ValidateExtension()) {
                     var name = document.forms["createCategory"]["name"].value;
                     $.ajax({
                         type: "get",
@@ -271,14 +321,61 @@
                 }
             }
 
-            function checkManaged(){
-                if(document.getElementById('checkManage').checked){
+            function checkManaged() {
+                if (document.getElementById('checkManage').checked) {
                     document.getElementById('isManaged').value = "1";
-                }else{
+                } else {
                     document.getElementById('isManaged').value = "0";
 
                 }
             }
+
+            function editCategory(categoryId, categoryName){
+
+            }
+            function ValidateExtension2() {
+                var fileUpload = document.getElementById("edit-fileUpload");
+                var lblError = document.getElementById("edit-lblError");
+                var regex = /^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpg|.jpeg|.png|.gif)$/;
+                if (!regex.test(fileUpload.value.toLowerCase())) {
+                    lblError.innerHTML = "Hãy chọn tập tin có đuôi là: <b>" + " .jpg, .jpeg,.png, .gif" + "</b>";
+                    return false;
+                }
+                lblError.innerHTML = "";
+                return true;
+            }
+            function validateEditCategory() {
+                if (ValidateExtension2()) {
+                    var name = document.forms["editCategory"]["name"].value;
+                    var categoryId = document.forms["editCategory"]["categoryId"].value;
+                    $.ajax({
+                        type: "get",
+                        url: "/ajax/checkEditCategory",
+                        cache: false,
+                        data: 'name=' + name+'&categoryId='+categoryId,
+                        success: function (data) {
+                            if (data.status == true) {
+                                showModal(0, 'modal-1');
+                                document.getElementById('editCategory').submit();
+                                $(".loading-page").addClass("active");
+                                $(".page").removeClass("active");
+                            } else {
+                                conformData(1, {message: data.alert});
+                            }
+                        },
+                        error: function () {
+                            conformData(1, {message: 'Xin Hãy Nhập Đầy Đủ Thông Tin!'});
+                        }
+                    })
+                }
+            }
+
+            function clearEditCategory(){
+                document.getElementById('edit-categoryName').value = '';
+                document.getElementById('edit-categoryId').value  = '';
+                document.getElementById('edit-fileUpload').value  = '';
+            }
+
             //phan trang
             jQuery(function ($) {
                 var items = $("#removeClassroom > div");

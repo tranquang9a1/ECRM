@@ -11,7 +11,6 @@
 <head>
     <title></title>
     <c:set var="categories" value="${requestScope.CATEGORIES}"/>
-
 </head>
 <body>
 <div class="table" style="width:77%; height: 350px">
@@ -53,9 +52,13 @@
                     <div style="width: 100px">
                         <div class="control">
                             <div class="group-button">
+                                <div class="btn btn-detail" title="Chỉnh sửa" onclick="showModal(1,'modal-edit-category');
+                document.getElementById('edit-categoryName').value = '${c.name}';
+                document.getElementById('edit-categoryId').value  = ${c.id}; "><i class="fa fa-pencil"></i>
+                                </div>
                                 <div class="btn btn-remove" title="Xóa"
-                                     onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
-                                             btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}'})"><i
+                                     onclick="conformData(2,{message:'Bạn có muốn xóa ${c.name} ra khỏi hệ thống? Điều này sẽ ảnh hưởng tới các thiết bị liên quan!',
+                                             btnName:'Xóa',link:'/staff/removeCategory?categoryId=${c.id}'})"><i
                                         class="fa fa-times"></i>
                                 </div>
                             </div>

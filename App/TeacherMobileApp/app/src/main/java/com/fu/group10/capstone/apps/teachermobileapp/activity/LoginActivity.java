@@ -88,7 +88,7 @@ public class LoginActivity  extends ActionBarActivity {
         String username = sp.getString("username", null);
         if (stateLogin && username != null) {
             if (isConnect) {
-                syncData();
+                syncData(username);
             }
             openMainActivity(username);
         } else {
@@ -189,7 +189,7 @@ public class LoginActivity  extends ActionBarActivity {
                                 editor.putString("username", user.getUsername());
                                 editor.commit();
                                 importUser();
-                                syncData();
+                                syncData(user.getUsername());
                                 openMainActivity(user.getUsername());
 
 
@@ -396,14 +396,14 @@ public class LoginActivity  extends ActionBarActivity {
     }
 
 
-    public void syncData() {
-        syncCategory();
+    public void syncData(String username) {
+        syncCategory(username);
         startService(new Intent(this, SynchronizeService.class));
     }
 
-    public void syncCategory() {
+    public void syncCategory(String username) {
         RequestSender sender = new RequestSender();
-        sender.start(Constants.API_GET_CATEGORY, new RequestSender.IRequestSenderComplete() {
+        sender.start(Constants.API_GET_CATEGORY + username, new RequestSender.IRequestSenderComplete() {
             @Override
             public void onRequestComplete(String result) {
                 List<EquipmentCategory> equipments = ParseUtils.parseEquipmentCategory(result);

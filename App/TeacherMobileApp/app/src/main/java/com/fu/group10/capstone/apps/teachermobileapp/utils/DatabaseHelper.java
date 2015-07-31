@@ -532,7 +532,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void insertEquipment(String name, byte[] image) {
         SQLiteDatabase db               =   this.getWritableDatabase();
-        String sql                      =   "INSERT INTO " + TABLE_EQUIPMENT_CATEGORY +" (name,images) VALUES(?,?)";
+        String sql                      =   "INSERT OR REPLACE INTO  " +
+                TABLE_EQUIPMENT_CATEGORY +" (name,images) VALUES(?,?)";
         SQLiteStatement insertStmt      =   db.compileStatement(sql);
         insertStmt.clearBindings();
         insertStmt.bindString(1, name);

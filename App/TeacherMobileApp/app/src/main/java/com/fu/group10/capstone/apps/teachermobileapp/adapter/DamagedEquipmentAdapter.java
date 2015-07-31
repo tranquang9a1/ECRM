@@ -2,6 +2,8 @@ package com.fu.group10.capstone.apps.teachermobileapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
+import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentInfo;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.InfinityListView;
 
 import java.text.SimpleDateFormat;
@@ -22,13 +26,16 @@ public class DamagedEquipmentAdapter extends BaseAdapter implements InfinityList
     Context mContext;
     public List<EquipmentInfo> items;
     private final SimpleDateFormat dateFormater;
-
+    DatabaseHelper db;
+    List<EquipmentDAO> listCategory = new ArrayList<>();
 
     public DamagedEquipmentAdapter(Context appContext, List<EquipmentInfo> items) {
 
         this.mContext = appContext;
         this.items = items;
         dateFormater = new SimpleDateFormat("HH:mm");
+        db = new DatabaseHelper(appContext);
+        listCategory = db.getEquipments();
     }
 
 
@@ -89,7 +96,7 @@ public class DamagedEquipmentAdapter extends BaseAdapter implements InfinityList
         });
 
         holder.spinner.setSelection(position);
-        holder.equipmentImg.setImageResource(setImage(items.get(i)));
+        holder.equipmentImg.setImageBitmap(setImage(items.get(i).getName()));
 
         return row;
     }
@@ -123,24 +130,18 @@ public class DamagedEquipmentAdapter extends BaseAdapter implements InfinityList
         Spinner spinner;
     }
 
-
-    public int setImage(EquipmentInfo report) {
-        if (report.getName().equalsIgnoreCase("Bàn")) {
-            return R.mipmap.ic_table;
-        } else if (report.getName().equalsIgnoreCase("Quạt")) {
-            return R.mipmap.ic_fan;
-        } else if (report.getName().equalsIgnoreCase("Máy Lạnh")) {
-            return R.mipmap.ic_air;
-        } else if (report.getName().equalsIgnoreCase("Tivi")) {
-            return R.mipmap.ic_tv;
-        } else if (report.getName().equalsIgnoreCase("Ghế")) {
-            return R.mipmap.ic_chair;
-        } else if (report.getName().equalsIgnoreCase("Máy Chiếu")) {
-            return R.mipmap.ic_projector;
-        } else  {
-            return R.mipmap.ic_speaker;
+    public Bitmap setImage(String name) {
+        for (EquipmentDAO ec : listCategory) {
+            if (ec.getName().equalsIgnoreCase(name)) {
+                return BitmapFactory.decodeByteArray(ec.getImages(),
+                        0, ec.getImages().length);
+            }
         }
+        return null;
     }
+
+
+
 
 
 

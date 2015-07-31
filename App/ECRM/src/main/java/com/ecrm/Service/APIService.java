@@ -691,16 +691,20 @@ public class APIService {
         return tblEquipmentEntity;
     }
 
-    public List<EquipmentCategoryDTO> getEquipment() {
+    public List<EquipmentCategoryDTO> getEquipment(String username) {
+        TblUserEntity userInfo = userDAO.findUser(username);
+        Long updateTime = userInfo.getTblUserInfoByUsername().getDownloadTime();
         List<EquipmentCategoryDTO> result  = new ArrayList<EquipmentCategoryDTO>();
         List<TblEquipmentCategoryEntity> listEquipment = equipmentCategoryDAO.getAllEquipment();
 
         for (int i = 0; i < listEquipment.size(); i++) {
             TblEquipmentCategoryEntity equipment = listEquipment.get(i);
-            EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
-            dto.setName(equipment.getName());
-            dto.setImageUrl(equipment.getImageUrl());
-            result.add(dto);
+            if (equipment.getUpdateTime() > updateTime) {
+                EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
+                dto.setName(equipment.getName());
+                dto.setImageUrl(equipment.getImageUrl());
+                result.add(dto);
+            }
         }
         return result;
     }

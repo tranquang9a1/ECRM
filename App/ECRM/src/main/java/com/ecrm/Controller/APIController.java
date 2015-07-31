@@ -71,7 +71,7 @@ public class APIController {
     @ResponseBody
     AccountDTO login(@RequestParam("username") String username, @RequestParam("password") String password,
                      HttpServletRequest request) {
-        AccountDTO accountDTO  = apiService.login(username, password);
+        AccountDTO accountDTO = apiService.login(username, password);
         return accountDTO;
     }
 
@@ -207,40 +207,19 @@ public class APIController {
         return new ResultDTO(200, "Connect Successful");
     }
 
-    @RequestMapping(value="/getClassroom", method = RequestMethod.GET)
-    public @ResponseBody ClassDTO getClassroom(@RequestParam("classId") int classId) {
+    @RequestMapping(value = "/getClassroom", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ClassDTO getClassroom(@RequestParam("classId") int classId) {
         return classroomService.getClassroom(classId);
     }
 
-    @RequestMapping(value="/getCategory", method = RequestMethod.GET)
-    public @ResponseBody List<EquipmentCategoryDTO> getCategory() {
-        BufferedReader br = null;
-        try {
-
-            String sCurrentLine;
-
-            br = new BufferedReader(new FileReader(Constant.CATEGORY_FILE));
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (sCurrentLine.equalsIgnoreCase(Constant.DATA_NEWEST)) {
-                    Utils.writeFile(Constant.CATEGORY_FILE, Constant.DATA_UPDATED);
-                    return apiService.getEquipment();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null)br.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return new ArrayList<EquipmentCategoryDTO>();
-
+    @RequestMapping(value = "/getCategory", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<EquipmentCategoryDTO> getCategory(@RequestParam("username") String username) {
+        return apiService.getEquipment(username);
     }
-
-
 
 
 }

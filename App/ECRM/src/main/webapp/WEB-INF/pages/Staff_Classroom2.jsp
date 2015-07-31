@@ -157,17 +157,22 @@
                         </div>
                         <div class="body-modal">
                             <div class="group-control">
-                                <div class="name">Số phòng</div>
+                                <div class="name" style="width: 135px;">Số phòng</div>
                                 <div class="control">
-                                    <input id="roomNameId" type="text" value="" name="RoomName" maxlength="30"
-                                           placeholder="Nhập số phòng"/>
+                                    <input id="roomNameId" type="text" value="" name="RoomName" maxlength="4"
+                                           onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )"  placeholder="Nhập số phòng"/>
                                 </div>
                             </div>
                             <div class="group-control">
-                                <div class="name">Loại phòng</div>
+                                <div class="name" style="width: 135px;">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-detail" style="float: left"
+                                <input type="button" class="btn btn-detail" style="float: left; margin: 0 0 0 0px;"
                                        onclick="showModal(2, 'modal-1','modal-2');"
                                        value="Chọn"/>
                             </div>

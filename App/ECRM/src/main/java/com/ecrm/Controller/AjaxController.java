@@ -196,23 +196,28 @@ public class AjaxController {
 
         String roomName = request.getParameter("roomName");
         if (roomName == null || roomName.trim().length() == 0) {
-            alert = "Tên phòng không được bỏ trống!";
+            alert = "Số phòng không được bỏ trống!";
             status = false;
             validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
-        } else {
-            TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName.trim());
-            if (classroomEntity != null) {
-                alert = "Bạn có muốn cập nhật cho phòng "+ classroomEntity.getName();
-                status = true;
-                validateEntity = new ValidateEntity(alert, status);
-                return validateEntity;
-            }
+        }
+        if (!Utils.isNumeric(roomName)) {
+            alert = "Số phòng không hợp lệ!";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
         }
         String roomType = request.getParameter("roomType");
         if (roomType == null || roomType.trim().length() == 0) {
             alert = "Phải chọn loại phòng!";
             status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
+        }
+        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(roomName.trim());
+        if (classroomEntity != null) {
+            alert = "Bạn có muốn cập nhật cho phòng " + classroomEntity.getName();
+            status = true;
             validateEntity = new ValidateEntity(alert, status);
             return validateEntity;
         }
@@ -240,7 +245,7 @@ public class AjaxController {
             if (action.equals("create")) {
                 TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
                 if (roomTypeEntity != null) {
-                    alert = "Bạn có muốn cập nhật cho loại phòng "+roomTypeName;
+                    alert = "Bạn có muốn cập nhật cho loại phòng " + roomTypeName;
                     status = true;
                     validateEntity = new ValidateEntity(alert, status);
                     return validateEntity;
@@ -339,11 +344,11 @@ public class AjaxController {
             }
 
         }
-        if(Double.parseDouble(timeRemain)>Double.parseDouble(usingTime)){
-                alert = "Thời gian còn lại không được lớn hơn thời gian sử dụng";
-                status = false;
-                validateEntity = new ValidateEntity(alert, status);
-                return validateEntity;
+        if (Double.parseDouble(timeRemain) > Double.parseDouble(usingTime)) {
+            alert = "Thời gian còn lại không được lớn hơn thời gian sử dụng";
+            status = false;
+            validateEntity = new ValidateEntity(alert, status);
+            return validateEntity;
         }
 
         return validateEntity;

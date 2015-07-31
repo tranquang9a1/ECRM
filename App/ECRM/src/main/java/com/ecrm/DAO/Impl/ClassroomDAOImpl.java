@@ -40,7 +40,7 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
 
         Query query = entityManager.createQuery("SELECT c " +
                 "FROM TblClassroomEntity c " +
-                "WHERE c.name = :name");
+                "WHERE c.name = :name and c.isDelete = false ");
         query.setParameter("name", name);
 
         List queryResult = query.getResultList();

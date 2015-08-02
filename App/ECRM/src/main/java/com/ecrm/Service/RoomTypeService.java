@@ -111,7 +111,7 @@ public class RoomTypeService {
                 }
                 if(action.equals("create") && roomType==null) {
                     roomType = new TblRoomTypeEntity2(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
-                            new Timestamp(date.getTime()), false, null);
+                            new Timestamp(date.getTime()), false, new Timestamp(date.getTime()));
                     roomType2DAO.insert(roomType);
                     message = "Tạo "+roomtypeName+" thành công!";
                 }

@@ -45,7 +45,12 @@ public class StaffController {
         HttpSession session  =  request.getSession();
         if(session!=null) {
             List<RoomTypeDTO> tblRoomTypeEntities = roomTypeService.getAllRoomType();
-
+            Collections.sort(tblRoomTypeEntities, new Comparator<RoomTypeDTO>() {
+                @Override
+                public int compare(RoomTypeDTO o1, RoomTypeDTO o2) {
+                    return o2.getRoomType().getUpdateTime().compareTo(o1.getRoomType().getUpdateTime());
+                }
+            });
             request.setAttribute("ALLROOMTYPE", tblRoomTypeEntities);
             List<ClassroomMapDTO> tblClassroomEntities = classroomService.getAllClassroomMap();
             List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
@@ -58,6 +63,13 @@ public class StaffController {
                 }
             }
             request.setCharacterEncoding("UTF-8");
+
+            Collections.sort(tblClassroomEntities, new Comparator<ClassroomMapDTO>() {
+                @Override
+                public int compare(ClassroomMapDTO o1, ClassroomMapDTO o2) {
+                    return o2.getClassroom().getUpdateTime().compareTo(o1.getClassroom().getUpdateTime());
+                }
+            });
             request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
             request.setAttribute("ACTIVETAB", activeTab);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");

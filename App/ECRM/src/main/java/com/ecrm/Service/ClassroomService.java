@@ -118,7 +118,7 @@ public class ClassroomService {
                     message = "Cập nhật phòng " + oldClass + " thành công!";
                 }
                 if(action.equals("create") && classroom==null) {
-                    classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), null, false, false, 0
+                    classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), new Timestamp(date.getTime()), false, false, 0
                             , roomTypeId);
                     classroomDAO.insert(classroom);
                     message = "Tạo phòng " + roomName + " thành công!";

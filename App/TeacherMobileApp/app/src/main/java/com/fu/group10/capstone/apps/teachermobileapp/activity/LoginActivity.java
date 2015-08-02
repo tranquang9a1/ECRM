@@ -28,6 +28,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.service.ShareExternalServer
 import com.fu.group10.capstone.apps.teachermobileapp.service.SynchronizeService;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
@@ -195,7 +196,7 @@ public class LoginActivity  extends ActionBarActivity {
 
                             }
                         } else {
-                            Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng!", Toast.LENGTH_LONG).show();
+                            DialogUtils.showAlert(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng");
                         }
 
                     }
@@ -211,7 +212,7 @@ public class LoginActivity  extends ActionBarActivity {
                     editor.commit();
                     openMainActivity(user.getUsername());
                 } else {
-                    Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng!", Toast.LENGTH_LONG).show();
+                    DialogUtils.showAlert(this, "Tên đăng nhập hoặc mật khẩu không đúng");
                 }
                 progress.dismiss();
             }

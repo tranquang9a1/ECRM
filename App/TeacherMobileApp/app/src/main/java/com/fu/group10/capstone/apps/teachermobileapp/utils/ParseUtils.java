@@ -68,7 +68,7 @@ public class ParseUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
 
@@ -172,7 +172,7 @@ public class ParseUtils {
         } catch (JSONException e) {
             Log.d("Utils", "Wrong JSON format");
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -216,7 +216,7 @@ public class ParseUtils {
             return result;
         }catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 }

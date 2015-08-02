@@ -15,6 +15,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.adapter.SampleAdapter;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ClassroomInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
@@ -137,7 +138,12 @@ public class ScheduleFragment extends Fragment {
                                     intent.putExtra("type", "create");
                                     startActivityForResult(intent, 1);
                                 } else {
-                                    Toast.makeText(getActivity().getApplicationContext(), "Bạn không thể báo cáo phòng này", Toast.LENGTH_LONG).show();
+                                    DialogUtils.showAlert(getActivity(), "Bạn không thể báo cáo phòng này vì chưa bắt đầu dạy", new DialogUtils.IOnOkClicked() {
+                                        @Override
+                                        public void onClick() {
+
+                                        }
+                                    });
                                 }
                             }catch (Exception e) {
                                 e.printStackTrace();
@@ -166,7 +172,12 @@ public class ScheduleFragment extends Fragment {
                             intent.putExtra("type", "create");
                             startActivityForResult(intent, 1);
                         } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "Bạn không thể báo cáo phòng này", Toast.LENGTH_LONG).show();
+                            DialogUtils.showAlert(getActivity(), "Bạn không thể báo cáo phòng này vì chưa bắt đầu dạy", new DialogUtils.IOnOkClicked() {
+                                @Override
+                                public void onClick() {
+
+                                }
+                            });
                         }
                     }catch (Exception e) {
                         e.printStackTrace();

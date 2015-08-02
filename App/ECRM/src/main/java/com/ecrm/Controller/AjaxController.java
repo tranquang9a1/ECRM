@@ -328,28 +328,31 @@ public class AjaxController {
             }
 
         }
-        String timeRemain = request.getParameter("timeRemain");
-        if (timeRemain != null) {
-            if (timeRemain.equals("")) {
-                alert = "Thời gian còn lại không được bỏ trống!";
-                status = false;
-                validateEntity = new ValidateEntity(alert, status);
-                return validateEntity;
-            }
-            if (!Utils.isDouble(timeRemain)) {
-                alert = "Thời gian còn lại không được là chữ!";
-                status = false;
-                validateEntity = new ValidateEntity(alert, status);
-                return validateEntity;
-            }
+        if (!action.equals("insert")) {
+            String timeRemain = request.getParameter("timeRemain");
+            if (timeRemain != null) {
+                if (timeRemain.equals("")) {
+                    alert = "Thời gian còn lại không được bỏ trống!";
+                    status = false;
+                    validateEntity = new ValidateEntity(alert, status);
+                    return validateEntity;
+                }
+                if (!Utils.isDouble(timeRemain)) {
+                    alert = "Thời gian còn lại không được là chữ!";
+                    status = false;
+                    validateEntity = new ValidateEntity(alert, status);
+                    return validateEntity;
+                }
 
+            }
+            if (Double.parseDouble(timeRemain) > Double.parseDouble(usingTime)) {
+                alert = "Thời gian còn lại không được lớn hơn thời gian sử dụng";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
         }
-        if (Double.parseDouble(timeRemain) > Double.parseDouble(usingTime)) {
-            alert = "Thời gian còn lại không được lớn hơn thời gian sử dụng";
-            status = false;
-            validateEntity = new ValidateEntity(alert, status);
-            return validateEntity;
-        }
+
 
         return validateEntity;
     }

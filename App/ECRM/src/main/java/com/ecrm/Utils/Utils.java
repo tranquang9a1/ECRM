@@ -262,7 +262,7 @@ public class Utils {
         try
         {
             double d = Double.parseDouble(str);
-            if(d<=0){
+            if(d<0){
                 return false;
             }
         }

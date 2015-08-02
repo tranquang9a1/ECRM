@@ -112,7 +112,11 @@ public class EquipmentController {
                 int category = Integer.parseInt(request.getParameter("category"));
                 TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
                 tblEquipmentEntity.setCategoryId(category);
-                tblEquipmentEntity.setClassroomId(classroomId);
+                if(classroomId==0){
+                    tblEquipmentEntity.setClassroomId(null);
+                }else {
+                    tblEquipmentEntity.setClassroomId(classroomId);
+                }
                 tblEquipmentEntity.setPosition("[" + category + "]");
                 tblEquipmentEntity.setTimeRemain(timeRemain);
                 tblEquipmentEntity.setName(name);

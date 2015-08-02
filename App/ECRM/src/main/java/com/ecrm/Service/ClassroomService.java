@@ -274,15 +274,15 @@ public class ClassroomService {
                 }
 
                 List<String> listTime = group.getListTime();
-                listTime.add(schedule.getTimeFrom().getHours() + "h" + schedule.getTimeFrom().getMinutes());
+                listTime.add(schedule.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getHours() + "h"
+                        + schedule.getTblScheduleConfigByScheduleConfigId().getTimeFrom().getMinutes());
 
                 schedule.setIsActive(false);
                 schedule.setNote("Đổi sang phòng " + changeRoom);
                 scheduleDAO.merge(schedule);
 
                 TblScheduleEntity newSchedule = new TblScheduleEntity(schedule.getUsername(), changeClassroom.getId(),
-                        schedule.getNumberOfStudents(), message, schedule.getTimeFrom(),
-                        schedule.getSlots(), schedule.getDate(), true, schedule.getScheduleConfigId());
+                        schedule.getNumberOfStudents(), message, schedule.getDate(), true, schedule.getScheduleConfigId());
                 scheduleDAO.persist(newSchedule);
             }
 

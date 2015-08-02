@@ -99,11 +99,10 @@ public class GetSMSController {
         scheduleDAO.merge(tblScheduleEntity);
         TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroomEntity.getId(),
                 tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng từ phòng " + tblScheduleEntity.getTblClassroomByClassroomId().getName()
-                + " sang phòng " + changeClassroomEntity.getName(), tblScheduleEntity.getTimeFrom(),
-                tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
+                + " sang phòng " + changeClassroomEntity.getName(),  tblScheduleEntity.getDate(), true, tblScheduleEntity.getScheduleConfigId());
         String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                 tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + changeClassroomEntity.getName() + "vào lúc "
-                + tblScheduleEntity.getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
+                + tblScheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom() + " ngày " + tblScheduleEntity.getDate();
         scheduleDAO.persist(newSchedule);
         System.out.println(message);
         return message;

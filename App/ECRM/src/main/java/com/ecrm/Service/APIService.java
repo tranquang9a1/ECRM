@@ -617,8 +617,7 @@ public class APIService {
                 tblScheduleEntity.setIsActive(false);
                 scheduleDAO.merge(tblScheduleEntity);
                 TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), classroomEntity.getId(),
-                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng", tblScheduleEntity.getTimeFrom(),
-                        tblScheduleEntity.getSlots(), tblScheduleEntity.getDate(), true);
+                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng",  tblScheduleEntity.getDate(), true);
                 String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                         tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + classroomEntity.getName() + ".";
                 scheduleDAO.persist(newSchedule);

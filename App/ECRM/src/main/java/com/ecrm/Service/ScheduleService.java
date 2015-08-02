@@ -165,7 +165,7 @@ public class ScheduleService {
         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date).getTime());
         int classroomId = classroomEntity.getId();
         if (checkValidSchedule(teacher, date, scheduleConfigId, classroomId)) {
-            TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(teacher, classroomId, numberOfSlot, null, java.sql.Time.valueOf(timeFrom), 1,
+            TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(teacher, classroomId, numberOfSlot, null,
                     teachingDate, true, scheduleConfigId);
             scheduleDAO.persist(tblScheduleEntity);
         }
@@ -220,7 +220,7 @@ public class ScheduleService {
                             tblScheduleEntities2.get(0).setNote("Đã đổi sang phòng: " + classroomEntity.getName());
                             scheduleDAO.merge(tblScheduleEntities2.get(0));
                         }
-                        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, classroom, numberOfStudent, "Nhập tay", java.sql.Time.valueOf(timeFrom), 1,
+                        TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, classroom, numberOfStudent, "Nhập tay",
                                 teachingDate, true, scheduleConfigId);
                         scheduleDAO.persist(tblScheduleEntity);
                     }
@@ -244,7 +244,7 @@ public class ScheduleService {
                         tblScheduleEntities2.get(0).setNote("Đã đổi sang phòng: " + classroomEntity.getName());
                         scheduleDAO.merge(tblScheduleEntities2.get(0));
                     }
-                    TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, classroom, numberOfStudent, "Nhập tay", java.sql.Time.valueOf(timeFrom), 1,
+                    TblScheduleEntity tblScheduleEntity = new TblScheduleEntity(username, classroom, numberOfStudent, "Nhập tay",
                             teachingDate, true, scheduleConfigId);
                     scheduleDAO.persist(tblScheduleEntity);
                 }

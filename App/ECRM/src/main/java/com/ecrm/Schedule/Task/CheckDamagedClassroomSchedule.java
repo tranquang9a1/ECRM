@@ -13,6 +13,7 @@ import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -31,8 +32,9 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
-import java.sql.Time;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Created by Htang on 6/22/2015.
@@ -60,7 +62,7 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-    /*@Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000)
     public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
@@ -141,11 +143,25 @@ public class CheckDamagedClassroomSchedule {
                     System.out.println("Daily cronjob!");
                     String date = Long.toString(new Date().getTime());
                     File file = new File(Constant.FILE_PATH + LAST_RUN_TXT);
-
                     FileWriter fw = new FileWriter(file.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(date);
                     bw.close();
+                    System.out.println("Checking schedule!");
+                    Date maxDate = scheduleDAO.getMaxDate();
+                    Date currentDate = new Date();
+                    long period = maxDate.getTime() - currentDate.getTime();
+                    if(period>=0 && period<=604800000){
+                        int day = (int) ((period / (1000*60*60*24)) % 7)+1;
+                        String message = "Lịch trong hệ thống chỉ còn "+ period+" ngày! Bạn có thể muốn nhập thêm lịch?";
+                        List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
+                        /*gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());*/
+                    }
+                    if(period<0){
+                        String message = "Đã hết lịch trong hệ thống! Bạn có thể muốn nhập thêm lịch?";
+                        List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
+                        /*gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());*/
+                    }
                     System.out.println("Done");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -239,6 +255,6 @@ public class CheckDamagedClassroomSchedule {
             }
         }
 
-    }*/
+    }
 
 }

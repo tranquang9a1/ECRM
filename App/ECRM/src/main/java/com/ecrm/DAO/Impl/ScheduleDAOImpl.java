@@ -5,6 +5,7 @@ import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.TblScheduleEntity;
 import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -239,4 +240,10 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
 //        Integer result = (Integer) query.getSingleResult();
 //        return result;
 //    }
+
+    public Date getMaxDate(){
+        Query query = entityManager.createQuery("select max(Date) from TblScheduleEntity");
+        Date date = (Date) query.getSingleResult();
+        return date;
+    }
 }

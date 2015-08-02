@@ -173,7 +173,7 @@
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
                                 <input type="button" class="btn btn-detail" style="float: left; margin: 0 0 0 0px;"
-                                       onclick="showModal(2, 'modal-1','modal-2');"
+                                       onclick="showModal(2, 'modal-1','modal-2'); chooseRoomType();"
                                        value="Chọn"/>
                             </div>
                         </div>
@@ -427,6 +427,7 @@
                     success: function (data) {
                         if (data.status == true) {
                             if(data.alert!=''){
+                                document.getElementById("ClassroomAction").value = 'update';
                                 showModal(0, 'modal-1');
                                 conformData(3, {message: data.alert, btnName: 'Cập nhật', choose: 2, object: {id: 'createClassroomForm'}});
                             }else{
@@ -502,6 +503,7 @@
                         success: function (data) {
                             if (data.status == true) {
                                 if(data.alert!=''){
+                                    document.getElementById('RoomTypeAction').value= 'update';
                                     showModal(0, 'modal-4');
                                     conformData(3, {message: data.alert, btnName: 'Cập nhật', choose: 2, object: {id: 'createRoomType'}});
                                 }else{
@@ -631,8 +633,15 @@
             function showRoomtype() {
                 var selectedValue = $('#selectBox').find(":selected").data("value");
                 document.getElementById("loaiphong").innerHTML = selectedValue.name;
-            }
 
+            }
+            function chooseRoomType(){
+                var action = document.getElementById('ClassroomAction').value;
+                if(action=='create'){
+                    var selectedValue = $('#selectBox option:first-child').data("value");
+                    document.getElementById('roomtype').value = selectedValue.id;
+                }
+            }
             document.getElementById("${tab1}").className += " active";
             document.getElementById("${tab1}").setAttribute("data-main", "1");
         </script>

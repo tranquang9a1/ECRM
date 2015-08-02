@@ -29,7 +29,7 @@ public class AccountDTO {
     }
 
     public AccountDTO() {
-
+        this.lastLogin = Timestamp.valueOf("1970-01-01 12:00:00");
     }
 
     public String getUsername() {

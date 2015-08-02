@@ -639,78 +639,92 @@ public class APIService {
 
     public List<EquipmentClassDTO> getEquipments(int classId) {
         List<EquipmentClassDTO> result = new ArrayList<EquipmentClassDTO>();
-        TblClassroomEntity classroomEntity = classroomDAO.find(classId);
-        List<TblEquipmentEntity> listEquipments = classroomEntity.getTblEquipmentsById();
-        List<TblEquipmentQuantityEntity> equipmentQuantity =
-                classroomEntity.getTblRoomType2ByRoomTypeId2().getTblEquipmentQuantityById();
-        TblEquipmentEntity equipmentEntity = new TblEquipmentEntity();
-        for (int i = 0; i < equipmentQuantity.size(); i++) {
-            TblEquipmentQuantityEntity entity = equipmentQuantity.get(i);
+        try {
+            TblClassroomEntity classroomEntity = classroomDAO.find(classId);
+            List<TblEquipmentEntity> listEquipments = classroomEntity.getTblEquipmentsById();
+            List<TblEquipmentQuantityEntity> equipmentQuantity =
+                    classroomEntity.getTblRoomType2ByRoomTypeId2().getTblEquipmentQuantityById();
+            TblEquipmentEntity equipmentEntity = new TblEquipmentEntity();
+            for (int i = 0; i < equipmentQuantity.size(); i++) {
+                TblEquipmentQuantityEntity entity = equipmentQuantity.get(i);
 
-            if (entity.getQuantity() > 0 && !entity.getIsDelete()) {
-                String name = entity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getName();
-                int categoryId = entity.getEquipmentCategoryId();
-                equipmentEntity = getEquipment(listEquipments, categoryId);
-                if (equipmentEntity != null) {
-                    result.add(new EquipmentClassDTO(name, equipmentEntity.getTimeRemain()+"",
-                            equipmentEntity.getName(), equipmentEntity.isStatus()));
-                } else {
-                    result.add(new EquipmentClassDTO(name, null, null, true));
+                if (entity.getQuantity() > 0 && !entity.getIsDelete()) {
+                    String name = entity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getName();
+                    int categoryId = entity.getEquipmentCategoryId();
+                    equipmentEntity = getEquipment(listEquipments, categoryId);
+                    if (equipmentEntity != null) {
+                        result.add(new EquipmentClassDTO(name, equipmentEntity.getTimeRemain()+"",
+                                equipmentEntity.getName(), equipmentEntity.isStatus()));
+                    } else {
+                        result.add(new EquipmentClassDTO(name, null, null, true));
+                    }
+
                 }
 
             }
-
+            equipmentEntity = getEquipment(listEquipments, 7);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Bàn", equipmentEntity.getTimeRemain()+"",
+                        equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Bàn", null, null, true));
+            }
+            equipmentEntity = getEquipment(listEquipments, 8);
+            if (equipmentEntity != null) {
+                result.add(new EquipmentClassDTO("Ghế", equipmentEntity.getTimeRemain()+"",
+                        equipmentEntity.getName(), equipmentEntity.isStatus()));
+            } else {
+                result.add(new EquipmentClassDTO("Ghế", null, null, true));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        equipmentEntity = getEquipment(listEquipments, 7);
-        if (equipmentEntity != null) {
-            result.add(new EquipmentClassDTO("Bàn", equipmentEntity.getTimeRemain()+"",
-                    equipmentEntity.getName(), equipmentEntity.isStatus()));
-        } else {
-            result.add(new EquipmentClassDTO("Bàn", null, null, true));
-        }
-        equipmentEntity = getEquipment(listEquipments, 8);
-        if (equipmentEntity != null) {
-            result.add(new EquipmentClassDTO("Ghế", equipmentEntity.getTimeRemain()+"",
-                    equipmentEntity.getName(), equipmentEntity.isStatus()));
-        } else {
-            result.add(new EquipmentClassDTO("Ghế", null, null, true));
-        }
-
-
         return result;
     }
 
     public TblEquipmentEntity getEquipment(List<TblEquipmentEntity> listEquipments, int categoryId) {
         TblEquipmentEntity tblEquipmentEntity = null;
-        for (int i = 0; i < listEquipments.size(); i++) {
-            if (listEquipments.get(i).getCategoryId() == categoryId) {
-                tblEquipmentEntity = listEquipments.get(i);
+        try {
+            for (int i = 0; i < listEquipments.size(); i++) {
+                if (listEquipments.get(i).getCategoryId() == categoryId) {
+                    tblEquipmentEntity = listEquipments.get(i);
 
-                if (tblEquipmentEntity != null && tblEquipmentEntity.isStatus() == false) {
-                    break;
+                    if (tblEquipmentEntity != null && tblEquipmentEntity.isStatus() == false) {
+                        break;
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return tblEquipmentEntity;
     }
 
     public List<EquipmentCategoryDTO> getEquipment(String username) {
-        TblUserInfoEntity userInfo = userInfoDAO.getUserInfoByUsername(username);
-        Long updateTime = userInfo.getDownloadTime();
         List<EquipmentCategoryDTO> result  = new ArrayList<EquipmentCategoryDTO>();
-        List<TblEquipmentCategoryEntity> listEquipment = equipmentCategoryDAO.getAllEquipment();
+        try {
+            TblUserInfoEntity userInfo = userInfoDAO.getUserInfoByUsername(username);
+            Long updateTime = userInfo.getDownloadTime();
+            System.out.println("Update Time: " + updateTime);
 
-        for (int i = 0; i < listEquipment.size(); i++) {
-            TblEquipmentCategoryEntity equipment = listEquipment.get(i);
-            if (updateTime == null || equipment.getUpdateTime() > updateTime) {
-                EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
-                dto.setName(equipment.getName());
-                dto.setImageUrl(equipment.getImageUrl());
-                result.add(dto);
+            List<TblEquipmentCategoryEntity> listEquipment = equipmentCategoryDAO.getAllEquipment();
+            System.out.println("List Equipment Size: " + listEquipment.size());
+            for (int i = 0; i < listEquipment.size(); i++) {
+                TblEquipmentCategoryEntity equipment = listEquipment.get(i);
+                if (updateTime == null || equipment.getUpdateTime() > updateTime) {
+                    EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
+                    dto.setName(equipment.getName());
+                    dto.setImageUrl(equipment.getImageUrl());
+                    result.add(dto);
+                }
             }
+            userInfo.setDownloadTime(System.currentTimeMillis());
+            userInfoDAO.merge(userInfo);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        userInfo.setDownloadTime(System.currentTimeMillis());
-        userInfoDAO.merge(userInfo);
+
         return result;
     }
 }

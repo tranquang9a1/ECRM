@@ -9,175 +9,186 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
-<div class="table" style="width:100%; height: 280px; margin-top: 10px">
-    <div class="header-table">
-        <div style="width:10%">
-            <div>Loại</div>
+
+<div class="clear"></div>
+<div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
+            onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
+                                                            document.getElementById('equipment-classroomId').value = '0';
+                                                            document.getElementById('time-remain').style.display = 'none';
+                                                            $('#modal-1 > div.content-modal').css('height','307px');
+                                                            document.getElementById('equipment-category-select').disabled = false;
+                                                            "/>
+
+    <div class="table" style="width:100%; height: 350px;">
+        <div class="header-table">
+            <div style="width:10%">
+                <div>Loại</div>
+            </div>
+            <div style="width:12%;">
+                <div>Tên</div>
+            </div>
+            <div style="width:20%;">
+                <div>Số Serial</div>
+            </div>
+            <div style="width:100px;">
+                <div>Giờ sử dụng</div>
+            </div>
+            <div style="width:100px;">
+                <div>Giờ còn lại</div>
+            </div>
+            <div style="width:50px;">
+                <div>Phòng</div>
+            </div>
+            <div style="width: 100px">
+                <div></div>
+            </div>
+            <p class="clear"></p>
         </div>
-        <div style="width:12%;">
-            <div>Tên</div>
-        </div>
-        <div style="width:20%;">
-            <div>Số Serial</div>
-        </div>
-        <div style="width:100px;">
-            <div>Giờ sử dụng</div>
-        </div>
-        <div style="width:100px;">
-            <div>Giờ còn lại</div>
-        </div>
-        <div style="width:50px;">
-            <div>Phòng</div>
-        </div>
-        <div style="width: 100px">
-            <div></div>
-        </div>
-        <p class="clear"></p>
-    </div>
-    <div class="body-table">
-        <form action="/staff/removeEqipment" id="removeClassroom">
-            <input type="hidden" value="" id="removeClassroomName"
-                   name="classroomName"/>
-            <c:forEach items="${equipments}" var="e">
-                <c:choose>
-                    <c:when test="${e.timeRemain <=50 and e.usingTime>0}">
-                        <div class="row">
-                            <div style="width:10%;">
-                                <div class="equip"
-                                     style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">
+        <div class="body-table">
+            <form action="/staff/removeEqipment" id="removeClassroom">
+                <input type="hidden" value="" id="removeClassroomName"
+                       name="classroomName"/>
+                <c:forEach items="${equipments}" var="e">
+                    <c:choose>
+                        <c:when test="${e.timeRemain <=50 and e.usingTime>0}">
+                            <div class="row">
+                                <div style="width:10%;">
+                                    <div class="equip"
+                                         style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">
+                                    </div>
                                 </div>
-                            </div>
-                            <div style="width:12%;">
-                                <div>${e.name}</div>
-                            </div>
-                            <div style="width:20%;">
-                                <div>${e.serialNumber}</div>
-                            </div>
-                            <div style="width:100px;">
-                                <div>${e.usingTime}</div>
-                            </div>
-                            <div style="width:100px;">
-                                <div>${e.timeRemain}</div>
-                            </div>
-                            <div style="width:50px;">
-                                <div>${e.tblClassroomByClassroomId.name}</div>
-                            </div>
-                            <div style="width: 100px">
-                                <div class="group-button">
-                                    <c:choose>
-                                        <c:when test="${e.classroomId != null}">
-                                            <div class="btn btn-detail"
-                                                 title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
-                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
-                                                ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
-                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
-                                                    class="fa fa-pencil"></i>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="btn btn-detail"
-                                                 title="Chỉnh sửa" onclick="editEquipment(0,
-                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
-                                                ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
-                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
-                                                    class="fa fa-pencil"></i>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:choose>
-                                        <c:when test="${e.classroomId != null}">
-                                            <div class="btn btn-remove"
-                                                 onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
-                                                         btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}&remove=false'})"
-                                                 title="Xóa"><i
-                                                    class="fa fa-times"></i>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="btn btn-remove"
-                                                 onclick="conformData(2,{message:'Bạn có muốn xóa thiết bị ${e.name} (serial: ${e.serialNumber})?', btnName:'Xóa', link:'/staff/removeEquipment?equipmentId=${e.id}&remove=true'})"
-                                                 title="Xóa"><i
-                                                    class="fa fa-times"></i>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                                <div style="width:12%;">
+                                    <div>${e.name}</div>
                                 </div>
-                            </div>
-                            <p class="clear"></p>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="row">
-                            <div style="width:10%;">
-                                <div class="equip"
-                                     style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">
+                                <div style="width:20%;">
+                                    <div>${e.serialNumber}</div>
                                 </div>
-                            </div>
-                            <div style="width:12%;">
-                                <div>${e.name}</div>
-                            </div>
-                            <div style="width:20%;">
-                                <div>${e.serialNumber}</div>
-                            </div>
-                            <div style="width:100px;">
-                                <div>${e.usingTime}</div>
-                            </div>
-                            <div style="width:100px;">
-                                <div>${e.timeRemain}</div>
-                            </div>
-                            <div style="width:50px;">
-                                <div>${e.tblClassroomByClassroomId.name}</div>
-                            </div>
-                            <div style="width: 100px">
-                                <div class="group-button">
-                                    <c:choose>
-                                        <c:when test="${e.classroomId != null}">
-                                            <div class="btn btn-detail"
-                                                 title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
-                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
-                                                ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
-                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
-                                                    class="fa fa-pencil"></i>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="btn btn-detail"
-                                                 title="Chỉnh sửa" onclick="editEquipment(0,
-                                                ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
-                                                ${e.usingTime}, ${e.timeRemain},${e.id});
-                                                    document.getElementById('time-remain').style.display = 'block';
-                                                    $('#modal-1 > div.content-modal').css('height','360px');"><i
-                                                    class="fa fa-pencil"></i>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:choose>
-                                        <c:when test="${e.classroomId != null}">
-                                            <div class="btn btn-remove"
-                                                 onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
-                                                         btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}&remove=false'})"
-                                                 title="Xóa"><i
-                                                    class="fa fa-times"></i>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="btn btn-remove"
-                                                 onclick="conformData(2,{message:'Bạn có muốn xóa thiết bị ${e.name} (serial: ${e.serialNumber})?', btnName:'Xóa', link:'/staff/removeEquipment?equipmentId=${e.id}&remove=true'})"
-                                                 title="Xóa"><i
-                                                    class="fa fa-times"></i>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                                <div style="width:100px;">
+                                    <div>${e.usingTime}</div>
                                 </div>
+                                <div style="width:100px;">
+                                    <div>${e.timeRemain}</div>
+                                </div>
+                                <div style="width:50px;">
+                                    <div>${e.tblClassroomByClassroomId.name}</div>
+                                </div>
+                                <div style="width: 100px">
+                                    <div class="group-button">
+                                        <c:choose>
+                                            <c:when test="${e.classroomId != null}">
+                                                <div class="btn btn-detail"
+                                                     title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
+                                                    ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                    ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
+                                                        $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                        class="fa fa-pencil"></i>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="btn btn-detail"
+                                                     title="Chỉnh sửa" onclick="editEquipment(0,
+                                                    ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                    ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
+                                                        $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                        class="fa fa-pencil"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:choose>
+                                            <c:when test="${e.classroomId != null}">
+                                                <div class="btn btn-remove"
+                                                     onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
+                                                             btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}&remove=false'})"
+                                                     title="Xóa"><i
+                                                        class="fa fa-times"></i>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="btn btn-remove"
+                                                     onclick="conformData(2,{message:'Bạn có muốn xóa thiết bị ${e.name} (serial: ${e.serialNumber})?', btnName:'Xóa', link:'/staff/removeEquipment?equipmentId=${e.id}&remove=true'})"
+                                                     title="Xóa"><i
+                                                        class="fa fa-times"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                                <p class="clear"></p>
                             </div>
-                            <p class="clear"></p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="row">
+                                <div style="width:10%;">
+                                    <div class="equip"
+                                         style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">
+                                    </div>
+                                </div>
+                                <div style="width:12%;">
+                                    <div>${e.name}</div>
+                                </div>
+                                <div style="width:20%;">
+                                    <div>${e.serialNumber}</div>
+                                </div>
+                                <div style="width:100px;">
+                                    <div>${e.usingTime}</div>
+                                </div>
+                                <div style="width:100px;">
+                                    <div>${e.timeRemain}</div>
+                                </div>
+                                <div style="width:50px;">
+                                    <div>${e.tblClassroomByClassroomId.name}</div>
+                                </div>
+                                <div style="width: 100px">
+                                    <div class="group-button">
+                                        <c:choose>
+                                            <c:when test="${e.classroomId != null}">
+                                                <div class="btn btn-detail"
+                                                     title="Chỉnh sửa" onclick="editEquipment(${e.classroomId},
+                                                    ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                    ${e.usingTime}, ${e.timeRemain},${e.id}); document.getElementById('time-remain').style.display = 'block';
+                                                        $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                        class="fa fa-pencil"></i>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="btn btn-detail"
+                                                     title="Chỉnh sửa" onclick="editEquipment(0,
+                                                    ${e.tblEquipmentCategoryByCategoryId.id}, '${e.name}', ${e.serialNumber},
+                                                    ${e.usingTime}, ${e.timeRemain},${e.id});
+                                                        document.getElementById('time-remain').style.display = 'block';
+                                                        $('#modal-1 > div.content-modal').css('height','360px');"><i
+                                                        class="fa fa-pencil"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:choose>
+                                            <c:when test="${e.classroomId != null}">
+                                                <div class="btn btn-remove"
+                                                     onclick="conformData(2,{message:'Bạn có muốn gỡ thiết bị ${e.name} (serial: ${e.serialNumber}) ra khỏi phòng ${e.tblClassroomByClassroomId.name}?',
+                                                             btnName:'Xóa',link:'/staff/removeEquipment?equipmentId=${e.id}&remove=false'})"
+                                                     title="Xóa"><i
+                                                        class="fa fa-times"></i>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="btn btn-remove"
+                                                     onclick="conformData(2,{message:'Bạn có muốn xóa thiết bị ${e.name} (serial: ${e.serialNumber})?', btnName:'Xóa', link:'/staff/removeEquipment?equipmentId=${e.id}&remove=true'})"
+                                                     title="Xóa"><i
+                                                        class="fa fa-times"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                                <p class="clear"></p>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
 
 
-            </c:forEach>
-        </form>
+                </c:forEach>
+            </form>
+        </div>
     </div>
 </div>
 <div id="pagination" style="padding-left: 150px;"></div>

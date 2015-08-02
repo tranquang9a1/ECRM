@@ -64,24 +64,11 @@
                                 </div>
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
-                                        <div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
-                                                    onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
-                                                            document.getElementById('equipment-classroomId').value = '0';
-                                                            document.getElementById('time-remain').style.display = 'none';
-                                                            $('#modal-1 > div.content-modal').css('height','307px');
-                                                            document.getElementById('equipment-category-select').disabled = false;
-                                                            "/>
-                                        </div>
-                                        <div class="clear"></div>
+
                                         <jsp:include flush="false" page="Staff_ManageEquipment.jsp"/>
                                     </div>
                                     <div id="tab2" class="body-tab">
-                                        <div>
-                                            <div></div>
-                                            <input type="button" class="btn btn-orange" style="margin: 0"
-                                                   value="Tạo loại thiết bị" onclick="showModal(1, 'modal-category')"/>
-                                        </div>
-                                        <div class="clear"></div>
+
                                         <jsp:include flush="false" page="Staff_ManageCategory.jsp"/>
                                     </div>
                                 </div>
@@ -377,7 +364,7 @@
                 var items = $("#removeClassroom > div");
 
                 var numItems = items.length;
-                var perPage = 7;
+                var perPage = 9;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();
@@ -398,10 +385,10 @@
             });
             //phan trang
             jQuery(function ($) {
-                var items = $("#removeClassroom > div");
+                var items = $("#removeCategory > div");
 
                 var numItems = items.length;
-                var perPage = 7;
+                var perPage = 9;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();

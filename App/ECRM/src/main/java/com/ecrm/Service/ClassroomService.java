@@ -209,6 +209,7 @@ public class ClassroomService {
                 }
             }
             classroomEntity.setIsAllInformation(true);
+            classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
             classroomDAO.merge(classroomEntity);
             message = "Cập nhật thiết bị thành công!";
             return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");

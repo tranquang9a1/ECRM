@@ -70,18 +70,11 @@
                                 </div>
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
-                                        <div><input type="button" class="btn btn-orange"
-                                                    onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();
-                                                    document.getElementById('classroom-create').value='Tạo phòng'"
-                                                    value="Tạo phòng học"/></div>
+
                                         <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                     </div>
                                     <div id="tab2" class="body-tab">
-                                        <div>
-                                            <div></div>
-                                            <input type="button" class="btn btn-orange" style="margin: 0"
-                                                   onclick="document.getElementById('RoomTypeAction').value='create';showModal(1, 'modal-roomtypedetail')"
-                                                   value="Tạo loại phòng"/></div>
+
                                         <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
                                     </div>
                                 </div>
@@ -573,7 +566,7 @@
                 var items = $("#removeClassroom > div");
 
                 var numItems = items.length;
-                var perPage = 7;
+                var perPage = 9;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();
@@ -598,7 +591,7 @@
                 var items = $("#removeRoomtype > div");
 
                 var numItems = items.length;
-                var perPage = 7;
+                var perPage = 9;
 
                 // only show the first 2 (or "first per_page") items initially
                 items.slice(perPage).hide();

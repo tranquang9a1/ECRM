@@ -23,6 +23,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -145,6 +146,7 @@ public class EquipmentController {
                 equipmentDAO.merge(tblEquipmentEntity);
                 TblClassroomEntity classroomEntity = tblEquipmentEntity.getTblClassroomByClassroomId();
                 classroomEntity.setIsAllInformation(false);
+                classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
                 classroomDAO.merge(classroomEntity);
             }
 
@@ -300,6 +302,7 @@ public class EquipmentController {
                         equipmentDAO.merge(tblEquipmentEntity);
                         TblClassroomEntity classroomEntity = tblEquipmentEntity.getTblClassroomByClassroomId();
                         classroomEntity.setIsAllInformation(false);
+                        classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
                         classroomDAO.merge(classroomEntity);
                     }
                 }

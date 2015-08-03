@@ -1,38 +1,16 @@
 package com.ecrm.Controller;
 
-import com.ecrm.DAO.ClassroomDAO;
-import com.ecrm.DAO.Impl.*;
-import com.ecrm.DAO.ReportDAO;
-import com.ecrm.DAO.ReportDetailDAO;
-import com.ecrm.DAO.RoomTypeDAO;
 import com.ecrm.DTO.*;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.APIService;
 import com.ecrm.Service.ClassroomService;
 import com.ecrm.Service.SMSService;
 import com.ecrm.Service.ScheduleService;
-import com.ecrm.Utils.Constant;
-import com.ecrm.Utils.Enumerable;
-import com.ecrm.Utils.SmsUtils;
-import com.ecrm.Utils.Utils;
-import com.ecrm.Utils.socket.SocketIO;
-import com.twilio.sdk.TwilioRestException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.joda.time.LocalDate;
-import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -167,8 +145,8 @@ public class APIController {
     }
 
     @RequestMapping(value = "/sendSMS", method = RequestMethod.GET)
-    public void sendSMS(@RequestParam("message") String message, @RequestParam("ListUser") String listUsers) {
-        smsService.sendSMS(listUsers, message);
+    public ResultDTO sendSMS(@RequestParam("message") String message, @RequestParam("ListUser") String listUsers) {
+        return smsService.sendSMS(listUsers, message);
 
     }
 
@@ -217,7 +195,7 @@ public class APIController {
     @RequestMapping(value = "/getCategory", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<EquipmentCategoryDTO> getCategory(@RequestParam("username") String username) {
+    List<CategoryDTO> getCategory(@RequestParam("username") String username) {
         return apiService.getEquipment(username);
     }
 

@@ -1,6 +1,7 @@
 package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.UserDAOImpl;
+import com.ecrm.DTO.ResultDTO;
 import com.ecrm.Entity.TblUserEntity;
 import com.ecrm.Entity.TblUserInfoEntity;
 import com.ecrm.Service.GCMService;
@@ -25,8 +26,6 @@ import java.io.*;
 public class GCMController {
 
 
-
-
     @Autowired
     private GCMService gcmService;
 
@@ -44,13 +43,17 @@ public class GCMController {
     }
 
     @RequestMapping(value = "/sendNotification")
-    public String sendNotification(@RequestParam("message") String msg, HttpServletRequest request,
-                                   @RequestParam("ListUser") String listUser) {
+    public ResultDTO sendNotification(@RequestParam("message") String msg, HttpServletRequest request,
+                                      @RequestParam("ListUser") String listUser) {
+
+        try {
+            Result result = gcmService.sendNotifications(msg, listUser);
+            return new ResultDTO(200, result.toString());
+        } catch (Exception e) {
+            return new ResultDTO(500, e.getMessage());
+        }
 
 
-        Result result = gcmService.sendNotifications(msg, listUser);
-        request.setAttribute("pushStatus", result.toString());
-        return "notify";
     }
 
 

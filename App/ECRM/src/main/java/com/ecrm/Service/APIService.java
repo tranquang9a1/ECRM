@@ -700,8 +700,8 @@ public class APIService {
         return tblEquipmentEntity;
     }
 
-    public List<EquipmentCategoryDTO> getEquipment(String username) {
-        List<EquipmentCategoryDTO> result  = new ArrayList<EquipmentCategoryDTO>();
+    public List<CategoryDTO> getEquipment(String username) {
+        List<CategoryDTO> result  = new ArrayList<CategoryDTO>();
         try {
             TblUserInfoEntity userInfo = userInfoDAO.getUserInfoByUsername(username);
             Long updateTime = userInfo.getDownloadTime();
@@ -712,7 +712,7 @@ public class APIService {
             for (int i = 0; i < listEquipment.size(); i++) {
                 TblEquipmentCategoryEntity equipment = listEquipment.get(i);
                 if (updateTime == null || equipment.getUpdateTime() > updateTime) {
-                    EquipmentCategoryDTO dto = new EquipmentCategoryDTO();
+                    CategoryDTO dto = new CategoryDTO();
                     dto.setName(equipment.getName());
                     dto.setImageUrl(equipment.getImageUrl());
                     result.add(dto);

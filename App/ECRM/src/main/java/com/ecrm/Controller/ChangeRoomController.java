@@ -3,6 +3,7 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.ReportDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
+import com.ecrm.DTO.ResultDTO;
 import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Entity.TblScheduleEntity;
@@ -53,7 +54,7 @@ public class ChangeRoomController {
     @RequestMapping(value = "changeRoom")
     public
     @ResponseBody
-    Boolean changeRoom(@RequestParam("from")String currentClassroom,@RequestParam("to") String changeClassroom) throws TwilioRestException {
+    ResultDTO changeRoom(@RequestParam("from")String currentClassroom,@RequestParam("to") String changeClassroom) throws TwilioRestException {
         TblClassroomEntity currentClassroomEntity = classroomService.getClassroomByName(currentClassroom);
         TblClassroomEntity changeClassroomEntity = classroomService.getClassroomByName(changeClassroom);
         int currentClassroomId = currentClassroomEntity.getId();
@@ -66,6 +67,6 @@ public class ChangeRoomController {
         }
         //update status report
         reportService.changeLiveReportStatus(currentClassroomId, changeClassroom);
-        return true;
+        return new ResultDTO(200, "Change room successful");
     }
 }

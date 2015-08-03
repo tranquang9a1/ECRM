@@ -3,17 +3,17 @@ package com.ecrm.DTO;
 /**
  * Created by QuangTV on 7/30/2015.
  */
-public class EquipmentCategoryDTO {
+public class CategoryDTO {
 
     private String name;
     private String imageUrl;
 
-    public EquipmentCategoryDTO(String name, String imageUrl) {
+    public CategoryDTO(String name, String imageUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
     }
 
-    public EquipmentCategoryDTO() {
+    public CategoryDTO() {
     }
 
     public String getName() {

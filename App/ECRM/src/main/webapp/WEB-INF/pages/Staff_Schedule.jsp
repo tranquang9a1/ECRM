@@ -274,7 +274,7 @@
         </div>
         <div class="content-modal">
             <div class="modal modal-small" id="Upload">
-                <div class="content-modal" style="  height: 235px;">
+                <div class="content-modal" style="height: 198px;">
                     <div class="header-modal title">
                         <p>Nhập Lịch</p>
                         <i class="fa fa-times" onclick="showModal(0, 'Upload')"></i>
@@ -282,15 +282,18 @@
                     <div class="body-modal" style="padding-top: 10px">
                         <a href="/staff/download">Bấm vào để tải mẫu!</a>
 
-                        <p>Chọn file excel:</p>
+                        <div class="group-control">
+                            <div class="name">Chọn file excel:</div>
 
-                        <form action="/staff/import" method="post"
-                              enctype="multipart/form-data" id="uploadSchedule">
-                            <input type="file" id="fileUpload" name="scheduleFile" size="50" accept=".csv,
-                        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                           <div class="control">
+                               <form action="/staff/import" method="post" enctype="multipart/form-data" id="uploadSchedule">
+                                    <input type="file" style="margin: 6px 0 0;" id="fileUpload" name="scheduleFile" size="50" accept=".csv,
+                                     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
 
-                            <p id="lblError" style="color: red;"></p>
-                        </form>
+                                    <p id="lblError" style="color: red;"></p>
+                                </form>
+                           </div>
+                        </div>
                     </div>
                     <div class="footer-modal">
                         <input type="button" class="btn btn-normal" onclick="showModal(0, 'Upload')"
@@ -301,7 +304,7 @@
                 </div>
             </div>
             <div class="modal modal-medium" id="Manual">
-                <div class="content-modal" style="height: 550px">
+                <div class="content-modal" style="height: 535px;">
                     <div class="header-modal title">
                         <p>Nhập Lịch Bằng Tay</p>
                         <i class="fa fa-times" onclick="showModal(0, 'Manual'); clearFormManual();"></i>
@@ -309,9 +312,6 @@
                     <form action="/staff/importManually" id="importManually"
                           name="ImportManually" method="post">
                         <div class="body-modal">
-
-                            <br/>
-
                             <div class="group-control">
                                 <div class="name">Tài khoản(*):</div>
 

@@ -4,9 +4,11 @@ import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.DamagedRoomDTO;
 import com.ecrm.DTO.GroupReportsDTO;
 import com.ecrm.DTO.ReportResponseObject;
+import com.ecrm.DTO.StatisticDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Utils;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -211,6 +213,22 @@ public class ReportService {
             tblReportEntity.setStatus(2);
             reportDAO.merge(tblReportEntity);
         }
+    }
+
+    public StatisticDTO getNumberOfChangeRoomByMonth(int year) {
+        List list = reportDAO.getNumberOfChangeRoomByMonth(year);
+        if(list.size() > 0) {
+            StatisticDTO result = new StatisticDTO();
+            for(int i = 0; i < list.size(); i++) {
+                Object[] item = (Object[]) list.get(i);
+                result.getListMonth().add(item[1].toString());
+                result.getListNumber().add(((Long) item[0]).intValue());
+            }
+
+            return result;
+        }
+
+        return null;
     }
 
     // PRIVATE METHOD

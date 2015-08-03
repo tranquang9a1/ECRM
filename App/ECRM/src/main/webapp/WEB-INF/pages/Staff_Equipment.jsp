@@ -92,12 +92,12 @@
                 <input type="hidden" name="category" id="equipment-category">
 
                 <div class="modal modal-medium" id="modal-1">
-                    <div class="content-modal" style="height: 350px">
+                    <div class="content-modal" style="height: 316px">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearEquipment()"></i>
                         </div>
-                        <div class="body-modal" style="padding-top: 10px">
+                        <div class="body-modal">
                             <div class="group-control">
                                 <div class="name">Loại thiết bị</div>
                                 <div class="control">
@@ -151,12 +151,12 @@
             <form action="/staff/createCategory" id="createCategory" name="createCategory" enctype="multipart/form-data"
                   method="post">
                 <div class="modal modal-medium" id="modal-category">
-                    <div class="content-modal" style="height: 260px">
+                    <div class="content-modal" style="height: 266px">
                         <div class="header-modal title">
                             <p>Tạo loại thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-category'); clearCategory();"></i>
                         </div>
-                        <div class="body-modal" style="padding-top: 10px">
+                        <div class="body-modal">
                             <div class="group-control">
                                 <div class="name">Tên loại</div>
                                 <div class="control">
@@ -194,21 +194,21 @@
             <form action="/staff/editCategory" id="editCategory" name="editCategory" enctype="multipart/form-data"
                   method="post">
                 <div class="modal modal-medium" id="modal-edit-category">
-                    <div class="content-modal" style="height: 200px">
+                    <div class="content-modal" style="height: 215px">
                         <div class="header-modal title">
                             <p>Cập nhật loại thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-category'); clearEditCategory();"></i>
                         </div>
                         <input type="hidden" id="edit-categoryId" name="categoryId">
-                        <div class="body-modal" style="padding-top: 10px">
+                        <div class="body-modal">
                             <div class="group-control">
-                                <div class="name">Tên loại</div>
+                                <div class="name">Tên loại thiết bị</div>
                                 <div class="control">
                                     <input name="name" type="text" id="edit-categoryName">
                                 </div>
                             </div>
                             <div class="group-control">
-                                <div class="name">Hình ảnh</div>
+                                <div class="name">Cập nhật hình ảnh</div>
                                 <div class="control"><input type="file" id="edit-fileUpload" name="scheduleFile"
                                                             size="50" accept="image/*"/>
 

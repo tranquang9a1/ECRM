@@ -1,7 +1,9 @@
 package com.ecrm.DAO;
 
+import com.ecrm.DTO.StatisticDTO;
 import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Utils.Enumerable.*;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -45,4 +47,6 @@ public interface ReportDAO {
     public boolean resolveAll(String solution);
 
     public boolean removeReport(int reportId);
+
+    public List<StatisticDTO.StatisticRow> getNumberOfChangeRoomByMonth(int year);
 }

@@ -2,9 +2,11 @@ package com.ecrm.DAO.Impl;
 
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.ReportDAO;
+import com.ecrm.DTO.StatisticDTO;
 import com.ecrm.Entity.TblReportEntity;
 import com.ecrm.Entity.TblUserInfoEntity;
 import com.ecrm.Utils.Enumerable.ReportStatus;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -283,5 +285,21 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         query.setParameter("classroomId", classroomId);
         List<TblReportEntity> tblReportEntities = query.getResultList();
         return tblReportEntities;
+    }
+
+    @Override
+    public List<StatisticDTO.StatisticRow> getNumberOfChangeRoomByMonth(int year) {
+        Query query = entityManager.createQuery("SELECT COUNT (r.id) AS num, DATE_FORMAT(r.createTime, '%m-%Y') AS month " +
+                                                "FROM TblReportEntity r " +
+                                                "WHERE r.changedRoom = '1' AND YEAR(r.createTime) = :thatYear " +
+                                                "GROUP BY MONTH(r.createTime), YEAR(r.createTime) " +
+                                                "order by r.createTime ASC");
+        query.setParameter("thatYear", year);
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return queryResult;
+        }
+        return new ArrayList<StatisticDTO.StatisticRow>();
     }
 }

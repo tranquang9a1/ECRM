@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.DatabaseHelper;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.DialogUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
 import com.fu.group10.capstone.apps.staffmobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.staffmobileapp.model.User;
@@ -167,7 +168,7 @@ public class LoginActivity extends Activity{
                             openMainActivity();
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, "Username or password are incorrect!", Toast.LENGTH_LONG).show();
+                        DialogUtils.showAlert(LoginActivity.this, "Tài khoản hoặc mật khẩu không đúng");
                     }
 
                 }

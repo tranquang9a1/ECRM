@@ -15,6 +15,9 @@ public class User {
     private boolean status;
 
 
+    public User() {
+    }
+
     public User(String username, String password, String fullname, String phone, String role, Long lastLogin,
                 boolean status) {
         this.username = username;

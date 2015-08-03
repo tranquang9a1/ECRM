@@ -25,6 +25,8 @@ import com.fu.group10.capstone.apps.staffmobileapp.model.NavDrawerItem;
 
 import java.util.ArrayList;
 
+import it.neokree.materialtabs.MaterialTabListener;
+
 /**
  * Created by QuangTV on 6/26/2015.
  */
@@ -209,7 +211,10 @@ public class ListRoomActivity extends ActionBarActivity {
                 fragment = new FinishFragment();
                 break;
             case 3:
-                fragment = new RemovedFragment();
+                fragment = new ClassroomFragment();
+                break;
+            case 4:
+                fragment = new ClassroomFragment();
                 break;
             default:
                 break;

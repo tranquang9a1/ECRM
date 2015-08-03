@@ -22,6 +22,7 @@
 
     <color name="green">#1DBF97</color>
     <color name="red">#FF4B4B</color>
+    <color name = "blue">#ff67bbff</color>
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>

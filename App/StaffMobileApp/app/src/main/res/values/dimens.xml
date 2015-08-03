@@ -29,4 +29,7 @@
     <dimen name="thumbnail_width">90dp</dimen>
     <dimen name="thumbnail_height">88dp</dimen>
     <dimen name="legue_name_width">100dp</dimen>
+    <dimen name="tabhostHeight">48dp</dimen>
+    <dimen name="tabSelectorHeight">2dp</dimen>
+    <dimen name="materialTextTab">14sp</dimen>
 </resources>

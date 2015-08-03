@@ -45,7 +45,7 @@ public class ParseUtils {
     }
 
     public static User parseUserJson(String json) {
-        User result = null;
+        User result = new User();
         try {
             if (json == null) {
                 return result;
@@ -109,7 +109,7 @@ public class ParseUtils {
     }
 
     public static Result parseResult(String json) {
-        Result result = null;
+        Result result = new Result();
         try {
             if (json == null) {
                 return result;
@@ -131,7 +131,7 @@ public class ParseUtils {
         try {
             JSONArray jsonListRoom = new JSONArray(json);
             if (jsonListRoom.length() == 0) {
-                return null;
+                return new String[0];
             }
             String[] result = new String[jsonListRoom.length()];
             for (int i = 0; i < jsonListRoom.length(); i++) {
@@ -144,7 +144,7 @@ public class ParseUtils {
             e.printStackTrace();
 
         }
-        return null;
+        return new String[0];
     }
 
     public static List<EquipmentCategory> parseEquipmentCategory(String json) {
@@ -168,7 +168,7 @@ public class ParseUtils {
             return result;
         }catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<EquipmentCategory>();
         }
     }
 }

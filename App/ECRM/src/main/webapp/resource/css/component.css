@@ -63,7 +63,6 @@ tbody tr:hover {
 .sticky-wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
-	position: relative;
 	width: 100%;
 }
 .sticky-wrap .sticky-thead,
@@ -78,9 +77,10 @@ tbody tr:hover {
 	width: auto; /* Prevent table from stretching to full size */
 }
 	.sticky-wrap .sticky-thead {
-		box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
+		/*box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);*/
 		/*z-index: 100;*/
 		width: 100%; /* Force stretch */
+		opacity: 1;
 	}
 	.sticky-wrap .sticky-intersect {
 		opacity: 1;
@@ -102,6 +102,13 @@ td.user-name {
 }
 .sticky-wrap.overflow-y {
 	overflow-y: auto;
-	max-height: 50vh;
+	max-height: 300px;
 }
 
+.sticky-enabled thead {
+	opacity: 0;
+}
+
+.sticky-wrap .sticky-thead th{
+	text-align: center;
+}

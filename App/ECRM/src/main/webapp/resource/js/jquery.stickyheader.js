@@ -4,14 +4,14 @@ $(function(){
 			// Clone <thead>
 			var $w	   = $(window),
 				$t	   = $(this),
-				$thead = $t.find('thead').clone(),
-				$col   = $t.find('thead, tbody').clone();
+				$thead = $t.find('thead').clone();
+				//$col   = $t.find('thead, tbody').clone();
 
 			// Add class, remove margins, reset width and wrap table
 			$t
 			.addClass('sticky-enabled')
 			.css({
-				margin: 0,
+				marginTop: -50,
 				width: '100%'
 			}).wrap('<div class="sticky-wrap" />');
 
@@ -21,25 +21,25 @@ $(function(){
 			$t.after('<table class="sticky-thead" />');
 
 			// If <tbody> contains <th>, then we create sticky column and intersect (advanced)
-			if($t.find('tbody th').length > 0) {
-				$t.after('<table class="sticky-col" /><table class="sticky-intersect" />');
-			}
+			//if($t.find('tbody th').length > 0) {
+			//	$t.after('<table class="sticky-col" /><table class="sticky-intersect" />');
+			//}
 
 			// Create shorthand for things
 			var $stickyHead  = $(this).siblings('.sticky-thead'),
-				$stickyCol   = $(this).siblings('.sticky-col'),
-				$stickyInsct = $(this).siblings('.sticky-intersect'),
+				//$stickyCol   = $(this).siblings('.sticky-col'),
+				//$stickyInsct = $(this).siblings('.sticky-intersect'),
 				$stickyWrap  = $(this).parent('.sticky-wrap');
 
 			$stickyHead.append($thead);
 
-			$stickyCol
-			.append($col)
-				.find('thead th:gt(0)').remove()
-				.end()
-				.find('tbody td').remove();
+			//$stickyCol
+			//.append($col)
+			//	.find('thead th:gt(0)').remove()
+			//	.end()
+			//	.find('tbody td').remove();
 
-			$stickyInsct.html('<thead><tr><th>'+$t.find('thead th:first-child').html()+'</th></tr></thead>');
+			//$stickyInsct.html('<thead><tr><th>'+$t.find('thead th:first-child').html()+'</th></tr></thead>');
 			
 			// Set widths
 			var setWidths = function () {
@@ -47,68 +47,71 @@ $(function(){
 					.find('thead th').each(function (i) {
 						$stickyHead.find('th').eq(i).width($(this).width());
 					})
-					.end()
-					.find('tr').each(function (i) {
-						$stickyCol.find('tr').eq(i).height($(this).height());
-					});
+					//.end()
+					//.find('tr').each(function (i) {
+					//	$stickyCol.find('tr').eq(i).height($(this).height());
+					//});
 
 					// Set width of sticky table head
 					$stickyHead.width($t.width());
 
 					// Set width of sticky table col
-					$stickyCol.find('th').add($stickyInsct.find('th')).width($t.find('thead th').width())
+					//$stickyCol.find('th').add($stickyInsct.find('th')).width($t.find('thead th').width())
 				},
-				repositionStickyHead = function () {
-					// Return value of calculated allowance
-					var allowance = calcAllowance();
-				
-					// Check if wrapper parent is overflowing along the y-axis
-					if($t.height() > $stickyWrap.height()) {
-						// If it is overflowing (advanced layout)
-						// Position sticky header based on wrapper scrollTop()
-						if($stickyWrap.scrollTop() > 0) {
-							// When top of wrapping parent is out of view
-							$stickyHead.add($stickyInsct).css({
-								opacity: 1,
-								top: $stickyWrap.scrollTop()
-							});
-						} else {
-							// When top of wrapping parent is in view
-							$stickyHead.add($stickyInsct).css({
-								opacity: 0,
-								top: 0
-							});
-						}
-					} else {
-						// If it is not overflowing (basic layout)
-						// Position sticky header based on viewport scrollTop
-						if($w.scrollTop() > $t.offset().top && $w.scrollTop() < $t.offset().top + $t.outerHeight() - allowance) {
-							// When top of viewport is in the table itself
-							$stickyHead.add($stickyInsct).css({
-								opacity: 1,
-								top: $w.scrollTop() - $t.offset().top
-							});
-						} else {
-							// When top of viewport is above or below table
-							$stickyHead.add($stickyInsct).css({
-								opacity: 0,
-								top: 0
-							});
-						}
-					}
-				},
+				//repositionStickyHead = function () {
+				//	// Return value of calculated allowance
+				//	var allowance = calcAllowance();
+				//
+				//	// Check if wrapper parent is overflowing along the y-axis
+				//	if($t.height() > $stickyWrap.height()) {
+				//		// If it is overflowing (advanced layout)
+				//		// Position sticky header based on wrapper scrollTop()
+				//		//if($stickyWrap.scrollTop() > 0) {
+				//		//	 //When top of wrapping parent is out of view
+				//		//	$stickyHead.add($stickyInsct).css({
+				//		//		opacity: 1,
+				//		//		top: $stickyWrap.scrollTop()
+				//		//	});
+				//		//} else {
+				//		//	// When top of wrapping parent is in view
+				//		//	$stickyHead.add($stickyInsct).css({
+				//		//		opacity: 0,
+				//		//		top: 0
+				//		//	});
+				//		//}
+				//	} else {
+				//		// If it is not overflowing (basic layout)
+				//		// Position sticky header based on viewport scrollTop
+				//		if($w.scrollTop() > $t.offset().top && $w.scrollTop() < $t.offset().top + $t.outerHeight() - allowance) {
+				//			// When top of viewport is in the table itself
+				//			$stickyHead.add($stickyInsct).css({
+				//				opacity: 1,
+				//				//top: $w.scrollTop() - $t.offset().top
+				//			});
+				//		} else {
+				//			// When top of viewport is above or below table
+				//			$stickyHead.add($stickyInsct).css({
+				//				//opacity: 0,
+				//				//top: 0
+				//			});
+				//		}
+				//	}
+				//},
 				repositionStickyCol = function () {
 					if($stickyWrap.scrollLeft() > 0) {
 						// When left of wrapping parent is out of view
-						$stickyCol.add($stickyInsct).css({
-							opacity: 1,
-							left: $stickyWrap.scrollLeft()
-						});
+						//$stickyCol.css({
+						//	opacity: 1
+						//	//left: $stickyWrap.scrollLeft()
+						//});
+
+						$stickyHead.css({left: -$stickyWrap.scrollLeft()});
 					} else {
 						// When left of wrapping parent is in view
-						$stickyCol
-						.css({ opacity: 0 })
-						.add($stickyInsct).css({ left: 0 });
+						//$stickyCol
+						//.css({ opacity: 0 });
+						//.add($stickyInsct).css({ left: 0 });
+						$stickyHead.css({left: 0});
 					}
 				},
 				calcAllowance = function () {
@@ -132,7 +135,7 @@ $(function(){
 			setWidths();
 
 			$t.parent('.sticky-wrap').scroll($.throttle(250, function() {
-				repositionStickyHead();
+				//repositionStickyHead();
 				repositionStickyCol();
 			}));
 
@@ -140,10 +143,10 @@ $(function(){
 			.load(setWidths)
 			.resize($.debounce(250, function () {
 				setWidths();
-				repositionStickyHead();
+				//repositionStickyHead();
 				repositionStickyCol();
-			}))
-			.scroll($.throttle(250, repositionStickyHead));
+			}));
+			//.scroll($.throttle(250, repositionStickyHead));
 		}
 	});
 });

@@ -210,8 +210,8 @@
                             </form>
                             <c:if test="${not isEmpty}">
                                 <c:if test="${not empty schedules}">
-                                    <div class="component">
-                                        <table class="overflow-y">
+                                    <div class="component" style="max-height: 300px; padding: 48px 0 0; overflow: hidden; position: relative;">
+                                        <table class="overflow-y" style="position:inherit; max-height: 300px;">
                                             <thead>
                                             <tr>
                                                 <th>Phòng</th>

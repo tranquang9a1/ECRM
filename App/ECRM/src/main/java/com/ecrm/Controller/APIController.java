@@ -199,6 +199,16 @@ public class APIController {
         return apiService.getEquipment(username);
     }
 
+    @RequestMapping(value = "/getFloor", method = RequestMethod.GET)
+    public @ResponseBody int getFloor() {
+        return classroomService.getFloor();
+    }
+
+    @RequestMapping(value = "/getClassInFloor", method = RequestMethod.GET)
+    public @ResponseBody List<RoomWithFloorDTO> getRoomInFloor(@RequestParam("floor") int floor) {
+        return classroomService.getClassroomByFloor(floor);
+    }
+
 
 }
 

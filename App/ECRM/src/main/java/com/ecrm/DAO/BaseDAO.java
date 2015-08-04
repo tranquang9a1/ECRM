@@ -23,7 +23,6 @@ public abstract class BaseDAO<T, ID extends Serializable> {
 
     public BaseDAO(Class<T> persistentClass) {
         this.persistentClass = persistentClass;
-
     }
 
     public EntityManager getEntityManager() {

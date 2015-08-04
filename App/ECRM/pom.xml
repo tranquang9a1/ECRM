@@ -89,6 +89,26 @@
         </dependency>
 
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <scope>runtime</scope>
+            <version>3.6.10.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>c3p0</groupId>
+                    <artifactId>c3p0</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.2-pre4</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.2.9</version>
@@ -191,6 +211,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>1.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ganyo</groupId>
+            <artifactId>gcm-server</artifactId>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 

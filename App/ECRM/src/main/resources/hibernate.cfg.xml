@@ -15,7 +15,6 @@
     <mapping class="com.ecrm.Entity.TblReportEntity"/>
     <mapping class="com.ecrm.Entity.TblReportDetailEntity"/>
     <mapping class="com.ecrm.Entity.TblRoleEntity"/>
-    <mapping class="com.ecrm.Entity.TblRoomTypeEntity"/>
     <mapping class="com.ecrm.Entity.TblRoomTypeEntity2"/>
     <mapping class="com.ecrm.Entity.TblScheduleEntity"/>
     <mapping class="com.ecrm.Entity.TblUserEntity"/>
@@ -28,10 +27,7 @@
     <mapping class="com.ecrm.Entity.TblScheduleConfigEntity"/>
     <mapping class="com.ecrm.Entity.TblMessageEntity"/>
     <mapping class="com.ecrm.Entity.TblEquipmentQuantityEntity"/>
-    <mapping class="com.ecrm.Entity.Test.TblclassroomEntity"/>
-    <mapping class="com.ecrm.Entity.Test.TblequipmentcategoryEntity"/>
-    <mapping class="com.ecrm.Entity.Test.TblequipmentquantityEntity"/>
-    <mapping class="com.ecrm.Entity.Test.Tblroomtype2Entity"/>
+
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->

@@ -132,27 +132,6 @@ public class ClassroomService {
         }
     }
 
-    /*public List<TblEquipmentEntity> getInsertEquipment(List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities) {
-        List<TblEquipmentEntity> insertEquipments = new ArrayList<TblEquipmentEntity>();
-        for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
-            if (!tblEquipmentQuantityEntity.getIsDelete()) {
-                int quantity = tblEquipmentQuantityEntity.getQuantity();
-                if (quantity > 0) {
-                    int category = tblEquipmentQuantityEntity.getEquipmentCategoryId();
-                    List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getEquipmentByCategory(category);
-                    if (tblEquipmentEntities.size() < quantity) {
-                        return null;
-                    } else {
-                        for (int i = 0; i < quantity; i++) {
-                            insertEquipments.add(tblEquipmentEntities.get(i));
-                        }
-                    }
-                }
-            }
-        }
-        return insertEquipments;
-    }*/
-
 
     public String removeClassroom(String classroomName) {
         try {
@@ -324,5 +303,41 @@ public class ClassroomService {
         return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
 
+    public int getFloor(){
+        List<TblClassroomEntity> classroomEntities = classroomDAO.getAllClassroom();
+        List<Integer> allCLass = new ArrayList<>();
+        for(TblClassroomEntity classroomEntity: classroomEntities){
+            allCLass.add(Integer.parseInt(classroomEntity.getName()));
+        }
+        Collections.sort(allCLass);
+        int floor = 0;
+        for(int i = 0; i<allCLass.size();i++){
+            int currentClass = allCLass.get(i);
+            int currentFloor = currentClass/100;
+            if(floor!=currentFloor){
+                floor+=1;
+            }
+        }
+        return floor;
+    }
+
+    public List<RoomWithFloorDTO> getClassroomByFloor(int floor){
+        List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getAllClassroom();
+        List<RoomWithFloorDTO> roomWithFloorDTOs = new ArrayList<>();
+        for(TblClassroomEntity classroomEntity: tblClassroomEntities){
+            int currentFloor = Integer.parseInt(classroomEntity.getName())/100;
+            if(floor==currentFloor){
+                int damgagedLevel = 0;
+                if(classroomEntity.getDamagedLevel()!=null){
+                    damgagedLevel = classroomEntity.getDamagedLevel();
+                }
+                RoomWithFloorDTO roomWithFloorDTO = new RoomWithFloorDTO();
+                roomWithFloorDTO.setClassroomName(classroomEntity.getName());
+                roomWithFloorDTO.setDamagedLevel(damgagedLevel);
+                roomWithFloorDTOs.add(roomWithFloorDTO);
+            }
+        }
+        return roomWithFloorDTOs;
+    }
 
 }

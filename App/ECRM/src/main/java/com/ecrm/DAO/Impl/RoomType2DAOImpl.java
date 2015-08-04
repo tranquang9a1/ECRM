@@ -2,7 +2,6 @@ package com.ecrm.DAO.Impl;
 
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.RoomType2DAO;
-import com.ecrm.DAO.RoomTypeDAO;
 import com.ecrm.Entity.TblRoomTypeEntity2;
 import org.springframework.stereotype.Repository;
 

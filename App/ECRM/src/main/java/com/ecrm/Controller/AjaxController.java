@@ -549,7 +549,7 @@ public class AjaxController {
                                     if (tes.getNote() != null) {
                                         note = tes.getNote();
                                     }
-                                    response.getWriter().write(tes.getTeacher() + "<span style='" + tes.getStyle() + "'>" + note + "</span>");
+                                    response.getWriter().write(tes.getTeacher() + " <span style='" + tes.getStyle() + "'>" + note + "</span>");
                                 }
                             }
                             response.getWriter().write("</td>");

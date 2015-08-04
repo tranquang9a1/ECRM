@@ -715,6 +715,7 @@ public class APIService {
                     CategoryDTO dto = new CategoryDTO();
                     dto.setName(equipment.getName());
                     dto.setImageUrl(equipment.getImageUrl());
+                    dto.setId(equipment.getId() + "");
                     result.add(dto);
                 }
             }

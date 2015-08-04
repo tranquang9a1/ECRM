@@ -102,8 +102,8 @@ public class ClassroomService {
 
             if (roomName != null) {
                 TblClassroomEntity classroom = classroomDAO.getClassroomByName(roomName);
-                if ( action.equals("update")) {
-                    if(classroom==null){
+                if (action.equals("update")) {
+                    if (classroom == null) {
                         classroom = classroomDAO.find(classroomId);
                     }
                     String oldClass = classroom.getName();
@@ -117,7 +117,7 @@ public class ClassroomService {
                     classroomDAO.merge(classroom);
                     message = "Cập nhật phòng " + oldClass + " thành công!";
                 }
-                if(action.equals("create") && classroom==null) {
+                if (action.equals("create") && classroom == null) {
                     classroom = new TblClassroomEntity(0, roomName.trim(), new Timestamp(date.getTime()), new Timestamp(date.getTime()), false, false, 0
                             , roomTypeId);
                     classroomDAO.insert(classroom);
@@ -303,41 +303,59 @@ public class ClassroomService {
         return "Không còn lịch dạy của phòng " + currentRoom + " trong ngày!";
     }
 
-    public int getFloor(){
+    public int getFloor() {
         List<TblClassroomEntity> classroomEntities = classroomDAO.getAllClassroom();
         List<Integer> allCLass = new ArrayList<>();
-        for(TblClassroomEntity classroomEntity: classroomEntities){
+        for (TblClassroomEntity classroomEntity : classroomEntities) {
             allCLass.add(Integer.parseInt(classroomEntity.getName()));
         }
         Collections.sort(allCLass);
         int floor = 0;
-        for(int i = 0; i<allCLass.size();i++){
+        for (int i = 0; i < allCLass.size(); i++) {
             int currentClass = allCLass.get(i);
-            int currentFloor = currentClass/100;
-            if(floor!=currentFloor){
-                floor+=1;
+            int currentFloor = currentClass / 100;
+            if (floor != currentFloor) {
+                floor += 1;
             }
         }
         return floor;
     }
 
-    public List<ClassDTO> getClassroomByFloor(int floor){
+    public List<List<ClassDTO>> getClassroomByFloor() {
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getAllClassroom();
-        List<ClassDTO> result = new ArrayList<>();
-        for(TblClassroomEntity classroomEntity: tblClassroomEntities){
-            int currentFloor = Integer.parseInt(classroomEntity.getName())/100;
-            if(floor==currentFloor){
-                int damgagedLevel = 0;
-                if(classroomEntity.getDamagedLevel()!=null){
-                    damgagedLevel = classroomEntity.getDamagedLevel();
-                }
-                ClassDTO classDTO = new ClassDTO();
-                classDTO.setClassName(classroomEntity.getName());
-                classDTO.setDamageLevel(classroomEntity.getDamagedLevel());
-                classDTO.setClassId(classroomEntity.getId());
-                result.add(classDTO);
+        List<List<ClassDTO>> result = new ArrayList<>();
+        List<Integer> allCLass = new ArrayList<>();
+        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+            allCLass.add(Integer.parseInt(classroomEntity.getName()));
+        }
+        Collections.sort(allCLass);
+        int floor = 0;
+        for (int i = 0; i < allCLass.size(); i++) {
+            int currentClass = allCLass.get(i);
+            int currentFloor = currentClass / 100;
+            if (floor != currentFloor) {
+                floor += 1;
             }
         }
+        for (int i = 0; i < floor; i++) {
+            List<ClassDTO> roomFloor = new ArrayList<>();
+            for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+                int currentFloor = Integer.parseInt(classroomEntity.getName()) / 100;
+                if (i == currentFloor) {
+                    int damgagedLevel = 0;
+                    if (classroomEntity.getDamagedLevel() != null) {
+                        damgagedLevel = classroomEntity.getDamagedLevel();
+                    }
+                    ClassDTO classDTO = new ClassDTO();
+                    classDTO.setClassName(classroomEntity.getName());
+                    classDTO.setDamageLevel(classroomEntity.getDamagedLevel());
+                    classDTO.setClassId(classroomEntity.getId());
+                    roomFloor.add(classDTO);
+                }
+            }
+            result.add(roomFloor);
+        }
+
         return result;
     }
 

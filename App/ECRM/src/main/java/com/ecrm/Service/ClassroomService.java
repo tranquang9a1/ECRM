@@ -321,9 +321,9 @@ public class ClassroomService {
         return floor;
     }
 
-    public List<RoomWithFloorDTO> getClassroomByFloor(int floor){
+    public List<ClassDTO> getClassroomByFloor(int floor){
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getAllClassroom();
-        List<RoomWithFloorDTO> roomWithFloorDTOs = new ArrayList<>();
+        List<ClassDTO> result = new ArrayList<>();
         for(TblClassroomEntity classroomEntity: tblClassroomEntities){
             int currentFloor = Integer.parseInt(classroomEntity.getName())/100;
             if(floor==currentFloor){
@@ -331,13 +331,14 @@ public class ClassroomService {
                 if(classroomEntity.getDamagedLevel()!=null){
                     damgagedLevel = classroomEntity.getDamagedLevel();
                 }
-                RoomWithFloorDTO roomWithFloorDTO = new RoomWithFloorDTO();
-                roomWithFloorDTO.setClassroomName(classroomEntity.getName());
-                roomWithFloorDTO.setDamagedLevel(damgagedLevel);
-                roomWithFloorDTOs.add(roomWithFloorDTO);
+                ClassDTO classDTO = new ClassDTO();
+                classDTO.setClassName(classroomEntity.getName());
+                classDTO.setDamageLevel(classroomEntity.getDamagedLevel());
+                classDTO.setClassId(classroomEntity.getId());
+                result.add(classDTO);
             }
         }
-        return roomWithFloorDTOs;
+        return result;
     }
 
 }

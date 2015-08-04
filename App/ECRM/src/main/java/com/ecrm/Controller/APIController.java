@@ -205,7 +205,7 @@ public class APIController {
     }
 
     @RequestMapping(value = "/getClassInFloor", method = RequestMethod.GET)
-    public @ResponseBody List<RoomWithFloorDTO> getRoomInFloor(@RequestParam("floor") int floor) {
+    public @ResponseBody List<ClassDTO> getRoomInFloor(@RequestParam("floor") int floor) {
         return classroomService.getClassroomByFloor(floor);
     }
 

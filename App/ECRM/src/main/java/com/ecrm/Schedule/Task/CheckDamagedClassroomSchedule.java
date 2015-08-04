@@ -62,7 +62,7 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-    @Scheduled(fixedDelay = 1000)
+    /*@Scheduled(fixedDelay = 1000)
     public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
@@ -153,14 +153,14 @@ public class CheckDamagedClassroomSchedule {
                     long period = maxDate.getTime() - currentDate.getTime();
                     if(period>=0 && period<=604800000){
                         int day = (int) ((period / (1000*60*60*24)) % 7)+1;
-                        String message = "Lịch trong hệ thống chỉ còn "+ period+" ngày! Bạn có thể muốn nhập thêm lịch?";
+                        String message = "Lịch trong hệ thống chỉ còn "+ day+" ngày! Bạn có thể muốn nhập thêm lịch?";
                         List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
-                        /*gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());*/
+                        gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());
                     }
                     if(period<0){
                         String message = "Đã hết lịch trong hệ thống! Bạn có thể muốn nhập thêm lịch?";
                         List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
-                        /*gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());*/
+                        gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());
                     }
                     System.out.println("Done");
                 } catch (Exception e) {
@@ -255,6 +255,6 @@ public class CheckDamagedClassroomSchedule {
             }
         }
 
-    }
+    }*/
 
 }

@@ -64,7 +64,23 @@ public class ScheduleController {
     public String mappingSchedule(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
-            return "redirect:/staff/searchSchedule?username=0&classroomId=0&datefrom=&dateto=";
+            List<TblClassroomEntity> tblClassroomEntities = classroomService.getAllClassroom();
+            List<String> classrooms =new ArrayList<String>();
+            for(TblClassroomEntity classroomEntity :  tblClassroomEntities){
+                classrooms.add(classroomEntity.getName());
+            }
+            request.setAttribute("CLASSROOMS", classrooms);
+            List<TblUserEntity> tblUserEntities = userService.getAllTeacher();
+            List<String> teachers = new ArrayList<String>();
+            for(TblUserEntity tblUserEntity:tblUserEntities){
+                teachers.add(tblUserEntity.getUsername());
+            }
+            List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigService.findAll();
+            request.setAttribute("TEACHERS", teachers);
+            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
+            request.setAttribute("SCHEDULECONFIG", tblScheduleConfigEntities);
+            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
+            return "Staff_Schedule";
         } else {
             return "Login";
         }
@@ -156,8 +172,7 @@ public class ScheduleController {
             int classroom= 0;
             boolean importManually = scheduleService.importManually(username,all,avai,slot,numberOfSlots,numberOfStudent,dateFrom,dateTo,sms,classroom);
             if(importManually){
-                return "redirect:/staff/searchSchedule?datefrom="+dateFrom+"&dateto=&classroomId="+Integer.toString(classroom)
-                        +"&username="+username;
+                return "redirect:/staff/schedule";
             }else {
                 return ERROR;
             }
@@ -165,99 +180,6 @@ public class ScheduleController {
 
         } else {
             return "Login";
-        }
-    }
-
-    //Search
-    @RequestMapping(value = "searchSchedule")
-    public String searchSchedule(HttpServletRequest request, @RequestParam("datefrom") String datefrom, @RequestParam("dateto") String dateto
-            , @RequestParam("classroomId") String classroomId, @RequestParam("username") String username) {
-        HttpSession session = request.getSession();
-        if (session != null) {
-            List<TblClassroomEntity> tblClassroomEntities = classroomService.getAllClassroom();
-            List<TblUserEntity> tblUserEntities = userService.getAllTeacher();
-            request.setAttribute("CLASSROOMS", tblClassroomEntities);
-            request.setAttribute("TEACHERS", tblUserEntities);
-            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
-            List<LocalDate> teachingDate = new ArrayList<LocalDate>();
-            LocalDate dateFrom = new LocalDate();
-            LocalDate dateTo = new LocalDate();
-            //
-            if (datefrom.trim().length() == 0 && dateto.trim().length() == 0) {
-                dateTo = dateFrom.plusDays(5);
-            }
-            if (datefrom.trim().length() > 0 && dateto.trim().length() > 0) {
-                dateFrom = new LocalDate(datefrom);
-                dateTo = new LocalDate(dateto);
-            }
-            if (datefrom.trim().length() > 0 && dateto.trim().length() == 0) {
-                dateFrom = new LocalDate(datefrom);
-                dateTo = new LocalDate(datefrom);
-            }
-            if (datefrom.trim().length() == 0 && dateto.trim().length() > 0) {
-                dateTo = new LocalDate(dateTo);
-                dateFrom = dateTo.minusDays(5);
-            }
-            for (LocalDate date = dateFrom; date.isBefore(dateTo.plusDays(1)); date = date.plusDays(1)) {
-                teachingDate.add(date);
-            }
-            if (classroomId.equals("0")) {
-                classroomId = "";
-            }
-            if (username.equals("0")) {
-                username = "";
-            }
-            List<TblScheduleEntity> tblScheduleEntities = scheduleService.advanceSearch(dateFrom, dateTo, classroomId, username);
-            List<String> classroomName = new ArrayList<String>();
-            classroomName = scheduleService.classroomName(tblScheduleEntities, classroomName);
-
-            List<CrSdEntity> crSdEntities = new ArrayList<CrSdEntity>();
-            List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigService.findAll();
-            crSdEntities = scheduleService.getCrSdEntity(crSdEntities, classroomName, tblScheduleConfigEntities, tblScheduleEntities);
-            LocalTime localTime = new LocalTime();
-            boolean isEmpty = true;
-            for (CrSdEntity crSdEntity : crSdEntities) {
-                int rowspan = 0;
-                List<TimeSchedule> timeSchedules = crSdEntity.getTimeSchedules();
-                for (TimeSchedule timeSchedule : timeSchedules) {
-                    if (timeSchedule.getTeacherSchedules() != null) {
-                        LocalTime timeFrom = LocalTime.parse(timeSchedule.getTimeFrom());
-                        LocalTime timeTo = LocalTime.parse(timeSchedule.getTimeTo());
-                        if(localTime.isBefore(timeTo)&& localTime.isAfter(timeFrom)){
-                            timeSchedule.setStyle("tr-active");
-                        }else{
-                            timeSchedule.setStyle("");
-                        }
-
-                        isEmpty = false;
-                        rowspan += 1;
-                    }
-                }
-                crSdEntity.setRowspan(rowspan + 1);
-            }
-            Collections.sort(crSdEntities, new CustomComparator());
-            request.setAttribute("SCHEDULECONFIG", tblScheduleConfigEntities);
-            request.setAttribute("TEACHINGDATE", teachingDate);
-            request.setAttribute("CLASSROOMID", classroomName);
-            request.setAttribute("SCHEDULES", crSdEntities);
-            request.setAttribute("TEACHER", username);
-            request.setAttribute("CLASSROOM", classroomId);
-            request.setAttribute("DATEFROM", datefrom);
-            request.setAttribute("DATETO", dateto);
-            request.setAttribute("ISEMPTY", isEmpty);
-            request.setAttribute("TABCONTROL", "STAFF_SCHEDULE");
-
-
-            return "Staff_Schedule";
-        } else {
-            return "Login";
-        }
-    }
-
-    public class CustomComparator implements Comparator<CrSdEntity> {
-        @Override
-        public int compare(CrSdEntity o1, CrSdEntity o2) {
-            return o1.getRoomName().compareTo(o2.getRoomName());
         }
     }
 

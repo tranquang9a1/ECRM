@@ -28,9 +28,8 @@
     <util:properties id="applicationProps" location="application.properties" />
     <context:property-placeholder properties-ref="applicationProps"  />
 
-    <task:scheduler id="taskScheduler"/>
-    <task:executor id="taskExecutor" pool-size="3"/>
-    <task:annotation-driven executor="taskExecutor" scheduler="taskScheduler"/>
+
+    <task:annotation-driven/>
     <bean id="checkDamagedClassroomSchedule" class="com.ecrm.Schedule.Task.CheckDamagedClassroomSchedule"></bean>
 
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">

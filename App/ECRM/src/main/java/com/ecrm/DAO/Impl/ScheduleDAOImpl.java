@@ -117,6 +117,7 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         q.setParameter("date", date);
         q.setParameter("scheduleConfigId", scheduleConfigId);
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
+
         return tblScheduleEntities;
     }
 
@@ -170,14 +171,14 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
         return tblScheduleEntities;
     }
 
-    public List<TblScheduleEntity> advanceSearch(String dateFrom, String dateTo, String classroomId, String username){
-        Query q = entityManager.createQuery("select s from TblScheduleEntity s where " +
-                "s.date between Date(:dateFrom) and Date(:dateTo) and s.username like :username and " +
-                "CONVERT(s.classroomId, CHAR(16)) like :classroomId");
+    public List<TblScheduleEntity> advanceSearch(String dateFrom, String dateTo, String classroomName, String username){
+        Query q = entityManager.createQuery("select s from TblScheduleEntity s , TblClassroomEntity  c where " +
+                "s.classroomId = c.id and s.date between Date(:dateFrom) and Date(:dateTo) and s.username like :username and " +
+                "c.name like :classroomName");
         q.setParameter("dateFrom", dateFrom);
         q.setParameter("dateTo", dateTo);
         q.setParameter("username", "%"+username+"%");
-        q.setParameter("classroomId", "%"+classroomId+"%");
+        q.setParameter("classroomName", "%"+classroomName+"%");
         List<TblScheduleEntity> tblScheduleEntities = q.getResultList();
         
         return tblScheduleEntities;

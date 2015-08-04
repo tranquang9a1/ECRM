@@ -27,7 +27,6 @@
             <c:set var="dateto" value="${requestScope.DATETO}"/>
             <c:set var="teacher" value="${requestScope.TEACHER}"/>
             <c:set var="classroom" value="${requestScope.CLASSROOM}"/>
-            <c:set var="isEmpty" value="${requestScope.ISEMPTY}"/>
             <c:set var="scheduleConfig" value="${requestScope.SCHEDULECONFIG}"/>
             <c:set var="tab" value="${requestScope.TABCONTROL}"/>
             <meta charset="UTF-8"/>
@@ -48,8 +47,35 @@
                 .inline div {
                     margin-bottom: 5px;
                 }
+
+                .input-search {
+                    width: 180px;
+                    height: 35px;
+                    border-radius: 5px;
+                }
             </style>
             <script>
+                $(function () {
+                    var teachers = [];
+                    <c:forEach var="t" items="${teachers}" varStatus="count">
+                    teachers[${count.count-1}] = '${t}';
+                    </c:forEach>
+                    $("#tags").autocomplete({
+                        source: teachers
+                    });
+                    $("#ui-username").autocomplete({
+                       source : teachers
+                    });
+
+                    var classrooms = [];
+                    <c:forEach var="c" items="${classrooms}" varStatus="count">
+                    classrooms[${count.count-1}] = '${c}';
+                    </c:forEach>
+                    $("#all").autocomplete({
+                        source: classrooms
+                    });
+
+                });
                 function checkSMS() {
                     if (document.getElementById('chckSMS').checked) {
                         document.getElementById('sms').value = "1";
@@ -79,9 +105,10 @@
                         document.getElementById('avai_classroom').style.display = 'none';
                         document.getElementById('classroom').style.display = 'block';
                         document.getElementById("avai").selectedIndex = 0;
-
                     }
                 }
+
+
             </script>
         </head>
         <body>
@@ -120,61 +147,15 @@
                                             <option value="1">Phòng học</option>
                                         </select>
 
-                                        <div class="ui-widget" style="display: block" id="teacherBox">
-                                            <select name="username" style="width: 150px" id="combobox2"
-                                                    style="display: none">
-                                                <option value="0" selected></option>
-                                                <c:choose>
-                                                    <c:when test="${not empty teacher}">
-                                                        <c:forEach items="${teachers}" var="t">
-                                                            <c:choose>
-                                                                <c:when test="${teacher == t.username}">
-                                                                    <option value="${t.username}"
-                                                                            selected>${t.tblUserInfoByUsername.fullName}</option>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:forEach>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:forEach items="${teachers}" var="t">
-                                                            <option value="${t.username}">${t.tblUserInfoByUsername.fullName}</option>
-                                                        </c:forEach>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </select>
-                                        </div>
-                                        <div class="ui-widget" style="display: none" id="classroomBox">
-                                            <select name="classroomId" id="combobox1" style="display: none">
-                                                <option value="0"></option>
-                                                <c:choose>
-                                                    <c:when test="${not empty classroom}">
-                                                        <c:forEach items="${classrooms}" var="c">
-                                                            <c:choose>
-                                                                <c:when test="${classroom == c.id}">
-                                                                    <option value="${c.id}"
-                                                                            selected>${c.name}</option>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <option value="${c.id}">${c.name}</option>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:forEach>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:forEach items="${classrooms}" var="c">
-                                                            <option value="${c.id}">${c.name}</option>
-                                                        </c:forEach>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </select>
+                                        <div style="display: block" id="teacherBox">
+                                            <input id="tags" name="tags" class="input-search"
+                                                   onkeypress="return pressEnter(event)">
                                         </div>
                                         <div>
                                             <div style="padding: 0px 0px 0px 0px;">
-                                                <button type="submit" class="btn btn-primary"
-                                                        style="margin-left: 15px" id="search">
+                                                <button type="button" class="btn btn-primary"
+                                                        style="margin-left: 15px" id="search"
+                                                        onclick="searchSchedule();">
                                                     Tìm Kiếm
                                                 </button>
                                             </div>
@@ -187,11 +168,14 @@
                                              class="date">
                                             <div>Ngày:
                                                 <input type="text" id="datefrom" name="datefrom"
-                                                       value="${datefrom}"><label>
+                                                       value="${datefrom}" onkeypress="return pressEnter(event)"
+                                                       class="input-search"><label>
                                                     ~ </label><input
                                                         type="text"
                                                         id="dateto"
-                                                        name="dateto" value="${dateto}"></div>
+                                                        name="dateto" value="${dateto}"
+                                                         class="input-search">
+                                            </div>
                                         </div>
                                     </c:when>
                                     <c:otherwise>
@@ -199,67 +183,26 @@
                                              class="date">
                                             <div>Ngày:
                                                 <input type="text" id="datefrom" name="datefrom"
-                                                       value="${datefrom}"><label>
+                                                       value="${datefrom}" onkeypress="return pressEnter(event)"
+                                                       class="input-search"><label>
                                                     ~ </label><input
                                                         type="text"
                                                         id="dateto"
-                                                        name="dateto" value="${dateto}"></div>
+                                                        name="dateto" value="${dateto}"
+                                                         class="input-search">
+                                            </div>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
                             </form>
-                            <c:if test="${not isEmpty}">
-                                <c:if test="${not empty schedules}">
-                                    <div class="component" style="max-height: 300px; padding: 48px 0 0; overflow: hidden; position: relative;">
-                                        <table class="overflow-y" style="position:inherit; max-height: 300px;">
-                                            <thead>
-                                            <tr>
-                                                <th>Phòng</th>
-                                                <th>Giờ</th>
 
-                                                <c:forEach items="${teachingDate}" var="td">
-                                                    <th>${td}</th>
-                                                </c:forEach>
+                            <div class='component'
+                                 style='max-height: 300px; padding:0 0; overflow: auto; position: relative;'>
 
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <c:forEach var="cs" items="${schedules}">
-                                                <tr>
-                                                    <th rowspan="${cs.rowspan}">${cs.roomName}</th>
-                                                </tr>
 
-                                                <c:forEach var="tis" items="${cs.timeSchedules}">
-                                                    <c:if test="${ not empty tis.teacherSchedules}">
-                                                        <tr class="${tis.style}">
-                                                            <td style="color: white;background-color:rgb(49, 119, 188);">${tis.timeFrom}
-                                                                - ${tis.timeTo}</td>
+                            </div>
 
-                                                            <c:forEach items="${teachingDate}" var="td">
-                                                                <td>
-                                                                    <c:forEach var="tes"
-                                                                               items="${tis.teacherSchedules}">
-                                                                        <c:if test="${tes.date == td.toString()}">
-                                                                            ${tes.teacher} <span
-                                                                                style="${tes.style}">${tes.note}</span>
-                                                                        </c:if>
-                                                                    </c:forEach>
-                                                                </td>
 
-                                                            </c:forEach>
-                                                        </tr>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </c:if>
-
-                            </c:if>
-                            <c:if test="${empty schedules}">
-                                <h3>Không tìm thấy lịch!</h3>
-                            </c:if>
                         </div>
                         <c:import url="/bao-cao/thong-bao?little=false&quay-lai=schedule"/>
                         <div class="loading-page">
@@ -285,14 +228,16 @@
                         <div class="group-control">
                             <div class="name">Chọn file excel:</div>
 
-                           <div class="control">
-                               <form action="/staff/import" method="post" enctype="multipart/form-data" id="uploadSchedule">
-                                    <input type="file" style="margin: 6px 0 0;" id="fileUpload" name="scheduleFile" size="50" accept=".csv,
+                            <div class="control">
+                                <form action="/staff/import" method="post" enctype="multipart/form-data"
+                                      id="uploadSchedule">
+                                    <input type="file" style="margin: 6px 0 0;" id="fileUpload" name="scheduleFile"
+                                           size="50" accept=".csv,
                                      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
 
                                     <p id="lblError" style="color: red;"></p>
                                 </form>
-                           </div>
+                            </div>
                         </div>
                     </div>
                     <div class="footer-modal">
@@ -314,15 +259,7 @@
                         <div class="body-modal">
                             <div class="group-control">
                                 <div class="name">Tài khoản(*):</div>
-
-                                <div class="ui-widget">
-                                    <select id="ui-username" name="username">
-                                        <option value=""></option>
-                                        <c:forEach items="${teachers}" var="t">
-                                            <option value="${t.username}">${t.username}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
+                                    <input id="ui-username" name="username" style="width: 200px; height: 35px">
                             </div>
 
                             <div class="group-control">
@@ -380,23 +317,16 @@
                                     <input type="checkbox" onclick="findAvailableRoom()"
                                            id="chckBox"><label for="chckBox">Tìm phòng trống</label>
 
-                                    <div id="classroom">
-                                        <div class="ui-widget">
-                                            <select id="all" name="all">
-                                                <option value="0"></option>
-                                                <c:forEach items="${classrooms}" var="c">
-                                                    <option value="${c.id}">${c.name}</option>
-                                                </c:forEach>
-                                            </select>
+                                        <div id="classroom">
+                                            <input name="all" id="all" style="width: 200px; height: 35px">
                                         </div>
-                                    </div>
-                                    <div id="avai_classroom" style="display: none">
-                                        <div class="ui-widget">
-                                            <select id="avai" name="avai">
-                                                <option value="0"></option>
-                                            </select>
+                                        <div id="avai_classroom" style="display: none">
+                                            <div class="ui-widget">
+                                                <select id="avai" name="avai">
+                                                    <option value="0"></option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="group-control">
@@ -514,20 +444,56 @@
                     }
                 })
             }
+
             function changeSearch() {
                 var select = document.getElementById("selectSearch");
                 var sub = select.options[select.selectedIndex].value;
+                document.getElementById('tags').value = '';
                 if (sub == '0') {
-                    document.getElementById('teacherBox').style.display = 'block';
-                    document.getElementById('classroomBox').style.display = 'none';
-                    $("#classroomBox  span  input").val("");
-                    document.getElementById('combobox1').selectedIndex = 0;
+                    var teachers = [];
+                    <c:forEach var="t" items="${teachers}" varStatus="count">
+                    teachers[${count.count-1}] = '${t}';
+                    </c:forEach>
+                    $("#tags").autocomplete({
+                        source: teachers
+                    });
                 } else {
-                    document.getElementById('teacherBox').style.display = 'none';
-                    document.getElementById('classroomBox').style.display = 'block';
-                    $("#teacherBox  span  input").val("");
-                    document.getElementById('combobox2').selectedIndex = 0;
+                    var classrooms = [];
+                    <c:forEach var="c" items="${classrooms}" varStatus="count">
+                    classrooms[${count.count-1}] = '${c}';
+                    </c:forEach>
+                    $("#tags").autocomplete({
+                        source: classrooms
+                    });
                 }
+            }
+            function pressEnter(e) {
+                if (e.keyCode === 13) {
+                    searchSchedule();
+                }else{
+                    var tag = document.getElementById('tags').value;
+                    if (tag.length === 0 && e.keyCode >= 48 && e.keyCode <= 57) {
+                        document.getElementById("selectSearch").selectedIndex = 1;
+                        var classrooms = [];
+                        <c:forEach var="c" items="${classrooms}" varStatus="count">
+                        classrooms[${count.count-1}] = '${c}';
+                        </c:forEach>
+                        $("#tags").autocomplete({
+                            source: classrooms
+                        });
+
+                    } else if(e.keyCode < 48 || e.keyCode > 57) {
+                        document.getElementById("selectSearch").selectedIndex = 0;
+                        var teachers = [];
+                        <c:forEach var="t" items="${teachers}" varStatus="count">
+                        teachers[${count.count-1}] = '${t}';
+                        </c:forEach>
+                        $("#tags").autocomplete({
+                            source: teachers
+                        });
+                    }
+                }
+
             }
             function showAdvance() {
                 $('.date').toggle();
@@ -548,12 +514,6 @@
 
             }
 
-
-/*
-            $("#classroomBox > span > input").change(function () {
-                    alert("s");
-            });
-*/
 
             document.getElementById("${tab}").className += " active";
             document.getElementById("${tab}").setAttribute("data-main", "1");

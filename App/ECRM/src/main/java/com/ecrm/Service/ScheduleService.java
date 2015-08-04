@@ -33,6 +33,7 @@ import java.util.List;
 @Service
 public class ScheduleService {
 
+    public static int X = 1;
     @Autowired
     private ScheduleDAOImpl scheduleDAO;
     @Autowired
@@ -153,7 +154,7 @@ public class ScheduleService {
             FileOutputStream out =
                     new FileOutputStream(new File(filePath));
             out.close();
-            return "redirect:/staff/searchSchedule?datefrom=" + day.get(0) + "&dateto=" + day.get(day.size() - 1) + "&classroomId=0&username=0";
+            return "redirect:/staff/schedule";
         } catch (Exception e) {
             e.printStackTrace();
             return "Error";
@@ -196,16 +197,16 @@ public class ScheduleService {
 
             for (int i = 0; i < numberOfSlots; i++) {
                 List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigBySlot(slot + i);
-                String timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom().toString();
                 int scheduleConfigId = tblScheduleConfigEntities.get(0).getId();
                 if (!dateTo.equals(dateFrom)) {
                     for (LocalDate date = dateF; date.isBefore(dateT.plusDays(1)); date = date.plusDays(1)) {
                         java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
 
-                        if (all.equals("0")) {
+                        if (all.equals("")) {
                             classroom = Integer.parseInt(avai);
                         } else {
-                            classroom = Integer.parseInt(all);
+                            TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(all);
+                            classroom = classroomEntity.getId();
                         }
                         List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, classroom);
                         List<TblScheduleEntity> tblScheduleEntities2 = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
@@ -226,10 +227,11 @@ public class ScheduleService {
                     }
                 } else {
                     java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
-                    if (all.equals("0")) {
+                    if (all.equals("")) {
                         classroom = Integer.parseInt(avai);
                     } else {
-                        classroom = Integer.parseInt(all);
+                        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(all);
+                        classroom = classroomEntity.getId();
                     }
                     List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, classroom);
                     List<TblScheduleEntity> tblScheduleEntities2 = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);

@@ -9,6 +9,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.fu.group10.capstone.apps.staffmobileapp.R;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
 import com.fu.group10.capstone.apps.staffmobileapp.adapter.GridViewAdapter;
 import com.fu.group10.capstone.apps.staffmobileapp.model.ClassInfo;
 
@@ -24,6 +27,7 @@ public class ListClassroomFragment extends Fragment {
     private GridView gridView;
     private GridViewAdapter mAdapter;
     private List<ClassInfo> items = new ArrayList<>();
+    private int floor = 0;
 
 
     @Override
@@ -33,13 +37,15 @@ public class ListClassroomFragment extends Fragment {
         return rootView;
     }
 
-    public void initView(View rootView) {
-        getData();
-        mAdapter = new GridViewAdapter(getActivity(),items);
+    public void setParams(int floor) {
+        this.floor = floor;
+    }
 
-        // Set custom adapter to gridview
+
+    public void initView(View rootView) {
         gridView = (GridView) rootView.findViewById(R.id.gridView1);
-        gridView.setAdapter(mAdapter);
+        getData();
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -49,9 +55,15 @@ public class ListClassroomFragment extends Fragment {
     }
 
     public void getData() {
-        for (int i = 0; i < 15; i++) {
-            ClassInfo info = new ClassInfo("2" + i, 5*i);
-            items.add(info);
-        }
+        String url = Constants.API_GET_ROOM_IN_FLOOR + floor;
+        RequestSender sender = new RequestSender();
+        sender.start(url, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                items = ParseUtils.parseClassInfo(result);
+                mAdapter = new GridViewAdapter(getActivity(),items);
+                gridView.setAdapter(mAdapter);
+            }
+        });
     }
 }

@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fu.group10.capstone.apps.staffmobileapp.R;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
+
+import java.util.List;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -24,6 +28,8 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
     MaterialTabHost tabHost;
     ViewPager pager;
     ViewPagerAdapter adapter;
+    List<Fragment> fragmentList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,11 +84,20 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
         }
 
         public Fragment getItem(int num) {
-            return new ListClassroomFragment();
+            ListClassroomFragment fragment = new ListClassroomFragment();
+            fragment.setParams(num);
+            return fragment;
         }
 
         @Override
         public int getCount() {
+            String url = Constants.API_GET_TOTAL_FLOOR;
+            RequestSender sender = new RequestSender();
+            sender.start(url, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                }
+            });
             return 3;
         }
 
@@ -92,4 +107,11 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
         }
 
     }
+
+    public void addFragment() {
+        fragmentList.add(new ListClassroomFragment());
+
+    }
+
+
 }

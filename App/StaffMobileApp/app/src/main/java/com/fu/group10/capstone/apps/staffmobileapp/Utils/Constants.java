@@ -4,8 +4,8 @@ package com.fu.group10.capstone.apps.staffmobileapp.Utils;
  * Created by QuangTV on 5/30/2015.
  */
 public class Constants {
-    //public static final String SOURCE = "http://128.199.208.93";
-    public static final String SOURCE = "http://192.168.43.80:8080";
+    public static final String SOURCE = "http://128.199.208.93";
+    //public static final String SOURCE = "http://192.168.43.80:8080";
     public static final String API_SOURCE = SOURCE + "/api/";
     public static final int TIMEOUT = 10000;
     public static final String API_LOGIN = API_SOURCE + "login";
@@ -18,11 +18,10 @@ public class Constants {
     public static final String API_CHECK_CONNECTION = API_SOURCE + "checkConnection";
     public static final String RESOURCE_URL = SOURCE + "/resource/img/equipment/";
     public static final String API_GET_CATEGORY = API_SOURCE + "getCategory?username=";
-
     public static final String API_GET_AVAILABLE_ROOM = SOURCE + "/staff/getAvailableRoom?classroomId=";
-
-
     public static final String APP_SERVER_URL = SOURCE + "/notification/register";
+    public static final String API_GET_ROOM_IN_FLOOR = API_SOURCE + "getClassInFloor?floor=";
+    public static final String API_GET_TOTAL_FLOOR = API_SOURCE + "getFloor";
 
     // GCM server using java
     // static final String APP_SERVER_URL =

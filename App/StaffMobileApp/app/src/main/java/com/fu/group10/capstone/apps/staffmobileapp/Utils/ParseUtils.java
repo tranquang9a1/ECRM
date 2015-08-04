@@ -2,6 +2,8 @@ package com.fu.group10.capstone.apps.staffmobileapp.Utils;
 
 
 import android.util.Log;
+
+import com.fu.group10.capstone.apps.staffmobileapp.model.ClassInfo;
 import com.fu.group10.capstone.apps.staffmobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.staffmobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.staffmobileapp.model.ReportInfo;
@@ -170,5 +172,30 @@ public class ParseUtils {
             e.printStackTrace();
             return new ArrayList<EquipmentCategory>();
         }
+    }
+
+    public static List<ClassInfo> parseClassInfo(String json) {
+        List<ClassInfo> result = new ArrayList<>();
+        try {
+            if (json == null) {
+                return result;
+            }
+
+            JSONArray listClass = new JSONArray(json);
+            for (int i = 0; i < listClass.length(); i++) {
+                ClassInfo info = new ClassInfo();
+                JSONObject object = listClass.getJSONObject(i);
+                info.setDamageLevel(object.getInt("damageLevel"));
+                info.setName(object.getString("name"));
+                info.setId(object.getInt("id"));
+                result.add(info);
+            }
+
+            return result;
+        } catch (Exception e) {
+            Log.d("Parse JSON", "Wrong format");
+            e.printStackTrace();
+        }
+        return result;
     }
 }

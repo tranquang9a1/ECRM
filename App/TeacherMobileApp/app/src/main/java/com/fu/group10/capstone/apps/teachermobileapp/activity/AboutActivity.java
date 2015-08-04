@@ -44,9 +44,9 @@ public class AboutActivity extends Activity {
 //        String imageUrl = "http://pbs.twimg.com/profile_images/378800000451012500/4628fbb9dc70514d389ed9491243866f_400x400.png";
 //        db.insertEquipment("test", imageUrl);
 
-        EquipmentDAO equipment = db.getEquipments();
-        imageView.setImageBitmap(BitmapFactory.decodeByteArray(equipment.getImages(),
-                0, equipment.getImages().length));
+//        EquipmentDAO equipment = db.getEquipments();
+//        imageView.setImageBitmap(BitmapFactory.decodeByteArray(equipment.getImages(),
+//                0, equipment.getImages().length));
 
 
     }

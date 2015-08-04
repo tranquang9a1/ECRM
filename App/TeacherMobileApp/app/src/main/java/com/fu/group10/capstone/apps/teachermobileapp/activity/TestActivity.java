@@ -3,6 +3,8 @@ package com.fu.group10.capstone.apps.teachermobileapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,6 +19,9 @@ import github.chenupt.multiplemodel.viewpager.ModelPagerAdapter;
 import github.chenupt.multiplemodel.viewpager.PagerModelManager;
 import github.chenupt.springindicator.SpringIndicator;
 import github.chenupt.springindicator.viewpager.ScrollerViewPager;
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,90 +29,83 @@ import java.util.List;
 /**
  * Created by QuangTV on 6/15/2015.
  */
-public class TestActivity extends ActionBarActivity {
-    ScrollerViewPager viewPager;
-    GuideFragment guideFragment;
-    ClassroomFragment classroomFragment;
+public class TestActivity extends ActionBarActivity implements MaterialTabListener{
 
-    EquipmentFragment equipmentFragment;
-    String username = "";
 
+    MaterialTabHost tabHost;
+    ViewPager pager;
+    ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        int id = getIntent().getExtras().getInt("classId");
-        username = getIntent().getExtras().getString("username");
+        tabHost = (MaterialTabHost) findViewById(R.id.tabHost);
+        pager = (ViewPager) findViewById(R.id.pager);
 
-        viewPager = (ScrollerViewPager) findViewById(R.id.view_pager);
-        SpringIndicator springIndicator = (SpringIndicator) findViewById(R.id.indicator);
-
-
-
-        PagerModelManager manager = new PagerModelManager();
-        manager.addCommonFragment(getFragment(), getTitles());
-        ModelPagerAdapter adapter = new ModelPagerAdapter(getSupportFragmentManager(), manager);
-        viewPager.setAdapter(adapter);
-        viewPager.fixScrollSpeed();
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        // init view pager
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(adapter);
+        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                // when user do a swipe the selected tab change
+                tabHost.setSelectedNavigationItem(position);
 
             }
         });
 
-        // just set viewPager
-        springIndicator.setViewPager(viewPager);
+        // insert all tabs from pagerAdapter data
+        for (int i = 0; i < adapter.getCount(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setText(adapter.getPageTitle(i))
+                            .setTabListener(this)
+            );
 
-    }
-
-    private List<String> getTitles(){
-        return Lists.newArrayList("Tổng quát", "Chi tiết");
-    }
-
-    private List<Integer> getBgRes(){
-        return Lists.newArrayList(R.mipmap.ic_air);
-    }
-
-    private List<Fragment> getFragment() {
-        List<Fragment> fragments = new ArrayList<Fragment>();
-        classroomFragment = new ClassroomFragment();
-        equipmentFragment = new EquipmentFragment();
-        fragments.add(equipmentFragment);
-        fragments.add(classroomFragment);
-        return fragments;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public void onTabSelected(MaterialTab tab) {
+        pager.setCurrentItem(tab.getPosition());
+    }
 
-        if (id == R.id.action_logout) {
-            Intent intent = new Intent(this, AboutActivity.class);
-            startActivity(intent);
-            return true;
+    @Override
+    public void onTabReselected(MaterialTab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(MaterialTab tab) {
+
+    }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+
         }
 
-        return super.onOptionsItemSelected(item);
+        public Fragment getItem(int num) {
+            return new EquipmentFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Tầng " + (position + 1);
+        }
+
     }
+
+
+
 
     @Override
     public void onBackPressed() {

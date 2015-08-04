@@ -174,8 +174,8 @@ public class ParseUtils {
         }
     }
 
-    public static List<ClassInfo> parseClassInfo(String json) {
-        List<ClassInfo> result = new ArrayList<>();
+    public static List<List<ClassInfo>> parseClassInfo(String json) {
+        List<List<ClassInfo>> result = new ArrayList<>();
         try {
             if (json == null) {
                 return result;
@@ -183,12 +183,17 @@ public class ParseUtils {
 
             JSONArray listClass = new JSONArray(json);
             for (int i = 0; i < listClass.length(); i++) {
-                ClassInfo info = new ClassInfo();
-                JSONObject object = listClass.getJSONObject(i);
-                info.setDamageLevel(object.getInt("damageLevel"));
-                info.setName(object.getString("name"));
-                info.setId(object.getInt("id"));
-                result.add(info);
+                List<ClassInfo> infos = new ArrayList<>();
+                JSONArray listRoom = listClass.getJSONArray(i);
+                for (int j = 0; j < listRoom.length(); j++) {
+                    ClassInfo info = new ClassInfo();
+                    JSONObject object = listRoom.getJSONObject(j);
+                    info.setDamageLevel(object.getInt("damageLevel"));
+                    info.setName(object.getString("className"));
+                    info.setId(object.getInt("classId"));
+                    infos.add(info);
+                }
+                result.add(infos);
             }
 
             return result;

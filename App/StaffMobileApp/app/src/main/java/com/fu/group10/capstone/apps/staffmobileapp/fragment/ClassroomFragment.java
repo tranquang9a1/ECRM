@@ -1,5 +1,6 @@
 package com.fu.group10.capstone.apps.staffmobileapp.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +12,9 @@ import android.view.ViewGroup;
 
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
+import com.fu.group10.capstone.apps.staffmobileapp.model.ClassInfo;
 
 import java.util.List;
 
@@ -29,17 +32,20 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
     ViewPager pager;
     ViewPagerAdapter adapter;
     List<Fragment> fragmentList;
+    List<List<ClassInfo>> items;
+    int size = 6;
+    RequestSender sender = new RequestSender();
+    View rootView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_classroom, container, false);
+        rootView = inflater.inflate(R.layout.fragment_classroom, container, false);
         tabHost = (MaterialTabHost) rootView.findViewById(R.id.tabHost);
         pager = (ViewPager) rootView.findViewById(R.id.pager);
-
-        // init view pager
-        adapter = new ViewPagerAdapter(getChildFragmentManager());
-        pager.setAdapter(adapter);
+        for (int i = 0; i < size; i++) {
+            tabHost.addTab(tabHost.newTab().setText("Tầng " + i + "").setTabListener(ClassroomFragment.this));
+        }
         pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -48,16 +54,7 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
 
             }
         });
-
-        // insert all tabs from pagerAdapter data
-        for (int i = 0; i < adapter.getCount(); i++) {
-            tabHost.addTab(
-                    tabHost.newTab()
-                            .setText(adapter.getPageTitle(i))
-                            .setTabListener(this)
-            );
-
-        }
+        getData();
         return rootView;
     }
 
@@ -78,27 +75,22 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        public ViewPagerAdapter(FragmentManager fm) {
+        List<List<ClassInfo>> items;
+        public ViewPagerAdapter(FragmentManager fm, List<List<ClassInfo>> items) {
             super(fm);
+            this.items = items;
 
         }
 
         public Fragment getItem(int num) {
             ListClassroomFragment fragment = new ListClassroomFragment();
-            fragment.setParams(num);
+            fragment.setParams(items.get(num));
             return fragment;
         }
 
         @Override
         public int getCount() {
-            String url = Constants.API_GET_TOTAL_FLOOR;
-            RequestSender sender = new RequestSender();
-            sender.start(url, new RequestSender.IRequestSenderComplete() {
-                @Override
-                public void onRequestComplete(String result) {
-                }
-            });
-            return 3;
+            return items.size();
         }
 
         @Override
@@ -108,8 +100,22 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
 
     }
 
-    public void addFragment() {
-        fragmentList.add(new ListClassroomFragment());
+    public void getData() {
+        String url = Constants.API_GET_ROOM_IN_FLOOR;
+
+        sender.start(url, new RequestSender.IRequestSenderComplete() {
+            @Override
+            public void onRequestComplete(String result) {
+                items = ParseUtils.parseClassInfo(result);
+                adapter = new ViewPagerAdapter(getChildFragmentManager(), items);
+                pager.setAdapter(adapter);
+                updateView(rootView);
+            }
+        });
+
+    }
+
+    public void updateView(View view) {
 
     }
 

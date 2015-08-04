@@ -37,14 +37,15 @@ public class ListClassroomFragment extends Fragment {
         return rootView;
     }
 
-    public void setParams(int floor) {
-        this.floor = floor;
+    public void setParams(List<ClassInfo> items) {
+        this.items = items;
     }
 
 
     public void initView(View rootView) {
         gridView = (GridView) rootView.findViewById(R.id.gridView1);
-        getData();
+        mAdapter = new GridViewAdapter(getActivity(),items);
+        gridView.setAdapter(mAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,16 +55,5 @@ public class ListClassroomFragment extends Fragment {
         });
     }
 
-    public void getData() {
-        String url = Constants.API_GET_ROOM_IN_FLOOR + floor;
-        RequestSender sender = new RequestSender();
-        sender.start(url, new RequestSender.IRequestSenderComplete() {
-            @Override
-            public void onRequestComplete(String result) {
-                items = ParseUtils.parseClassInfo(result);
-                mAdapter = new GridViewAdapter(getActivity(),items);
-                gridView.setAdapter(mAdapter);
-            }
-        });
-    }
+
 }

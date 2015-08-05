@@ -13,13 +13,16 @@ import android.support.v7.widget.Toolbar;
 import com.fu.group10.capstone.apps.teachermobileapp.DummyApplication;
 import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.adapter.EquipmentAdapter;
+import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dialog.ChooseEquipmentDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.dialog.CreateReportDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.dialog.CreateReportDialogOffline;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.JsInterface;
@@ -49,10 +52,11 @@ public class EquipmentFragment extends Fragment{
     int classId = 0;
     String className = "";
     String username = "";
-    DatabaseHelper db;
     boolean isOnline = true;
     String type;
     ReportInfo report;
+    DatabaseHelper db;
+    List<EquipmentDAO> listCategory = new ArrayList<>();
 
 
     @Override
@@ -61,6 +65,7 @@ public class EquipmentFragment extends Fragment{
         // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_guide, container, false);
+
         initListView(rootView);
         getActivity().setTitle("ECRM Teacher");
         return rootView;
@@ -80,6 +85,8 @@ public class EquipmentFragment extends Fragment{
         toolbar.setTitle("ECRM Teacher");
         String[] equipments;
         type = getActivity().getIntent().getExtras().getString("type");
+        db = new DatabaseHelper(getActivity());
+        listCategory = db.getEquipments();
         if (type.equalsIgnoreCase("create")) {
             classId = getActivity().getIntent().getExtras().getInt("classId");
             username = getActivity().getIntent().getExtras().getString("username");
@@ -90,6 +97,7 @@ public class EquipmentFragment extends Fragment{
             className = report.getClassName();
             convertList();
         }
+
 
         isOnline = Utils.isOnline();
         getData(classId);
@@ -116,10 +124,14 @@ public class EquipmentFragment extends Fragment{
                     });
 
                 } else if (!listEquipments.get(i).isDamaged()) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Thiết bị này đã được báo cáo!", Toast.LENGTH_LONG).show();
+                    DialogUtils.showAlert(getActivity(), "Thiết bị này đã được báo cáo!");
                 } else {
                     chooseEquipmentDialog = new ChooseEquipmentDialog();
-                    chooseEquipmentDialog.setParams(getActivity(), listEquipments.get(i), new ChooseEquipmentDialog.OnMsgEnteredListener() {
+                    Equipment equipment = listEquipments.get(i);
+                    if (equipment.getPosition().equalsIgnoreCase("")) {
+                        equipment.setPosition(DBUtils.getPosition(getActivity(), equipment.getEquipmentName()));
+                    }
+                    chooseEquipmentDialog.setParams(getActivity(), equipment, new ChooseEquipmentDialog.OnMsgEnteredListener() {
                         @Override
                         public void onMsgEnteredListener(Equipment equipment) {
                             listDamaged.add(equipment);
@@ -206,7 +218,6 @@ public class EquipmentFragment extends Fragment{
                 }
             });
         } else {
-            db = new DatabaseHelper(getActivity().getApplicationContext());
             listEquipments = db.getEquipment(classId);
             adapter = new EquipmentAdapter(DummyApplication.getAppContext(), listEquipments);
             listView.setAdapter(adapter);
@@ -290,7 +301,7 @@ public class EquipmentFragment extends Fragment{
                                     listDamage += selecteditem.getEquipmentName() + ",";
                                     listEvaluate += "1" + ",";
                                     listDescription += "Không sử dụng được" + ",";
-                                    listPosition += Constants.getPosition(selecteditem.getEquipmentName()) + "-";
+                                    listPosition += DBUtils.getPosition(getActivity(), selecteditem.getEquipmentName()) + "-";
                                 }
                             }
                             final String damaged = listDamage.substring(0, listDamage.length() - 1);
@@ -356,7 +367,7 @@ public class EquipmentFragment extends Fragment{
         List<EquipmentReportInfo> equipments = report.getEquipments();
         for (EquipmentReportInfo equip : equipments ) {
             Equipment e = new Equipment(equip.getEquipmentName(), equip.getDamaged(), equip.getDescription(),
-                    Constants.getPosition(equip.getEquipmentName()));
+                   DBUtils.getPosition(getActivity(), equip.getEquipmentName()));
             listDamaged.add(e);
         }
     }
@@ -392,4 +403,6 @@ public class EquipmentFragment extends Fragment{
         //adapter.notifyDataSetChanged();
 
     }
+
+
 }

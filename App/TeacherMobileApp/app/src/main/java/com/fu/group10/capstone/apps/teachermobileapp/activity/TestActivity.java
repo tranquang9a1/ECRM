@@ -35,6 +35,7 @@ public class TestActivity extends ActionBarActivity implements MaterialTabListen
     MaterialTabHost tabHost;
     ViewPager pager;
     ViewPagerAdapter adapter;
+    List<String> listTiltes = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class TestActivity extends ActionBarActivity implements MaterialTabListen
         setContentView(R.layout.activity_main);
         tabHost = (MaterialTabHost) findViewById(R.id.tabHost);
         pager = (ViewPager) findViewById(R.id.pager);
+        generateTitle();
 
         // init view pager
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -56,14 +58,23 @@ public class TestActivity extends ActionBarActivity implements MaterialTabListen
         });
 
         // insert all tabs from pagerAdapter data
-        for (int i = 0; i < adapter.getCount(); i++) {
+        for (int i = 0; i < 2; i++) {
             tabHost.addTab(
                     tabHost.newTab()
-                            .setText(adapter.getPageTitle(i))
+                            .setText(getTitles(i))
                             .setTabListener(this)
             );
 
         }
+    }
+
+    public void generateTitle() {
+        listTiltes.add("Tổng Quát");
+        listTiltes.add("Chi Tiết");
+    }
+
+    public String getTitles(int position) {
+        return listTiltes.get(position);
     }
 
     @Override
@@ -83,13 +94,19 @@ public class TestActivity extends ActionBarActivity implements MaterialTabListen
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
+        List<Fragment> fragmentList = new ArrayList<>();
+
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
-
+            addFragment();
+        }
+        public void addFragment() {
+            fragmentList.add(new EquipmentFragment());
+            fragmentList.add(new ClassroomFragment());
         }
 
         public Fragment getItem(int num) {
-            return new EquipmentFragment();
+            return fragmentList.get(num);
         }
 
         @Override

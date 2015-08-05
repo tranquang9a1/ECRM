@@ -13,6 +13,7 @@ import android.widget.*;
 import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentInfo;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.InfinityListView;
 
@@ -96,7 +97,7 @@ public class DamagedEquipmentAdapter extends BaseAdapter implements InfinityList
         });
 
         holder.spinner.setSelection(position);
-        holder.equipmentImg.setImageBitmap(setImage(items.get(i).getName()));
+        holder.equipmentImg.setImageBitmap(DBUtils.setImage(mContext, items.get(i).getName()));
 
         return row;
     }
@@ -130,15 +131,7 @@ public class DamagedEquipmentAdapter extends BaseAdapter implements InfinityList
         Spinner spinner;
     }
 
-    public Bitmap setImage(String name) {
-        for (EquipmentDAO ec : listCategory) {
-            if (ec.getName().equalsIgnoreCase(name)) {
-                return BitmapFactory.decodeByteArray(ec.getImages(),
-                        0, ec.getImages().length);
-            }
-        }
-        return null;
-    }
+
 
 
 

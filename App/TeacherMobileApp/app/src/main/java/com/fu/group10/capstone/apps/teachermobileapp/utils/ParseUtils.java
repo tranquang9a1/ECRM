@@ -210,6 +210,7 @@ public class ParseUtils {
                 EquipmentCategory equipment = new EquipmentCategory();
                 equipment.setName(object.getString("name"));
                 equipment.setImageUrl(object.getString("imageUrl"));
+                equipment.setId(object.getString("id"));
                 result.add(equipment);
 
             }

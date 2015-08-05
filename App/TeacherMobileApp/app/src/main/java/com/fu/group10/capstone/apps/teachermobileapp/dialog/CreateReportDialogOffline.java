@@ -13,13 +13,16 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
+import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +41,7 @@ public class CreateReportDialogOffline extends DialogFragment {
     int classId;
     DatabaseHelper db;
     ReportSuccessDialog reportSuccessDialog;
-
+    List<EquipmentDAO> listCategory = new ArrayList<>();
     Context context;
     ProgressDialog progress;
 
@@ -50,7 +53,7 @@ public class CreateReportDialogOffline extends DialogFragment {
         context = rootView.getContext();
         db = new DatabaseHelper(activity.getApplicationContext());
         spinner = (Spinner) rootView.findViewById(R.id.spinnerItem);
-
+        listCategory = db.getEquipments();
         builder.setView(rootView);
         builder.setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
             @Override
@@ -140,7 +143,7 @@ public class CreateReportDialogOffline extends DialogFragment {
         int damageLevel = db.getDamageLevel(classId);
         for (int i = 0; i <listDamaged.size(); i++) {
             Equipment equipment = listDamaged.get(i);
-            equipment.setPosition(Constants.getPosition(equipment.getEquipmentName()));
+            equipment.setPosition(DBUtils.getPosition(activity, equipment.getEquipmentName()));
 
             if (equipment.getPosition().equals(Constants.PROJECTOR)) {
                 if (equipment.getDamageLevel().equalsIgnoreCase("3")) {

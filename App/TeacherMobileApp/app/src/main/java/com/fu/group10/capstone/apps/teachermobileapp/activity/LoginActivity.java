@@ -438,9 +438,9 @@ public class LoginActivity  extends ActionBarActivity {
         }
 
     }
-    public void insertCategory(String name, byte[] image) {
+    public void insertCategory(String id, String name, byte[] image) {
         db = new DatabaseHelper(this);
-        db.insertEquipment(name, image);
+        db.insertEquipment(id, name, image);
     }
 
     private class ImageDownloader extends AsyncTask<List<EquipmentCategory>, Void, Void> {
@@ -451,7 +451,7 @@ public class LoginActivity  extends ActionBarActivity {
         protected Void doInBackground(List<EquipmentCategory>... lists) {
             for (int i =0; i < lists[0].size(); i++) {
                 EquipmentCategory ec = lists[0].get(i);
-                insertCategory(ec.getName(),getLogoImage(Constants.RESOURCE_URL + ec.getImageUrl()));
+                insertCategory(ec.getId(), ec.getName(),getLogoImage(Constants.RESOURCE_URL + ec.getImageUrl()));
             }
             return null;
         }

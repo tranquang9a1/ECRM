@@ -6,7 +6,6 @@
 
     <ListView
             android:id="@+id/lv_sample_list"
-            android:paddingTop="50dp"
             android:clickable="true"
             android:focusable="false"
             android:layout_width="match_parent"

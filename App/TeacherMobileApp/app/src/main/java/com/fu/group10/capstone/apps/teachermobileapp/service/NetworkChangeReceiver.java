@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.fu.group10.capstone.apps.teachermobileapp.DummyApplication;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
@@ -16,6 +17,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Result;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
@@ -58,7 +60,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                     listDamaged += e.getEquipmentName() + ",";
                     listEvaluate += e.getDamaged() + ",";
                     listDescription += e.getDescription() + ",";
-                    listPosition += Constants.getPosition(e.getEquipmentName()) + "-";
+                    listPosition += DBUtils.getPosition(context, e.getEquipmentName()) + "-";
                 }
 
                 Map<String, String> params = new HashMap<String, String>();

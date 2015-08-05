@@ -154,7 +154,7 @@ public class ListRoomActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 3) {
                     DialogUtils.showAlert(ListRoomActivity.this,
-                            "Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập",
+                            "Đăng xuất khỏi hệ thống ?",
                             new DialogUtils.IOnOkClicked() {
                                 @Override
                                 public void onClick() {

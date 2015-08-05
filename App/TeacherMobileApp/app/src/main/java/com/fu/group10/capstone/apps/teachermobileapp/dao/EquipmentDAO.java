@@ -5,15 +5,25 @@ package com.fu.group10.capstone.apps.teachermobileapp.dao;
  */
 public class EquipmentDAO {
 
+    private String id;
     private String name;
     private byte[] images;
 
-    public EquipmentDAO(String name, byte[] images) {
+    public EquipmentDAO(String id, String name, byte[] images) {
+        this.id = id;
         this.name = name;
         this.images = images;
     }
 
     public EquipmentDAO() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

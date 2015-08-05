@@ -31,6 +31,7 @@ public class ChooseEquipmentDialog extends DialogFragment {
     Equipment equipment;
     OnMsgEnteredListener onMsgEnteredListener;
     Activity activity;
+    String position;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -82,9 +83,9 @@ public class ChooseEquipmentDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //JsInterface.addEquipment(equipment.getEquipmentName(), Constants.getPosition(equipment.getEquipmentName()));
-                if (equipment.getPosition().equalsIgnoreCase("")) {
-                    equipment.setPosition(Constants.getPosition(equipment.getEquipmentName()));
-                }
+//                if (equipment.getPosition().equalsIgnoreCase("")) {
+//                    equipment.setPosition(Constants.getPosition(equipment.getEquipmentName()));
+//                }
 
                 equipment.setIsReport(true);
                 onMsgEnteredListener.onMsgEnteredListener(equipment);
@@ -104,6 +105,7 @@ public class ChooseEquipmentDialog extends DialogFragment {
     public void setParams(Activity activity, Equipment equipment, OnMsgEnteredListener cb) {
         this.activity = activity;
         this.equipment = equipment;
+
         this.onMsgEnteredListener = cb;
     }
 

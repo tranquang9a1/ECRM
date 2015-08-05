@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.InfinityListView;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.NetworkUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
@@ -92,8 +93,8 @@ public class AccountAdapter extends BaseAdapter implements InfinityListView.IInf
         } else {
             holder.equipmentName.setText(items.get(i).getEquipments().get(0).getEquipmentName());
         }
-
-        holder.equipmentImg.setImageResource(setImage(items.get(i)));
+            holder.equipmentImg.setImageBitmap(DBUtils.setImage(mContext,
+                    items.get(i).getEquipments().get(0).getEquipmentName()));
 
         Resources resource = mContext.getResources();
         row.setBackgroundColor(resource.getColor(R.color.resolved));
@@ -141,25 +142,4 @@ public class AccountAdapter extends BaseAdapter implements InfinityListView.IInf
     }
 
 
-    public int setImage(ReportInfo report) {
-        if (report.getEquipments().size() > 1) {
-            return R.mipmap.ic_tv;
-        } else {
-            if (report.getEquipments().get(0).getEquipmentName().equalsIgnoreCase("Quạt")) {
-                return R.mipmap.ic_fan;
-            } else if (report.getEquipments().get(0).getEquipmentName().equalsIgnoreCase("Máy Lạnh")) {
-                return R.mipmap.ic_air;
-            } else if (report.getEquipments().get(0).getEquipmentName().equalsIgnoreCase("Tivi")) {
-                return R.mipmap.ic_tv;
-            } else if (report.getEquipments().get(0).getEquipmentName().equalsIgnoreCase("Ghế")) {
-                return R.mipmap.ic_chair;
-            } else if (report.getEquipments().get(0).getEquipmentName().equalsIgnoreCase("Máy Chiếu")) {
-                return R.mipmap.ic_projector;
-            } else if (report.getEquipments().get(0).getEquipmentName().equalsIgnoreCase("Bàn")) {
-                return R.mipmap.ic_table;
-            } else {
-                return R.mipmap.ic_speaker;
-            }
-        }
-    }
 }

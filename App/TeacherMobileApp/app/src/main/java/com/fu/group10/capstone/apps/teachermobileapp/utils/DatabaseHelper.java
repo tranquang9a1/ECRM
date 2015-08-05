@@ -37,7 +37,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private static final String DATABASE_NAME = "ECRM_DATA";
 
@@ -105,6 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String RD_STATUS = "status";
     private static final String RD_IS_SYNC = "isSync";
 
+    private static final String EC_ID = "id";
     private static final String EC_NAME = "name";
     private static final String EC_IMAGE = "images";
 
@@ -127,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT, " + SCHEDULE_IS_ACTIVE + " INTEGER" + ")";
 
     private static final String CREATE_TABLE_EQUIPMENT_CATEGORY = "CREATE TABLE " +
-            TABLE_EQUIPMENT_CATEGORY + "("  + EC_NAME + " TEXT," + EC_IMAGE + " TEXT" + ")";
+            TABLE_EQUIPMENT_CATEGORY + "("  + EC_ID + " TEXT," + EC_NAME + " TEXT," + EC_IMAGE + " TEXT" + ")";
 
     private static final String CREATE_TABLE_EQUIPMENT_CLASSROOM = "CREATE TABLE " + TABLE_EQUIPMENT_CLASSROOM + "("
             + EC_CLASSID + " INTEGER," + EC_EQUIPMENT_NAME + " TEXT," + EC_POSITION + " TEXT," + EC_COMPANY + " TEXT,"
@@ -530,14 +531,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return c.getInt(c.getColumnIndex(CLASSROOM_DAMAGE_LEVEL));
     }
 
-    public void insertEquipment(String name, byte[] image) {
+    public void insertEquipment(String id, String name, byte[] image) {
         SQLiteDatabase db               =   this.getWritableDatabase();
         String sql                      =   "INSERT OR REPLACE INTO  " +
-                TABLE_EQUIPMENT_CATEGORY +" (name,images) VALUES(?,?)";
+                TABLE_EQUIPMENT_CATEGORY +" (id,name,images) VALUES(?,?,?)";
         SQLiteStatement insertStmt      =   db.compileStatement(sql);
         insertStmt.clearBindings();
-        insertStmt.bindString(1, name);
-        insertStmt.bindBlob(2, image);
+        insertStmt.bindString(1, id);
+        insertStmt.bindString(2, name);
+        insertStmt.bindBlob(3, image);
         insertStmt.executeInsert();
         db.close();
     }
@@ -554,8 +556,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do {
                 EquipmentDAO dao = new EquipmentDAO();
-                dao.setName(cursor.getString(0));
-                dao.setImages(cursor.getBlob(1));
+                dao.setId(cursor.getString(0));
+                dao.setName(cursor.getString(1));
+                dao.setImages(cursor.getBlob(2));
                 result.add(dao);
             } while (cursor.moveToNext());
 

@@ -13,6 +13,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class EquipmentAdapter extends BaseAdapter {
             if (mSelectedItemsIds.get(position)) {
                 mViewHolder.equipmentImg.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_check));
             } else {
-                mViewHolder.equipmentImg.setImageBitmap(setImage(items.getEquipmentName()));
+                mViewHolder.equipmentImg.setImageBitmap(DBUtils.setImage(mContext,items.getEquipmentName()));
             }
             mViewHolder.txtEquipmentName.setText(items.getEquipmentName());
             setText(mViewHolder, items);
@@ -144,15 +145,7 @@ public class EquipmentAdapter extends BaseAdapter {
     }
 
 
-    public Bitmap setImage(String name) {
-        for (EquipmentDAO ec : listCategory) {
-            if (ec.getName().equalsIgnoreCase(name)) {
-                return BitmapFactory.decodeByteArray(ec.getImages(),
-                        0, ec.getImages().length);
-            }
-        }
-        return null;
-    }
+
 
 
     public void toggleSelection(int position) {

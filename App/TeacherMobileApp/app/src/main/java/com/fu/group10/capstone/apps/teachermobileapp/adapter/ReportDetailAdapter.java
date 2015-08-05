@@ -15,6 +15,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.InfinityListView;
 
@@ -92,7 +93,7 @@ public class ReportDetailAdapter extends BaseAdapter implements InfinityListView
         }
 
 
-        holder.equipmentImg.setImageBitmap(setImage(items.get(i).getEquipmentName()));
+        holder.equipmentImg.setImageBitmap(DBUtils.setImage(mContext, items.get(i).getEquipmentName()));
 
 
 
@@ -129,15 +130,7 @@ public class ReportDetailAdapter extends BaseAdapter implements InfinityListView
         ImageView equipmentImg;
     }
 
-    public Bitmap setImage(String name) {
-        for (EquipmentDAO ec : listCategory) {
-            if (ec.getName().equalsIgnoreCase(name)) {
-                return BitmapFactory.decodeByteArray(ec.getImages(),
-                        0, ec.getImages().length);
-            }
-        }
-        return null;
-    }
+
 
 
 

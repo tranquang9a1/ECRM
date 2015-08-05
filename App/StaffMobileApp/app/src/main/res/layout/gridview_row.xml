@@ -23,16 +23,5 @@
         app:titleSize="35dp"
         app:titleText="101" />
 
-    <TextView
-        android:text="Phòng 101"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtName"
-        android:layout_width="wrap_content"
-        android:layout_below="@+id/rlv_name_view"
-        android:layout_marginTop="2dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="18sp"
-        android:ellipsize="marquee"></TextView>
-
 
 </RelativeLayout>

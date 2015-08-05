@@ -22,10 +22,7 @@ import com.fu.group10.capstone.apps.staffmobileapp.Utils.DialogUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.adapter.NavDrawerListAdapter;
 import com.fu.group10.capstone.apps.staffmobileapp.fragment.*;
 import com.fu.group10.capstone.apps.staffmobileapp.model.NavDrawerItem;
-
 import java.util.ArrayList;
-
-import it.neokree.materialtabs.MaterialTabListener;
 
 /**
  * Created by QuangTV on 6/26/2015.
@@ -140,7 +137,7 @@ public class ListRoomActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 4) {
                     DialogUtils.showAlert(ListRoomActivity.this,
-                            "Đăng xuất khỏi hệ thống ? Bạn sẽ không thể sử dụng nếu không đăng nhập",
+                            "Đăng xuất khỏi hệ thống ?",
                             new DialogUtils.IOnOkClicked() {
                                 @Override
                                 public void onClick() {
@@ -211,9 +208,6 @@ public class ListRoomActivity extends ActionBarActivity {
                 fragment = new FinishFragment();
                 break;
             case 3:
-                fragment = new ClassroomFragment();
-                break;
-            case 4:
                 fragment = new ClassroomFragment();
                 break;
             default:

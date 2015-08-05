@@ -58,7 +58,7 @@ public class GridViewAdapter extends BaseAdapter {
             convertView = mLayoutInflater.inflate(R.layout.gridview_row, null);
 
             viewHolder.mRoundedLetterView = (RoundedLetterView) convertView.findViewById(R.id.rlv_name_view);
-            viewHolder.txtViewTitle = (TextView) convertView.findViewById(R.id.txtName);
+            //viewHolder.txtViewTitle = (TextView) convertView.findViewById(R.id.txtName);
 
             convertView.setTag(viewHolder);
         }
@@ -68,7 +68,7 @@ public class GridViewAdapter extends BaseAdapter {
 
         ClassInfo info = getItem(position);
         if (info != null) {
-            viewHolder.txtViewTitle.setText("Độ hư hại: " + info.getDamageLevel() + "%");
+            //viewHolder.txtViewTitle.setText("Độ hư hại: " + info.getDamageLevel() + "%");
             viewHolder.mRoundedLetterView.setTitleText(info.getName());
             if (info.getDamageLevel() <= 20) {
                 viewHolder.mRoundedLetterView.setBackgroundColor(mContext.getResources().getColor(R.color.blue));

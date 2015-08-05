@@ -162,6 +162,7 @@ public class ParseUtils {
             for (int i = 0; i < listEquipments.length(); i++) {
                 JSONObject object = listEquipments.getJSONObject(i);
                 EquipmentCategory equipment = new EquipmentCategory();
+                equipment.setId(object.getString("id"));
                 equipment.setName(object.getString("name"));
                 equipment.setImageUrl(object.getString("imageUrl"));
                 result.add(equipment);

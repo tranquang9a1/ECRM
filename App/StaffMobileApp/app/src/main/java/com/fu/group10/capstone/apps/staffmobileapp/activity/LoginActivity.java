@@ -122,13 +122,13 @@ public class LoginActivity extends Activity{
         boolean cancelLogin = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             passwordTextView.setError(getString(R.string.invalid_password));
             focusView = passwordTextView;
             cancelLogin = true;
         }
 
-        if (TextUtils.isEmpty(username) && !isUsernameValid(username)) {
+        if (TextUtils.isEmpty(username) || !isUsernameValid(username)) {
             usernameTextView.setError(getString(R.string.field_required));
             focusView = usernameTextView;
             cancelLogin = true;
@@ -345,7 +345,7 @@ public class LoginActivity extends Activity{
         protected Void doInBackground(List<EquipmentCategory>... lists) {
             for (int i =0; i < lists[0].size(); i++) {
                 EquipmentCategory ec = lists[0].get(i);
-                insertCategory(ec.getName(),getLogoImage(Constants.RESOURCE_URL + ec.getImageUrl()));
+                insertCategory(ec.getId(), ec.getName(),getLogoImage(Constants.RESOURCE_URL + ec.getImageUrl()));
             }
             return null;
         }
@@ -387,9 +387,9 @@ public class LoginActivity extends Activity{
         }
 
     }
-    public void insertCategory(String name, byte[] image) {
+    public void insertCategory(String id, String name, byte[] image) {
         db = new DatabaseHelper(this);
-        db.insertEquipment(name, image);
+        db.insertEquipment(id, name, image);
     }
 
 }

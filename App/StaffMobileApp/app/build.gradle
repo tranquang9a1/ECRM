@@ -27,4 +27,5 @@ dependencies {
     compile 'com.github.chenupt.android:multiplemodel:1.1.0@aar'
     compile 'com.github.pavlospt:roundedletterview:1.1'
     compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'it.neokree:MaterialTabs:0.11'
 }

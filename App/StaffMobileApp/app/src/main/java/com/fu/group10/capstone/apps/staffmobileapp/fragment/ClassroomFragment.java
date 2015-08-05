@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
@@ -44,7 +45,7 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
         tabHost = (MaterialTabHost) rootView.findViewById(R.id.tabHost);
         pager = (ViewPager) rootView.findViewById(R.id.pager);
         for (int i = 0; i < size; i++) {
-            tabHost.addTab(tabHost.newTab().setText("Tầng " + i + "").setTabListener(ClassroomFragment.this));
+            tabHost.addTab(tabHost.newTab().setText(setTitle(i)).setTabListener(ClassroomFragment.this));
         }
         pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -109,13 +110,24 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
                 items = ParseUtils.parseClassInfo(result);
                 adapter = new ViewPagerAdapter(getChildFragmentManager(), items);
                 pager.setAdapter(adapter);
-                updateView(rootView);
+                //updateView(getView());
             }
         });
 
     }
 
+    public String setTitle(int position) {
+        if (position==0) {
+            return "Tầng Trệt";
+        }
+        return "Tầng " + position;
+    }
+
     public void updateView(View view) {
+        size = items.size();
+
+        RelativeLayout linear=(RelativeLayout)rootView.findViewById(R.id.classroom);
+        linear.removeAllViews();
 
     }
 

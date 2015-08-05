@@ -202,10 +202,10 @@ public class ListRoomActivity extends ActionBarActivity {
                 fragment = new HomeFragment();
                 break;
             case 1:
-                fragment = new GoingFragment();
+                fragment = new FinishFragment();
                 break;
             case 2:
-                fragment = new FinishFragment();
+                fragment = new RemovedFragment();
                 break;
             case 3:
                 fragment = new ClassroomFragment();

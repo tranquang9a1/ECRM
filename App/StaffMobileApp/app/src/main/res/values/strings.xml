@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ECRM STAFF</string>
+    <string name="app_name">ECRM Staff</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Login</string>
+    <string name="prompt_username">Tài khoản</string>
+    <string name="prompt_password">Mật khẩu</string>
+    <string name="action_sign_in">ĐĂNG NHẬP</string>
     <string name="action_change_pass">Update Password</string>
     <string name="invalid_password">Password is too short</string>
     <string name="incorrect_password">Password is incorrect</string>
@@ -43,11 +43,11 @@
     <string name="detail">đã được chuyển sang phòng</string>
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item >Trang chủ</item>
-        <item >Báo cáo hiện tại</item>
-        <item >Báo cáo đã sửa</item>
-        <item >Quản lí phòng học</item>
-        <item >Đăng xuất</item>
+        <item>Trang chủ</item>
+        <item>Báo cáo đã sửa</item>
+        <item>Báo cáo đã xóa</item>
+        <item>Quản lí phòng học</item>
+        <item>Đăng xuất</item>
 
     </string-array>
 

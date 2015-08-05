@@ -10,6 +10,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
             android:layout_below="@+id/tool_bar">
 
 
@@ -19,6 +20,7 @@
                 android:layout_height="50sp"
                 android:inputType="text"
                 android:id="@+id/txtKeyword"
+            android:paddingLeft="20dp"
                 android:hint="Tìm lớp học"
                 android:singleLine="true" />
         <ImageButton

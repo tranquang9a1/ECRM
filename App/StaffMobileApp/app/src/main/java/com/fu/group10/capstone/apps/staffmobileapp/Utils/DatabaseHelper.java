@@ -18,7 +18,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_NAME = "ECRM_DATA";
 
@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertEquipment(String id, String name, byte[] image) {
         SQLiteDatabase db               =   this.getWritableDatabase();
         String sql                      =   "INSERT OR REPLACE INTO " +
-                TABLE_EQUIPMENT_CATEGORY +" (id,name,images) VALUES(?,?)";
+                TABLE_EQUIPMENT_CATEGORY +" (id,name,images) VALUES(?,?,?)";
         SQLiteStatement insertStmt      =   db.compileStatement(sql);
         insertStmt.clearBindings();
         insertStmt.bindString(1, id);

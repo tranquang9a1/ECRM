@@ -36,6 +36,7 @@
                         android:layout_marginBottom="10dp"
                         android:textSize="20dp"
                         android:background="@color/white"
+                        android:paddingLeft="10dp"
                         android:textColorHint="#ffa3a3a3"
                         android:textColor="#000000" />
 
@@ -45,6 +46,7 @@
                         android:imeOptions="actionUnspecified" android:inputType="textPassword"
                         android:maxLines="1" android:singleLine="true"
                         android:layout_marginBottom="10dp"
+                        android:paddingLeft="10dp"
                         android:background="@color/white"
                         android:textColorHint="#ffa3a3a3"
                         android:textColor="#000000"

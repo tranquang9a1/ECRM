@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.fu.group10.capstone.apps.staffmobileapp.DummyApplication;
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.DialogUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
 import com.fu.group10.capstone.apps.staffmobileapp.activity.ListRoomActivity;
 import com.fu.group10.capstone.apps.staffmobileapp.activity.MainActivity;
@@ -31,15 +32,17 @@ public class ChooseRoomDialogFragment extends DialogFragment{
     OnListChooseListener onListChooseListener;
     DialogChangeRoomSuccess dialogChangeRoomSuccess;
     Context context;
+    String type;
 
     public ChooseRoomDialogFragment() {
 
     }
 
-    public void setParam(Activity activity, String[] items, String current) {
+    public void setParam(Activity activity, String[] items, String current, String type) {
         this.activity = activity;
         this.items = items;
         this.current = current;
+        this.type = type;
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -97,9 +100,20 @@ public class ChooseRoomDialogFragment extends DialogFragment{
     }
 
     public void openHome(String from, String to) {
-        dialogChangeRoomSuccess = new DialogChangeRoomSuccess();
-        dialogChangeRoomSuccess.setParams(activity, from, to, "staff");
-        dialogChangeRoomSuccess.show(activity.getFragmentManager(), "Show dialog success!");
+
+        DialogUtils.showAlert(activity, "Đã đổi phòng " + from + " sang phòng " + to, new DialogUtils.IOnOkClicked() {
+            @Override
+            public void onClick() {
+                if (type.equalsIgnoreCase("report")) {
+                    Intent intent = new Intent(activity, ListRoomActivity.class);
+                    intent.putExtra("username", "staff");
+                    activity.setResult(2);
+                    startActivity(intent);
+                    activity.finish();
+                }
+            }
+        });
+
     }
 
 

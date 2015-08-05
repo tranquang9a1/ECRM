@@ -4,6 +4,7 @@
     android:layout_height="fill_parent">
 
     <GridView
+        android:paddingTop="5dp"
         android:layout_height="wrap_content"
         android:id="@+id/gridView1"
         android:layout_width="match_parent"

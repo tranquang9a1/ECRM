@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.DialogUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
 import com.fu.group10.capstone.apps.staffmobileapp.adapter.ResolveAdapter;
@@ -171,16 +172,22 @@ public class ResolveReportActivity extends Activity {
 
 
     public void showProgress() {
-        progress = ProgressDialog.show(this, "", "Đang tải phòng học", true);
+        progress = ProgressDialog.show(this, "", Constants.FIND_ROOM, true);
     }
     public void progressResolve() {
         progress = ProgressDialog.show(this, "", "Đang khắc phục", true);
     }
     public void openHome() {
-        Intent intent = new Intent(ResolveReportActivity.this, ListRoomActivity.class);
-        setResult(2);
-        startActivity(intent);
-        finish();
+        DialogUtils.showAlert(this, "Khắc phục phòng thành công", new DialogUtils.IOnOkClicked() {
+            @Override
+            public void onClick() {
+                Intent intent = new Intent(ResolveReportActivity.this, ListRoomActivity.class);
+                setResult(2);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     public void getAvailableRoom(String roomId) {
@@ -193,10 +200,10 @@ public class ResolveReportActivity extends Activity {
                 progress.dismiss();
                 if (items != null) {
                     chooseRoomDialog = new ChooseRoomDialogFragment();
-                    chooseRoomDialog.setParam(ResolveReportActivity.this,items, current);
+                    chooseRoomDialog.setParam(ResolveReportActivity.this,items, current, "report");
                     chooseRoomDialog.show(getFragmentManager(), "ChooseRoom");
                 } else {
-                    Toast.makeText(getApplicationContext(), "Hiện tại không có phòng trống", Toast.LENGTH_LONG).show();
+                    DialogUtils.showAlert(ResolveReportActivity.this, Constants.NO_ROOM_MESSAGE);
                 }
 
             }
@@ -219,13 +226,10 @@ public class ResolveReportActivity extends Activity {
                     }
 
                 } else {
-                    if (type.equalsIgnoreCase("new")) {
+                    if (type.equalsIgnoreCase("new") || type.equalsIgnoreCase("going")) {
                         btnChooseRoom.setVisibility(View.VISIBLE);
                         btnResolve.setVisibility(View.VISIBLE);
-                    } else if (type.equalsIgnoreCase("going")) {
-                        btnChooseRoom.setVisibility(View.VISIBLE);
-                        btnResolve.setVisibility(View.VISIBLE);
-                    } else {
+                    }  else {
                         btnChooseRoom.setVisibility(View.GONE);
                         btnResolve.setVisibility(View.GONE);
                     }
@@ -247,8 +251,7 @@ public class ResolveReportActivity extends Activity {
     public void setSuggest(ReportInfo report) {
         if (type.equalsIgnoreCase("new")) {
             txtStatus.setVisibility(View.GONE);
-            btnChooseRoom.setVisibility(View.VISIBLE);
-            btnResolve.setVisibility(View.VISIBLE);
+
         } else if (type.equalsIgnoreCase("finish")) {
             txtStatus.setText("Phòng đã được sửa");
             txtStatus.setVisibility(View.VISIBLE);

@@ -55,6 +55,13 @@
                         </div>
                         <div class="control">
                             <div class="group-button">
+                                <div class="btn btn-detail"
+                                     title="Đổi phòng" onclick="showModal(1,'modal-changeRoom');
+                                     document.getElementById('changeRoom-id').value=${cl.classroom.id};
+                                        document.getElementById('changeRoom-name').innerHTML = 'Đổi phòng cho phòng ${cl.classroom.name}';
+                                        document.getElementById('getchangeRoom-name').innerHTML = 'Phòng trống cho phòng ${cl.classroom.name}'"><i
+                                        class="fa fa-pencil"></i>
+                                </div>
                                 <div class="btn btn-view" title="Xem sơ đồ"
                                      onclick='document.getElementById("ClassroomAction").value="update";
                                              document.getElementById("loaiphong").innerHTML = "${cl.roomType.name}" ;

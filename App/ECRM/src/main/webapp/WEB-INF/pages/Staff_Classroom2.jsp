@@ -25,10 +25,13 @@
             <link rel="stylesheet" href="/resource/css/roomtype-2.css"/>
             <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
             <link rel="stylesheet" href="/resource/css/simplePagination.css"/>
+            <link rel="stylesheet" href="/resource/css/jquery-ui.css"/>
+
 
             <script src="/resource/js/jquery-1.11.3.js"></script>
             <script src="/resource/js/jquery-1.11.3.min.js"></script>
             <script src="/resource/js/socket.io.js"></script>
+            <script src="/resource/js/jquery-ui.js"></script>
 
             <script src="/resource/js/socket-io.js"></script>
             <script src="/resource/js/staff-notify.js"></script>
@@ -41,9 +44,6 @@
         <script>
             <c:set var="message" value="${requestScope.MESSAGE}"/>
             <c:if test="${message!= '0'}">
-            <c:if test="${message=='update-equipment-fail'}">
-            var m = "Không đủ thiết bị để cập nhật!"
-            </c:if>
             conformData(1, {message: '${message}'});
             </c:if>
         </script>
@@ -158,7 +158,7 @@
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
                     || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )"  placeholder="Nhập số phòng"/>
+                    || (event.keyCode==46) )" placeholder="Nhập số phòng"/>
                                 </div>
                             </div>
                             <div class="group-control">
@@ -350,8 +350,74 @@
                     <div class="black-background"></div>
                 </div>
             </form>
-        </div>
+                <%--Modal change room--%>
+            <form id="form-getChangeRoom" name="form-getChangeRoom">
+                <div class="modal modal-small" id="modal-changeRoom">
+                    <div class="content-modal">
+                        <div class="header-modal title">
+                            <p id="changeRoom-name"></p>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-changeRoom');
+                            document.getElementById('datepickerFrom').value = '';
+                                   document.getElementById('datepickeTo').value = '';"></i>
+                        </div>
+                        <input type="hidden" id="changeRoom-id">
 
+                        <div class="body-modal">
+                            <div class="group-control">
+                                <div class="name">Từ ngày(*):</div>
+                                <div class="control">
+                                    <input type="text" id="datepickerFrom" name="timeFrom">
+                                </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Đến ngày:</div>
+                                <div class="control">
+                                    <input type="text" id="datepickeTo" name="timeTo">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="footer-modal">
+                            <input type="button" class="btn btn-normal"
+                                   onclick="showModal(0, 'modal-changeRoom'); document.getElementById('datepickerFrom').value = '';
+                                   document.getElementById('datepickeTo').value = '';"
+                                   value="Thoát"/>
+                            <input type="button" class="btn btn-orange"
+                                   onclick="getChangeRoom();"
+                                   value="Tìm phòng trống"/>
+                        </div>
+                        <div class="black-background"></div>
+                    </div>
+                </div>
+            </form>
+            <form id="changeRoom-form" name="changeRoom-form" action="/staff/changeRoomManually">
+                <div class="modal modal-small" id="modal-room">
+                    <input type="hidden" id="result-changeRoom-id" name="classroomId">
+                    <input type="hidden" id="result-timeFrom" name="timeFrom">
+                    <input type="hidden" id="result-timeTo" name="timeTo">
+                    <div class="content-modal">
+                        <div class="header-modal title">
+                            <p id="getchangeRoom-name">Phòng trống</p>
+                            <i class="fa fa-times" onclick="showModal(0,'modal-room');"></i>
+                        </div>
+                        <div class="body-modal">
+                            <div id="changeRoomField">
+
+                            </div>
+
+                        </div>
+                        <div class="footer-modal">
+                            <input type="button" class="btn btn-normal"
+                                   onclick="showModal(2,'modal-room', 'modal-changeRoom');"
+                                   value="Quay lại"/>
+                            <input type="button" class="btn btn-orange"
+                                   onclick="changeRoomDate()"
+                                   value="Đổi"/>
+                        </div>
+                        <div class="black-background"></div>
+                    </div>
+                </div>
+            </form>
 
         </body>
         <script src="/resource/js/script.js"></script>
@@ -419,11 +485,16 @@
                     data: 'roomName=' + roomName + '&roomType=' + roomType + '&action=' + action + '&classroomId=' + classroomId,
                     success: function (data) {
                         if (data.status == true) {
-                            if(data.alert!=''){
+                            if (data.alert != '') {
                                 document.getElementById("ClassroomAction").value = 'update';
                                 showModal(0, 'modal-1');
-                                conformData(3, {message: data.alert, btnName: 'Cập nhật', choose: 2, object: {id: 'createClassroomForm'}});
-                            }else{
+                                conformData(3, {
+                                    message: data.alert,
+                                    btnName: 'Cập nhật',
+                                    choose: 2,
+                                    object: {id: 'createClassroomForm'}
+                                });
+                            } else {
                                 showModal(0, 'modal-1');
                                 document.getElementById('createClassroomForm').submit();
                                 $(".loading-page").addClass("active");
@@ -495,11 +566,16 @@
                         data: 'roomtypeName=' + roomtypeName + '&action=' + action + '&roomtypeId=' + roomtypeId,
                         success: function (data) {
                             if (data.status == true) {
-                                if(data.alert!=''){
-                                    document.getElementById('RoomTypeAction').value= 'update';
+                                if (data.alert != '') {
+                                    document.getElementById('RoomTypeAction').value = 'update';
                                     showModal(0, 'modal-4');
-                                    conformData(3, {message: data.alert, btnName: 'Cập nhật', choose: 2, object: {id: 'createRoomType'}});
-                                }else{
+                                    conformData(3, {
+                                        message: data.alert,
+                                        btnName: 'Cập nhật',
+                                        choose: 2,
+                                        object: {id: 'createRoomType'}
+                                    });
+                                } else {
                                     showModal(0, 'modal-4');
                                     document.getElementById('createRoomType').submit();
                                     $(".loading-page").addClass("active");
@@ -525,7 +601,11 @@
                     data: 'roomTypeId=' + roomTypeId,
                     success: function (data) {
                         if (data.status == true) {
-                            conformData(2, {message:'Bạn có muốn xóa loại phòng'+ roomTypeName+'!', btnName:'Xóa',link:'/staff/removeRoomType?roomTypeId='+roomTypeId})
+                            conformData(2, {
+                                message: 'Bạn có muốn xóa loại phòng' + roomTypeName + '!',
+                                btnName: 'Xóa',
+                                link: '/staff/removeRoomType?roomTypeId=' + roomTypeId
+                            })
                         } else {
                             conformData(1, {message: data.alert});
                         }
@@ -628,12 +708,50 @@
                 document.getElementById("loaiphong").innerHTML = selectedValue.name;
 
             }
-            function chooseRoomType(){
+            function chooseRoomType() {
                 var action = document.getElementById('ClassroomAction').value;
-                if(action=='create'){
+                if (action == 'create') {
                     var selectedValue = $('#selectBox option:first-child').data("value");
                     document.getElementById('roomtype').value = selectedValue.id;
                 }
+            }
+
+            $(function () {
+                $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
+                $("#datepickeTo").datepicker({dateFormat: "yy-mm-dd"});
+            });
+
+            function getChangeRoom() {
+                $(".loading-page").addClass("active");
+                var classroomId = document.forms['form-getChangeRoom']['changeRoom-id'].value;
+                var timeFrom = document.forms['form-getChangeRoom']['timeFrom'].value;
+                var timeTo = document.forms['form-getChangeRoom']['timeTo'].value;
+                showModal(0,'modal-changeRoom');
+                $.ajax({
+                    type: "get",
+                    url: "/ajax/getChangeRoom",
+                    cache: false,
+                    data: 'classroomId=' + classroomId + '&timeFrom=' + timeFrom + '&timeTo=' + timeTo,
+                    success: function (data) {
+                        $('#result-changeRoom-id').val(classroomId);
+                        $('#result-timeFrom').val(timeFrom);
+                        $('#result-timeTo').val(timeTo);
+                        $('#changeRoomField').html(data);
+                        $(".loading-page").removeClass("active");
+                        showModal(1, 'modal-room');
+                    },
+                    error: function () {
+                        conformData(1, {message: 'Sai kiểu ngày tháng yyyy-mm-dd!'});
+                        $(".loading-page").removeClass("active");
+                        showModal(1,'modal-changeRoom');
+                    }
+                })
+            }
+
+            function changeRoomDate(){
+                showModal(0, 'modal-room');
+                $(".loading-page").addClass("active");
+                document.getElementById('changeRoom-form').submit();
             }
             document.getElementById("${tab1}").className += " active";
             document.getElementById("${tab1}").setAttribute("data-main", "1");

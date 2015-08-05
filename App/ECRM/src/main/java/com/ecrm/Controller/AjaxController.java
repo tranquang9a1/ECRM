@@ -141,9 +141,9 @@ public class AjaxController {
             validateEntity.setAlert(alert);
             validateEntity.setStatus(false);
             return validateEntity;
-        }else{
+        } else {
             List<TblUserEntity> tblUserEntity = userDAO.checkUsername(username);
-            if(tblUserEntity.isEmpty()){
+            if (tblUserEntity.isEmpty()) {
                 alert = "Tài khoản không tồn tại!";
                 validateEntity.setAlert(alert);
                 validateEntity.setStatus(false);
@@ -177,15 +177,15 @@ public class AjaxController {
         }
         int avai = Integer.parseInt(request.getParameter("avai"));
         String all = request.getParameter("all");
-        if (avai == 0 && all.trim().length()==0) {
+        if (avai == 0 && all.trim().length() == 0) {
             alert = "Phải chọn phòng học!";
             validateEntity.setAlert(alert);
             validateEntity.setStatus(false);
             return validateEntity;
         }
-        if (all.trim().length()!=0) {
+        if (all.trim().length() != 0) {
             TblClassroomEntity classroom = classroomDAO.getClassroomByName(all.trim());
-            if(classroom == null){
+            if (classroom == null) {
                 alert = "Phòng học không tồn tại!";
                 validateEntity.setAlert(alert);
                 validateEntity.setStatus(false);
@@ -454,11 +454,11 @@ public class AjaxController {
         String datefrom = request.getParameter("dateFrom");
         String target = request.getParameter("tags");
         String action = request.getParameter("action");
-        String username ="";
+        String username = "";
         String classroom = "";
-        if(action.equals("0")){
-            username =target;
-        }else{
+        if (action.equals("0")) {
+            username = target;
+        } else {
             classroom = target;
         }
 
@@ -569,5 +569,125 @@ public class AjaxController {
         public int compare(CrSdEntity o1, CrSdEntity o2) {
             return o1.getRoomName().compareTo(o2.getRoomName());
         }
+    }
+
+    //create changeroom with date range
+    @RequestMapping("getChangeRoom")
+    public
+    @ResponseBody
+    void getChangeRoom(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
+        int classroomId = Integer.parseInt(request.getParameter("classroomId"));
+        String tt = request.getParameter("timeTo");
+        String tf = request.getParameter("timeFrom");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate timeFrom = new LocalDate(tf);
+        LocalDate timeTo = timeFrom;
+        if (tt.trim().length() == 0) {
+            tt = tf;
+            timeTo = timeFrom;
+        } else {
+            timeTo = new LocalDate(tt);
+        }
+        boolean tempMorning = true;
+        boolean tempNoon = true;
+        List<TblClassroomEntity> validClassrooms = classroomDAO.getAllClassroom();
+        List<String> availableClassroom1 = new ArrayList<String>();
+        List<String> availableClassroom2 = new ArrayList<String>();
+        for (LocalDate date = timeFrom; date.isBefore(timeTo.plusDays(1)); date = date.plusDays(1)) {
+            java.sql.Date teachingDate = new java.sql.Date(formatter.parse(date.toString()).getTime());
+            List<TblScheduleEntity> morningSchedule = scheduleDAO.findAllScheduleInClassroomByDayTimeWithDate(classroomId, "06:00:00",
+                    teachingDate);
+            if (!morningSchedule.isEmpty()) {
+                if (!tempMorning) {
+                    break;
+                }
+                for (TblScheduleEntity currentSchedule : morningSchedule) {
+                    List<String> classroom = Utils.getAvailableRoom(currentSchedule, validClassrooms);
+                    if (!classroom.isEmpty()) {
+                        if (availableClassroom1.isEmpty()) {
+                            availableClassroom1 = classroom;
+                        } else {
+                            Iterator<String> it = availableClassroom1.iterator();
+                            while (it.hasNext()) {
+                                String room = it.next();
+                                if (!classroom.contains(room)) {
+                                    it.remove();
+                                }
+                            }
+                        }
+                    } else {
+                        tempMorning = false;
+                        break;
+                    }
+                }
+            }
+
+
+            List<TblScheduleEntity> noonSchedule = scheduleDAO.findAllScheduleInClassroomByDayTimeWithDate(classroomId, "12:00:00",
+                    teachingDate);
+            if (!noonSchedule.isEmpty()) {
+                if (!tempNoon) {
+                    break;
+                }
+                for (TblScheduleEntity currentSchedule : noonSchedule) {
+                    List<String> classroom = Utils.getAvailableRoom(currentSchedule, validClassrooms);
+                    if (!classroom.isEmpty()) {
+                        if (availableClassroom2.isEmpty()) {
+                            availableClassroom2 = classroom;
+                        } else {
+                            Iterator<String> it = availableClassroom2.iterator();
+                            while (it.hasNext()) {
+                                String room = it.next();
+                                if (!classroom.contains(room)) {
+                                    it.remove();
+                                }
+                            }
+                        }
+                    } else {
+                        tempNoon = false;
+                        break;
+                    }
+                }
+            }
+        }
+        response.setContentType("text/html");
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+        response.getWriter().write("<div class='group-control'>");
+        response.getWriter().write("<div class='name'>Phòng cho buổi sáng:</div>");
+        response.getWriter().write("<div class='control'>");
+        if (!availableClassroom1.isEmpty() && tempMorning) {
+            availableClassroom1 = Utils.sortClassroom(availableClassroom1, classroomEntity.getName());
+            availableClassroom1.remove(classroomEntity.getName());
+            response.getWriter().write("<select id='morning' name='morning'>");
+            for(String room: availableClassroom1){
+                response.getWriter().write("<option value='"+room+"'>"+room+"</option>");
+            }
+            response.getWriter().write("</select>");
+        }else {
+            response.getWriter().write("<input type='hidden' value='0' id='morning' name='morning'>");
+            response.getWriter().write("Không có phòng cho buổi sáng!");
+        }
+        response.getWriter().write("</div>");
+        response.getWriter().write("</div>");
+        response.getWriter().write("</div>");
+
+        response.getWriter().write("<div class='group-control'>");
+        response.getWriter().write("<div class='name'>Phòng cho buổi sáng:</div>");
+        response.getWriter().write("<div class='control'>");
+        if (!availableClassroom2.isEmpty() && tempNoon) {
+            availableClassroom2 = Utils.sortClassroom(availableClassroom2, classroomEntity.getName());
+            availableClassroom1.remove(classroomEntity.getName());
+            response.getWriter().write("<select id='noon' name='noon'>");
+            for(String room: availableClassroom2){
+                response.getWriter().write("<option value='"+room+"'>"+room+"</option>");
+            }
+            response.getWriter().write("</select>");
+        }else{
+            response.getWriter().write("<input type='hidden' value='0' id='noon' name='noon'>");
+            response.getWriter().write("Không có phòng cho buổi chiều!");
+        }
+        response.getWriter().write("</div>");
+        response.getWriter().write("</div>");
+        response.getWriter().write("</div>");
     }
 }

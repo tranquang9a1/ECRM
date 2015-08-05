@@ -7,14 +7,18 @@ import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Utils;
 import com.ecrm.Utils.socket.SocketIO;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -357,6 +361,60 @@ public class ClassroomService {
         }
 
         return result;
+    }
+
+    public String changeRoomManually(int classroomId, String tf, String tt, String morning, String noon) throws UnsupportedEncodingException {
+        String message="";
+        if(morning.equals("0") && noon.equals("0")){
+            message = "Không có gì thay đổi!";
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            Date time1 = formatter.parse(tf.trim());
+            if(tt.trim().length()==0){
+                tt = tf;
+            }
+            Date time2 = formatter.parse(tt.trim());
+            java.sql.Date timeFrom = new java.sql.Date(time1.getTime());
+            java.sql.Date timeTo = new java.sql.Date(time2.getTime());
+            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+            if(!morning.equals("0")){
+                TblClassroomEntity changeClassroom = classroomDAO.getClassroomByName(morning);
+                List<TblScheduleEntity> morningSchedule = scheduleDAO.findAllScheduleInClassroomByDayTimeWithDateRange(classroomId,
+                        "06:00:00", timeFrom, timeTo);
+                for(TblScheduleEntity tblScheduleEntity: morningSchedule){
+                    tblScheduleEntity.setIsActive(false);
+                    tblScheduleEntity.setNote("Đổi sang phòng " + morning);
+                    scheduleDAO.merge(tblScheduleEntity);
+                    TblScheduleEntity changedSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroom.getId(),
+                            tblScheduleEntity.getNumberOfStudents(), "Đổi từ phòng "+classroomEntity.getName()+" sang phòng "+morning,
+                            tblScheduleEntity.getDate(), true,tblScheduleEntity.getScheduleConfigId());
+                    scheduleDAO.persist(changedSchedule);
+                }
+            }
+            if(!noon.equals("0")){
+                TblClassroomEntity changeClassroom = classroomDAO.getClassroomByName(noon);
+                List<TblScheduleEntity> noonSchedule = scheduleDAO.findAllScheduleInClassroomByDayTimeWithDateRange(classroomId,
+                        "12:00:00", timeFrom, timeTo);
+                for(TblScheduleEntity tblScheduleEntity: noonSchedule){
+                    tblScheduleEntity.setIsActive(false);
+                    tblScheduleEntity.setNote("Đổi sang phòng " + noon);
+                    scheduleDAO.merge(tblScheduleEntity);
+                    TblScheduleEntity changedSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), changeClassroom.getId(),
+                            tblScheduleEntity.getNumberOfStudents(), "Đổi từ phòng "+classroomEntity.getName()+" sang phòng "+noon,
+                            tblScheduleEntity.getDate(), true,tblScheduleEntity.getScheduleConfigId());
+                    scheduleDAO.persist(changedSchedule);
+                }
+            }
+            message = "Đổi phòng cho phòng "+ classroomEntity.getName()+" thành công!";
+        }catch (Exception e){
+            message = "Sai kiểu ngày tháng yyyy-mm-dd!";
+            return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
+        }
+
+
+        return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
     }
 
 }

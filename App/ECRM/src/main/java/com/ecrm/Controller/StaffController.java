@@ -8,6 +8,7 @@ import com.ecrm.DTO.RoomTypeDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.ClassroomService;
 import com.ecrm.Service.RoomTypeService;
+import org.joda.time.LocalDate;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -137,6 +138,18 @@ public class StaffController {
         if(session!=null) {
             return roomTypeService.removeRoomType(roomTypeId);
 
+        }else {
+            return "Login";
+        }
+    }
+
+    @RequestMapping(value = "changeRoomManually")
+    public String changeRoomManually(HttpServletRequest request, @RequestParam("classroomId") int classroomId, @RequestParam("timeFrom") String tf,
+                                     @RequestParam("timeTo") String tt, @RequestParam("morning") String morning,
+                                     @RequestParam("noon") String noon) throws UnsupportedEncodingException, ParseException {
+        HttpSession session  =  request.getSession();
+        if(session!=null) {
+            return classroomService.changeRoomManually(classroomId, tf, tt, morning, noon);
         }else {
             return "Login";
         }

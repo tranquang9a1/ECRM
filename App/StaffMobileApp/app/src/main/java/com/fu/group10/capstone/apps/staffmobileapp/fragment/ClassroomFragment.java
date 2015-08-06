@@ -34,7 +34,7 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
     ViewPagerAdapter adapter;
     List<Fragment> fragmentList;
     List<List<ClassInfo>> items;
-    int size = 6;
+    //int size = 6;
     RequestSender sender = new RequestSender();
     View rootView;
 
@@ -44,9 +44,9 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
         rootView = inflater.inflate(R.layout.fragment_classroom, container, false);
         tabHost = (MaterialTabHost) rootView.findViewById(R.id.tabHost);
         pager = (ViewPager) rootView.findViewById(R.id.pager);
-        for (int i = 0; i < size; i++) {
-            tabHost.addTab(tabHost.newTab().setText(setTitle(i)).setTabListener(ClassroomFragment.this));
-        }
+        //for (int i = 0; i < size; i++) {
+        //tabHost.addTab(tabHost.newTab().setText(setTitle(i)).setTabListener(ClassroomFragment.this));
+        //}
         pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -110,6 +110,12 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
                 items = ParseUtils.parseClassInfo(result);
                 adapter = new ViewPagerAdapter(getChildFragmentManager(), items);
                 pager.setAdapter(adapter);
+                //pager.notifyAll();
+                for (int i = 0; i < items.size(); i++) {
+                    tabHost.addTab(tabHost.newTab().setText(setTitle(i)).setTabListener(ClassroomFragment.this));
+
+                }
+                tabHost.notifyDataSetChanged();
                 //updateView(getView());
             }
         });
@@ -124,10 +130,7 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
     }
 
     public void updateView(View view) {
-        size = items.size();
 
-        RelativeLayout linear=(RelativeLayout)rootView.findViewById(R.id.classroom);
-        linear.removeAllViews();
 
     }
 

@@ -37,6 +37,8 @@ public class HomeFragment extends Fragment {
     private List<ReportInfo> mRandomData = new ArrayList<ReportInfo>();
     private View emptyView;
     private Context context;
+    private TextView txtKeyword;
+    private ImageButton btnSearch;
     private ProgressBar progressBar;
     private TextView emptyMessage;
     private String type = "new";
@@ -59,6 +61,8 @@ public class HomeFragment extends Fragment {
     public void initListView(View rootView) {
 
         context = DummyApplication.getAppContext();
+        btnSearch = (ImageButton) rootView.findViewById(R.id.btnSearch);
+        txtKeyword = (TextView) rootView.findViewById(R.id.txtKeyword);
         emptyView = rootView.findViewById(R.id.empty_list);
         emptyMessage = (TextView) emptyView.findViewById(R.id.emptyMessage);
         progressBar = (ProgressBar) emptyView.findViewById(R.id.loadingImg);
@@ -71,6 +75,22 @@ public class HomeFragment extends Fragment {
         this.mListView = (ListView) rootView.findViewById(R.id.lv_sample_list);
         mListView.setEmptyView(emptyView);
         getDummyData();
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String keyword = txtKeyword.getText().toString();
+                RequestSender sender = new RequestSender();
+                String url = Constants.API_SEARCH + keyword;
+                sender.start(url, new RequestSender.IRequestSenderComplete() {
+                    @Override
+                    public void onRequestComplete(String result) {
+                        mRandomData = ParseUtils.parseReportFromJSON(result);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
 
     }

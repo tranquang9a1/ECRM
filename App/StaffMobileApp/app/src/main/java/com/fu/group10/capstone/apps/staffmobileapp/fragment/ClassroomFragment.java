@@ -116,7 +116,7 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
 
                 }
                 tabHost.notifyDataSetChanged();
-                //updateView(getView());
+
             }
         });
 
@@ -128,11 +128,4 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
         }
         return "Tầng " + position;
     }
-
-    public void updateView(View view) {
-
-
-    }
-
-
 }

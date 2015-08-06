@@ -10,7 +10,7 @@ public class Constants {
     public static final int TIMEOUT = 10000;
     public static final String API_LOGIN = API_SOURCE + "login";
     public static final String API_LOAD_MAP = API_SOURCE + "map?id=";
-    public static final String API_SEARCH = API_SOURCE + "search?classid=";
+    public static final String API_SEARCH = API_SOURCE + "search?className=";
     public static final String API_GET_REPORT = API_SOURCE + "getReportStaff?status=";
     public static final String API_RESOLVE_REPORT = API_SOURCE + "resolve?listRoomId=";
     public static final String API_CHANGE_ROOM = SOURCE + "/staff/changeRoom?from=";

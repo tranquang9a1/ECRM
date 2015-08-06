@@ -62,7 +62,7 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     ReportService reportService;
 
-    /*@Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000)
     public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
@@ -122,13 +122,15 @@ public class CheckDamagedClassroomSchedule {
                     List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
                     if (!tblEquipmentEntities.isEmpty()) {
                         for (TblEquipmentEntity equipmentEntity : tblEquipmentEntities) {
-                            double timeRemain = equipmentEntity.getTimeRemain() - rs;
-                            equipmentEntity.setTimeRemain(timeRemain);
-                            equipmentDAO.merge(equipmentEntity);
-                            if (equipmentEntity.getTimeRemain() <= 50) {
-                                String message = "Bóng đèn của projector: " + equipmentEntity.getName() + " số serial: " + equipmentEntity.getSerialNumber() +
-                                        " của phòng: " + equipmentEntity.getTblClassroomByClassroomId().getName() + " sắp hết thời gian sử dụng!";
-                                gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                            if(equipmentEntity.getUsingTime()>0){
+                                double timeRemain = equipmentEntity.getTimeRemain() - rs;
+                                equipmentEntity.setTimeRemain(timeRemain);
+                                equipmentDAO.merge(equipmentEntity);
+                                if (equipmentEntity.getTimeRemain() <= 50) {
+                                    String message = "Bóng đèn của projector: " + equipmentEntity.getName() + " số serial: " + equipmentEntity.getSerialNumber() +
+                                            " của phòng: " + equipmentEntity.getTblClassroomByClassroomId().getName() + " sắp hết thời gian sử dụng!";
+                                    gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                                }
                             }
                         }
 
@@ -255,6 +257,6 @@ public class CheckDamagedClassroomSchedule {
             }
         }
 
-    }*/
+    }
 
 }

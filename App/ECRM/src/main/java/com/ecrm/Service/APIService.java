@@ -154,7 +154,7 @@ public class APIService {
                     }
 
                     TblEquipmentCategoryEntity tblEquipmentCategoryEntity = equipmentCategoryDAO.find(category);
-                    if(!tblEquipmentCategoryEntity.getIsManaged()){
+                    if (!tblEquipmentCategoryEntity.getIsManaged()) {
                         serialNumber = "";
                     }
 
@@ -425,6 +425,83 @@ public class APIService {
         }
     }
 
+    public List<ReportClassDTO> getSearchReport(String className) {
+
+        List<ReportClassDTO> result = new ArrayList<>();
+        TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(className);
+        int classId = classroomEntity.getId();
+        List<TblReportDetailEntity> details = new ArrayList<TblReportDetailEntity>();
+        details = reportDetailDAO.getReportByClassId(classId);
+
+
+
+        List<EquipmentDTO> equipments = new ArrayList<EquipmentDTO>();
+
+        Map<String, Integer> mapCount = new HashMap<String, Integer>();
+
+        for (TblReportDetailEntity detail : details) {
+            String categoryName =
+                    detail.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName();
+            if (mapCount.get(categoryName) != null) {
+                mapCount.put(categoryName, mapCount.get(categoryName) + 1);
+
+            } else {
+                mapCount.put(categoryName, 1);
+            }
+        }
+
+        Map<Integer, Integer> mapReport = new HashMap<Integer, Integer>();
+        for (TblReportDetailEntity detail : details) {
+            if (mapReport.get(detail.getReportId()) != null) {
+                mapReport.put(detail.getReportId(), mapReport.get(detail.getReportId()) + 1);
+            } else {
+                mapReport.put(detail.getReportId(), 1);
+            }
+        }
+        Map<String, Boolean> mapManage = new HashMap<String, Boolean>();
+        for (TblReportDetailEntity entity : details) {
+            String categoryName =
+                    entity.getTblEquipmentByEquipmentId().getTblEquipmentCategoryByCategoryId().getName();
+            if (mapManage.get(categoryName) == null) {
+                EquipmentDTO detailDTO = new EquipmentDTO();
+
+                detailDTO.setEquipmentName(categoryName);
+                detailDTO.setDamage(entity.getDamagedLevel());
+                detailDTO.setEvaluate(entity.getDescription());
+                detailDTO.setReportId(entity.getReportId());
+                detailDTO.setStatus(entity.isStatus());
+                detailDTO.setQuantity(mapCount.get(detailDTO.getEquipmentName()));
+                mapManage.put(detailDTO.getEquipmentName(), true);
+                equipments.add(detailDTO);
+            }
+
+        }
+
+
+        ReportClassDTO reportClassDTO = new ReportClassDTO();
+        String userReport = "";
+        for (Map.Entry<Integer, Integer> entry : mapReport.entrySet()) {
+            TblReportEntity reportEntity = reportDAO.find(entry.getKey());
+            reportClassDTO.setRoomName(reportEntity.getTblClassroomByClassRoomId().getName());
+            reportClassDTO.setRoomId(classId);
+            reportClassDTO.setEquipments(equipments);
+            reportClassDTO.setDamageLevel(classroomEntity.getDamagedLevel());
+            reportClassDTO.setTimeReport(reportEntity.getCreateTime() + "");
+            reportClassDTO.setEvaluate(reportEntity.getEvaluate());
+            reportClassDTO.setChangedRoom(reportEntity.getChangedRoom());
+            if (!userReport.contains(reportEntity.getUsername())) {
+                userReport += reportEntity.getUsername() + ", ";
+            }
+        }
+
+        reportClassDTO.setUserReport(userReport.substring(0, userReport.length() - 2));
+        result.add(reportClassDTO);
+
+
+        System.out.println("Result Size For Class "+ className + " is:" + result.size());
+        return result;
+    }
+
     public List<ReportClassDTO> getReportStaff(int limit, int offset, String status) {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
         List<Integer> listClass = reportDAO.getReportByClassId(status, offset, limit);
@@ -531,7 +608,7 @@ public class APIService {
                         equip.setStatus(true);
                         equipmentDAO.merge(equip);
                     }
-					
+
                 }
 
                 List<TblReportEntity> reports = reportDAO.getLiveReportsInRoom(Integer.parseInt(roomId[i]));
@@ -617,7 +694,7 @@ public class APIService {
                 tblScheduleEntity.setIsActive(false);
                 scheduleDAO.merge(tblScheduleEntity);
                 TblScheduleEntity newSchedule = new TblScheduleEntity(tblScheduleEntity.getUsername(), classroomEntity.getId(),
-                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng",  tblScheduleEntity.getDate(), true);
+                        tblScheduleEntity.getNumberOfStudents(), "Thay đổi phòng", tblScheduleEntity.getDate(), true);
                 String message = "Đã đổi phòng cho giáo viên " + tblScheduleEntity.getUsername() + " từ phòng: " +
                         tblScheduleEntity.getTblClassroomByClassroomId().getName() + " sang phòng: " + classroomEntity.getName() + ".";
                 scheduleDAO.persist(newSchedule);
@@ -652,7 +729,7 @@ public class APIService {
                     int categoryId = entity.getEquipmentCategoryId();
                     equipmentEntity = getEquipment(listEquipments, categoryId);
                     if (equipmentEntity != null) {
-                        result.add(new EquipmentClassDTO(name, equipmentEntity.getTimeRemain()+"",
+                        result.add(new EquipmentClassDTO(name, equipmentEntity.getTimeRemain() + "",
                                 equipmentEntity.getName(), equipmentEntity.isStatus()));
                     } else {
                         result.add(new EquipmentClassDTO(name, null, null, true));
@@ -663,19 +740,19 @@ public class APIService {
             }
             equipmentEntity = getEquipment(listEquipments, 7);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Bàn", equipmentEntity.getTimeRemain()+"",
+                result.add(new EquipmentClassDTO("Bàn", equipmentEntity.getTimeRemain() + "",
                         equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Bàn", null, null, true));
             }
             equipmentEntity = getEquipment(listEquipments, 8);
             if (equipmentEntity != null) {
-                result.add(new EquipmentClassDTO("Ghế", equipmentEntity.getTimeRemain()+"",
+                result.add(new EquipmentClassDTO("Ghế", equipmentEntity.getTimeRemain() + "",
                         equipmentEntity.getName(), equipmentEntity.isStatus()));
             } else {
                 result.add(new EquipmentClassDTO("Ghế", null, null, true));
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
@@ -701,7 +778,7 @@ public class APIService {
     }
 
     public List<CategoryDTO> getEquipment(String username) {
-        List<CategoryDTO> result  = new ArrayList<CategoryDTO>();
+        List<CategoryDTO> result = new ArrayList<CategoryDTO>();
         try {
             TblUserInfoEntity userInfo = userInfoDAO.getUserInfoByUsername(username);
             Long updateTime = userInfo.getDownloadTime();
@@ -711,7 +788,7 @@ public class APIService {
             System.out.println("List Equipment Size: " + listEquipment.size());
             for (int i = 0; i < listEquipment.size(); i++) {
                 TblEquipmentCategoryEntity equipment = listEquipment.get(i);
-                if (updateTime == null ||  equipment.getUpdateTime() > updateTime) {
+                if (updateTime == null || equipment.getUpdateTime() > updateTime) {
                     System.out.println("Add equipment: " + equipment.getName());
                     CategoryDTO dto = new CategoryDTO();
                     dto.setName(equipment.getName());
@@ -722,7 +799,7 @@ public class APIService {
             }
             userInfo.setDownloadTime(System.currentTimeMillis());
             userInfoDAO.merge(userInfo);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -209,6 +209,11 @@ public class APIController {
         return classroomService.getClassroomByFloor();
     }
 
+    @RequestMapping(value = "getSearchClass", method = RequestMethod.GET)
+    public @ResponseBody List<ReportClassDTO> searchReportByClass(@RequestParam("className") String className) {
+        return apiService.getSearchReport(className);
+    }
+
 
 }
 

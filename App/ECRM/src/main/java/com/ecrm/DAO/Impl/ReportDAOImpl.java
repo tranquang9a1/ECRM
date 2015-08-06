@@ -230,6 +230,16 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         return query.getResultList();
     }
 
+    public List<Integer> getClassFromStatus(int offset, int limit) {
+        Query query  = entityManager.createQuery("Select u.classRoomId from TblReportEntity u where (u.status = :statusnew " +
+                "OR u.status = :statusgoing)  group by u.classRoomId ");
+        query.setParameter("statusnew", ReportStatus.NEW.getValue());
+        query.setParameter("statusgoing", ReportStatus.GOING.getValue());
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
+
     @Override
     public boolean resolveReport(int reportId, int equipmentId, String solution) {
         Query query = entityManager.createQuery("Update TblReportDetailEntity u set u.status = true, u.solution =:solution " +

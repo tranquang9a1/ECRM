@@ -87,7 +87,7 @@ public class ClassroomDAOImpl extends BaseDAO<TblClassroomEntity, Integer> imple
     }
 
     public List<TblClassroomEntity> getAllClassroom(){
-        Query q = entityManager.createQuery("SELECT c from TblClassroomEntity c where c.isDelete = false");
+        Query q = entityManager.createQuery("SELECT c from TblClassroomEntity c where c.isDelete = false ORDER BY c.name ASC");
         List<TblClassroomEntity> tblClassroomEntities = q.getResultList();
         return tblClassroomEntities;
     }

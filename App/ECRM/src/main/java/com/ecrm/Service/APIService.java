@@ -711,7 +711,8 @@ public class APIService {
             System.out.println("List Equipment Size: " + listEquipment.size());
             for (int i = 0; i < listEquipment.size(); i++) {
                 TblEquipmentCategoryEntity equipment = listEquipment.get(i);
-                if (updateTime == null || equipment.getUpdateTime() > updateTime) {
+                if (updateTime == null ||  equipment.getUpdateTime() > updateTime) {
+                    System.out.println("Add equipment: " + equipment.getName());
                     CategoryDTO dto = new CategoryDTO();
                     dto.setName(equipment.getName());
                     dto.setImageUrl(equipment.getImageUrl());

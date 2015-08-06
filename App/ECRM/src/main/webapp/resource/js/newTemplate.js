@@ -196,30 +196,37 @@ function getRoomReport() {
     });
 }
 
-function loadRoomEquipment(listDamage, mayLanh, quat, projector, loa, tivi){
+function loadRoomEquipment(listDamage, listEquip){
     var listEquipment = new Array();
-    if(projector > 0) {
-        listEquipment.push({id: 1, classname: "projector", name: "Projector", message: (listDamage[1]==false?"Đã được báo cáo":"")});
+    var listId = "";
+
+    for(var i = 0; i < listEquip.length; i++) {
+        if(listId.indexOf(listEquip[i].id) > -1){}
+        else {
+            listId += listEquip[i].id;
+            if(listDamage[listEquip[i].id] != null) {
+                listEquipment.push({
+                    id: listEquip[i].id,
+                    name: listEquip[i].name,
+                    imageUrl: listEquip[i].imageUrl,
+                    message: "Đã được báo cáo"
+                });
+            } else {
+                listEquipment.push({
+                    id: listEquip[i].id,
+                    name: listEquip[i].name,
+                    imageUrl: listEquip[i].imageUrl,
+                    message: ""
+                });
+            }
+        }
     }
-    if(mayLanh > 0) {
-        listEquipment.push({id: 3, classname: "air-condition", name: "AirCondition", message: (listDamage[3]==false?"Đã được báo cáo":"")});
-    }
-    if(loa > 0) {
-        listEquipment.push({id: 5, classname: "speaker", name: "Speaker", message: (listDamage[5]==false?"Đã được báo cáo":"")});
-    }
-    if(tivi > 0) {
-        listEquipment.push({id: 2, classname: "tivi", name: "Television", message: (listDamage[2]==false?"Đã được báo cáo":"")});
-    }
-    if(quat > 0) {
-        listEquipment.push({id: 4, classname: "fan", name: "Fan", message: (listDamage[4]==false?"Đã được báo cáo":"")});
-    }
-    listEquipment.push({id: 7, classname: "table-icon", name: "Table", message: (listDamage[7]==false?"Đã được báo cáo":"")});
-    listEquipment.push({id: 8, classname: "chair", name: "Chair", message: (listDamage[8]==false?"Đã được báo cáo":"")});
 
     var contentDiv = $(".data-room-content")[0];
     for(var i = 0; i < listEquipment.length; i++) {
         var img = document.createElement("div");
-        img.className = "equipment-img " + listEquipment[i].classname;
+        img.className = "equipment-img"
+        img.style.backgroundImage = "url('/resource/img/equipment/" + listEquipment[i].imageUrl + "')";
         var div1 = document.createElement("div");
         div1.className = "width-30";
         div1.appendChild(img);

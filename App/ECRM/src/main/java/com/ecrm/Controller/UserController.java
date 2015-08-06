@@ -3,11 +3,13 @@ package com.ecrm.Controller;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.ReportRequestDTO;
 import com.ecrm.DTO.ReportResponseObject;
+import com.ecrm.DTO.RoomTypeDTO;
 import com.ecrm.DTO.ScheduleDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.CheckDamageService;
 import com.ecrm.Service.ClassroomService;
 import com.ecrm.Service.GCMService;
+import com.ecrm.Service.RoomTypeService;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Enumerable.MessageType;
 import com.ecrm.Utils.Enumerable.NotifyType;
@@ -59,6 +61,8 @@ public class UserController {
 
     @Autowired
     GCMService gcmService;
+    @Autowired
+    RoomTypeService roomTypeService;
 
     @RequestMapping(value = "")
     public String homePage(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
@@ -130,12 +134,12 @@ public class UserController {
     @RequestMapping(value = "phong-bao-cao")
     public String getRoom(HttpServletRequest request, @RequestParam("roomId") int roomId) {
         TblClassroomEntity classroom = classroomDAO.find(roomId);
-        TblRoomTypeEntity2 roomType = roomTypeDAO2.find(classroom.getRoomTypeId2());
-        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(roomId);
+        RoomTypeDTO roomTypeDTO = roomTypeService.getRoomTypeOfRoom(classroom);
+        List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipments(roomId);
 
         request.setAttribute("ROOM", classroom);
-        request.setAttribute("EQUIPMENTS", listEquipment);
-        request.setAttribute("ROOMTYPE", roomType);
+        request.setAttribute("ROOMTYPE", roomTypeDTO);
+        request.setAttribute("DAMAGEDEQUIPMENTS", listEquipment);
         return "user/ReportRoomNew";
     }
 
@@ -290,17 +294,17 @@ public class UserController {
         return report.getId() + "-" + room.getName() + "-" + equipmentNames + "-" + report.getCreateTime().getTime();
     }
 
-    @RequestMapping(value = "mau-phong")
-    public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
-        TblClassroomEntity classroom = classroomDAO.find(roomId);
-        TblRoomTypeEntity2 roomType = roomTypeDAO2.find(classroom.getRoomTypeId2());
-        List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(roomId);
-
-        request.setAttribute("ROOM", classroom);
-        request.setAttribute("EQUIPMENTS", listEquipment);
-        request.setAttribute("ROOMTYPE", roomType);
-        return "user/ReportRoom";
-    }
+//    @RequestMapping(value = "mau-phong")
+//    public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
+//        TblClassroomEntity classroom = classroomDAO.find(roomId);
+//        RoomTypeDTO roomTypeDTO = roomTypeService.getRoomTypeOfRoom(classroom);
+//        List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipments(roomId);
+//
+//        request.setAttribute("ROOM", classroom);
+//        request.setAttribute("ROOMTYPE", roomTypeDTO);
+//        request.setAttribute("DAMAGEDEQUIPMENTS", listEquipment);
+//        return "user/ReportRoom";
+//    }
 
     @RequestMapping(value = "chi-tiet")
     public String viewReportByUser(HttpServletRequest request, @RequestParam("bao-cao") int reportId) {

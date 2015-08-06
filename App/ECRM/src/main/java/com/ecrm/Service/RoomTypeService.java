@@ -56,7 +56,6 @@ public class RoomTypeService {
                         formDetailsJson.put("imageUrl", tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getImageUrl());
                         jsonArray.add(formDetailsJson);
                     }
-
                 }
                 roomTypeDTO.setRoomType(roomTypeEntity);
                 roomTypeDTO.setEquipment(jsonArray);
@@ -151,5 +150,28 @@ public class RoomTypeService {
             return ERROR;
         }
 
+    }
+
+    public RoomTypeDTO getRoomTypeOfRoom(TblClassroomEntity classroom){
+        TblRoomTypeEntity2 roomType = roomType2DAO.find(classroom.getRoomTypeId2());
+
+        JSONArray jsonArray = new JSONArray();
+        List<TblEquipmentQuantityEntity>tblEquipmentQuantityEntities = roomType.getTblEquipmentQuantityById();
+        for(int i = 0; i<tblEquipmentQuantityEntities.size(); i++){
+            if(!tblEquipmentQuantityEntities.get(i).getIsDelete()){
+                TblEquipmentQuantityEntity tblEquipmentQuantityEntity = tblEquipmentQuantityEntities.get(i);
+                JSONObject formDetailsJson = new JSONObject();
+                formDetailsJson.put("id", tblEquipmentQuantityEntity.getEquipmentCategoryId());
+                formDetailsJson.put("name", tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getName());
+                formDetailsJson.put("imageUrl", tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getImageUrl());
+                jsonArray.add(formDetailsJson);
+            }
+        }
+
+        RoomTypeDTO roomTypeDTO = new RoomTypeDTO();
+        roomTypeDTO.setRoomType(roomType);
+        roomTypeDTO.setEquipment(jsonArray);
+
+        return roomTypeDTO;
     }
 }

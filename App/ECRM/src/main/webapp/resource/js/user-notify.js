@@ -4,7 +4,7 @@
 var damagedEquipments = {};
 var noDamagedEquipments = {};
 
-function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, projector, loa, tivi) {
+function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, listEquipment) {
     var horizontalRows = sDayNgang.split('-');
     var noSlotsEachRows = sChoNgoi.split('-');
     var array = [];
@@ -150,75 +150,18 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, mayLanh, quat, p
         divBang.style.width = "100%";
     }
 
-    //projector
-    if(projector>0){
-        var divProjector = document.createElement('div');
-        if(equipments["[1]"] != undefined && equipments["[1]"].status == false) {
-            divProjector.className = 'subThietBi projector damaged';
+    for(var i = 0; i< listEquipment.length; i++){
+        var divEquip = document.createElement('div');
+        if(equipments["["+ listEquipment[i].id+"]"] != undefined) {
+            divEquip.className = 'subThietBi equip damaged';
         } else {
-            divProjector.className = 'equipment subThietBi projector';
+            divEquip.className = 'equipment subThietBi equip';
         }
-        divProjector.setAttribute('data-equipmentName','Máy chiếu');
-        divProjector.setAttribute("data-position", "[1]");
-        divProjector.setAttribute("data-categoryId", "1");
-        divT.appendChild(divProjector);
-    }
-
-    //tivi
-    if(tivi>0){
-        var divTivi = document.createElement('div');
-        if(equipments["[2]"] != undefined && equipments["[2]"].status == false) {
-            divTivi.className = 'subThietBi tivi damaged';
-        } else {
-            divTivi.className = 'equipment subThietBi tivi';
-        }
-        divTivi.setAttribute('data-equipmentName','Tivi');
-        divTivi.setAttribute("data-position", "[2]");
-        divTivi.setAttribute("data-categoryId", "2");
-        divT.appendChild(divTivi);
-    }
-
-    //may lanh
-    if(mayLanh>0){
-        var divMayLanh = document.createElement('div');
-        if(equipments["[3]"] != undefined && equipments["[3]"].status == false) {
-            divMayLanh.className = 'subThietBi mayLanh damaged';
-        } else {
-            divMayLanh.className = 'equipment subThietBi mayLanh';
-        }
-        divMayLanh.setAttribute('data-equipmentName','Máy lạnh');
-        divMayLanh.setAttribute("data-position", "[3]");
-        divMayLanh.setAttribute("data-categoryId", "3");
-        divT.appendChild(divMayLanh);
-    }
-
-    //quat
-    if(quat>0){
-        var divQuat = document.createElement('div');
-        if(equipments["[4]"] != undefined && equipments["[4]"].status == false) {
-            divQuat.className = 'subThietBi quat damaged';
-        } else {
-            divQuat.className = 'equipment subThietBi quat';
-        }
-
-        divQuat.setAttribute('data-equipmentName','Quạt');
-        divQuat.setAttribute("data-position", "[4]");
-        divQuat.setAttribute("data-categoryId", "4");
-        divT.appendChild(divQuat);
-    }
-
-    //loa
-    if(loa>0){
-        var divLoa = document.createElement('div');
-        if(equipments["[5]"] != undefined && equipments["[5]"].status == false) {
-            divLoa.className = 'subThietBi loa damaged';
-        } else {
-            divLoa.className = 'equipment subThietBi loa';
-        }
-        divLoa.setAttribute('data-equipmentName','Loa');
-        divLoa.setAttribute("data-position", "[5]");
-        divLoa.setAttribute("data-categoryId", "5");
-        divT.appendChild(divLoa);
+        divEquip.style.backgroundImage = 'url("/resource/img/equipment/' + listEquipment[i].imageUrl + '")';
+        divEquip.setAttribute('data-equipment', listEquipment[i].name);
+        divEquip.setAttribute('data-position','['+ listEquipment[i].id+']');
+        divEquip.setAttribute("data-categoryId", listEquipment[i].id);
+        divT.appendChild(divEquip);
     }
 }
 

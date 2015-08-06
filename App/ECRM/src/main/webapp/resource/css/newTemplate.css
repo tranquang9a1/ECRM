@@ -474,14 +474,12 @@ body {
 
 .list-room-content{
     float: left;
-    width: 450px;
     margin: 0;
     padding: 15px 0 0;
     height: 435px;
 }
 
 .list-room-content .room-content {
-    /*width: 450px;*/
     margin: 0 auto;
     height: 435px;
     position: relative;
@@ -1006,4 +1004,37 @@ body {
 .account-setting ul li a{
     color: #555;
     text-decoration: none;
+}
+
+
+.map-info .thietBi{
+    margin: 0 0 10px;
+}
+
+.map-info .subThietBi {
+    width: 40px;
+    height: 40px;
+}
+
+.map-info .subThietBi:hover {
+    background-color: #d1d1d1;
+    transform: scale(1);
+}
+
+.map-info .ghe:hover {
+    background-color: #d1d1d1;
+    transform: scale(1);
+}
+
+.map-info .ban, .map-info .banGV {
+    border: 0;
+}
+
+.map-info .ban:hover, .map-info .banGV:hover {
+    background-color: #ccc;
+    transform: scale(1);
+}
+
+.map-info .map {
+    height: 350px;
 }

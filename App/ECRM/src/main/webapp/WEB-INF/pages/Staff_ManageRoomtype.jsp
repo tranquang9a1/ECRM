@@ -16,21 +16,15 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
-<div class="clear"></div>
-<div>
-    <input type="button" class="btn btn-orange" style="margin: 0"
-           onclick="document.getElementById('RoomTypeAction').value='create';showModal(1, 'modal-roomtypedetail')"
-           value="Tạo loại phòng"/>
-
-    <div class="table small-table" style="height: 350px;">
+<div class="table small-table" style="height: 350px; width: 400px">
         <div class="header-table">
-            <div class="room-number">
+            <div class="width-40">
                 <div>Loại Phòng</div>
             </div>
-            <div class="room-type">
+            <div class="width-30">
                 <div>Số chỗ ngồi</div>
             </div>
-            <div class="control">
+            <div class="width-30">
                 <div>Quản lý</div>
             </div>
             <p class="clear"></p>
@@ -40,13 +34,13 @@
                 <input type="hidden" name="RoomtypeId" value="" id="removeRoomtypeID"/>
                 <c:forEach items="${roomtypes}" var="r">
                     <div class="row">
-                        <div class="room-number">
+                        <div class="width-40">
                             <div>${r.roomType.name}</div>
                         </div>
-                        <div class="room-type">
+                        <div class="width-30">
                             <div>${r.roomType.slots}</div>
                         </div>
-                        <div class="control">
+                        <div class="width-30">
                             <div class="group-button">
                                 <div class="btn btn-view" title="Xem sơ đồ"
                                      onclick='showModal(1, "modal-manageroomtype"); showMapForEdit(${r.roomType.id},"${r.roomType.name}",
@@ -67,6 +61,5 @@
             </form>
         </div>
     </div>
-</div>
 <div id="pagination2" style="padding-left: 150px;"></div>
 

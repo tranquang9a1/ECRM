@@ -92,7 +92,7 @@
                 <input type="hidden" name="category" id="equipment-category">
 
                 <div class="modal modal-medium" id="modal-1">
-                    <div class="content-modal" style="height: 316px">
+                    <div class="content-modal" style="height: 317px">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearEquipment()"></i>

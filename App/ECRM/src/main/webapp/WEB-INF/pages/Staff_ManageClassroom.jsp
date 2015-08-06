@@ -8,24 +8,18 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="classrooms" value="${requestScope.ALLCLASSROOM}"/>
-<div class="clear"></div>
-<div><input type="button" class="btn btn-orange"
-            onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();
-                                                    document.getElementById('classroom-create').value='Tạo phòng'"
-            value="Tạo phòng học"/>
-
-    <div class="table small-table" style="height: 350px;">
+<div class="table small-table" style="height: 350px;">
         <div class="header-table">
-            <div class="room-number">
+            <div class="width-15">
                 <div>Số phòng</div>
             </div>
-            <div class="room-type">
+            <div class="width-25">
                 <div>Loại phòng</div>
             </div>
-            <div class="statusS">
+            <div class="width-30">
                 <div>Trạng thái</div>
             </div>
-            <div class="control">
+            <div class="width-30">
                 <div>Quản lý</div>
             </div>
             <p class="clear"></p>
@@ -35,13 +29,13 @@
                 <input type="hidden" value="" id="removeClassroomName" name="classroomName"/>
                 <c:forEach items="${classrooms}" var="cl">
                     <div class="row">
-                        <div class="room-number">
+                        <div class="width-15">
                             <div>${cl.classroom.name}</div>
                         </div>
-                        <div class="room-type">
+                        <div class="width-25">
                             <div>${cl.roomType.name}</div>
                         </div>
-                        <div class="statusS">
+                        <div class="width-30">
                             <c:if test="${not cl.classroom.isAllInformation}">
                                 <div><a href="/staff/updateEquipment?classroomId=${cl.classroom.id}">Cập nhật thiết
                                     bị</a></div>
@@ -53,7 +47,7 @@
                                 <div>Bình thường</div>
                             </c:if>
                         </div>
-                        <div class="control">
+                        <div class="width-30">
                             <div class="group-button">
                                 <div class="btn btn-detail"
                                      title="Đổi phòng" onclick="showModal(1,'modal-changeRoom');
@@ -86,7 +80,6 @@
             </form>
         </div>
     </div>
-</div>
 <div id="pagination" style="padding-left: 150px;"></div>
 <script>
     function editClassroom(id, classroomId) {

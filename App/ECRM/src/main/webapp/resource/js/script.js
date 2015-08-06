@@ -117,3 +117,24 @@ function closeLoading(){
     var loadingDiv = document.getElementsByClassName("loading")[0];
     loadingDiv.parentNode.removeChild(loadingDiv);
 }
+
+function changeTabInTitle(tab , thisElement) {
+    var checkActive = thisElement.className;
+    if(checkActive !== "active"){
+        // change title tab
+        var fatherElement = thisElement.parentNode;
+        var listTab = fatherElement.childNodes;
+        for(var i = 0; i < listTab.length; i++){
+            listTab[i].className = "";
+        }
+        thisElement.className = "active";
+
+        //change body tab
+        fatherElement = document.getElementsByClassName(thisElement.getAttribute("data-tab"))[0];
+        listTab = fatherElement.getElementsByClassName("body-tab");
+        for(var i = 0; i < listTab.length; i++){
+            listTab[i].className = "body-tab";
+        }
+        document.getElementById(tab).className = "body-tab active";
+    }
+}

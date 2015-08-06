@@ -28,13 +28,7 @@
     <body>
     <div class="layout-background">
       <div class="container">
-        <div class="header">
-          <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>
-          <div class="account-control">
-            <p>${user.tblUserInfoByUsername.fullName}</p>
-            <img src="/resource/img/gears.png"/>
-          </div>
-        </div>
+        <jsp:include page="/WEB-INF/pages/HeaderNew.jsp"/>
         <div class="content-body">
           <c:import url="/bao-cao/danh-muc"/>
           <div class="right-content">

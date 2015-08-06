@@ -42,7 +42,7 @@
             </a>
         </li>
         <li id="STAFF_STATISTIC">
-            <a href="/staff/statistic?time=0&category=0">
+            <a href="/staff/statistic">
                 <p>Thống Kê</p>
             </a>
         </li>

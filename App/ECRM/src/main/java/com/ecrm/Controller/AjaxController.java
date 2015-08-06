@@ -7,7 +7,6 @@ import com.ecrm.Service.ScheduleConfigService;
 import com.ecrm.Service.ScheduleService;
 import com.ecrm.Service.UserService;
 import com.ecrm.Utils.Utils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -39,7 +37,7 @@ public class AjaxController {
     @Autowired
     ScheduleConfigDAOImpl scheduleConfigDAO;
     @Autowired
-    RoomType2DAOImpl roomType2DAO;
+    RoomTypeDAOImpl roomType2DAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;
     @Autowired
@@ -66,7 +64,7 @@ public class AjaxController {
             List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
             for (int i = 0; i < tblClassroomEntities.size(); i++) {
-                int numberOfStudent = tblClassroomEntities.get(i).getTblRoomType2ByRoomTypeId2().getSlots();
+                int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
                 if (numberOfStudent >= Integer.parseInt(currentSlots)) {
                     fitClassroom.add(tblClassroomEntities.get(i));
                 }
@@ -263,7 +261,7 @@ public class AjaxController {
         } else {
             String action = request.getParameter("action");
             if (action.equals("create")) {
-                TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
+                TblRoomTypeEntity roomTypeEntity = roomType2DAO.getRoomTypeByName(roomTypeName.trim());
                 if (roomTypeEntity != null) {
                     alert = "Bạn có muốn cập nhật cho loại phòng " + roomTypeName;
                     status = true;
@@ -286,8 +284,8 @@ public class AjaxController {
         validateEntity.setStatus(status);
 
         int roomTypeId = Integer.parseInt(request.getParameter("roomTypeId"));
-        TblRoomTypeEntity2 tblRoomTypeEntity2 = roomType2DAO.find(roomTypeId);
-        List<TblClassroomEntity> tblClassroomEntities = tblRoomTypeEntity2.getTblClassroomsById();
+        TblRoomTypeEntity tblRoomTypeEntity = roomType2DAO.find(roomTypeId);
+        List<TblClassroomEntity> tblClassroomEntities = tblRoomTypeEntity.getTblClassroomsById();
         if (!tblClassroomEntities.isEmpty()) {
             alert = "Không thể xóa loại phòng này! Bạn phải gỡ ra khỏi phòng học trước!";
             status = false;

@@ -151,7 +151,7 @@ public class RoomTypeService {
     }
 
     public RoomTypeDTO getRoomTypeOfRoom(TblClassroomEntity classroom){
-        TblRoomTypeEntity2 roomType = roomType2DAO.find(classroom.getRoomTypeId2());
+        TblRoomTypeEntity roomType = roomType2DAO.find(classroom.getRoomTypeId());
 
         JSONArray jsonArray = new JSONArray();
         List<TblEquipmentQuantityEntity>tblEquipmentQuantityEntities = roomType.getTblEquipmentQuantityById();

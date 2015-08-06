@@ -59,7 +59,7 @@
                 newTextBoxDiv.attr("class", "ui-text");
 
                 newTextBoxDiv.after().html('<label class="text-label">Tiết ' + counter + ' : </label>' +
-                '<input type="text" class="timepicker" value="' + oldTime + '" id="time-from' + counter + '" onchange="changeText(' + counter + ')"/> ~ <input type="text" value="" disabled id="time-to' + counter + '"/>');
+                '<input type="text" class="timepicker" value="' + oldTime + '" id="time-from' + counter + '" onchange="changeText(' + counter + ')"/> ~ <input class="timepicker" type="text" value="" disabled id="time-to' + counter + '"/>');
 
                 newTextBoxDiv.appendTo("#sub-text");
                 if (counter > 1) {
@@ -144,7 +144,7 @@
                                                                                                            value="${l.timeFrom}"
                                                                                                            id="time-from${count.count}"
                                                                                                            onchange="changeText('${count.count}');"/>
-                                            ~ <input type='text' value="${l.timeTo}" disabled
+                                            ~ <input class="timepicker" type='text' value="${l.timeTo}" disabled
                                                      id="time-to${count.count}"/>
                                         </div>
                                     </c:forEach>
@@ -263,7 +263,9 @@
         if (checkNumber(minute)) {
             var y = document.getElementsByClassName("timepicker");
             for (i = 0; i < y.length; i++) {
-                y[i].disabled = false;
+                if(i%2==0){
+                    y[i].disabled = false;
+                }
             }
             document.getElementById("edit").style.display = 'block';
             document.getElementById("action").style.display = 'block';

@@ -43,7 +43,7 @@ public class UserController {
     @Autowired
     ReportDetailDAOImpl reportDetailDAO;
     @Autowired
-    RoomType2DAOImpl roomTypeDAO2;
+    RoomTypeDAOImpl roomTypeDAO2;
     @Autowired
     ScheduleDAOImpl scheduleDAO;
     @Autowired

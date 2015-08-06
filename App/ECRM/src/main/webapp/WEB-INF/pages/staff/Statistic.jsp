@@ -15,7 +15,7 @@
   </c:when>
   <c:otherwise>
     <c:set value="${requestScope.LISTSTATISTIC}" var="list"/>
-
+    <c:set value="${requestScope.TABCONTROL}" var="tab"/>
     <html>
     <head>
       <title>ECRM - Equipment Classroom Management</title>
@@ -36,12 +36,12 @@
               <div class="title">
                 <p>Thống Kê</p>
               </div>
+              <c:if test="${list == null}">Không có dữ liệu thống kê</c:if>
               <div id="chartContainer" style="width: 100%; height: 400px; margin: 35px 0 0 0;"></div>
             </div>
             <c:import url="/bao-cao/thong-bao?little=false&quay-lai=statistic"/>
             <div class="loading-page">
               <img src="/resource/img/500.GIF">
-
               <div>Đang tải! Vui lòng chờ trong giây lát!</div>
             </div>
           </div>
@@ -49,6 +49,7 @@
       </div>
     </div>
     </body>
+    <c:if test="${list != null}">
     <script type="text/javascript">
       theme = 'sand-signika';
       $(function () {
@@ -57,7 +58,7 @@
             type: 'line'
           },
           title: {
-            text: 'Số liệu thống kê ' + '' + 'gần nhất'
+            text: 'Số lượt đổi phòng các tháng trong năm 2015'
           },
           xAxis: {
             categories: [<c:forEach items="${list.listMonth}" var="item">'${item}'<c:if test="${item != list.listMonth[list.listMonth.size()-1]}">,</c:if></c:forEach>]
@@ -89,6 +90,13 @@
           }]
         });
       });
+    </script>
+    </c:if>
+    <script>
+      document.getElementById("${tab}").className += " active";
+      document.getElementById("${tab}").setAttribute("data-main", "1");
+
+      connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
     </script>
     </html>
   </c:otherwise>

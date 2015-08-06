@@ -54,6 +54,7 @@ public class StatisticController {
             request.setAttribute("NODATA", true);
         }
 
+        request.setAttribute("TABCONTROL", "STAFF_STATISTIC");
         return "staff/Statistic";
     }
 

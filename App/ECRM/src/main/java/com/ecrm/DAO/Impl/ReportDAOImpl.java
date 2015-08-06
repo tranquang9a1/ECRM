@@ -301,7 +301,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
     public List<StatisticDTO.StatisticRow> getNumberOfChangeRoomByMonth(int year) {
         Query query = entityManager.createQuery("SELECT COUNT (r.id) AS num, DATE_FORMAT(r.createTime, '%m-%Y') AS month " +
                                                 "FROM TblReportEntity r " +
-                                                "WHERE r.changedRoom = '1' AND YEAR(r.createTime) = :thatYear " +
+                                                "WHERE r.changedRoom IS NOT NULL AND YEAR(r.createTime) = :thatYear " +
                                                 "GROUP BY MONTH(r.createTime), YEAR(r.createTime) " +
                                                 "order by r.createTime ASC");
         query.setParameter("thatYear", year);

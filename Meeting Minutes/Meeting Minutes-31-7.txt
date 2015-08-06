@@ -2,4 +2,4 @@
 Cần auto set số hàng trong dãy bằng nhau
 Cần quản lý bảng phòng học
 Tạo phòng khi gặp trường hợp phòng đã tồn tại cần hỏi người dùng có muốn ghi đè không
-Cho phép xóa loại phòng khi vừa cấp nhật 
+Cho phép xóa loại phòng khi vừa tạo

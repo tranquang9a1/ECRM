@@ -77,7 +77,7 @@ public class StaffController {
             request.setAttribute("TABCONTROL", "STAFF_CLASSROOM");
             request.setAttribute("CATEGORY", tblEquipmentCategoryEntities);
             request.setAttribute("MESSAGE", message);
-            return "Staff_Classroom2";
+            return "Staff_Classroom";
         }else {
             return "Login";
         }

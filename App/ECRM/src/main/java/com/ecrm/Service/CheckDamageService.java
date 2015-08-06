@@ -1,6 +1,5 @@
 package com.ecrm.Service;
 
-import com.ecrm.DAO.Impl.ReportDAOImpl;
 import com.ecrm.DAO.Impl.ReportDetailDAOImpl;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
@@ -22,7 +21,7 @@ public class CheckDamageService {
 
     public int checkDamagedLevel(List<TblEquipmentEntity> damagedEquipment, TblClassroomEntity tblClassroomEntity) {
         int damagedLevel = 0;
-        TblRoomTypeEntity2 roomTypeEntity = tblClassroomEntity.getTblRoomType2ByRoomTypeId2();
+        TblRoomTypeEntity roomTypeEntity = tblClassroomEntity.getTblRoomTypeByRoomTypeId();
         int chair = roomTypeEntity.getSlots();
         String[] row = roomTypeEntity.getHorizontalRows().split("-");
         int table = 0;

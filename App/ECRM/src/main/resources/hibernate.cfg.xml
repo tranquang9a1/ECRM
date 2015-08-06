@@ -15,7 +15,7 @@
     <mapping class="com.ecrm.Entity.TblReportEntity"/>
     <mapping class="com.ecrm.Entity.TblReportDetailEntity"/>
     <mapping class="com.ecrm.Entity.TblRoleEntity"/>
-    <mapping class="com.ecrm.Entity.TblRoomTypeEntity2"/>
+    <mapping class="com.ecrm.Entity.TblRoomTypeEntity"/>
     <mapping class="com.ecrm.Entity.TblScheduleEntity"/>
     <mapping class="com.ecrm.Entity.TblUserEntity"/>
     <mapping class="com.ecrm.Entity.TblUserInfoEntity"/>

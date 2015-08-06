@@ -21,6 +21,7 @@ public class TblUserEntity {
     private List<TblScheduleEntity> tblSchedulesByUsername;
     private TblRoleEntity tblRoleByRoleId;
     private TblUserInfoEntity tblUserInfoByUsername;
+    private List<TblMessageEntity> tblMessageById;
 
     public TblUserEntity() {
     }
@@ -133,5 +134,15 @@ public class TblUserEntity {
 
     public void setTblUserInfoByUsername(TblUserInfoEntity tblUserInfoByUsername) {
         this.tblUserInfoByUsername = tblUserInfoByUsername;
+    }
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "tblUserByUsername")
+    public List<TblMessageEntity> getTblMessageById() {
+        return tblMessageById;
+    }
+
+    public void setTblMessageById(List<TblMessageEntity> tblMessageById) {
+        this.tblMessageById = tblMessageById;
     }
 }

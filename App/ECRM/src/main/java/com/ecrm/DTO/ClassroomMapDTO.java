@@ -1,7 +1,7 @@
 package com.ecrm.DTO;
 
 import com.ecrm.Entity.TblClassroomEntity;
-import com.ecrm.Entity.TblRoomTypeEntity2;
+import com.ecrm.Entity.TblRoomTypeEntity;
 import org.json.simple.JSONArray;
 
 /**
@@ -9,13 +9,13 @@ import org.json.simple.JSONArray;
  */
 public class ClassroomMapDTO {
     TblClassroomEntity classroom;
-    private TblRoomTypeEntity2 roomType;
+    private TblRoomTypeEntity roomType;
     private JSONArray equipment;
 
     public ClassroomMapDTO() {
     }
 
-    public ClassroomMapDTO(TblClassroomEntity tblClassroomEntity, TblRoomTypeEntity2 roomType, JSONArray equipment) {
+    public ClassroomMapDTO(TblClassroomEntity tblClassroomEntity, TblRoomTypeEntity roomType, JSONArray equipment) {
         this.classroom = tblClassroomEntity;
         this.roomType = roomType;
         this.equipment = equipment;
@@ -29,11 +29,11 @@ public class ClassroomMapDTO {
         this.classroom = tblClassroomEntity;
     }
 
-    public TblRoomTypeEntity2 getRoomType() {
+    public TblRoomTypeEntity getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(TblRoomTypeEntity2 roomType) {
+    public void setRoomType(TblRoomTypeEntity roomType) {
         this.roomType = roomType;
     }
 

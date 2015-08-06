@@ -12,8 +12,8 @@ import java.util.List;
  * Created by Htang on 7/28/2015.
  */
 @Entity
-@Table(name = "tblRoomType2")
-public class TblRoomTypeEntity2 {
+@Table(name = "tblRoomType")
+public class TblRoomTypeEntity {
     private int id;
     private String name;
     private int slots;
@@ -133,7 +133,7 @@ public class TblRoomTypeEntity2 {
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "tblRoomType2ByRoomTypeId2")
+    @OneToMany(mappedBy = "tblRoomTypeByRoomTypeId")
     public List<TblClassroomEntity> getTblClassroomsById() {
         return tblClassroomsById;
     }
@@ -143,7 +143,7 @@ public class TblRoomTypeEntity2 {
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "tblRoomType2ByRoomTypeId")
+    @OneToMany(mappedBy = "tblRoomTypeByRoomTypeId")
     public List<TblEquipmentQuantityEntity> getTblEquipmentQuantityById() {
         return tblEquipmentQuantityById;
     }
@@ -152,10 +152,10 @@ public class TblRoomTypeEntity2 {
         this.tblEquipmentQuantityById = tblEquipmentQuantityById;
     }
 
-    public TblRoomTypeEntity2() {
+    public TblRoomTypeEntity() {
     }
 
-    public TblRoomTypeEntity2(int id, String name, int slots, int verticalRows, String horizontalRows, String numberOfSlotsEachHRows,Timestamp createTime, Boolean isDelete, Timestamp updateTime) {
+    public TblRoomTypeEntity(int id, String name, int slots, int verticalRows, String horizontalRows, String numberOfSlotsEachHRows, Timestamp createTime, Boolean isDelete, Timestamp updateTime) {
         this.id = id;
         this.name = name;
         this.slots = slots;

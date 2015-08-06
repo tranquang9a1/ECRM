@@ -155,7 +155,6 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
                     "where s.scheduleConfigId = sc.id and s.classroomId = :classroomId and " +
                     " current_date() = s.date  " +
                     " and s.isActive= true and sc.timeFrom > Time(:dayTime) and sc.timeFrom < Time('12:00:00')");
-            System.out.println(q);
             q.setParameter("dayTime", dayTime);
             q.setParameter("classroomId", classroomId);
             tblScheduleEntities = q.getResultList();
@@ -180,7 +179,6 @@ public class ScheduleDAOImpl extends BaseDAO<TblScheduleEntity, Integer> impleme
                     "where s.scheduleConfigId = sc.id and s.classroomId = :classroomId and " +
                     " s.date = Date(:dateFrom) " +
                     " and s.isActive= true and sc.timeFrom > Time(:dayTime) and sc.timeFrom < Time('12:00:00')");
-            System.out.println(q);
             q.setParameter("dayTime", dayTime);
             q.setParameter("classroomId", classroomId);
             q.setParameter("dateFrom", dateFrom);

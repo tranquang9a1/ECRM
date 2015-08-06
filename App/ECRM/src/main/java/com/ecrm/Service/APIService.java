@@ -58,8 +58,8 @@ public class APIService {
         TblClassroomEntity classroomEntity = classroomDAO.find(classId);
         JSONArray jsonArray = new JSONArray();
         ClassroomMapDTO classroomMapDTO = new ClassroomMapDTO();
-        TblRoomTypeEntity2 tblRoomTypeEntity2 = classroomEntity.getTblRoomType2ByRoomTypeId2();
-        List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity2.getTblEquipmentQuantityById();
+        TblRoomTypeEntity tblRoomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
+        List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity.getTblEquipmentQuantityById();
         for (int i = 0; i < tblEquipmentQuantityEntities.size(); i++) {
             TblEquipmentQuantityEntity tblEquipmentQuantityEntity = tblEquipmentQuantityEntities.get(i);
             JSONObject formDetailsJson = new JSONObject();
@@ -69,7 +69,7 @@ public class APIService {
             jsonArray.add(formDetailsJson);
         }
         classroomMapDTO.setEquipment(jsonArray);
-        classroomMapDTO.setRoomType(tblRoomTypeEntity2);
+        classroomMapDTO.setRoomType(tblRoomTypeEntity);
         classroomMapDTO.setClassroom(classroomEntity);
         return classroomMapDTO;
     }
@@ -719,7 +719,7 @@ public class APIService {
             TblClassroomEntity classroomEntity = classroomDAO.find(classId);
             List<TblEquipmentEntity> listEquipments = classroomEntity.getTblEquipmentsById();
             List<TblEquipmentQuantityEntity> equipmentQuantity =
-                    classroomEntity.getTblRoomType2ByRoomTypeId2().getTblEquipmentQuantityById();
+                    classroomEntity.getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
             TblEquipmentEntity equipmentEntity = new TblEquipmentEntity();
             for (int i = 0; i < equipmentQuantity.size(); i++) {
                 TblEquipmentQuantityEntity entity = equipmentQuantity.get(i);

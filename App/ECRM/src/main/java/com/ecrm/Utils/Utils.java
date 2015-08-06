@@ -128,7 +128,7 @@ public class Utils {
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
         for (int i = 0; i < tblClassroomEntities.size(); i++) {
-            int numberOfStudent = tblClassroomEntities.get(i).getTblRoomType2ByRoomTypeId2().getSlots();
+            int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
             if (numberOfStudent >= currentSlots) {
                 fitClassroom.add(tblClassroomEntities.get(i));
             }

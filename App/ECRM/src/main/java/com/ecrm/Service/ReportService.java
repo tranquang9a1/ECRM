@@ -132,7 +132,7 @@ public class ReportService {
         DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId), equipments);
 
         resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
-        resultObject.setRoomtype(classroom.getTblRoomType2ByRoomTypeId2());
+        resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
         resultObject.setDamagedLevel(classroom.getDamagedLevel());
 
         List<String> availableRooms = classroomService.getAvailableRoom(roomId);

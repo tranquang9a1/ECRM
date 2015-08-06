@@ -9,10 +9,11 @@ import javax.persistence.*;
 @Table(name = "tblMessage")
 public class TblMessageEntity {
     private int id;
+    private String username;
     private String phone;
     private String body;
     private Boolean isRead;
-
+    private TblUserEntity tblUserByUsername;
 
     @Id
     @GeneratedValue
@@ -23,6 +24,16 @@ public class TblMessageEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "Username")
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Basic
@@ -56,6 +67,17 @@ public class TblMessageEntity {
     }
 
     public TblMessageEntity() {
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "Username", referencedColumnName = "Username", nullable = false, insertable = false, updatable = false)
+    public TblUserEntity getTblUserByUsername() {
+        return tblUserByUsername;
+    }
+
+    public void setTblUserByUsername(TblUserEntity tblUserByUsername) {
+        this.tblUserByUsername = tblUserByUsername;
     }
 
     public TblMessageEntity(int id, String phone, String body, Boolean isRead) {

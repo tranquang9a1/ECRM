@@ -5,7 +5,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,8 +20,8 @@ public class TblClassroomEntity {
     private Boolean isDelete;
     private Boolean isAllInformation;
     private Integer damagedLevel;
-    private Integer roomTypeId2;
-    private TblRoomTypeEntity2 tblRoomType2ByRoomTypeId2;
+    private Integer roomTypeId;
+    private TblRoomTypeEntity tblRoomTypeByRoomTypeId;
     private List<TblEquipmentEntity> tblEquipmentsById;
     private List<TblReportEntity> tblReportsById;
     private List<TblScheduleEntity> tblSchedulesById;
@@ -38,13 +37,13 @@ public class TblClassroomEntity {
         this.id = id;
     }
     @Basic
-    @Column(name = "RoomTypeId2")
-    public Integer getRoomTypeId2() {
-        return roomTypeId2;
+    @Column(name = "roomTypeId")
+    public Integer getRoomTypeId() {
+        return roomTypeId;
     }
 
-    public void setRoomTypeId2(Integer roomTypeId2) {
-        this.roomTypeId2 = roomTypeId2;
+    public void setRoomTypeId(Integer roomTypeId) {
+        this.roomTypeId = roomTypeId;
     }
 
     @Basic
@@ -135,13 +134,13 @@ public class TblClassroomEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "RoomTypeId2", referencedColumnName = "Id", insertable = false, updatable = false)
-    public TblRoomTypeEntity2 getTblRoomType2ByRoomTypeId2() {
-        return tblRoomType2ByRoomTypeId2;
+    @JoinColumn(name = "roomTypeId", referencedColumnName = "Id", insertable = false, updatable = false)
+    public TblRoomTypeEntity getTblRoomTypeByRoomTypeId() {
+        return tblRoomTypeByRoomTypeId;
     }
 
-    public void setTblRoomType2ByRoomTypeId2(TblRoomTypeEntity2 tblRoomType2ByRoomTypeId2) {
-        this.tblRoomType2ByRoomTypeId2 = tblRoomType2ByRoomTypeId2;
+    public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeByRoomTypeId) {
+        this.tblRoomTypeByRoomTypeId = tblRoomTypeByRoomTypeId;
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -189,7 +188,7 @@ public class TblClassroomEntity {
     }
 
     public TblClassroomEntity(int id, String name, Timestamp createTime, Timestamp updateTime,
-                              Boolean isDelete, Boolean isAllInformation, Integer damagedLevel, Integer roomTypeId2) {
+                              Boolean isDelete, Boolean isAllInformation, Integer damagedLevel, Integer roomTypeId) {
         this.id = id;
         this.name = name;
         this.createTime = createTime;
@@ -197,6 +196,6 @@ public class TblClassroomEntity {
         this.isDelete = isDelete;
         this.isAllInformation = isAllInformation;
         this.damagedLevel = damagedLevel;
-        this.roomTypeId2 = roomTypeId2;
+        this.roomTypeId = roomTypeId;
     }
 }

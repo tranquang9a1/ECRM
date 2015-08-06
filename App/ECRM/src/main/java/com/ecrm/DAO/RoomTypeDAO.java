@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
  * Created by Htang on 5/26/2015.
  */
 @Repository
-public interface RoomType2DAO {
+public interface RoomTypeDAO {
 }

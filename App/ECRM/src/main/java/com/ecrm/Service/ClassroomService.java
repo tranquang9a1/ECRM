@@ -7,7 +7,6 @@ import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Utils;
 import com.ecrm.Utils.socket.SocketIO;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -41,7 +39,7 @@ public class ClassroomService {
     @Autowired
     private UserNotificationDAOImpl userNotificationDAO;
     @Autowired
-    private RoomType2DAOImpl roomType2DAO;
+    private RoomTypeDAOImpl roomType2DAO;
 
     public ClassDTO getClassroom(int classId) {
         TblClassroomEntity entity = classroomDAO.getClassroomById(classId);
@@ -81,8 +79,8 @@ public class ClassroomService {
             if (!classroomEntity.getIsDelete()) {
                 JSONArray jsonArray = new JSONArray();
                 ClassroomMapDTO classroomMapDTO = new ClassroomMapDTO();
-                TblRoomTypeEntity2 tblRoomTypeEntity2 = classroomEntity.getTblRoomType2ByRoomTypeId2();
-                List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity2.getTblEquipmentQuantityById();
+                TblRoomTypeEntity tblRoomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
+                List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity.getTblEquipmentQuantityById();
                 for (int i = 0; i < tblEquipmentQuantityEntities.size(); i++) {
                     TblEquipmentQuantityEntity tblEquipmentQuantityEntity = tblEquipmentQuantityEntities.get(i);
                     if (!tblEquipmentQuantityEntity.getIsDelete()) {
@@ -94,7 +92,7 @@ public class ClassroomService {
                     }
                 }
                 classroomMapDTO.setEquipment(jsonArray);
-                classroomMapDTO.setRoomType(tblRoomTypeEntity2);
+                classroomMapDTO.setRoomType(tblRoomTypeEntity);
                 classroomMapDTO.setClassroom(classroomEntity);
                 classroomMapDTOs.add(classroomMapDTO);
             }
@@ -163,8 +161,8 @@ public class ClassroomService {
         try {
             String message = "";
             TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
-            TblRoomTypeEntity2 tblRoomTypeEntity2 = classroomEntity.getTblRoomType2ByRoomTypeId2();
-            List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity2.getTblEquipmentQuantityById();
+            TblRoomTypeEntity tblRoomTypeEntity = classroomEntity.getTblRoomTypeByRoomTypeId();
+            List<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblRoomTypeEntity.getTblEquipmentQuantityById();
             for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
                 //get category
                 TblEquipmentCategoryEntity tblEquipmentCategoryEntity = tblEquipmentQuantityEntity.getTblEquipmentCategoryEntityByEquipmentCategoryId();

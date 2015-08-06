@@ -17,7 +17,7 @@ public class TblEquipmentQuantityEntity {
     private int id;
 
 
-    private TblRoomTypeEntity2 tblRoomTypeEntity2ByRoomTypeId;
+    private TblRoomTypeEntity tblRoomTypeEntityByRoomTypeId;
     private TblEquipmentCategoryEntity tblEquipmentCategoryEntityByEquipmentCategoryId;
 
 
@@ -88,12 +88,12 @@ public class TblEquipmentQuantityEntity {
 
     @ManyToOne
     @JoinColumn(name = "RoomTypeId", referencedColumnName = "Id", nullable = false, insertable = false, updatable = false)
-    public TblRoomTypeEntity2 getTblRoomType2ByRoomTypeId() {
-        return tblRoomTypeEntity2ByRoomTypeId;
+    public TblRoomTypeEntity getTblRoomTypeByRoomTypeId() {
+        return tblRoomTypeEntityByRoomTypeId;
     }
 
-    public void setTblRoomType2ByRoomTypeId(TblRoomTypeEntity2 tblRoomTypeEntity2ByRoomTypeId) {
-        this.tblRoomTypeEntity2ByRoomTypeId = tblRoomTypeEntity2ByRoomTypeId;
+    public void setTblRoomTypeByRoomTypeId(TblRoomTypeEntity tblRoomTypeEntityByRoomTypeId) {
+        this.tblRoomTypeEntityByRoomTypeId = tblRoomTypeEntityByRoomTypeId;
     }
 
     @ManyToOne

@@ -1,10 +1,8 @@
 package com.ecrm.Service;
 
-import com.ecrm.DAO.EquipmentDAO;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.RoomTypeDTO;
 import com.ecrm.Entity.*;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 
@@ -26,7 +24,7 @@ import java.util.List;
 public class RoomTypeService {
     public static final String ERROR = "ERROR";
     @Autowired
-    RoomType2DAOImpl roomType2DAO;
+    RoomTypeDAOImpl roomType2DAO;
     @Autowired
     EquipmentDAOImpl equipmentDAO;
     @Autowired
@@ -39,9 +37,9 @@ public class RoomTypeService {
     public List<RoomTypeDTO> getAllRoomType() throws JSONException {
         List<RoomTypeDTO> roomTypeDTOs = new ArrayList<RoomTypeDTO>();
         List<String> category = new ArrayList<String>();
-        List<TblRoomTypeEntity2> lstRoomType = roomType2DAO.findAll();
-        List<TblRoomTypeEntity2> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity2>();
-        for (TblRoomTypeEntity2 roomTypeEntity : lstRoomType) {
+        List<TblRoomTypeEntity> lstRoomType = roomType2DAO.findAll();
+        List<TblRoomTypeEntity> tblRoomTypeEntities = new ArrayList<TblRoomTypeEntity>();
+        for (TblRoomTypeEntity roomTypeEntity : lstRoomType) {
             if (!roomTypeEntity.getIsDelete()) {
                 JSONArray jsonArray = new JSONArray();
                 RoomTypeDTO roomTypeDTO = new RoomTypeDTO();
@@ -71,7 +69,7 @@ public class RoomTypeService {
                                    String horizontalRows,String NumberOfSlotsEachHRows,
                                    String roomtypeName, String equip, String action){
         try {
-            TblRoomTypeEntity2 roomType = new TblRoomTypeEntity2();
+            TblRoomTypeEntity roomType = new TblRoomTypeEntity();
             horizontalRows = horizontalRows.substring(0, horizontalRows.length() - 1);
             NumberOfSlotsEachHRows = NumberOfSlotsEachHRows.substring(0, NumberOfSlotsEachHRows.length() - 1);
             java.util.Date date = new java.util.Date();
@@ -102,14 +100,14 @@ public class RoomTypeService {
                             classroomDAO.merge(classroomEntity);
                         }
                     }
-                    roomType = new TblRoomTypeEntity2(roomType.getId(), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
+                    roomType = new TblRoomTypeEntity(roomType.getId(), roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
                             roomType.getCreateTime(), false, new Timestamp(date.getTime()));
 
                     roomType2DAO.merge(roomType);
                     message = "Cập nhật "+oldRoomType+" thành công!";
                 }
                 if(action.equals("create") && roomType==null) {
-                    roomType = new TblRoomTypeEntity2(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
+                    roomType = new TblRoomTypeEntity(0, roomtypeName, slots, verticalRows, horizontalRows, NumberOfSlotsEachHRows,
                             new Timestamp(date.getTime()), false, new Timestamp(date.getTime()));
                     roomType2DAO.insert(roomType);
                     message = "Tạo "+roomtypeName+" thành công!";
@@ -141,7 +139,7 @@ public class RoomTypeService {
 
     public String removeRoomType(int roomTypeId){
         try {
-            TblRoomTypeEntity2 roomTypeEntity = roomType2DAO.find(roomTypeId);
+            TblRoomTypeEntity roomTypeEntity = roomType2DAO.find(roomTypeId);
             roomTypeEntity.setIsDelete(true);
             roomType2DAO.merge(roomTypeEntity);
             String message = "Xóa loại phòng "+roomTypeEntity.getName()+" thành công!";

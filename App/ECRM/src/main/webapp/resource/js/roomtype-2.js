@@ -46,6 +46,11 @@ function createDetailMap(horizontalRows, noSlotsEachRows) {
 
         soDayNgang[i] = "SoDayNgang" + (i + 1);
         soChoNgoi[i] = "SoChoNgoi" + (i + 1);
+
+        if(i == 0) {
+            select1.addEventListener("change", function(){changeDefaultFirst(this)});
+            select2.addEventListener("change", function(){changeDefaultFirst(this)});
+        }
     }
 
     var clearDiv = document.createElement("div");
@@ -53,6 +58,15 @@ function createDetailMap(horizontalRows, noSlotsEachRows) {
     row1.appendChild(clearDiv);
     row2.appendChild(clearDiv);
     row3.appendChild(clearDiv);
+}
+
+function changeDefaultFirst(element) {
+    var parent = element.parentNode.parentNode;
+    var listSelect = parent.getElementsByTagName("select");
+
+    for(var i = 0; i < listSelect.length; i++) {
+        listSelect[i].value = element.value;
+    }
 }
 
 function createSelect(id) {

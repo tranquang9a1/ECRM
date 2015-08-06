@@ -11,6 +11,7 @@ import com.ecrm.Service.ChangeRoomService;
 import com.ecrm.Service.ClassroomService;
 import com.ecrm.Service.GCMService;
 import com.ecrm.Service.ReportService;
+import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.SmsUtils;
 import com.ecrm.Utils.Utils;
 import com.twilio.sdk.TwilioRestException;
@@ -56,6 +57,10 @@ public class ChangeRoomController {
     @ResponseBody
     ResultDTO changeRoom(@RequestParam("from")String currentClassroom,@RequestParam("to") String changeClassroom) throws TwilioRestException {
         TblClassroomEntity currentClassroomEntity = classroomService.getClassroomByName(currentClassroom);
+        if (currentClassroomEntity.getDamagedLevel() < Constant.MIN_DAMAGED_CHANGE_ROOM) {
+            currentClassroomEntity.setDamagedLevel(Constant.MIN_DAMAGED_CHANGE_ROOM);
+            classroomService.updateClassroom(currentClassroomEntity);
+        }
         TblClassroomEntity changeClassroomEntity = classroomService.getClassroomByName(changeClassroom);
         int currentClassroomId = currentClassroomEntity.getId();
         List<TblScheduleEntity> currentSchedule = new ArrayList<TblScheduleEntity>();

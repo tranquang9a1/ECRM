@@ -54,6 +54,10 @@ public class ClassroomService {
         return classroomEntity;
     }
 
+    public void updateClassroom(TblClassroomEntity entity) {
+        classroomDAO.merge(entity);
+    }
+
     public TblClassroomEntity getClassroomById(int classroomId) {
         TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         return classroomEntity;

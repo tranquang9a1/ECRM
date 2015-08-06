@@ -18,5 +18,6 @@ public class Constant {
     public static String DATA_NEWEST = "category_newest";
     public static String DATA_UPDATED = "category_updated";
     public static String CATEGORY_FILE = "task.txt";
+    public static int MIN_DAMAGED_CHANGE_ROOM = 50;
 
 }

@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="user" value="${sessionScope.USER}"/>
+<c:set var="firstLogin" value="${sessionScope.FIRSTLOGIN}"/>
 
 <c:set var="allSchedule" value="${requestScope.ALLSCHEDULE}"/>
 <c:set var="finishSchedule" value="${requestScope.FINISHSCHEDULE}"/>
@@ -28,10 +29,41 @@
     <script src="/resource/js/jquery-1.11.3.min.js"></script>
     <script src="/resource/js/socket.io.js"></script>
     <script src="/resource/js/socket-io.js"></script>
+    <script src="/resource/js/script.js"></script>
     <script src="/resource/js/user-notify.js"></script>
     <script src="/resource/js/newTemplate.js"></script>
 </head>
 <body>
+    <c:if test="${firstLogin}">
+        <div class="modal modal-small" id="modal-changePass">
+          <div class="content-modal" style="height:264px;">
+            <div class="header-modal title">Đổi mật khẩu</div>
+            <div class="body-modal">
+              <div>Chào, <b>${user.tblUserInfoByUsername.fullName}</b>. Bạn đang dùng mật khẩu mặt định, vui lòng thay đổi mật khẩu của bạn!</div>
+              <div class="group-control">
+                <div class="name">Mật khẩu mới</div>
+                <div class="control">
+                  <input type="password" id="password">
+                </div>
+              </div>
+              <div class="group-control">
+                <div class="name">Xác nhận lại</div>
+                <div class="control">
+                  <input type="password" id="rePassword">
+                </div>
+              </div>
+            </div>
+            <div class="footer-modal">
+              <input type="button" class="btn btn-orange" onclick="changePassword('${user.username}')" value="Đổi mật khẩu"/>
+            </div>
+          </div>
+          <div class="black-background"></div>
+        </div>
+        <script>
+          showModal(1, 'modal-changePass');
+        </script>
+      <c:remove var="FIRSTLOGIN" scope="session"/>
+    </c:if>
     <div class="container">
       <div class="header">
         <div class="logo">HỆ THỐNG QUẢN LÝ THIẾT BỊ PHÒNG HỌC</div>

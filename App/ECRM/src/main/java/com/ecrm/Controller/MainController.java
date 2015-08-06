@@ -4,6 +4,7 @@ import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.ScheduleDAOImpl;
 import com.ecrm.DAO.Impl.UserDAOImpl;
 import com.ecrm.Entity.TblUserEntity;
+import com.ecrm.Utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -57,6 +58,10 @@ public class MainController {
                 return "redirect:/bao-cao";
             }
             if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
+                if(password.equals(Constant.DEFAULT_PASSWORD)) {
+                    session.setAttribute("FIRSTLOGIN", true);
+                }
+
                 return "redirect:/giang-vien";
             }
         }

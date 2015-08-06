@@ -15,9 +15,7 @@
 <script>
     var roomEquipments = {};
     <c:forEach items="${equipments}" var="item">
-        <%--<c:if test="${'[0]'.equals(item.position) != false}">--%>
-            roomEquipments["${item.position.trim()}"] = {id: ${item.id}, status: false};
-        <%--</c:if>--%>
+        roomEquipments["${item.position.trim()}"] = {id: ${item.id}, status: false};
     </c:forEach>
 </script>
 <div id="hitory-report-${report.id}">
@@ -80,6 +78,6 @@
     </div>
 </div>
 <script>
-    showMap('report-map-${report.id}', roomEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
-            ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
+    showMap('report-map-${report.id}', roomEquipments, ${rt.roomType.verticalRows}, '${rt.roomType.horizontalRows}',
+            '${rt.roomType.numberOfSlotsEachHRows}', ${rt.equipment});
 </script>

@@ -143,66 +143,66 @@ public class UserController {
         return "user/ReportRoomNew";
     }
 
-    @RequestMapping(value = "thong-bao")
-    public String notifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
-        HttpSession session = request.getSession();
-        if (session.getAttribute("USER") == null) {
-            return "redirect:/";
-        }
-
-        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
-        int pageNumber = Integer.parseInt(page);
-        int size = 5;
-        int numberOfReport = reportDAO.getNumberOfUserReport(user.getUsername());
-        int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
-
-        if(pageNumber > numberOfPage && pageNumber > 0) {
-            return "Error";
-        }
-
-        if(numberOfReport == 0) {
-            request.setAttribute("NOTIFICATIONS", new ArrayList<ReportResponseObject>());
-        } else {
-            if(pageNumber == 0) {
-                pageNumber = 1;
-            }
-
-            List<TblReportEntity> list = reportDAO.getPagingReportByUser(user.getUsername(), pageNumber, size);
-            List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
-            for (int i = 0; i < list.size(); i++) {
-                ReportResponseObject report = new ReportResponseObject(list.get(i));
-                report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
-
-                listReport.add(report);
-            }
-
-            request.setAttribute("PAGE", pageNumber);
-            request.setAttribute("MAX", numberOfPage);
-            request.setAttribute("NOTIFICATIONS", listReport);
-        }
-
-        List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
-        if (schedules.size() > 0) {
-            TblClassroomEntity classroom = classroomDAO.find(schedules.get(0).getClassroomId());
-            TblRoomTypeEntity2 roomType = roomTypeDAO2.find(classroom.getRoomTypeId2());
-            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedules.get(0).getClassroomId());
-
-            List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
-            for (TblScheduleEntity schedule : schedules) {
-                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null, null));
-            }
-
-            request.setAttribute("LISTSCHEDULE", listSchedule);
-            request.setAttribute("ROOM", classroom);
-            request.setAttribute("EQUIPMENTS", listEquipment);
-            request.setAttribute("ROOMTYPE", roomType);
-        } else {
-            request.setAttribute("ROOM", new TblClassroomEntity());
-        }
-
-        request.setAttribute("ACTIVELEFTTAB", "USER_NOTIFY");
-        return "user/Notifications";
-    }
+//    @RequestMapping(value = "thong-bao")
+//    public String notifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
+//        HttpSession session = request.getSession();
+//        if (session.getAttribute("USER") == null) {
+//            return "redirect:/";
+//        }
+//
+//        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
+//        int pageNumber = Integer.parseInt(page);
+//        int size = 5;
+//        int numberOfReport = reportDAO.getNumberOfUserReport(user.getUsername());
+//        int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
+//
+//        if(pageNumber > numberOfPage && pageNumber > 0) {
+//            return "Error";
+//        }
+//
+//        if(numberOfReport == 0) {
+//            request.setAttribute("NOTIFICATIONS", new ArrayList<ReportResponseObject>());
+//        } else {
+//            if(pageNumber == 0) {
+//                pageNumber = 1;
+//            }
+//
+//            List<TblReportEntity> list = reportDAO.getPagingReportByUser(user.getUsername(), pageNumber, size);
+//            List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
+//            for (int i = 0; i < list.size(); i++) {
+//                ReportResponseObject report = new ReportResponseObject(list.get(i));
+//                report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
+//
+//                listReport.add(report);
+//            }
+//
+//            request.setAttribute("PAGE", pageNumber);
+//            request.setAttribute("MAX", numberOfPage);
+//            request.setAttribute("NOTIFICATIONS", listReport);
+//        }
+//
+//        List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
+//        if (schedules.size() > 0) {
+//            TblClassroomEntity classroom = classroomDAO.find(schedules.get(0).getClassroomId());
+//            TblRoomTypeEntity2 roomType = roomTypeDAO2.find(classroom.getRoomTypeId2());
+//            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedules.get(0).getClassroomId());
+//
+//            List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
+//            for (TblScheduleEntity schedule : schedules) {
+//                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null, null));
+//            }
+//
+//            request.setAttribute("LISTSCHEDULE", listSchedule);
+//            request.setAttribute("ROOM", classroom);
+//            request.setAttribute("EQUIPMENTS", listEquipment);
+//            request.setAttribute("ROOMTYPE", roomType);
+//        } else {
+//            request.setAttribute("ROOM", new TblClassroomEntity());
+//        }
+//
+//        request.setAttribute("ACTIVELEFTTAB", "USER_NOTIFY");
+//        return "user/Notifications";
+//    }
 
     @RequestMapping(value = "sentReport", method = RequestMethod.POST)
     @ResponseBody
@@ -294,6 +294,15 @@ public class UserController {
         return report.getId() + "-" + room.getName() + "-" + equipmentNames + "-" + report.getCreateTime().getTime();
     }
 
+    @RequestMapping(value = "doi-mat-khau", method = RequestMethod.POST)
+    public String changePassword(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("password") String password) {
+        TblUserEntity user = userDAO.findUser(username);
+        user.setPassword(password);
+        userDAO.merge(user);
+
+        return "true";
+    }
+
 //    @RequestMapping(value = "mau-phong")
 //    public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
 //        TblClassroomEntity classroom = classroomDAO.find(roomId);
@@ -310,12 +319,13 @@ public class UserController {
     public String viewReportByUser(HttpServletRequest request, @RequestParam("bao-cao") int reportId) {
         TblReportEntity report = reportDAO.find(reportId);
         TblClassroomEntity classroom = report.getTblClassroomByClassRoomId();
+        RoomTypeDTO roomTypeDTO = roomTypeService.getRoomTypeOfRoom(classroom);
         List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipmentsInReport(reportId);
 
         request.setAttribute("ROOM", classroom);
         request.setAttribute("REPORT", report);
         request.setAttribute("EQUIPMENTS", listEquipment);
-        request.setAttribute("ROOMTYPE", classroom.getTblRoomType2ByRoomTypeId2());
+        request.setAttribute("ROOMTYPE", roomTypeDTO);
 
         return "user/ReportHistory";
     }

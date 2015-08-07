@@ -17,10 +17,34 @@
     <div class="account-setting">
       <img src="../../resource/img/pointer.png"/>
       <ul>
-        <li>Thay đổi mật khẩu</li>
+        <li onclick="showModal(1, 'modal-updatePass')">Thay đổi mật khẩu</li>
         <li>Thông tin tài khoản</li>
         <li><a href="/dang-xuat"> Đăng xuất</a></li>
       </ul>
     </div>
+  </div>
+  <div class="modal modal-small" id="modal-updatePass">
+    <div class="content-modal" style="height:217px">
+      <div class="header-modal title" style="margin: 0">Đổi mật khẩu</div>
+      <div class="body-modal">
+        <div class="group-control">
+          <div class="name">Mật khẩu mới</div>
+          <div class="control">
+            <input type="password" id="password">
+          </div>
+        </div>
+        <div class="group-control">
+          <div class="name">Xác nhận lại</div>
+          <div class="control">
+            <input type="password" id="rePassword">
+          </div>
+        </div>
+      </div>
+      <div class="footer-modal" style="border-top: 1px solid #ccc">
+        <input type="button" class="btn btn-orange" onclick="changePassword('${user.username}', 0)" value="Đổi mật khẩu"/>
+        <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-updatePass')" value="Thoát"/>
+      </div>
+    </div>
+    <div class="black-background"></div>
   </div>
 </div>

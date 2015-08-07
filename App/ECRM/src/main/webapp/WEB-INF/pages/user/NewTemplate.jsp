@@ -43,18 +43,18 @@
               <div class="group-control">
                 <div class="name">Mật khẩu mới</div>
                 <div class="control">
-                  <input type="password" id="password">
+                  <input type="password" id="password-first">
                 </div>
               </div>
               <div class="group-control">
                 <div class="name">Xác nhận lại</div>
                 <div class="control">
-                  <input type="password" id="rePassword">
+                  <input type="password" id="rePassword-first">
                 </div>
               </div>
             </div>
             <div class="footer-modal">
-              <input type="button" class="btn btn-orange" onclick="changePassword('${user.username}')" value="Đổi mật khẩu"/>
+              <input type="button" class="btn btn-orange" onclick="changePassword('${user.username}', 1)" value="Đổi mật khẩu"/>
             </div>
           </div>
           <div class="black-background"></div>

@@ -358,3 +358,35 @@ function changeNewRoom() {
         }
     });
 }
+
+function changePassword(username, th) {
+    var password = $("#password").val();
+    var rePassword = $("#rePassword").val();
+
+    if(th==1) {
+        password = $("#password-first").val();
+        rePassword = $("#rePassword-first").val();
+    }
+
+    if(password.length < 6) {
+        conformData(1, {message: 'Mật khẩu tối thiểu 6 ký tự!'});
+    } else if (password != rePassword) {
+        conformData(1, {message: 'Mật khẩu xác nhận chưa trùng khớp!'});
+    } else if(password == '123456') {
+        conformData(1, {message: 'Không được dùng mật khẩu mặt định!'});
+    } else {
+        if(th==1) {
+            showModal(0, 'modal-changePass');
+        } else {
+            showModal(0, 'modal-updatePass');
+        }
+        conformData(1, {message: 'Đổi mật khẩu thành công!'});
+
+        $.ajax({
+            method: "POST",
+            url: "/giang-vien/doi-mat-khau",
+            data: {username: username, password: password},
+            success: function(data) {}
+        });
+    }
+}

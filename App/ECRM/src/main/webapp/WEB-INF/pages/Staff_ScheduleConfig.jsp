@@ -168,7 +168,7 @@
         </div>
     </div>
 </div>
-<div class="content-modal">
+<div class="content-all-modal">
     <div class="modal modal-small" id="Upload">
         <div class="content-modal" style="top: 30%">
             <div class="header-modal title">
@@ -188,8 +188,8 @@
                        value="OK" onclick="showModal(0, 'Upload');getMinute();"/>
             </div>
         </div>
+        <div class="black-background"></div>
     </div>
-    <div class="black-background"></div>
 </div>
 </body>
 </html>

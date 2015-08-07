@@ -229,16 +229,18 @@ function showMap(mapId, equipments, vrows, sDayNgang, sChoNgoi, listEquipment) {
     }
 
     for(var i = 0; i< listEquipment.length; i++){
-        var divEquip = document.createElement('div');
-        if(equipments["["+ listEquipment[i].id+"]"] != undefined) {
-            divEquip.className = 'subThietBi equip damaged';
-        } else {
-            divEquip.className = 'equipment subThietBi equip';
+        if(listEquipment[i].name != "Ghế" && listEquipment[i].name != "Bàn") {
+            var divEquip = document.createElement('div');
+            if (equipments["[" + listEquipment[i].id + "]"] != undefined) {
+                divEquip.className = 'subThietBi equip damaged';
+            } else {
+                divEquip.className = 'equipment subThietBi equip';
+            }
+            divEquip.style.backgroundImage = 'url("/resource/img/equipment/' + listEquipment[i].imageUrl + '")';
+            divEquip.setAttribute('data-equipment', listEquipment[i].name);
+            divEquip.setAttribute('data-position', '[' + listEquipment[i].id + ']');
+            divEquip.setAttribute("data-categoryId", listEquipment[i].id);
+            divT.appendChild(divEquip);
         }
-        divEquip.style.backgroundImage = 'url("/resource/img/equipment/' + listEquipment[i].imageUrl + '")';
-        divEquip.setAttribute('data-equipment', listEquipment[i].name);
-        divEquip.setAttribute('data-position','['+ listEquipment[i].id+']');
-        divEquip.setAttribute("data-categoryId", listEquipment[i].id);
-        divT.appendChild(divEquip);
     }
 }

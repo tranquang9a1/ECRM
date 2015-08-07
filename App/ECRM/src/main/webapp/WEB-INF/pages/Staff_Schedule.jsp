@@ -31,12 +31,11 @@
             <c:set var="tab" value="${requestScope.TABCONTROL}"/>
             <meta charset="UTF-8"/>
             <title>ECRM - Equipment Classroom Management</title>
-            <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="/resource/css/general.css"/>
+            <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
             <link rel="stylesheet" href="/resource/css/jquery-ui.css"/>
             <link rel="stylesheet" href="/resource/css/component.css"/>
-
 
             <script src="/resource/js/jquery-1.11.3.js"></script>
             <script src="/resource/js/jquery-1.11.3.min.js"></script>
@@ -241,6 +240,7 @@
                                value="Nhập lịch"/>
                     </div>
                 </div>
+                <div class="black-background"></div>
             </div>
             <div class="modal modal-medium" id="Manual">
                 <div class="content-modal" style="height: 535px;">
@@ -342,10 +342,9 @@
                         </div>
                     </form>
                 </div>
+                <div class="black-background"></div>
             </div>
-            <div class="black-background"></div>
         </div>
-
         </body>
 
         <script src="/resource/js/script.js"></script>
@@ -415,11 +414,11 @@
                         if (data.status == true) {
                             document.getElementById('importManually').submit();
                         } else {
-                            alert(data.alert);
+                            conformData(1, {message:data.alert});
                         }
                     },
                     error: function () {
-                        alert('Error while request..');
+                        conformData(1, {message:'Error while request..'});
                     }
                 })
 
@@ -434,7 +433,7 @@
                         console.log(data);
                     },
                     error: function () {
-                        alert('Error while request..');
+                        conformData(1, {message:'Error while request..'});
                     }
                 })
             }

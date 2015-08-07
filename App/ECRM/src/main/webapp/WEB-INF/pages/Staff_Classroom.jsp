@@ -353,14 +353,13 @@
             <form id="form-getChangeRoom" name="form-getChangeRoom">
                 <div class="modal modal-small" id="modal-changeRoom">
                     <div class="content-modal" style="height:216px;">
+                        <input type="hidden" id="changeRoom-id">
                         <div class="header-modal title">
                             <p id="changeRoom-name"></p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-changeRoom');
                             document.getElementById('datepickerFrom').value = '';
                                    document.getElementById('datepickeTo').value = '';"></i>
                         </div>
-                        <input type="hidden" id="changeRoom-id">
-
                         <div class="body-modal">
                             <div class="group-control">
                                 <div class="name">Từ ngày(*):</div>
@@ -374,7 +373,6 @@
                                     <input type="text" id="datepickeTo" name="timeTo">
                                 </div>
                             </div>
-
                         </div>
                         <div class="footer-modal">
                             <input type="button" class="btn btn-normal"
@@ -385,8 +383,8 @@
                                    onclick="getChangeRoom();"
                                    value="Tìm phòng trống"/>
                         </div>
-                        <div class="black-background"></div>
                     </div>
+                    <div class="black-background"></div>
                 </div>
             </form>
             <form id="changeRoom-form" name="changeRoom-form" action="/staff/changeRoomManually">

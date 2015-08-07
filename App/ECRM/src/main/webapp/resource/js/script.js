@@ -23,7 +23,7 @@ function changeTab(tab , thisElement) {
 }
 
 function showModal(show, modal1, modal2) {
-    var bgA = document.getElementsByClassName("black-background")[0];
+    var bgA = document.getElementById(modal1).getElementsByClassName("black-background")[0];
     var modalA = document.getElementById(modal1).getElementsByClassName("content-modal")[0];
 
     if (show == 0) {
@@ -36,12 +36,12 @@ function showModal(show, modal1, modal2) {
             modalA.className += " active";
         }
     } else {
-        //bgA.className = "black-background";
+        bgA.className = "black-background";
         modalA.className = "content-modal";
 
-        //var bgB = document.getElementById(modal2).getElementsByClassName("black-background")[0];
+        var bgB = document.getElementById(modal2).getElementsByClassName("black-background")[0];
         var modalB = document.getElementById(modal2).getElementsByClassName("content-modal")[0];
-        //bgB.className += " active";
+        bgB.className += " active";
         modalB.className += " active";
     }
 }

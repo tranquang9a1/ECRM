@@ -88,7 +88,7 @@
   <div class="scroll-list-equip">
   </c:if>
   <c:forEach items="${room.equipmentCategory}" var="item" >
-    <div class="group-equipment">
+    <div class="group-equipment" style="overflow: hidden;">
       <c:if test="${item.serialNumber.size() == 0}">
         <input type="checkbox" class="equipment-type" value="${item.id}"/>
       </c:if>
@@ -127,8 +127,8 @@
 
 <c:if test="${room.free == false}">
   <div class="modal modal-small" id="change-room">
-    <div class="content-modal">
-      <div class="header-modal title">
+  <div class="content-modal" style="height: 217px;">
+      <div class="header-modal title" style=" margin: 0; height: 50px; background: -webkit-linear-gradient(top, #f4f4f4 12%,#e2e2e2 100%);">
         <p>Đổi phòng</p>
       </div>
       <div class="body-modal">
@@ -150,7 +150,7 @@
           </div>
         </div>
       </div>
-      <div class="footer-modal">
+      <div class="footer-modal" style="border-top: 1px solid #ccc;">
         <input type="button" class="btn btn-normal" onclick="showModal(0, 'change-room');" value="Đóng" />
         <input type="button" class="btn btn-primary" onclick="changeNewRoom();" value="Đổi phòng" />
       </div>

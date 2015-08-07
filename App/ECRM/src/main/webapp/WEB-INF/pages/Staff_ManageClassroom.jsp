@@ -54,7 +54,7 @@
                                      document.getElementById('changeRoom-id').value=${cl.classroom.id};
                                         document.getElementById('changeRoom-name').innerHTML = 'Đổi phòng cho phòng ${cl.classroom.name}';
                                         document.getElementById('getchangeRoom-name').innerHTML = 'Phòng trống cho phòng ${cl.classroom.name}'"><i
-                                        class="fa fa-pencil"></i>
+                                        class="fa fa-refresh"></i>
                                 </div>
                                 <div class="btn btn-view" title="Xem sơ đồ"
                                      onclick='document.getElementById("ClassroomAction").value="update";

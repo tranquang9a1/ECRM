@@ -41,11 +41,17 @@
         <c:set var="tab" value="${requestScope.ACTIVETAB}"/>
         <c:set var="tab1" value="${requestScope.TABCONTROL}"/>
         <c:set var="category" value="${requestScope.CATEGORY}"/>
+        <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
         <script>
             <c:set var="message" value="${requestScope.MESSAGE}"/>
             <c:if test="${message!= '0'}">
-            conformData(1, {message: '${message}'});
+            showMessage('${message}');
             </c:if>
+            function showMessage(message) {
+                conformData(1, {message: message});
+                var URLString = document.URL;
+                window.history.pushState({"html":'',"pageTitle":''},"", URLString.split("&MESSAGE")[0]+ "&MESSAGE=0");
+            }
         </script>
         <div class="layout-background" style="height: 0px">
             <div class="container">
@@ -60,27 +66,26 @@
                     <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
                         <div class="page active" id="classroom">
-                            <div class="title"><p>Phòng Học</p></div>
-                            <div class="tab">
-                                <div class="tab-medium">
+                            <div class="title" style="padding: 0; height: 70px">
+                                <p>Quản lý phòng học</p>
+                                <input type="button" id="createClassroomBtn" class="btn btn-orange" style="float:right; display: none" onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();
+                                                    document.getElementById('classroom-create').value='Tạo phòng'" value="Tạo phòng học"/>
+                                <input type="button" id="createRoomTypeBtn" class="btn btn-orange" style="float:right; display: none" onclick="document.getElementById('RoomTypeAction').value='create';showModal(1, 'modal-roomtypedetail')"
+                                       value="Tạo loại phòng"/>
+                                <div class="clear"></div>
+                                <div class="title-category">
                                     <ul>
-                                        <li id="tab1-1" onclick="changeTab('tab1', this)">Phòng học</li>
-                                        <li id="tab2-2" onclick="changeTab('tab2', this)">Loại phòng</li>
+                                        <li id="head-tab1" onclick="changeManage('tab1', this)" data-tab="classroom-tab" class="active">Phòng học</li>
+                                        <li id="head-tab2" onclick="changeManage('tab2', this)" data-tab="classroom-tab">Loại phòng</li>
                                     </ul>
                                 </div>
+                            </div>
+                            <div class="tab classroom-tab">
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
-                                        <div><input type="button" class="btn btn-orange"
-                                                    onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();"
-                                                    value="Tạo phòng học"/></div>
                                         <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                     </div>
                                     <div id="tab2" class="body-tab">
-                                        <div>
-                                            <div></div>
-                                            <input type="button" class="btn btn-orange" style="margin: 0"
-                                                   onclick="document.getElementById('RoomTypeAction').value='update';showModal(1, 'modal-roomtypedetail')"
-                                                   value="Tạo loại phòng"/></div>
                                         <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
                                     </div>
                                 </div>
@@ -100,7 +105,7 @@
         <div class="content-modal">
                 <%--Modal hien len khi nhap vao nut xem cua CLASSROOM--%>
             <div class="modal modal-medium" id="modal-manageclassroom">
-                <div class="content-modal" style="width: auto;">
+                <div class="content-modal">
                     <div class="header-modal title">
                         <p id="roomname"></p>
                         <i class="fa fa-times" onclick="showModal(0, 'modal-manageclassroom')"></i>
@@ -149,7 +154,7 @@
                 <input type="hidden" name="classroomId" id="classroomId" value="0">
 
                 <div class="modal modal-small" id="modal-1">
-                    <div class="content-modal">
+                    <div class="content-modal" style="height: 217px;">
                         <div class="header-modal title">
                             <p id="classroomName">Tạo Phòng</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-1'); clearRoomName();"></i>
@@ -158,20 +163,15 @@
                             <div class="group-control">
                                 <div class="name" style="width: 135px;">Số phòng</div>
                                 <div class="control">
-                                    <input id="roomNameId" type="text" value="" name="RoomName" maxlength="4"
-                                           onkeydown="return ( event.ctrlKey || event.altKey
-                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
-                    || (95<event.keyCode && event.keyCode<106)
-                    || (event.keyCode==8) || (event.keyCode==9)
-                    || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )" placeholder="Nhập số phòng"/>
+                                    <input id="roomNameId"
+                                           type="text" value="" name="RoomName" maxlength="4" placeholder="Nhập số phòng"/>
                                 </div>
                             </div>
                             <div class="group-control">
                                 <div class="name" style="width: 135px;">Loại phòng</div>
                                 <div class="value" id="loaiphong"></div>
                                 <input type="hidden" name="RoomType" value="" id="roomtype">
-                                <input type="button" class="btn btn-detail" style="float: left; margin: 0 0 0 0px;"
+                                <input type="button" class="btn btn-detail" style="float: left; margin: 0 0 0 0;"
                                        onclick="showModal(2, 'modal-1','modal-2'); chooseRoomType();"
                                        value="Chọn"/>
                             </div>
@@ -189,14 +189,13 @@
             </form>
                 <%--Modal hien len khi nhap vao nut chon kieu phong khi tao phong cua CLASSROOM--%>
             <div class="modal modal-medium" id="modal-2">
-                <div class="content-modal" style="height: 598px;">
+                <div class="content-modal" style="height: 625px;">
                     <div class="header-modal title">
                         <p>Loại phòng học</p>
                         <i class="fa fa-times" onclick="showModal(0, 'modal-2'); clearRoomName();"></i>
                     </div>
-                    <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
                     <div class="body-modal">
-                        <div class="group-control" style="margin: 15px 0 0">
+                        <div class="group-control">
                             <div class="name">Loại phòng</div>
                             <div class="control">
                                 <select id="selectBox">
@@ -226,55 +225,55 @@
             </div>
                 <%--Modal hien len khi nhap vao nut tao roomtype--%>
             <div class="modal modal-medium" id="modal-roomtypedetail">
-                <div class="content-modal" style="height: 650px;">
+                <div class="content-modal" style="height: 600px;">
                     <div class="header-modal title">
                         <p class="roomtypename">Tạo loại phòng </p>
                         <i class="fa fa-times" onclick="showModal(0, 'modal-roomtypedetail'); clearRoomType();"></i>
                     </div>
                     <div class="body-modal">
-                        <div class="group-control" style="margin: 15px 0 0">
+                        <div class="group-control">
                             <div class="name">Tên loại phòng</div>
                             <div class="control">
                                 <input type="text" id="roomTypeName" maxlength="30"/>
                             </div>
                         </div>
 
-                        <c:forEach items="${category}" var="c" varStatus="count">
-                            <div class="group-control" style="margin: 15px 0 0">
-                                <div class="name">${c.name}</div>
-                                <div class="control">
-                                    <input class="check-box" value="${c.id}-${c.imageUrl}" type="checkbox"
-                                           id="thiet-bi${count.count}"
-                                           onclick="checkQuantity(${count.count});"/>
+                        <div style="margin: 15px 0 0 180px; font-weight: bold; height: 15px">
+                            <div style="float:left; margin-right: 35px">Chọn</div>
+                            <div style="float:left; margin-right: 35px">Số lượng</div>
+                            <div>Độ ưu tiên</div>
+                        </div>
+                        <div style="width: 100%; height: 185px; margin: 10px 0 0; overflow-x: hidden; overflow-y: overlay">
+                            <c:forEach items="${category}" var="c" varStatus="count">
+                                <div class="group-control">
+                                    <div class="name">${c.name}</div>
+                                    <div class="control">
+                                        <input class="check-box" style="margin: 11px 50px 11px 0" value="${c.id}-${c.imageUrl}" type="checkbox" id="thiet-bi${count.count}" onclick="checkQuantity(${count.count});"/>
 
-                                    <div id="control-${count.count}" style="display: none" class="control-roomtype">
-                                        <c:if test="${c.isManaged}">
-                                            Số lượng: <input maxlength="2" id="quantity${count.count}"
-                                                             style="width: 20px"
-                                                             onkeydown="return ( event.ctrlKey || event.altKey
-                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
-                    || (95<event.keyCode && event.keyCode<106)
-                    || (event.keyCode==8) || (event.keyCode==9)
-                    || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )" class="quantity">
-                                        </c:if>
-                                        Độ ưu tiên: <select id="priority${count.count}" class="priority">
-
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
+                                        <div id="control-${count.count}" style="display: none" class="control-roomtype">
+                                            <c:if test="${c.isManaged}">
+                                                <input maxlength="2" id="quantity${count.count}" style="width: 60px; margin: 0 32px 0 0" class="quantity">
+                                            </c:if>
+                                            <c:if test="${!c.isManaged}">
+                                                <p style="margin: 0 56px 0 0; float: left;">Không</p>
+                                            </c:if>
+                                            <select id="priority${count.count}" class="priority">
+                                                <option value="1">Thấp</option>
+                                                <option value="2">Trung Bình</option>
+                                                <option value="3">Cao</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </c:forEach>
+                            </c:forEach>
+                        </div>
                         <div class="group-control">
                             <div class="name">Số dãy bàn</div>
                             <div class="control">
                                 <select id="vrow" onchange="createDetailMap()">
                                     <option value="1">1</option>
-                                    <option value="2" selected>2</option>
-                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="3" selected>3</option>
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
@@ -293,15 +292,9 @@
                                 <p class="clear"></p>
                             </div>
                             <div id="detail">
-                                <div class="row" id="row-1">
-
-                                </div>
-                                <div class="row" id="row-2">
-
-                                </div>
-                                <div class="row" id="row-3">
-
-                                </div>
+                                <div class="row" id="row-1"></div>
+                                <div class="row" id="row-2"></div>
+                                <div class="row" id="row-3" style="margin: 0 0 5px"></div>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -359,7 +352,7 @@
                 <%--Modal change room--%>
             <form id="form-getChangeRoom" name="form-getChangeRoom">
                 <div class="modal modal-small" id="modal-changeRoom">
-                    <div class="content-modal">
+                    <div class="content-modal" style="height:216px;">
                         <div class="header-modal title">
                             <p id="changeRoom-name"></p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-changeRoom');
@@ -401,8 +394,7 @@
                     <input type="hidden" id="result-changeRoom-id" name="classroomId">
                     <input type="hidden" id="result-timeFrom" name="timeFrom">
                     <input type="hidden" id="result-timeTo" name="timeTo">
-
-                    <div class="content-modal">
+                    <div class="content-modal" style="height: 216px;">
                         <div class="header-modal title">
                             <p id="getchangeRoom-name">Phòng trống</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-room');"></i>
@@ -439,7 +431,7 @@
                 document.getElementById('removeRoomtypeID').value = roomtypeId;
             }
             function getClassroomName(removeClassroomName) {
-                document.getElementById('removeClassroomName').value = removeClassroomName;
+                document.getElementById('x').value = removeClassroomName;
             }
 
             function clearthietbi() {
@@ -469,16 +461,33 @@
                 document.getElementById('name').value = "";
 
             }
+
             document.getElementById("${tab}").className = "body-tab active";
             var tab = '${tab}';
             if (tab === 'tab1') {
-                document.getElementById("tab1-1").className = "active";
-                document.getElementById("tab2-2").className = "";
-            } else {
-                document.getElementById("tab2-2").className = "active";
-                document.getElementById("tab1-1").className = "";
+                document.getElementById("head-tab1").className = "active";
+                document.getElementById("head-tab2").className = "";
+                document.getElementById("createClassroomBtn").style.display = "block";
+            }
+            else {
+                document.getElementById("head-tab2").className = "active";
+                document.getElementById("head-tab1").className = "";
+                document.getElementById("createRoomTypeBtn").style.display = "block";
             }
 
+            function changeManage(tab, thisE) {
+                changeTabInTitle(tab, thisE);
+
+                if(tab == 'tab1') {
+                    document.getElementById("createClassroomBtn").style.display = "block";
+                    document.getElementById("createRoomTypeBtn").style.display = "none";
+                } else {
+                    document.getElementById("createClassroomBtn").style.display = "none";
+                    document.getElementById("createRoomTypeBtn").style.display = "block";
+                }
+
+                window.history.pushState({"html":'',"pageTitle":''},"", "http://localhost:8080/staff/classroom?ACTIVETAB=" + tab + "&MESSAGE=0");
+            }
 
             function validateCreateClassroomForm() {
                 var roomName = document.forms["CreateClassroomForm"]["RoomName"].value;
@@ -733,7 +742,7 @@
                 var classroomId = document.forms['form-getChangeRoom']['changeRoom-id'].value;
                 var timeFrom = document.forms['form-getChangeRoom']['timeFrom'].value;
                 var timeTo = document.forms['form-getChangeRoom']['timeTo'].value;
-                showModal(0, 'modal-changeRoom');
+                showModal(0,'modal-changeRoom');
                 $.ajax({
                     type: "get",
                     url: "/ajax/getChangeRoom",
@@ -750,16 +759,45 @@
                     error: function () {
                         conformData(1, {message: 'Sai kiểu ngày tháng yyyy-mm-dd!'});
                         $(".loading-page").removeClass("active");
-                        showModal(1, 'modal-changeRoom');
+                        showModal(1,'modal-changeRoom');
                     }
                 })
             }
 
-            function changeRoomDate() {
+            function changeRoomDate(){
                 showModal(0, 'modal-room');
                 $(".loading-page").addClass("active");
                 document.getElementById('changeRoom-form').submit();
             }
+
+            $(".quantity").keydown(function (event) {
+                if( event.ctrlKey || event.altKey
+                        || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                        || (95<event.keyCode && event.keyCode<106)
+                        || (event.keyCode==8) || (event.keyCode==9)
+                        || (event.keyCode>34 && event.keyCode<40)
+                        || (event.keyCode==46) ) {
+                    return;
+                }
+                else {
+                    event.preventDefault();
+                }
+            });
+
+            $("#roomNameId").keydown(function (event) {
+                if( event.ctrlKey || event.altKey
+                        || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                        || (95<event.keyCode && event.keyCode<106)
+                        || (event.keyCode==8) || (event.keyCode==9)
+                        || (event.keyCode>34 && event.keyCode<40)
+                        || (event.keyCode==46) ) {
+                    return;
+                }
+                else {
+                    event.preventDefault();
+                }
+            });
+
             document.getElementById("${tab1}").className += " active";
             document.getElementById("${tab1}").setAttribute("data-main", "1");
         </script>

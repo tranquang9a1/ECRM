@@ -373,7 +373,7 @@ function changePassword(username, th) {
     } else if (password != rePassword) {
         conformData(1, {message: 'Mật khẩu xác nhận chưa trùng khớp!'});
     } else if(password == '123456') {
-        conformData(1, {message: 'Không được dùng mật khẩu mặt định!'});
+        conformData(1, {message: 'Không được dùng mật khẩu mặc định!'});
     } else {
         if(th==1) {
             showModal(0, 'modal-changePass');

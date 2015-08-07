@@ -55,7 +55,7 @@ public class DamagedRoomDTO {
 
                 if(item.isStatus() == false && !item.getTblEquipmentCategoryByCategoryId().getName().equals("Bàn") && !item.getTblEquipmentCategoryByCategoryId().getName().equals("Ghế")) {
                     this.equipmentCategory.get(position).setSize(1);
-                } else if(item.getTblEquipmentCategoryByCategoryId().getName().equals("Bàn") && item.getTblEquipmentCategoryByCategoryId().getName().equals("Ghế") && "[0]".equals(item.getPosition()) == false) {
+                } else if((item.getTblEquipmentCategoryByCategoryId().getName().equals("Bàn") || item.getTblEquipmentCategoryByCategoryId().getName().equals("Ghế")) && "[0]".equals(item.getPosition()) == false) {
                     this.equipmentCategory.get(position).addSize();
                 }
             }

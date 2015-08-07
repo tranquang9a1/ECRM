@@ -364,7 +364,7 @@ public class UserController {
         TblEquipmentCategoryEntity equipmentCategory = equipmentCategoryDAO.find(category);
 
         String position = null;
-        if (!equipmentCategory.getName().equalsIgnoreCase("Bàn") || !equipmentCategory.getName().equalsIgnoreCase("Ghế")) {
+        if (!equipmentCategory.getName().equalsIgnoreCase("Bàn") && !equipmentCategory.getName().equalsIgnoreCase("Ghế")) {
             position = "[" + category + "]";
         } else {
             position = "[0]";

@@ -504,7 +504,13 @@ public class APIService {
 
     public List<ReportClassDTO> getReportStaff(int limit, int offset, String status) {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
-        List<Integer> listClass = reportDAO.getReportByClassId(status, offset, limit);
+        List<Integer> listClass = new ArrayList<>();
+        if (status.equalsIgnoreCase("finish")) {
+            listClass  = reportDAO.getReportByClassId(status, offset, limit);
+        } else {
+            listClass = reportDAO.getClassFromStatus(offset, limit);
+        }
+
         List<Integer> listReport = new ArrayList<Integer>();
         for (int classId : listClass) {
             //int id = Integer.parseInt(classId);

@@ -200,7 +200,12 @@ public class ResolveReportActivity extends Activity {
                 progress.dismiss();
                 if (items != null) {
                     chooseRoomDialog = new ChooseRoomDialogFragment();
-                    chooseRoomDialog.setParam(ResolveReportActivity.this,items, current, "report");
+                    chooseRoomDialog.setParam(ResolveReportActivity.this, items, current, "report", new ChooseRoomDialogFragment.IChangeRoomComplete() {
+                        @Override
+                        public void onRequestComplete(boolean result) {
+
+                        }
+                    });
                     chooseRoomDialog.show(getFragmentManager(), "ChooseRoom");
                 } else {
                     DialogUtils.showAlert(ResolveReportActivity.this, Constants.NO_ROOM_MESSAGE);

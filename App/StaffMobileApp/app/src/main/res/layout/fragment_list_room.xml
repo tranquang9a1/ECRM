@@ -2,7 +2,18 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
+    <TextView
+        android:id="@+id/emptyMessage"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#949494"
+        android:layout_marginTop="20dp"
+        android:textSize="@dimen/empty_list_text_size"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:gravity="center"
+        android:text="@string/no_classroom"/>
     <GridView
         android:paddingTop="5dp"
         android:layout_height="wrap_content"

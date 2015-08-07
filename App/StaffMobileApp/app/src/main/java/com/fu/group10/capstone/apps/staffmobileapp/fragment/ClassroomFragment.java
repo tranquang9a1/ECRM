@@ -1,5 +1,6 @@
 package com.fu.group10.capstone.apps.staffmobileapp.fragment;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,13 +38,16 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
     //int size = 6;
     RequestSender sender = new RequestSender();
     View rootView;
+    ProgressDialog progressDialog;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_classroom, container, false);
+        progressDialog = ProgressDialog.show(getActivity(), "", "Đang tải danh sách phòng học", true);
         tabHost = (MaterialTabHost) rootView.findViewById(R.id.tabHost);
         pager = (ViewPager) rootView.findViewById(R.id.pager);
+
         //for (int i = 0; i < size; i++) {
         //tabHost.addTab(tabHost.newTab().setText(setTitle(i)).setTabListener(ClassroomFragment.this));
         //}
@@ -116,6 +120,7 @@ public class ClassroomFragment extends Fragment implements MaterialTabListener {
 
                 }
                 tabHost.notifyDataSetChanged();
+                progressDialog.dismiss();
 
             }
         });

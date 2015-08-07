@@ -20,6 +20,7 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="no_report_found">Không có báo cáo nào</string>
+    <string name = "no_classroom">Không có lớp học ở tầng này</string>
     <string name="highlight_image">Highlight Image</string>
     <string name="delete">Xóa</string>
     <string name="fixed">Đã sửa</string>

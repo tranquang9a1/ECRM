@@ -72,8 +72,6 @@ public class GridViewAdapter extends BaseAdapter {
             viewHolder.mRoundedLetterView.setTitleText(info.getName());
             if (info.getDamageLevel() <= 20) {
                 viewHolder.mRoundedLetterView.setBackgroundColor(mContext.getResources().getColor(R.color.blue));
-            } else if (info.getDamageLevel() > 20 && info.getDamageLevel() <= 60) {
-                viewHolder.mRoundedLetterView.setBackgroundColor(mContext.getResources().getColor(R.color.green));
             } else {
                 viewHolder.mRoundedLetterView.setBackgroundColor(mContext.getResources().getColor(R.color.red));
             }

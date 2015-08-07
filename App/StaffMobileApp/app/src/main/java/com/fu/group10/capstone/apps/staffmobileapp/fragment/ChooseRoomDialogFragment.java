@@ -12,10 +12,12 @@ import com.fu.group10.capstone.apps.staffmobileapp.DummyApplication;
 import com.fu.group10.capstone.apps.staffmobileapp.R;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.Constants;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.DialogUtils;
+import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
 import com.fu.group10.capstone.apps.staffmobileapp.activity.ListRoomActivity;
 import com.fu.group10.capstone.apps.staffmobileapp.activity.MainActivity;
 import com.fu.group10.capstone.apps.staffmobileapp.activity.ResolveReportActivity;
+import com.fu.group10.capstone.apps.staffmobileapp.model.Result;
 
 /**
  * Created by QuangTV on 6/13/2015.
@@ -33,16 +35,18 @@ public class ChooseRoomDialogFragment extends DialogFragment{
     DialogChangeRoomSuccess dialogChangeRoomSuccess;
     Context context;
     String type;
+    IChangeRoomComplete status;
 
     public ChooseRoomDialogFragment() {
 
     }
 
-    public void setParam(Activity activity, String[] items, String current, String type) {
+    public void setParam(Activity activity, String[] items, String current, String type, IChangeRoomComplete status) {
         this.activity = activity;
         this.items = items;
         this.current = current;
         this.type = type;
+        this.status = status;
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -52,7 +56,8 @@ public class ChooseRoomDialogFragment extends DialogFragment{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showProgress();
-                changeRoom(current, items[which+1]);
+                int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                changeRoom(current, items[selectedPosition]);
             }
         }).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
@@ -62,8 +67,9 @@ public class ChooseRoomDialogFragment extends DialogFragment{
         }).setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                showProgress();
-                changeRoom(current, items[i]);
+//                showProgress();
+//                changeRoom(current, items[i]);
+
             }
         });
         dialog =  builder.create();
@@ -89,10 +95,13 @@ public class ChooseRoomDialogFragment extends DialogFragment{
         sender.start(url, new RequestSender.IRequestSenderComplete() {
             @Override
             public void onRequestComplete(String result) {
+                Result res = ParseUtils.parseResult(result);
                 progress.dismiss();
-                if (result.equalsIgnoreCase("true")) {
+                if (res.getError_code() == 200) {
+                    status.onRequestComplete(true);
                     openHome(from, to);
                 } else {
+                    status.onRequestComplete(false);
                     Toast.makeText(context, "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_LONG).show();
                 }
             }
@@ -114,6 +123,10 @@ public class ChooseRoomDialogFragment extends DialogFragment{
             }
         });
 
+    }
+
+    public interface IChangeRoomComplete {
+        void onRequestComplete(boolean result);
     }
 
 

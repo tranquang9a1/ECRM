@@ -11,25 +11,22 @@
 <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
  <div class="table" style="width:100%; height: 350px;">
         <div class="header-table">
-            <div style="width:10%">
+            <div class="width-15">
+                <div>Hình ảnh</div>
+            </div>
+            <div class="width-20">
                 <div>Loại</div>
             </div>
-            <div style="width:12%;">
-                <div>Tên</div>
+            <div class="width-20">
+                <div>Tên thiết bị</div>
             </div>
-            <div style="width:20%;">
+            <div class="width-20">
                 <div>Số Serial</div>
             </div>
-            <div style="width:100px;">
-                <div>Giờ sử dụng</div>
-            </div>
-            <div style="width:100px;">
-                <div>Giờ còn lại</div>
-            </div>
-            <div style="width:50px;">
+            <div class="width-10">
                 <div>Phòng</div>
             </div>
-            <div style="width: 100px">
+            <div class="width-15">
                 <div></div>
             </div>
             <p class="clear"></p>
@@ -42,27 +39,24 @@
                     <c:choose>
                         <c:when test="${e.timeRemain <=50 and e.usingTime>0}">
                             <div class="row">
-                                <div style="width:10%;">
+                                <div class="width-15">
                                     <div class="equip"
                                          style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">
                                     </div>
                                 </div>
-                                <div style="width:12%;">
+                                <div class="width-20">
+                                    <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
+                                </div>
+                                <div class="width-20">
                                     <div>${e.name}</div>
                                 </div>
-                                <div style="width:20%;">
+                                <div class="width-20">
                                     <div>${e.serialNumber}</div>
                                 </div>
-                                <div style="width:100px;">
-                                    <div>${e.usingTime}</div>
-                                </div>
-                                <div style="width:100px;">
-                                    <div>${e.timeRemain}</div>
-                                </div>
-                                <div style="width:50px;">
+                                <div class="width-10">
                                     <div>${e.tblClassroomByClassroomId.name}</div>
                                 </div>
-                                <div style="width: 100px">
+                                <div class="width-15">
                                     <div class="group-button">
                                         <c:choose>
                                             <c:when test="${e.classroomId != null}">
@@ -108,27 +102,24 @@
                         </c:when>
                         <c:otherwise>
                             <div class="row">
-                                <div style="width:10%;">
+                                <div class="width-15">
                                     <div class="equip"
                                          style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">
                                     </div>
                                 </div>
-                                <div style="width:12%;">
+                                <div class="width-20">
+                                    <div>${e.tblEquipmentCategoryByCategoryId.name}</div>
+                                </div>
+                                <div class="width-20">
                                     <div>${e.name}</div>
                                 </div>
-                                <div style="width:20%;">
+                                <div class="width-20">
                                     <div>${e.serialNumber}</div>
                                 </div>
-                                <div style="width:100px;">
-                                    <div>${e.usingTime}</div>
-                                </div>
-                                <div style="width:100px;">
-                                    <div>${e.timeRemain}</div>
-                                </div>
-                                <div style="width:50px;">
+                                <div class="width-10">
                                     <div>${e.tblClassroomByClassroomId.name}</div>
                                 </div>
-                                <div style="width: 100px">
+                                <div class="width-15">
                                     <div class="group-button">
                                         <c:choose>
                                             <c:when test="${e.classroomId != null}">

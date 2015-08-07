@@ -38,10 +38,27 @@ public class UserDAOImpl extends BaseDAO<TblUserEntity, Integer> implements User
         return tblUserEntity;
     }
 
-    public List<TblUserEntity> findTeacher(){
-        Query q = entityManager.createQuery("SELECT u from TblUserEntity u where u.roleId =:roleId");
+    public int getNumberOfTeacher(){
+        Query q = entityManager.createQuery("SELECT count(u) from TblUserEntity u where u.roleId =:roleId");
         q.setParameter("roleId", 3);
-        List<TblUserEntity> tblUserEntities = q.getResultList();
+
+        return ((Long)q.getSingleResult()).intValue();
+    }
+
+    public List<TblUserEntity> findTeacher(){
+        Query query = entityManager.createQuery("SELECT u from TblUserEntity u where u.roleId =:roleId");
+        query.setParameter("roleId", 3);
+        List<TblUserEntity> tblUserEntities = query.getResultList();
+        return tblUserEntities;
+    }
+
+    public List<TblUserEntity> getTeacher(int page, int size){
+        Query query = entityManager.createQuery("SELECT u from TblUserEntity u where u.roleId =:roleId");
+        query.setParameter("roleId", 3);
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+
+        List<TblUserEntity> tblUserEntities = query.getResultList();
         return tblUserEntities;
     }
 

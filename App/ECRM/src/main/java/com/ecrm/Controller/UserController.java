@@ -213,14 +213,14 @@ public class UserController {
         TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
 
         //List damagedLevel
-        List<TblEquipmentEntity>listDamamagedEquipment1 =  room.getTblEquipmentsById();
-        Iterator<TblEquipmentEntity> iterator1 = listDamamagedEquipment1.iterator();
-        while (iterator1.hasNext()){
-            TblEquipmentEntity tblEquipmentEntity = iterator1.next();
-            if(tblEquipmentEntity.isStatus()){
-                iterator1.remove();
-            }
-        }
+//        List<TblEquipmentEntity>listDamamagedEquipment1 =  room.getTblEquipmentsById();
+//        Iterator<TblEquipmentEntity> iterator1 = listDamamagedEquipment1.iterator();
+//        while (iterator1.hasNext()){
+//            TblEquipmentEntity tblEquipmentEntity = iterator1.next();
+//            if(tblEquipmentEntity.isStatus()){
+//                iterator1.remove();
+//            }
+//        }
 
         TblReportEntity report = reportDAO.getReportOfUsernameInDay(user.getUsername(), reportRequest.getRoomId());
         if (report == null || report.getStatus() == ReportStatus.FINISH.getValue()) {
@@ -238,7 +238,7 @@ public class UserController {
             for (int i = 0; i < evaluates.length; i++) {
 
                 category = Integer.parseInt(evaluates[i].split("-")[0]);
-                TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
             }
         } else {
             String[] equipments = reportRequest.getListDamaged().split("--");
@@ -247,10 +247,10 @@ public class UserController {
                 List<String> equipsInCate = getEquipmentsInCategory(equipments, category);
 
                 if (equipsInCate.size() == 0) {
-                    TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                    insertEquipment(report.getId(), reportRequest.getRoomId(), category, null, evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
                 } else {
                     for (int j = 0; j < equipsInCate.size(); j++) {
-                        TblEquipmentEntity tblEquipmentEntity = insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
+                        insertEquipment(report.getId(), reportRequest.getRoomId(), category, equipsInCate.get(j), evaluates[i].split("-")[1], reportRequest.getListDesc().get(i));
                     }
                 }
             }
@@ -361,22 +361,22 @@ public class UserController {
     }
 
     private TblEquipmentEntity insertEquipment(int reportId, int roomId, int category, String pos, String evaluate, String description) {
+        TblEquipmentCategoryEntity equipmentCategory = equipmentCategoryDAO.find(category);
+
         String position = null;
-        if (category < 7) {
+        if (!equipmentCategory.getName().equalsIgnoreCase("Bàn") || !equipmentCategory.getName().equalsIgnoreCase("Ghế")) {
             position = "[" + category + "]";
         } else {
             position = "[0]";
         }
-
         if (pos != null && "".equals(pos) == false) {
             position = pos;
         }
 
-        String serialNumber = "";
-        if (category < 4) {
-            serialNumber = null;
+        String serialNumber = null;
+        if (!equipmentCategory.getIsManaged()) {
+            serialNumber = "";
         }
-
 
         TblEquipmentEntity equip = equipmentDAO.findEquipmentHavePosition(roomId, category, position, serialNumber);
 

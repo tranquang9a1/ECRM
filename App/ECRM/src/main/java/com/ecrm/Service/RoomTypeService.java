@@ -166,6 +166,17 @@ public class RoomTypeService {
             }
         }
 
+        JSONObject tableJson = new JSONObject();
+        tableJson.put("id", equipmentCategoryDAO.findEquipmentId("Bàn"));
+        tableJson.put("name", "Bàn");
+        tableJson.put("imageUrl", "HouseholdTableicon.png");
+        jsonArray.add(tableJson);
+        JSONObject chairJson = new JSONObject();
+        chairJson.put("id", equipmentCategoryDAO.findEquipmentId("Ghế"));
+        chairJson.put("name", "Ghế");
+        chairJson.put("imageUrl", "chairoffice512.png");
+        jsonArray.add(chairJson);
+
         RoomTypeDTO roomTypeDTO = new RoomTypeDTO();
         roomTypeDTO.setRoomType(roomType);
         roomTypeDTO.setEquipment(jsonArray);

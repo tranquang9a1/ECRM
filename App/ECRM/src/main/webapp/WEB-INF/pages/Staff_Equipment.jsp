@@ -52,16 +52,25 @@
                     <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
                         <div class="page active" id="equipment">
-                            <div class="title">
+                            <div class="title" style="padding: 0; height: 70px">
                                 <p>Quản lý thiết bị</p>
-                            </div>
-                            <div class="tab">
-                                <div class="tab-medium">
+                                <input type="button" class="btn btn-orange" style="display: none" id="createEquipmentBtn" value="Tạo thiết bị"
+                                       onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
+                                                            document.getElementById('equipment-classroomId').value = '0';
+                                                            document.getElementById('time-remain').style.display = 'none';
+                                                            $('#modal-1 > div.content-modal').css('height','307px');
+                                                            document.getElementById('equipment-category-select').disabled = false;
+                                                            "/>
+                                <input type="button" class="btn btn-orange" id="createEquipCategoryBtn" style="display: none; margin: 0" value="Tạo loại thiết bị" onclick="showModal(1, 'modal-category')"/>
+                                <div class="clear"></div>
+                                <div class="title-category">
                                     <ul>
-                                        <li id="tab1-1" onclick="changeTab('tab1', this)">Thiết bị</li>
-                                        <li id="tab2-2" onclick="changeTab('tab2', this)">Loại thiết bị</li>
+                                        <li id="head-tab1" onclick="changeManage('tab1', this)" data-tab="equipment-tab" class="active">Thiết bị</li>
+                                        <li id="head-tab2" onclick="changeManage('tab2', this)" data-tab="equipment-tab">Loại thiết bị</li>
                                     </ul>
                                 </div>
+                            </div>
+                            <div class="tab equipment-tab">
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
 
@@ -410,16 +419,32 @@
 
             document.getElementById("${tab1}").className += " active";
             document.getElementById("${tab1}").setAttribute("data-main", "1");
+
             document.getElementById("${tab}").className = "body-tab active";
             var tab = '${tab}';
             if (tab === 'tab1') {
-                document.getElementById("tab1-1").className = "active";
-                document.getElementById("tab2-2").className = "";
+                document.getElementById("head-tab1").className = "active";
+                document.getElementById("head-tab2").className = "";
+                document.getElementById("createEquipmentBtn").style.display = "block";
             } else {
-                document.getElementById("tab2-2").className = "active";
-                document.getElementById("tab1-1").className = "";
+                document.getElementById("head-tab2").className = "active";
+                document.getElementById("head-tab1").className = "";
+                document.getElementById("createEquipCategoryBtn").style.display = "block";
             }
 
+            function changeManage(tab, thisE) {
+                changeTabInTitle(tab, thisE);
+
+                if(tab == 'tab1') {
+                    document.getElementById("createEquipmentBtn").style.display = "block";
+                    document.getElementById("createEquipCategoryBtn").style.display = "none";
+                } else {
+                    document.getElementById("createEquipmentBtn").style.display = "none";
+                    document.getElementById("createEquipCategoryBtn").style.display = "block";
+                }
+
+                window.history.pushState({"html":'',"pageTitle":''},"", "http://localhost:8080/staff/equipment?ACTIVETAB=" + tab);
+            }
         </script>
         </html>
     </c:otherwise>

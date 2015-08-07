@@ -9,17 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
-
-<div class="clear"></div>
-<div><input type="button" class="btn btn-orange" value="Tạo thiết bị"
-            onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
-                                                            document.getElementById('equipment-classroomId').value = '0';
-                                                            document.getElementById('time-remain').style.display = 'none';
-                                                            $('#modal-1 > div.content-modal').css('height','307px');
-                                                            document.getElementById('equipment-category-select').disabled = false;
-                                                            "/>
-
-    <div class="table" style="width:100%; height: 350px;">
+ <div class="table" style="width:100%; height: 350px;">
         <div class="header-table">
             <div style="width:10%">
                 <div>Loại</div>
@@ -190,9 +180,8 @@
             </form>
         </div>
     </div>
-</div>
-<div id="pagination" style="padding-left: 150px;"></div>
 
+<div id="pagination" style="padding-left: 150px;"></div>
 <script>
     function editEquipment(classroomId, category, name, serialNumber, usingTime, timeRemain, equipmentId) {
         document.getElementById('classroomName').innerHTML = 'Cập nhật thiết bị';

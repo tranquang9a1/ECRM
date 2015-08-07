@@ -41,8 +41,8 @@
         </div>
       </div>
       <div class="footer-modal" style="border-top: 1px solid #ccc">
-        <input type="button" class="btn btn-orange" onclick="changePassword('${user.username}', 0)" value="Đổi mật khẩu"/>
         <input type="button" class="btn btn-normal" onclick="showModal(0, 'modal-updatePass')" value="Thoát"/>
+        <input type="button" class="btn btn-orange" onclick="changePassword('${user.username}', 0)" value="Đổi mật khẩu"/>
       </div>
     </div>
     <div class="black-background"></div>

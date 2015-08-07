@@ -975,10 +975,11 @@ body {
     position: absolute;
     top: -13px;
     float: none !important;
-    right: 19px;
+    right: 0;
     width: 20px;
     height: 15px!important;
     margin: 0!important;
+    padding: 0px 20px 0 142px;
 }
 
 .account-setting ul{

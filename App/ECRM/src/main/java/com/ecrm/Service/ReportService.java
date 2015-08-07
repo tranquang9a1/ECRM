@@ -45,6 +45,8 @@ public class ReportService {
     private NotificationService notificationService;
     @Autowired
     private CheckDamageService checkDamageService;
+    @Autowired
+    private RoomTypeService roomTypeService;
 
     // PUBLIC METHOD
     public boolean resolveRoom(int roomId, String listResolve, String listRealEquip) {
@@ -132,7 +134,7 @@ public class ReportService {
         DamagedRoomDTO resultObject = new DamagedRoomDTO(classroom, reportDAO.getReportNewest(roomId), equipments);
 
         resultObject.setReporters(reportDAO.getReportersInRoom(roomId));
-        resultObject.setRoomtype(classroom.getTblRoomTypeByRoomTypeId());
+        resultObject.setRoomtype(roomTypeService.getRoomTypeOfRoom(classroom));
         resultObject.setDamagedLevel(classroom.getDamagedLevel());
 
         List<String> availableRooms = classroomService.getAvailableRoom(roomId);

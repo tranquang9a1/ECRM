@@ -12,9 +12,9 @@
 <c:set var="rt" value="${room.roomtype}" />
 <script>
   var positionEquipments = {};
-  <c:forEach items="${room.equipments}" var="item">
+  <c:forEach items="${room.equipment}" var="item">
   <c:if test="${item.position != null && '[0]'.equals(item.position) == false && item.status == false}">
-  positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
+    positionEquipments["${item.position.trim()}"] = {id: ${item.id}, status: ${item.status}};
   </c:if>
   </c:forEach>
 </script>
@@ -95,7 +95,7 @@
       <c:if test="${item.serialNumber.size() > 0}">
         <input type="checkbox" class="equipment-type" value="${item.id}"/>
       </c:if>
-      <div class="equip ${item.className}"></div>
+      <div class="equip" style="background-image: url('/resource/img/equipment/${item.urlImage}')"></div>
       <div class="equipment">${item.name}</div>
       <c:if test="${item.size == 0}">
         <div class="quantity">Số lượng: Không xác định</div>
@@ -108,7 +108,7 @@
         <div class="list-real-equipment" id="real-equip-${item.id}">
           <div class="real-equipment">${item.name}</div>
           <c:forEach items="${item.serialNumber}" var="item2">
-            <div class="real-equipment" onclick="chooseRealEquipment(${item2}, ${item.id}, this)">${item2}</div>
+            <div class="real-equipment" onclick="chooseRealEquipment('${item2}', ${item.id}, this)">${item2}</div>
           </c:forEach>
         </div>
       </c:if>
@@ -180,8 +180,7 @@
     }
   });
 
-  showMap('room-map', positionEquipments, ${rt.verticalRows}, '${rt.horizontalRows}', '${rt.numberOfSlotsEachHRows}', ${rt.airConditioning},
-          ${rt.fan}, ${rt.projector}, ${rt.speaker}, ${rt.television});
+  showMap('room-map', positionEquipments, ${rt.roomType.verticalRows}, '${rt.roomType.horizontalRows}', '${rt.roomType.numberOfSlotsEachHRows}', ${rt.equipment});
 </script>
 
 

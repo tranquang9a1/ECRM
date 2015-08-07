@@ -22,27 +22,26 @@ public class DamagedRoomDTO {
     private String evaluate;
 
     private List<String> suggestRooms;
-    private TblRoomTypeEntity roomtype;
+    private RoomTypeDTO roomtype;
     private List<EquipmentDamaged> equipmentCategory;
-    private List<TblEquipmentEntity> equipments;
+    private List<TblEquipmentEntity> equipment;
 
     public DamagedRoomDTO(TblClassroomEntity room, TblReportEntity report, List<TblEquipmentEntity> equipments) {
         this.roomId = room.getId();
         this.roomName = room.getName();
         this.reportDate = report.getCreateTime();
         this.evaluate = report.getEvaluate();
-        this.equipments = equipments;
+        this.equipment = equipments;
         this.free = false;
 
         this.equipmentCategory = new ArrayList<EquipmentDamaged>();
         int position = -1;
-        String[] className = {"","projector","tivi","air-condition","fan","speaker","bulb","table-icon","chair"};
 
         for (TblEquipmentEntity item: equipments) {
             if(item.isStatus() == false) {
                 position = checkContain(item.getCategoryId());
                 if (position == -1) {
-                    this.equipmentCategory.add(new EquipmentDamaged(item.getCategoryId(), item.getTblEquipmentCategoryByCategoryId().getName(), 0, className[item.getCategoryId()]));
+                    this.equipmentCategory.add(new EquipmentDamaged(item.getCategoryId(), item.getTblEquipmentCategoryByCategoryId().getName(), 0, item.getTblEquipmentCategoryByCategoryId().getImageUrl()));
                 }
             }
         }
@@ -54,9 +53,9 @@ public class DamagedRoomDTO {
                     this.equipmentCategory.get(position).getSerialNumber().add(item.getSerialNumber());
                 }
 
-                if(item.isStatus() == false && item.getCategoryId() < 7) {
+                if(item.isStatus() == false && !item.getTblEquipmentCategoryByCategoryId().getName().equals("Bàn") && !item.getTblEquipmentCategoryByCategoryId().getName().equals("Ghế")) {
                     this.equipmentCategory.get(position).setSize(1);
-                } else if("[0]".equals(item.getPosition()) == false) {
+                } else if(item.getTblEquipmentCategoryByCategoryId().getName().equals("Bàn") && item.getTblEquipmentCategoryByCategoryId().getName().equals("Ghế") && "[0]".equals(item.getPosition()) == false) {
                     this.equipmentCategory.get(position).addSize();
                 }
             }
@@ -138,20 +137,12 @@ public class DamagedRoomDTO {
         this.suggestRooms = suggestRooms;
     }
 
-    public TblRoomTypeEntity getRoomtype() {
+    public RoomTypeDTO getRoomtype() {
         return roomtype;
     }
 
-    public void setRoomtype(TblRoomTypeEntity roomtype) {
+    public void setRoomtype(RoomTypeDTO roomtype) {
         this.roomtype = roomtype;
-    }
-
-    public List<TblEquipmentEntity> getEquipments() {
-        return equipments;
-    }
-
-    public void setEquipments(List<TblEquipmentEntity> equipments) {
-        this.equipments = equipments;
     }
 
     public List<EquipmentDamaged> getEquipmentCategory() {
@@ -162,18 +153,26 @@ public class DamagedRoomDTO {
         this.equipmentCategory = equipmentCategory;
     }
 
+    public List<TblEquipmentEntity> getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(List<TblEquipmentEntity> equipment) {
+        this.equipment = equipment;
+    }
+
     public class EquipmentDamaged {
         private int id;
         private int size;
         private String name;
-        private String className;
+        private String urlImage;
         private List<String> serialNumber;
 
-        public EquipmentDamaged(int id, String name, int size, String className){
+        public EquipmentDamaged(int id, String name, int size, String urlImage){
             this.id = id;
             this.name = name;
             this.size = size;
-            this.className = className;
+            this.urlImage = urlImage;
             this.serialNumber = new ArrayList<String>();
         }
 
@@ -205,12 +204,12 @@ public class DamagedRoomDTO {
             this.name = name;
         }
 
-        public String getClassName() {
-            return className;
+        public String getUrlImage() {
+            return urlImage;
         }
 
-        public void setClassName(String className) {
-            this.className = className;
+        public void setUrlImage(String urlImage) {
+            this.urlImage = urlImage;
         }
 
         public List<String> getSerialNumber() {

@@ -70,11 +70,17 @@
                                 </div>
                                 <div class="content-tab">
                                     <div id="tab1" class="body-tab">
-
+                                        <div><input type="button" class="btn btn-orange"
+                                                    onclick="document.getElementById('ClassroomAction').value='create';showModal(1, 'modal-1');clearRoomName();"
+                                                    value="Tạo phòng học"/></div>
                                         <jsp:include flush="false" page="Staff_ManageClassroom.jsp"/>
                                     </div>
                                     <div id="tab2" class="body-tab">
-
+                                        <div>
+                                            <div></div>
+                                            <input type="button" class="btn btn-orange" style="margin: 0"
+                                                   onclick="document.getElementById('RoomTypeAction').value='update';showModal(1, 'modal-roomtypedetail')"
+                                                   value="Tạo loại phòng"/></div>
                                         <jsp:include flush="false" page="Staff_ManageRoomtype.jsp"/>
                                     </div>
                                 </div>
@@ -94,7 +100,7 @@
         <div class="content-modal">
                 <%--Modal hien len khi nhap vao nut xem cua CLASSROOM--%>
             <div class="modal modal-medium" id="modal-manageclassroom">
-                <div class="content-modal">
+                <div class="content-modal" style="width: auto;">
                     <div class="header-modal title">
                         <p id="roomname"></p>
                         <i class="fa fa-times" onclick="showModal(0, 'modal-manageclassroom')"></i>
@@ -395,6 +401,7 @@
                     <input type="hidden" id="result-changeRoom-id" name="classroomId">
                     <input type="hidden" id="result-timeFrom" name="timeFrom">
                     <input type="hidden" id="result-timeTo" name="timeTo">
+
                     <div class="content-modal">
                         <div class="header-modal title">
                             <p id="getchangeRoom-name">Phòng trống</p>
@@ -726,7 +733,7 @@
                 var classroomId = document.forms['form-getChangeRoom']['changeRoom-id'].value;
                 var timeFrom = document.forms['form-getChangeRoom']['timeFrom'].value;
                 var timeTo = document.forms['form-getChangeRoom']['timeTo'].value;
-                showModal(0,'modal-changeRoom');
+                showModal(0, 'modal-changeRoom');
                 $.ajax({
                     type: "get",
                     url: "/ajax/getChangeRoom",
@@ -743,12 +750,12 @@
                     error: function () {
                         conformData(1, {message: 'Sai kiểu ngày tháng yyyy-mm-dd!'});
                         $(".loading-page").removeClass("active");
-                        showModal(1,'modal-changeRoom');
+                        showModal(1, 'modal-changeRoom');
                     }
                 })
             }
 
-            function changeRoomDate(){
+            function changeRoomDate() {
                 showModal(0, 'modal-room');
                 $(".loading-page").addClass("active");
                 document.getElementById('changeRoom-form').submit();

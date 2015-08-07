@@ -663,7 +663,7 @@ public class AjaxController {
             response.getWriter().write("</select>");
         }else {
             response.getWriter().write("<input type='hidden' value='0' id='morning' name='morning'>");
-            response.getWriter().write("Không có phòng cho buổi sáng!");
+            response.getWriter().write("Không có phòng cho buổi sáng hoặc không có lịch dạy!");
         }
         response.getWriter().write("</div>");
         response.getWriter().write("</div>");
@@ -682,7 +682,7 @@ public class AjaxController {
             response.getWriter().write("</select>");
         }else{
             response.getWriter().write("<input type='hidden' value='0' id='noon' name='noon'>");
-            response.getWriter().write("Không có phòng cho buổi chiều!");
+            response.getWriter().write("Không có phòng cho buổi chiều hoặc không có lịch dạy!");
         }
         response.getWriter().write("</div>");
         response.getWriter().write("</div>");

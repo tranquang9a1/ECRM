@@ -343,7 +343,7 @@ public class ClassroomService {
                 floor += 1;
             }
         }
-        for (int i = 0; i < floor; i++) {
+        for (int i = 0; i <= floor; i++) {
             List<ClassDTO> roomFloor = new ArrayList<>();
             for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
                 int currentFloor = Integer.parseInt(classroomEntity.getName()) / 100;
@@ -354,7 +354,7 @@ public class ClassroomService {
                     }
                     ClassDTO classDTO = new ClassDTO();
                     classDTO.setClassName(classroomEntity.getName());
-                    classDTO.setDamageLevel(classroomEntity.getDamagedLevel());
+                    classDTO.setDamageLevel(damgagedLevel);
                     classDTO.setClassId(classroomEntity.getId());
                     roomFloor.add(classDTO);
                 }

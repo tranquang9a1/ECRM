@@ -798,6 +798,8 @@
 
             document.getElementById("${tab1}").className += " active";
             document.getElementById("${tab1}").setAttribute("data-main", "1");
+            connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
+
         </script>
         </html>
     </c:otherwise>

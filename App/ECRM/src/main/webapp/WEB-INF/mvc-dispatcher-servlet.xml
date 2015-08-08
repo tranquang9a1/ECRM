@@ -38,7 +38,7 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     </bean>
 
-    <!--<bean id="customerService" class="com.ecrm.Utils.socket.ConfigurationSocket"></bean>-->
+    <bean id="customerService" class="com.ecrm.Utils.socket.ConfigurationSocket"></bean>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">

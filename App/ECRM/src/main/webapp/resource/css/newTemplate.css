@@ -431,7 +431,7 @@ body {
 }
 
 .table .body-table .row {
-    border: 0;
+    /*border: 0;*/
     background-color: white;
 }
 

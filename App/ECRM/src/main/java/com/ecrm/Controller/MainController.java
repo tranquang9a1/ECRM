@@ -48,21 +48,23 @@ public class MainController {
                         HttpServletRequest request) {
         HttpSession session = request.getSession();
         TblUserEntity user = userDAO.login(username, password);
-        if (user.isStatus()) {
-            session.setAttribute("USER", user);
+        if(user !=null){
+            if (user.isStatus()) {
+                session.setAttribute("USER", user);
 
-            if (user.getTblRoleByRoleId().getName().equals("Admin")) {
-                return "redirect:/quan-ly";
-            }
-            if (user.getTblRoleByRoleId().getName().equals("Staff")) {
-                return "redirect:/bao-cao";
-            }
-            if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
-                if(password.equals(Constant.DEFAULT_PASSWORD)) {
-                    session.setAttribute("FIRSTLOGIN", true);
+                if (user.getTblRoleByRoleId().getName().equals("Admin")) {
+                    return "redirect:/quan-ly";
                 }
+                if (user.getTblRoleByRoleId().getName().equals("Staff")) {
+                    return "redirect:/bao-cao";
+                }
+                if (user.getTblRoleByRoleId().getName().equals("Teacher")) {
+                    if(password.equals(Constant.DEFAULT_PASSWORD)) {
+                        session.setAttribute("FIRSTLOGIN", true);
+                    }
 
-                return "redirect:/giang-vien";
+                    return "redirect:/giang-vien";
+                }
             }
         }
         request.setAttribute("MESSAGE","Tài khoản hoặc mật khẩu không đúng!");

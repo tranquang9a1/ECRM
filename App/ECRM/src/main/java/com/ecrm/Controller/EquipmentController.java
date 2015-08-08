@@ -8,6 +8,7 @@ import com.ecrm.Entity.TblClassroomEntity;
 import com.ecrm.Entity.TblEquipmentCategoryEntity;
 import com.ecrm.Entity.TblEquipmentEntity;
 import com.ecrm.Entity.TblEquipmentQuantityEntity;
+import com.ecrm.Service.CheckDamageService;
 import com.ecrm.Utils.Constant;
 import com.ecrm.Utils.Utils;
 import org.apache.commons.fileupload.FileItem;
@@ -40,6 +41,8 @@ public class EquipmentController {
     EquipmentQuantityDAOImpl equipmentQuantityDAO;
     @Autowired
     ClassroomDAOImpl classroomDAO;
+    @Autowired
+    CheckDamageService checkDamageService;
 
     @RequestMapping("/equipment")
     public String equipment(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
@@ -122,7 +125,14 @@ public class EquipmentController {
                 tblEquipmentEntity.setTimeRemain(timeRemain);
                 tblEquipmentEntity.setName(name);
                 tblEquipmentEntity.setSerialNumber(serialNumber);
-                tblEquipmentEntity.setStatus(true);
+                if(timeRemain>0 && usingTime>0){
+                    tblEquipmentEntity.setStatus(true);
+                    equipmentDAO.merge(tblEquipmentEntity);
+                    TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+                    classroomEntity.setDamagedLevel(checkDamageService.checkDamagedLevelForEquipmentResolve(classroomEntity));
+                    classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
+                    classroomDAO.merge(classroomEntity);
+                }
                 tblEquipmentEntity.setIsDelete(false);
                 tblEquipmentEntity.setUsingTime(usingTime);
                 equipmentDAO.merge(tblEquipmentEntity);

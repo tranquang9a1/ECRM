@@ -5,6 +5,7 @@ import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ScheduleDAO;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.ChangeRoomService;
+import com.ecrm.Service.CheckDamageService;
 import com.ecrm.Service.GCMService;
 import com.ecrm.Service.ReportService;
 import com.ecrm.Utils.Constant;
@@ -61,6 +62,8 @@ public class CheckDamagedClassroomSchedule {
     ChangeRoomService changeRoomService;
     @Autowired
     ReportService reportService;
+    @Autowired
+    CheckDamageService checkDamageService;
 
     @Scheduled(fixedDelay = 1000)
     public void checkChangeClassroom() throws Exception {
@@ -116,7 +119,7 @@ public class CheckDamagedClassroomSchedule {
                     TblScheduleConfigEntity scheduleConfigEntity = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId();
                     Time timeFrom = scheduleConfigEntity.getTimeFrom();
                     Time timeTo = scheduleConfigEntity.getTimeTo();
-                    long time = timeTo.getTime() - timeFrom.getTime();
+                    double time = timeTo.getTime() - timeFrom.getTime();
                     double rs = time / (1000 * 60 * 60);
                     TblClassroomEntity classroomEntity = tblScheduleEntity.getTblClassroomByClassroomId();
                     List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
@@ -127,10 +130,19 @@ public class CheckDamagedClassroomSchedule {
                                 equipmentEntity.setTimeRemain(timeRemain);
                                 equipmentDAO.merge(equipmentEntity);
                                 if (equipmentEntity.getTimeRemain() <= 50) {
-                                    String message = "Bóng đèn của projector: " + equipmentEntity.getName() + " số serial: " + equipmentEntity.getSerialNumber() +
+                                    String message = "Thiết bị: "+equipmentEntity.getTblEquipmentCategoryByCategoryId().getName()+" " + equipmentEntity.getName() + " số serial: " + equipmentEntity.getSerialNumber() +
                                             " của phòng: " + equipmentEntity.getTblClassroomByClassroomId().getName() + " sắp hết thời gian sử dụng!";
-                                    gcmService.sendNotification(message, tblScheduleEntity.getTblUserByUserId().getTblUserInfoByUsername().getDeviceId());
+                                    gcmService.sendNotification(message, userDAO.getAllStaff().get(0).getTblUserInfoByUsername().getDeviceId());
                                 }
+                                if(equipmentEntity.getTimeRemain()<=0){
+                                    equipmentEntity.setStatus(false);
+                                    List<TblEquipmentEntity> tblEquipmentEntities1 = new ArrayList<>();
+                                    tblEquipmentEntities1.add(equipmentEntity);
+                                    classroomEntity.setDamagedLevel(checkDamageService.checkDamagedLevelForEquipment(tblEquipmentEntities1, classroomEntity));
+                                    classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
+                                    classroomDAO.merge(classroomEntity);
+                                }
+                                equipmentDAO.merge(equipmentEntity);
                             }
                         }
 
@@ -155,12 +167,12 @@ public class CheckDamagedClassroomSchedule {
                     long period = maxDate.getTime() - currentDate.getTime();
                     if(period>=0 && period<=604800000){
                         int day = (int) ((period / (1000*60*60*24)) % 7)+1;
-                        String message = "Lịch trong hệ thống chỉ còn "+ day+" ngày! Bạn có thể muốn nhập thêm lịch?";
+                        String message = "Lịch trong hệ thống chỉ còn "+ day+" ngày! Hãy nhập thêm lịch?";
                         List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
                         gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());
                     }
                     if(period<0){
-                        String message = "Đã hết lịch trong hệ thống! Bạn có thể muốn nhập thêm lịch?";
+                        String message = "Đã hết lịch trong hệ thống! Hãy nhập thêm lịch?";
                         List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
                         gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());
                     }
@@ -177,8 +189,8 @@ public class CheckDamagedClassroomSchedule {
         LocalDate localDate = new LocalDate();
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
-            if (((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) && Utils.checkCronJob()) {
+            if (((localTime.isAfter(new LocalTime("07:05:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
+                    localTime.isAfter(new LocalTime("12:20:00")) && localTime.isBefore(new LocalTime("21:00:00"))) && Utils.checkCronJob()) {
                 LocalTime noon = new LocalTime("12:00:00");
                 System.out.println("Task 2: Start cronjob changeroom lúc: " + new Date());
                 List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getDamagedClassroom();
@@ -228,8 +240,8 @@ public class CheckDamagedClassroomSchedule {
         LocalDate localDate = new LocalDate();
         LocalTime localTime = new LocalTime();
         if (localDate.getDayOfWeek() != 7) {
-            if (((localTime.isAfter(new LocalTime("07:01:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
-                    localTime.isAfter(new LocalTime("12:16:00")) && localTime.isBefore(new LocalTime("21:00:00"))) && Utils.checkCronJob()) {
+            if (((localTime.isAfter(new LocalTime("07:05:00")) && localTime.isBefore(new LocalTime("12:00:00"))) ||
+                    localTime.isAfter(new LocalTime("12:20:00")) && localTime.isBefore(new LocalTime("21:00:00"))) && Utils.checkCronJob()) {
                 System.out.println("Task 3: Run cronjob offline at:" + new Date());
                 URL url = new URL("http://128.199.208.93/offline/getBody");
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));

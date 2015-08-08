@@ -14,25 +14,25 @@
     <script src="../resource/js/jquery-1.11.3.js"></script>
 
     <style>
-        .subDIv {
-            display: block !important;
-        }
+        /*.subDIv {*/
+            /*display: block !important;*/
+        /*}*/
 
-        .board {
-            height: 20px;
-            background-color: #999;
-            color: #666;
-            text-align: center;
-            padding: 3px;
-            border-radius: 5px;
-            width: 50%;
-            margin: 0px !important;
-        }
+        /*.board {*/
+            /*height: 20px;*/
+            /*background-color: #999;*/
+            /*color: #666;*/
+            /*text-align: center;*/
+            /*padding: 3px;*/
+            /*border-radius: 5px;*/
+            /*width: 50%;*/
+            /*margin: 0 auto !important;*/
+        /*}*/
     </style>
 </head>
 <c:set var="r" value="${requestScope.CLASSROOM}"/>
 <body>
-<div style="width: 240px;">
+<div style="width: 300px;">
     <div class="group-control">
         <div class="value" id="list-equipment"></div>
     </div>

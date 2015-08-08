@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <c:set var="categories" value="${requestScope.CATEGORIES}"/>
-<div class="table" style="width:77%; height: 350px">
+<div class="table" style="width:77%; height: 360px">
     <div class="header-table">
         <div style="width:100px">
             <div>Hình ảnh</div>

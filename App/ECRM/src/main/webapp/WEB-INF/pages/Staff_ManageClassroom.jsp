@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="classrooms" value="${requestScope.ALLCLASSROOM}"/>
-<div class="table small-table" style="height: 350px;">
+<div class="table small-table" style="height: 360px;">
         <div class="header-table">
             <div class="width-15">
                 <div>Số phòng</div>

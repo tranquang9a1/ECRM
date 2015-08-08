@@ -1,5 +1,8 @@
 package com.ecrm.Service;
 
+import com.ecrm.DAO.ClassroomDAO;
+import com.ecrm.DAO.Impl.ClassroomDAOImpl;
+import com.ecrm.DAO.Impl.EquipmentDAOImpl;
 import com.ecrm.DAO.Impl.ReportDetailDAOImpl;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
@@ -18,6 +21,10 @@ public class CheckDamageService {
 
     @Autowired
     private ReportDetailDAOImpl reportDetailDAO;
+    @Autowired
+    private ClassroomDAOImpl classroomDAO;
+    @Autowired
+    private EquipmentDAOImpl equipmentDAO;
 
     public int checkDamagedLevel(List<TblEquipmentEntity> damagedEquipment, TblClassroomEntity tblClassroomEntity) {
         int damagedLevel = 0;
@@ -115,6 +122,79 @@ public class CheckDamageService {
                 }
 
             }
+        }
+
+        if (damagedLevel > 100) {
+            damagedLevel = 100;
+        }
+        return damagedLevel;
+    }
+
+    public int checkDamagedLevelForEquipment(List<TblEquipmentEntity> damagedEquipment, TblClassroomEntity tblClassroomEntity) {
+        int damagedLevel = 0;
+        TblRoomTypeEntity roomTypeEntity = tblClassroomEntity.getTblRoomTypeByRoomTypeId();
+        if (!damagedEquipment.isEmpty()) {
+            for (TblEquipmentEntity tblEquipmentEntity : damagedEquipment) {
+                String categoryName = tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getName();
+                if (!categoryName.equals("Bàn") ||
+                        !categoryName.equals("Ghế")) {
+                    Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getTblEquipmentQuantityById();
+                    for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
+                        if (roomTypeEntity.getId() == tblEquipmentQuantityEntity.getRoomTypeId() && !tblEquipmentQuantityEntity.getIsDelete()) {
+                            if (tblEquipmentEntity.getCategoryId() == tblEquipmentQuantityEntity.getEquipmentCategoryId()) {
+                                int priority = tblEquipmentQuantityEntity.getPriority();
+                                if (priority == 3) {
+                                        damagedLevel += 50;
+                                }
+                                if (priority == 2) {
+                                        damagedLevel += 30;
+                                }
+                                if (priority == 1) {
+                                        damagedLevel += 15;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        if (damagedLevel > 100) {
+            damagedLevel = 100;
+        }
+        return damagedLevel;
+    }
+
+    public int checkDamagedLevelForEquipmentResolve(TblClassroomEntity tblClassroomEntity) {
+        int damagedLevel = 0;
+        TblRoomTypeEntity roomTypeEntity = tblClassroomEntity.getTblRoomTypeByRoomTypeId();
+        List<TblEquipmentEntity> damagedEquipment = equipmentDAO.getDamagedEquipments(tblClassroomEntity.getId());
+        if (!damagedEquipment.isEmpty()) {
+            for (TblEquipmentEntity tblEquipmentEntity : damagedEquipment) {
+                String categoryName = tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getName();
+                if (!categoryName.equals("Bàn") ||
+                        !categoryName.equals("Ghế")) {
+                    Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityEntities = tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getTblEquipmentQuantityById();
+                    for (TblEquipmentQuantityEntity tblEquipmentQuantityEntity : tblEquipmentQuantityEntities) {
+                        if (roomTypeEntity.getId() == tblEquipmentQuantityEntity.getRoomTypeId() && !tblEquipmentQuantityEntity.getIsDelete()) {
+                            if (tblEquipmentEntity.getCategoryId() == tblEquipmentQuantityEntity.getEquipmentCategoryId()) {
+                                int priority = tblEquipmentQuantityEntity.getPriority();
+                                if (priority == 3) {
+                                    damagedLevel += 50;
+                                }
+                                if (priority == 2) {
+                                    damagedLevel += 30;
+                                }
+                                if (priority == 1) {
+                                    damagedLevel += 15;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         if (damagedLevel > 100) {

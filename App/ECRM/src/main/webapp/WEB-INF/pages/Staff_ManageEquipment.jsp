@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="equipments" value="${requestScope.EQUIPMENTS}"/>
- <div class="table" style="width:100%; height: 350px;">
+ <div class="table" style="width:100%; height: 360px;">
         <div class="header-table">
             <div class="width-15">
                 <div>Hình ảnh</div>
@@ -38,7 +38,7 @@
                 <c:forEach items="${equipments}" var="e">
                     <c:choose>
                         <c:when test="${e.timeRemain <=50 and e.usingTime>0}">
-                            <div class="row">
+                            <div class="row" style="background-color: #D28787">
                                 <div class="width-15">
                                     <div class="equip"
                                          style="background-image: url('../../resource/img/equipment/${e.tblEquipmentCategoryByCategoryId.imageUrl}')">

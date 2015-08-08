@@ -119,11 +119,11 @@
                             </div>
                             <div class="group-control">
                                 <div class="name">Tên thiết bị</div>
-                                <input type="text" name="name" id="equipment-name">
+                                <input type="text" name="name" id="equipment-name" maxlength="30">
                             </div>
                             <div class="group-control">
                                 <div class="name">Số seri</div>
-                                <input type="text" name="serialNumber" id="equipment-number">
+                                <input type="text" name="serialNumber" id="equipment-number" maxlength="20">
                             </div>
                             <div class="group-control">
                                 <div class="name">Thời gian sử dụng</div>
@@ -132,7 +132,7 @@
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
                     || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )" maxlength="4" id="equipment-time">
+                    || (event.keyCode==46) )" maxlength="5" id="equipment-time">
                             </div>
                             <div class="group-control" id="time-remain">
                                 <div class="name">Thời gian còn lại</div>
@@ -141,7 +141,7 @@
                     || (95<event.keyCode && event.keyCode<106)
                     || (event.keyCode==8) || (event.keyCode==9)
                     || (event.keyCode>34 && event.keyCode<40)
-                    || (event.keyCode==46) )" maxlength="4" id="equipment-remain">
+                    || (event.keyCode==46) )" maxlength="5" id="equipment-remain">
                             </div>
                         </div>
                         <div class="footer-modal">
@@ -169,7 +169,7 @@
                             <div class="group-control">
                                 <div class="name">Tên loại</div>
                                 <div class="control">
-                                    <input name="name" type="text" id="categoryName">
+                                    <input name="name" type="text" id="categoryName" maxlength="30">
                                 </div>
                             </div>
                             <div class="group-control">
@@ -213,7 +213,7 @@
                             <div class="group-control">
                                 <div class="name">Tên loại thiết bị</div>
                                 <div class="control">
-                                    <input name="name" type="text" id="edit-categoryName">
+                                    <input name="name" type="text" id="edit-categoryName" maxlength="30">
                                 </div>
                             </div>
                             <div class="group-control">
@@ -445,6 +445,7 @@
 
                 window.history.pushState({"html":'',"pageTitle":''},"", "http://localhost:8080/staff/equipment?ACTIVETAB=" + tab);
             }
+            connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
         </script>
         </html>
     </c:otherwise>

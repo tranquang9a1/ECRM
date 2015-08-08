@@ -16,7 +16,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set value="${requestScope.ALLROOMTYPE}" var="roomtypes"/>
-<div class="table small-table" style="height: 350px; width: 400px">
+<div class="table small-table" style="height: 360px; width: 400px">
         <div class="header-table">
             <div class="width-40">
                 <div>Loại Phòng</div>

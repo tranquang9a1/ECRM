@@ -146,7 +146,7 @@ public class APIService {
                 }
                 for (int j = 0; j < categoriesId.size(); j++) {
                     int category = categoriesId.get(j);
-                    String positon = positions[j];
+                    String positon = "["+positions[j]+"]";
                     String damagedLevel = evaluates[j];
                     String description = null;
                     if (Integer.parseInt(damagedLevel) == 1) {
@@ -158,7 +158,7 @@ public class APIService {
                         serialNumber = "";
                     }
 
-                    if (!categoryNames[j].equalsIgnoreCase("Bàn") || !categoryNames[j].equalsIgnoreCase("Ghế")) {
+                    if (!categoryNames[j].equalsIgnoreCase("Bàn") && !categoryNames[j].equalsIgnoreCase("Ghế")) {
                         TblEquipmentEntity tblEquipmentEntity = equipmentDAO.findEquipmentHavePosition(classroomId,
                                 category, positon, serialNumber);
                         if (tblEquipmentEntity == null) {
@@ -221,6 +221,7 @@ public class APIService {
                 int damagedLevel = checkDamageService.checkDamagedLevel(listDamamagedEquipment, room);
 
                 room.setDamagedLevel(damagedLevel);
+                room.setUpdateTime(new Timestamp(new Date().getTime()));
                 classroomDAO.merge(room);
 
                 resultDTO.setError_code(100);
@@ -232,7 +233,7 @@ public class APIService {
                 for (TblUserEntity staff : staffs) {
 
                     boolean res = socketIO.sendNotifyMessageToUser(staff.getUsername(),
-                            Enumerable.NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/thong-bao/hu-hai?phong=" +
+                            Enumerable.NotifyType.STAFFNOTIFYREPORT.getValue(), message, "/bao-cao/hu-hai?phong=" +
                                     report.getClassRoomId());
 
                     System.out.println("Send notification to " + staff.getUsername() + " - " + res);
@@ -639,6 +640,7 @@ public class APIService {
                 }
 
                 room.setDamagedLevel(0);
+                room.setUpdateTime(new Timestamp(new Date().getTime()));
                 classroomDAO.merge(room);
                 result.setError("Success");
                 result.setError_code(100);

@@ -73,11 +73,11 @@
           </c:if>
         </div>
       </div>
-      <div class="right-col width-55">
+      <%--<div class="right-col width-55">
         <div class="tab"><div class="tab-medium"><ul><li class="active">Hệ thống</li></ul></div></div>
         <div class="block-content">
         </div>
-      </div>
+      </div>--%>
     </div>
 
     <div class="notifies old-notifies">

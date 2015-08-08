@@ -121,6 +121,7 @@
 
             document.getElementById("${tab}").className += " active";
             document.getElementById("${tab}").setAttribute("data-main", "1");
+            connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
         </script>
         </html>
     </c:otherwise>

@@ -484,7 +484,7 @@
                     document.getElementById("createRoomTypeBtn").style.display = "block";
                 }
 
-                window.history.pushState({"html":'',"pageTitle":''},"", "http://localhost:8080/staff/classroom?ACTIVETAB=" + tab + "&MESSAGE=0");
+                window.history.pushState({"html":'',"pageTitle":''},"", "/staff/classroom?ACTIVETAB=" + tab + "&MESSAGE=0");
             }
 
             function validateCreateClassroomForm() {

@@ -443,7 +443,7 @@
                     document.getElementById("createEquipCategoryBtn").style.display = "block";
                 }
 
-                window.history.pushState({"html":'',"pageTitle":''},"", "http://localhost:8080/staff/equipment?ACTIVETAB=" + tab);
+                window.history.pushState({"html":'',"pageTitle":''},"", "/staff/equipment?ACTIVETAB=" + tab);
             }
             connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
         </script>

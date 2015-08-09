@@ -154,7 +154,7 @@ public class EquipmentFragment extends Fragment{
             public void onClick(View view) {
                 addEquipmentToList();
                 if (listDamaged.size() == 0) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Bạn phải chọn ít nhất 1 thiết bị", Toast.LENGTH_LONG).show();
+                    DialogUtils.showAlert(getActivity(), "Bạn phải chọn ít nhất 1 thiết bị để báo cáo");
                 } else {
 
                     if (isOnline) {

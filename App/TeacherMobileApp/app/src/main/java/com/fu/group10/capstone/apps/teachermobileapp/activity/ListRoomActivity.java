@@ -25,6 +25,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.R;
 import com.fu.group10.capstone.apps.teachermobileapp.adapter.NavDrawerListAdapter;
 import com.fu.group10.capstone.apps.teachermobileapp.dialog.LogoutDialog;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.AccountFragment;
+import com.fu.group10.capstone.apps.teachermobileapp.fragment.ProfileFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.fragment.ScheduleFragment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.NavDrawerItem;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
@@ -114,6 +115,7 @@ public class ListRoomActivity extends ActionBarActivity {
         // Photos
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
 
 
         // Recycle the typed array
@@ -155,7 +157,7 @@ public class ListRoomActivity extends ActionBarActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 3) {
+                if (i == 4) {
                     DialogUtils.showAlert(ListRoomActivity.this,
                             "Đăng xuất khỏi hệ thống ?",
                             new DialogUtils.IOnOkClicked() {
@@ -234,7 +236,10 @@ public class ListRoomActivity extends ActionBarActivity {
                 break;
             case 2:
                 fragment = new AccountFragment();
-
+                break;
+            case 3:
+                fragment = new ProfileFragment();
+                break;
             default:
                 break;
         }

@@ -67,6 +67,7 @@
         <item >Trang chủ</item>
         <item >Lịch dạy</item>
         <item >Báo cáo của bạn</item>
+        <item> Đổi mật khẩu</item>
         <item >Đăng xuất</item>
 
     </string-array>
@@ -78,6 +79,7 @@
         <item>@mipmap/ic_launcher</item>
         <item>@mipmap/ic_launcher</item>
         <item>@mipmap/ic_launcher</item>
+    <item>@mipmap/ic_launcher</item>
     </array>
 
     <!-- Content Description -->

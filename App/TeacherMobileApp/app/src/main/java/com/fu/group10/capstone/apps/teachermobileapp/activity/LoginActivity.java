@@ -182,6 +182,12 @@ public class LoginActivity  extends ActionBarActivity {
                             editor.putString("username", user.getUsername());
                             editor.putString("password", user.getPassword());
                             editor.commit();
+                            showProgressSync();
+                            registerWithServer(user.getUsername());
+
+
+                            importUser();
+                            syncData(user.getUsername());
                             // Check role
                             if (user.getRole().equalsIgnoreCase("Teacher") &&
                                     user.getPassword().equalsIgnoreCase(Constants.DEFAULT_PASSWORD)) {
@@ -193,12 +199,7 @@ public class LoginActivity  extends ActionBarActivity {
                                 } else {
                                     Log.d("RegisterActivity", "Already Registered with GCM Server!");
                                 }
-                                showProgressSync();
-                                registerWithServer(user.getUsername());
 
-
-                                importUser();
-                                syncData(user.getUsername());
                                 openMainActivity(user.getUsername());
 
 

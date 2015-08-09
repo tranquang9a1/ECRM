@@ -170,7 +170,7 @@ public class LoginActivity  extends ActionBarActivity {
                     public void onRequestComplete(String result) {
                         user = ParseUtils.parseUserJson(result);
                         progress.dismiss();
-                        if (user != null ) {
+                        if (user != null && !user.getUsername().equalsIgnoreCase("null")) {
 
 
                             if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {

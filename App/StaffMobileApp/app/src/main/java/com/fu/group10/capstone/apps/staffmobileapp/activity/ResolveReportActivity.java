@@ -23,6 +23,9 @@ import com.fu.group10.capstone.apps.staffmobileapp.fragment.ResolveDialogFragmen
 import com.fu.group10.capstone.apps.staffmobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.staffmobileapp.model.Result;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by QuangTV on 6/13/2015.
  */
@@ -47,6 +50,7 @@ public class ResolveReportActivity extends Activity {
     String current;
     ProgressDialog progress;
     String type;
+    SimpleDateFormat df = new SimpleDateFormat("HH:mm - dd/MM");
 
     private ChooseRoomDialogFragment chooseRoomDialog;
     private ResolveDialogFragment resolveDialog;
@@ -79,7 +83,11 @@ public class ResolveReportActivity extends Activity {
         type  = getIntent().getExtras().getString("type");
 
         txtClassroom.setText(report.getRoomName());
-        txtTime.setText(report.getTimeReport());
+        try {
+            txtTime.setText(df.parse(report.getTimeReport()) + "");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         txtDamageLevel.setText(report.getDamageLevel() + "");
 
 
@@ -254,17 +262,17 @@ public class ResolveReportActivity extends Activity {
 
 
     public void setSuggest(ReportInfo report) {
-        if (type.equalsIgnoreCase("new")) {
+        if (type.equalsIgnoreCase("new") || type.equalsIgnoreCase("going")) {
             txtStatus.setVisibility(View.GONE);
-
+            txtStatus.setText("Đổi phòng sang " + report.getChangedRoom());
+            txtStatus.setVisibility(View.VISIBLE);
+            txtStatusDes.setVisibility(View.VISIBLE);
         } else if (type.equalsIgnoreCase("finish")) {
             txtStatus.setText("Phòng đã được sửa");
             txtStatus.setVisibility(View.VISIBLE);
             txtStatusDes.setVisibility(View.VISIBLE);
         } else if (type.equalsIgnoreCase("going")) {
-            txtStatus.setText("Đổi phòng sang " + report.getChangedRoom());
-            txtStatus.setVisibility(View.VISIBLE);
-            txtStatusDes.setVisibility(View.VISIBLE);
+
         } else {
             txtStatus.setText("Báo cáo đã bị xóa");
             txtStatus.setVisibility(View.VISIBLE);

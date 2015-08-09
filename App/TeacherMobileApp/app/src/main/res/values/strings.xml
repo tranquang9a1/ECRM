@@ -15,9 +15,10 @@
     <string name="tabClassroom">CLASSROOM</string>
     <string name="tabAccount">ACCOUNT</string>
     <string name="no_class">You are not teaching is any class!</string>
-    <string name="current_password">Current Password</string>
-    <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
+    <string name="current_password">Mật khẩu hiện tại</string>
+    <string name="new_password">Nhập mật khẩu mới</string>
+    <string name="confirm_password">Xác nhận mật khẩu mới</string>
+    <string name="change_pass">ĐỔI MẬT KHẨU</string>
     <string name="action_create_report">Tạo Báo Cáo</string>
     <string name="no_shedule_found">Bạn không có lịch dạy ngày hôm nay!</string>
     <string name="highlight_image">Highlight Image</string>

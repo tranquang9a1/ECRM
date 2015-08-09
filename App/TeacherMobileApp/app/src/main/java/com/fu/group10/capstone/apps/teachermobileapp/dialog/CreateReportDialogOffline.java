@@ -206,6 +206,16 @@ public class CreateReportDialogOffline extends DialogFragment {
                 }
             }
 
+            if (equipment.getPosition().equals(Constants.CHAIR)) {
+                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
+                    damageLevel += 5;
+                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
+                    damageLevel += 10;
+                } else {
+                    damageLevel += 20;
+                }
+            }
+
             if (equipment.getPosition().equals(Constants.TELEVISION)) {
                 if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
                     damageLevel += 20;

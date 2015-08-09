@@ -67,7 +67,6 @@ public class LoginActivity  extends ActionBarActivity {
     private static final String APP_VERSION = "appVersion";
 
     static final String TAG = "Notify Activity";
-    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private boolean isConnect = false;
 
 
@@ -87,11 +86,16 @@ public class LoginActivity  extends ActionBarActivity {
         SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
         boolean stateLogin = sp.getBoolean("LoginState", false);
         String username = sp.getString("username", null);
+        String password= sp.getString("password", null);
         if (stateLogin && username != null) {
             if (isConnect) {
                 syncData(username);
             }
-            openMainActivity(username);
+            if (password.equalsIgnoreCase(Constants.DEFAULT_PASSWORD)) {
+                firstLogin();
+            } else {
+                openMainActivity(username);
+            }
         } else {
 
             context = getApplicationContext();
@@ -135,7 +139,7 @@ public class LoginActivity  extends ActionBarActivity {
         usernameTextView.setError(null);
         passwordTextView.setError(null);
 
-        String username = usernameTextView.getText().toString();
+        final String username = usernameTextView.getText().toString();
         String password = passwordTextView.getText().toString();
 
         boolean cancelLogin = false;
@@ -171,10 +175,17 @@ public class LoginActivity  extends ActionBarActivity {
                         user = ParseUtils.parseUserJson(result);
                         progress.dismiss();
                         if (user != null && !user.getUsername().equalsIgnoreCase("null")) {
-
-
-                            if (user.getRole().equalsIgnoreCase("Teacher") && user.getLastLogin() == null ) {
-                                firstLogin(user.getPassword());
+                            //Luu data local
+                            SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putBoolean("LoginState", true);
+                            editor.putString("username", user.getUsername());
+                            editor.putString("password", user.getPassword());
+                            editor.commit();
+                            // Check role
+                            if (user.getRole().equalsIgnoreCase("Teacher") &&
+                                    user.getPassword().equalsIgnoreCase(Constants.DEFAULT_PASSWORD)) {
+                                firstLogin();
                             } else {
                                 if (TextUtils.isEmpty(regId)) {
                                     regId = registerGCM();
@@ -184,11 +195,8 @@ public class LoginActivity  extends ActionBarActivity {
                                 }
                                 showProgressSync();
                                 registerWithServer(user.getUsername());
-                                SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sp.edit();
-                                editor.putBoolean("LoginState", true);
-                                editor.putString("username", user.getUsername());
-                                editor.commit();
+
+
                                 importUser();
                                 syncData(user.getUsername());
                                 openMainActivity(user.getUsername());
@@ -243,15 +251,14 @@ public class LoginActivity  extends ActionBarActivity {
 
 
         Intent intent = new Intent(this, ListRoomActivity.class);
-        //intent.putParcelableArrayListExtra("listClass", listClassroom);
         intent.putExtra("username", username);
+        //intent.putParcelableArrayListExtra("listClass", listClassroom);
         startActivity(intent);
         finish();
     }
 
-    public void firstLogin(String password) {
+    public void firstLogin() {
         Intent intent = new Intent(this, ChangePasswordActivity.class);
-        intent.putExtra("current_password", password);
         startActivity(intent);
         finish();
     }

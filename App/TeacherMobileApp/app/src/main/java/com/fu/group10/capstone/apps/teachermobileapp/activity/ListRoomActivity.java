@@ -67,21 +67,24 @@ public class ListRoomActivity extends ActionBarActivity {
     boolean flag = false;
     private String username;
     private TextView txtClock;
+    String password;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        username = getIntent().getExtras().getString("username");
         isOnline = Utils.isOnline();
 
         SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
         boolean stateLogin = sp.getBoolean("LoginState", false);
+        username = sp.getString("username", null);
+        password =  sp.getString("password", null);
         if (!stateLogin) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
+
         setContentView(R.layout.activity_list_room);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

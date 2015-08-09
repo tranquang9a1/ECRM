@@ -56,7 +56,8 @@ public class AjaxController {
             listSlot.add(slot);
             if (numberOfSlot > 1) {
                 for (int i = 2; i <= numberOfSlot; i++) {
-                    listSlot.add(slot + 1);
+                    slot = slot+1;
+                    listSlot.add(slot);
                 }
             }
             String date = request.getParameter("date");
@@ -65,7 +66,7 @@ public class AjaxController {
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
             for (int i = 0; i < tblClassroomEntities.size(); i++) {
                 int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
-                if (numberOfStudent >= Integer.parseInt(currentSlots)) {
+                if (numberOfStudent >= Integer.parseInt(currentSlots)*20/100) {
                     fitClassroom.add(tblClassroomEntities.get(i));
                 }
             }
@@ -575,6 +576,7 @@ public class AjaxController {
     @ResponseBody
     void getChangeRoom(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
         int classroomId = Integer.parseInt(request.getParameter("classroomId"));
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         String tt = request.getParameter("timeTo");
         String tf = request.getParameter("timeFrom");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -600,7 +602,7 @@ public class AjaxController {
                     break;
                 }
                 for (TblScheduleEntity currentSchedule : morningSchedule) {
-                    List<String> classroom = Utils.getAvailableRoom(currentSchedule, validClassrooms);
+                    List<String> classroom = Utils.getAvailableRoom(currentSchedule,classroomEntity, validClassrooms);
                     if (!classroom.isEmpty()) {
                         if (availableClassroom1.isEmpty()) {
                             availableClassroom1 = classroom;
@@ -628,7 +630,7 @@ public class AjaxController {
                     break;
                 }
                 for (TblScheduleEntity currentSchedule : noonSchedule) {
-                    List<String> classroom = Utils.getAvailableRoom(currentSchedule, validClassrooms);
+                    List<String> classroom = Utils.getAvailableRoom(currentSchedule,classroomEntity, validClassrooms);
                     if (!classroom.isEmpty()) {
                         if (availableClassroom2.isEmpty()) {
                             availableClassroom2 = classroom;
@@ -649,7 +651,6 @@ public class AjaxController {
             }
         }
         response.setContentType("text/html");
-        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         response.getWriter().write("<div class='group-control'>");
         response.getWriter().write("<div class='name'>Phòng cho buổi sáng:</div>");
         response.getWriter().write("<div class='control'>");

@@ -123,7 +123,7 @@
                                 <div><input type="button" class="btn btn-primary" onclick="showModal(1,'Upload');"
                                             value="Nhập File"/>
                                 </div>
-                                <div><input type="button" class="btn btn-normal" onclick="showModal(1,'Manual');"
+                                <div><input type="button" class="btn btn-normal" onclick="showModal(1,'Manual');createNumberOfSlot();"
                                             value="Tạo mới"/></div>
                                 <div class="clear"></div>
                             </div>
@@ -265,12 +265,15 @@
                                 <div class="control">
                                     <select name="numberOfSlots" id="numberOfSlots">
                                         <option value="1">1</option>
-                                        <option value="1">2</option>
-                                        <option value="1">3</option>
-                                        <option value="1">4</option>
-                                        <option value="1">5</option>
-                                        <option value="1">6</option>
-                                        <option value="1">7</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
                                     </select>
                                 </div>
                             </div>

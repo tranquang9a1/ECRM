@@ -206,11 +206,12 @@ public class ClassroomService {
 
 
     public List<String> getAvailableRoom(int classroomId) {
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         List<String> availableClassroom = new ArrayList<String>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
         for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
-            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity,classroomEntity, tblClassroomEntities);
             if (!classroom.isEmpty()) {
                 if (availableClassroom.isEmpty()) {
                     availableClassroom = classroom;
@@ -226,7 +227,7 @@ public class ClassroomService {
             }
         }
         if (!availableClassroom.isEmpty()) {
-            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
 
             availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
             availableClassroom.remove(classroomEntity.getName());

@@ -411,8 +411,8 @@
                                    onclick="changeRoomDate()"
                                    value="Đổi"/>
                         </div>
-                        <div class="black-background"></div>
                     </div>
+                    <div class="black-background"></div>
                 </div>
             </form>
 
@@ -747,11 +747,11 @@
                     cache: false,
                     data: 'classroomId=' + classroomId + '&timeFrom=' + timeFrom + '&timeTo=' + timeTo,
                     success: function (data) {
+                        $(".loading-page").removeClass("active");
                         $('#result-changeRoom-id').val(classroomId);
                         $('#result-timeFrom').val(timeFrom);
                         $('#result-timeTo').val(timeTo);
                         $('#changeRoomField').html(data);
-                        $(".loading-page").removeClass("active");
                         showModal(1, 'modal-room');
                     },
                     error: function () {

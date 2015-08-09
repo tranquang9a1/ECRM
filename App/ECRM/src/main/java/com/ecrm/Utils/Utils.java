@@ -120,7 +120,8 @@ public class Utils {
     }
 
     //Tìm phòng trống
-    public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, List<TblClassroomEntity> tblClassroomEntities) {
+    public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, TblClassroomEntity currentClassroom, List<TblClassroomEntity> tblClassroomEntities) {
+        List<TblEquipmentQuantityEntity> currentEquipment = currentClassroom.getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
         //lay so cho ngoi
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
         //lay so tiet hoc
@@ -128,9 +129,32 @@ public class Utils {
         //Tìm những phòng có chỗ ngồi phù hợp
         List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
         for (int i = 0; i < tblClassroomEntities.size(); i++) {
+            boolean isOk = false;
             int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
-            if (numberOfStudent >= currentSlots) {
-                fitClassroom.add(tblClassroomEntities.get(i));
+            if (numberOfStudent >= currentSlots * 20 / 100) {
+                List<TblEquipmentQuantityEntity> changeEquipment = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
+                if (!changeEquipment.isEmpty()) {
+                    for (int j = 0; j < currentEquipment.size(); j++) {
+                        int temp = 0;
+                        int categoryId = currentEquipment.get(j).getEquipmentCategoryId();
+                        for (int k = 0; k < changeEquipment.size(); k++) {
+                            if (categoryId == changeEquipment.get(k).getEquipmentCategoryId()) {
+                                temp += 1;
+                            }
+                        }
+                        if (temp > 0) {
+                            isOk = true;
+                        } else {
+                            isOk = false;
+                            break;
+                        }
+                    }
+                } else {
+                    isOk = false;
+                }
+                if (isOk) {
+                    fitClassroom.add(tblClassroomEntities.get(i));
+                }
             }
         }
 
@@ -228,12 +252,12 @@ public class Utils {
                 int currentFloor = Integer.parseInt(lstRoom.get(i)) / 100;
                 int nextFloor = Integer.parseInt(lstRoom.get(i + 1)) / 100;
                 if (nextFloor - currentFloor == 0) {
-                    for(int j = i; j>=0; j--){
+                    for (int j = i; j >= 0; j--) {
                         String s1 = lstRoom.get(j);
-                        String s2 = lstRoom.get(j+1);
-                        if(Integer.parseInt(s1)>Integer.parseInt(s2)&&Integer.parseInt(s1)/100==currentFloor){
+                        String s2 = lstRoom.get(j + 1);
+                        if (Integer.parseInt(s1) > Integer.parseInt(s2) && Integer.parseInt(s1) / 100 == currentFloor) {
                             lstRoom.set(j, s2);
-                            lstRoom.set(j+1, s1);
+                            lstRoom.set(j + 1, s1);
                         }
                     }
                 }
@@ -244,50 +268,44 @@ public class Utils {
     }
 
     public static boolean isNumeric(String str) {
-        try
-        {
+        try {
             int d = Integer.parseInt(str);
-            if(d<=0){
+            if (d <= 0) {
                 return false;
             }
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             return false;
         }
         return true;
     }
 
     public static boolean isDouble(String str) {
-        try
-        {
+        try {
             double d = Double.parseDouble(str);
-            if(d<0){
+            if (d < 0) {
                 return false;
             }
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             return false;
         }
         return true;
     }
 
-    public static String convertTime(long time){
+    public static String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
 
     public static final String LAST_RUN_TXT = "LastRun.txt";
-    public static boolean checkCronJob(){
-        try
-        {
-            BufferedReader br = new BufferedReader(new FileReader(Constant.FILE_PATH+LAST_RUN_TXT));
-            String sCurrentLine="";
+
+    public static boolean checkCronJob() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(Constant.FILE_PATH + LAST_RUN_TXT));
+            String sCurrentLine = "";
 
             while ((sCurrentLine = br.readLine()) != null) {
-                if(new Date().getTime()<Long.parseLong(sCurrentLine)){
+                if (new Date().getTime() < Long.parseLong(sCurrentLine)) {
                     return false;
                 }
             }

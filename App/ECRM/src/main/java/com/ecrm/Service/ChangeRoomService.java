@@ -34,7 +34,7 @@ public class ChangeRoomService {
         List<String> availableClassroom = new ArrayList<String>();
         System.out.println("Find available classroom!");
         for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
-            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, currentClassroom, validClassrooms);
             if (!classroom.isEmpty()) {
                 if (availableClassroom.isEmpty()) {
                     availableClassroom = classroom;
@@ -65,7 +65,7 @@ public class ChangeRoomService {
             System.out.println("Find classroom for each schedule!");
             for (TblScheduleEntity tblScheduleEntity : currentSchedule) {
                 validClassrooms = classroomDAO.getValidClassroom();
-                List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, validClassrooms);
+                List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, currentClassroom, validClassrooms);
                 if (!classroom.isEmpty()) {
                     changeRoom = classroom.get(0);
                     System.out.println("Change room:");
@@ -105,11 +105,12 @@ public class ChangeRoomService {
     }
 
     public List<String> getAvailableClassroom(int classroomId) {
+        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
         List<String> availableClassroom = new ArrayList<String>();
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
         for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
-            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity,classroomEntity, tblClassroomEntities);
             if (!classroom.isEmpty()) {
                 if (availableClassroom.isEmpty()) {
                     availableClassroom = classroom;
@@ -125,7 +126,7 @@ public class ChangeRoomService {
             }
         }
         if (!availableClassroom.isEmpty()) {
-            TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+
 
             availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
             availableClassroom.remove(classroomEntity.getName());

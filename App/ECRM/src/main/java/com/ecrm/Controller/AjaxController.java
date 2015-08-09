@@ -515,7 +515,7 @@ public class AjaxController {
             response.getWriter().write("<h3>Không tìm thấy lịch!</h3>");
         } else {
             Collections.sort(crSdEntities, new CustomComparator());
-            response.getWriter().write("<table class='overflow-y' style='position:inherit; max-height: 300px;'>");
+            response.getWriter().write("<table class='overflow-y' style='position:inherit; max-height: 317px;'>");
             response.getWriter().write("<thead>");
             response.getWriter().write("<tr>");
             response.getWriter().write("<th>Phòng</th>");

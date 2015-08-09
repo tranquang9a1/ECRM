@@ -1,4 +1,4 @@
-$(function(){
+function initHeader(){
 	$('table').each(function() {
 		if($(this).find('thead').length > 0 && $(this).find('th').length > 0) {
 			// Clone <thead>
@@ -11,7 +11,6 @@ $(function(){
 			$t
 			.addClass('sticky-enabled')
 			.css({
-				marginTop: -50,
 				width: '100%'
 			}).wrap('<div class="sticky-wrap" />');
 
@@ -147,6 +146,8 @@ $(function(){
 				repositionStickyCol();
 			}));
 			//.scroll($.throttle(250, repositionStickyHead));
+
+			$(".sticky-wrap").css("width", $stickyHead.width());
 		}
 	});
-});
+};

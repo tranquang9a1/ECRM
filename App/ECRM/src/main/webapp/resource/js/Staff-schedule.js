@@ -24,7 +24,9 @@ function searchSchedule() {
         data: 'tags=' + tags +'&action=' + action +
         "&dateFrom=" + dateFrom + "&dateTo=" + dateTo,
         success: function (responseText) {
+            $('.component').html("");
             $('.component').html(responseText);
+            initHeader();
         },
         error: function () {
             alert('Error while request..');

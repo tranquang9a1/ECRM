@@ -307,7 +307,7 @@ function changePage(page){
 function showDetailReport(roomId){
     $(".loading-page").addClass("active");
     var room = $("#report-details").attr("data-room");
-    window.history.pushState({},"", "/bao-cao/hu-hai?phong=" + roomId);
+    window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/bao-cao/hu-hai?phong=" + roomId);
 
     if(room != roomId) {
         $.ajax({
@@ -328,7 +328,7 @@ function showDetailReport(roomId){
 }
 
 function resetURL() {
-    window.history.pushState({},"", "/bao-cao");
+    window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/bao-cao");
 }
 
 function showViewPage(page) {

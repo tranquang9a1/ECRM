@@ -147,7 +147,7 @@ function initHeader(){
 			}));
 			//.scroll($.throttle(250, repositionStickyHead));
 
-			$(".sticky-wrap").css("width", $stickyHead.width());
+			$(".sticky-wrap").css("width", $(".sticky-thead").width());
 		}
 	});
 };

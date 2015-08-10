@@ -5,7 +5,7 @@
 function showReportDetail(roomId){
     waitLoading();
     var room = $(".content-all-modal").attr("data-room");
-    window.history.pushState({},"", "/thong-bao/hu-hai?phong=" + roomId);
+    window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/thong-bao/hu-hai?phong=" + roomId);
 
     if(room != roomId) {
         $.ajax({

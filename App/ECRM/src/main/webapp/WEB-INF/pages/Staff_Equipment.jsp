@@ -16,7 +16,7 @@
         <html>
         <head>
             <meta charset="UTF-8"/>
-            <title>ECRM - Equipment Classroom Management</title>
+            <title>Hệ thống quản lý thiết bị phòng học</title>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="/resource/css/general.css"/>
             <link rel="stylesheet" href="/resource/css/newTemplate.css"/>
@@ -443,7 +443,7 @@
                     document.getElementById("createEquipCategoryBtn").style.display = "block";
                 }
 
-                window.history.pushState({"html":'',"pageTitle":''},"", "/staff/equipment?ACTIVETAB=" + tab);
+                window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/staff/equipment?ACTIVETAB=" + tab);
             }
             connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
         </script>

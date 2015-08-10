@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <c:set var="categories" value="${requestScope.CATEGORIES}"/>
-<div class="table" style="width:77%; height: 360px">
+<div class="table" style="width:420px; height: 360px">
     <div class="header-table">
         <div style="width:100px">
             <div>Hình ảnh</div>
@@ -20,7 +20,7 @@
         <div style="width:100px;">
             <div>Quản lý</div>
         </div>
-        <div style="width: 200px">
+        <div style="width: 120px">
             <div></div>
         </div>
         <p class="clear"></p>
@@ -45,7 +45,7 @@
                             Không
                         </c:otherwise>
                     </c:choose></div>
-                    <div style="width: 200px">
+                    <div style="width: 120px">
                         <div class="control">
                             <div class="group-button" style="border: 0px">
                                 <div class="btn btn-detail" title="Chỉnh sửa"

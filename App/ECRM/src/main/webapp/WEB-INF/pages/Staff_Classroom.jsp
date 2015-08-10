@@ -17,7 +17,7 @@
         <html>
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>ECRM - Equipment Classroom Management</title>
+            <title>Hệ thống quản lý thiết bị phòng học</title>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="/resource/css/layout.css"/>
             <link rel="stylesheet" href="/resource/css/general.css"/>
@@ -50,7 +50,7 @@
             function showMessage(message) {
                 conformData(1, {message: message});
                 var URLString = document.URL;
-                window.history.pushState({"html":'',"pageTitle":''},"", URLString.split("&MESSAGE")[0]+ "&MESSAGE=0");
+                window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", URLString.split("&MESSAGE")[0]+ "&MESSAGE=0");
             }
         </script>
         <div class="layout-background" style="height: 0px">
@@ -484,7 +484,7 @@
                     document.getElementById("createRoomTypeBtn").style.display = "block";
                 }
 
-                window.history.pushState({"html":'',"pageTitle":''},"", "/staff/classroom?ACTIVETAB=" + tab + "&MESSAGE=0");
+                window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/staff/classroom?ACTIVETAB=" + tab + "&MESSAGE=0");
             }
 
             function validateCreateClassroomForm() {

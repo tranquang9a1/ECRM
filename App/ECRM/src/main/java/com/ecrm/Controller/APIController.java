@@ -2,10 +2,7 @@ package com.ecrm.Controller;
 
 import com.ecrm.DTO.*;
 import com.ecrm.Entity.*;
-import com.ecrm.Service.APIService;
-import com.ecrm.Service.ClassroomService;
-import com.ecrm.Service.SMSService;
-import com.ecrm.Service.ScheduleService;
+import com.ecrm.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +27,9 @@ public class APIController {
 
     @Autowired
     private ClassroomService classroomService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/map")
     public String generateMap(HttpServletRequest request, @RequestParam("id") int classroomId) {
@@ -210,6 +210,20 @@ public class APIController {
     @RequestMapping(value = "getSearchClass", method = RequestMethod.GET)
     public @ResponseBody List<ReportClassDTO> searchReportByClass(@RequestParam("className") String className) {
         return apiService.getSearchReport(className);
+    }
+
+    @RequestMapping(value = "changePass", method = RequestMethod.GET)
+    public @ResponseBody ResultDTO changePassword(@RequestParam("username") String username,
+                                                  @RequestParam("password") String password) {
+        ResultDTO result = new ResultDTO();
+        int row = userService.changePassword(username, password);
+        if (row == 200) {
+            return new ResultDTO(200, "Sucess");
+        } else if (row == 201) {
+            return new ResultDTO(201, "Không có tài khoản này");
+        } else {
+            return new ResultDTO(400, "Tài khoản này đã bị khóa");
+        }
     }
 
 

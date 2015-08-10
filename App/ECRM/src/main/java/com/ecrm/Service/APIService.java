@@ -505,7 +505,7 @@ public class APIService {
 
     public List<ReportClassDTO> getReportStaff(int limit, int offset, String status) {
         List<ReportClassDTO> result = new ArrayList<ReportClassDTO>();
-        List<Integer> listClass = new ArrayList<>();
+        List<Integer> listClass = new ArrayList<Integer>();
         if (status.equalsIgnoreCase("finish")) {
             listClass  = reportDAO.getReportByClassId(status, offset, limit);
         } else {

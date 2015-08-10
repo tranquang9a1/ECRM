@@ -188,7 +188,9 @@
                                     </c:otherwise>
                                 </c:choose>
                             </form>
-                            <div class='component' style='max-height: 347px; padding:0 0; overflow: auto; overflow-y: hidden; position: relative;'></div>
+                            <div class='component' style='max-height: 347px; padding:0 0; overflow: auto; overflow-y: hidden; position: relative;'>
+
+                            </div>
                         </div>
                         <c:import url="/bao-cao/thong-bao?little=false&quay-lai=schedule"/>
                         <div class="loading-page">

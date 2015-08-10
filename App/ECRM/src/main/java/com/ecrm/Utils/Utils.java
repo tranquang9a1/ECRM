@@ -135,19 +135,24 @@ public class Utils {
                 List<TblEquipmentQuantityEntity> changeEquipment = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
                 if (!changeEquipment.isEmpty()) {
                     for (int j = 0; j < currentEquipment.size(); j++) {
-                        int temp = 0;
-                        int categoryId = currentEquipment.get(j).getEquipmentCategoryId();
-                        for (int k = 0; k < changeEquipment.size(); k++) {
-                            if (categoryId == changeEquipment.get(k).getEquipmentCategoryId()) {
-                                temp += 1;
+                        if(!currentEquipment.get(j).getIsDelete()){
+                            int temp = 0;
+                            int categoryId = currentEquipment.get(j).getEquipmentCategoryId();
+                            for (int k = 0; k < changeEquipment.size(); k++) {
+                                if(!changeEquipment.get(k).getIsDelete()){
+                                    if (categoryId == changeEquipment.get(k).getEquipmentCategoryId()) {
+                                        temp += 1;
+                                    }
+                                }
+                            }
+                            if (temp > 0) {
+                                isOk = true;
+                            } else {
+                                isOk = false;
+                                break;
                             }
                         }
-                        if (temp > 0) {
-                            isOk = true;
-                        } else {
-                            isOk = false;
-                            break;
-                        }
+
                     }
                 } else {
                     isOk = false;

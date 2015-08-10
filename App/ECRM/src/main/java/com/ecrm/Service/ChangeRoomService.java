@@ -126,8 +126,6 @@ public class ChangeRoomService {
             }
         }
         if (!availableClassroom.isEmpty()) {
-
-
             availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
             availableClassroom.remove(classroomEntity.getName());
         }

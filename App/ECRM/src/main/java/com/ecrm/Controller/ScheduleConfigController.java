@@ -30,13 +30,13 @@ public class ScheduleConfigController {
 
     @RequestMapping(value = "scheduleConfig")
     public String scheduleConfig(HttpServletRequest request) {
-        long duration=0;
+        long duration = 0;
         List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findAll();
-        if(!tblScheduleConfigEntities.isEmpty()){
+        if (!tblScheduleConfigEntities.isEmpty()) {
             Time timeTo = tblScheduleConfigEntities.get(0).getTimeTo();
             Time timeFrom = tblScheduleConfigEntities.get(0).getTimeFrom();
-            duration = timeTo.getTime()-timeFrom.getTime();
-            duration = duration/60000;
+            duration = timeTo.getTime() - timeFrom.getTime();
+            duration = duration / 60000;
         }
         request.setAttribute("LIST", tblScheduleConfigEntities);
         request.setAttribute("TABCONTROL", "STAFF_SCHEDULECONFIG");
@@ -75,7 +75,13 @@ public class ScheduleConfigController {
                 j += 2;
             }
         }
-        if(size>0){
+        List<TblScheduleConfigEntity> allScheduleConfig = scheduleConfigDAO.findAll();
+        if (allScheduleConfig.size() > size) {
+            for(int i = size+1; i<=allScheduleConfig.size(); i++){
+                scheduleConfigDAO.removeTblScheduleConfig(i);
+            }
+        }
+        if (size > 0) {
             //create file exel
             String filePath = "";
             ServletContext servletContext = request.getSession().getServletContext();
@@ -99,7 +105,7 @@ public class ScheduleConfigController {
                 Cell cell = null;
                 if (row.getRowNum() > 4) {
                     cell = sheet.getRow(row.getRowNum()).getCell(1);
-                    if(cell==null){
+                    if (cell == null) {
                         cell = row.createCell(1);
                     }
                     if (j <= size - 1) {

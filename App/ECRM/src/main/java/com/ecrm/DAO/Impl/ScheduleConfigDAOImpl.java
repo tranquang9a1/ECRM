@@ -3,9 +3,12 @@ package com.ecrm.DAO.Impl;
 import com.ecrm.DAO.BaseDAO;
 import com.ecrm.DAO.ScheduleConfigDAO;
 import com.ecrm.Entity.TblScheduleConfigEntity;
+import com.ecrm.Entity.TblScheduleEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,5 +44,17 @@ public class ScheduleConfigDAOImpl extends BaseDAO<TblScheduleConfigEntity,Integ
         query.setParameter("id", id);
         List<TblScheduleConfigEntity>tblScheduleConfigEntities = query.getResultList();
         return tblScheduleConfigEntities;
+    }
+
+    @Transactional
+    public void removeTblScheduleConfig(int id){
+        TblScheduleConfigEntity o1 = entityManager.find(TblScheduleConfigEntity.class, id);
+        Collection<TblScheduleEntity> tblScheduleEntity = o1.getTblSchedulesById();
+        for(TblScheduleEntity s1 : tblScheduleEntity){
+            TblScheduleEntity s2 = entityManager.merge(s1);
+            entityManager.remove(s2);
+        }
+        TblScheduleConfigEntity o2 = entityManager.merge(o1);
+        entityManager.remove(o2);
     }
 }

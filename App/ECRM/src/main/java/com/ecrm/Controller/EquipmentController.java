@@ -48,20 +48,8 @@ public class EquipmentController {
     public String equipment(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab) {
         HttpSession session = request.getSession();
         if (session != null) {
-            List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.findAll();
-            Iterator<TblEquipmentEntity> iteratorE = tblEquipmentEntities.iterator();
-            while (iteratorE.hasNext()) {
-                TblEquipmentEntity tblEquipmentEntity = iteratorE.next();
-                String name = tblEquipmentEntity.getName();
-                String serialNumber = tblEquipmentEntity.getSerialNumber();
-                if (!tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getIsManaged()) {
-                    iteratorE.remove();
-                } else {
-                    if (name == null || serialNumber == null) {
-                        iteratorE.remove();
-                    }
-                }
-            }
+            List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getAllEquipmentOrderByClassroom();
+
             List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
             List<TblEquipmentCategoryEntity> mEquipmentCategoryEntities = new ArrayList<TblEquipmentCategoryEntity>();
             Iterator<TblEquipmentCategoryEntity> iterator = tblEquipmentCategoryEntities.iterator();
@@ -83,12 +71,6 @@ public class EquipmentController {
                     iterator2.remove();
                 }
             }
-            Collections.sort(tblEquipmentEntities, new Comparator<TblEquipmentEntity>() {
-                @Override
-                public int compare(TblEquipmentEntity o1, TblEquipmentEntity o2) {
-                    return o1.getTblClassroomByClassroomId().getName().compareTo(o2.getTblClassroomByClassroomId().getName());
-                }
-            });
             request.setAttribute("CATEGORIES", tblEquipmentCategoryEntities);
             request.setAttribute("MANAGEDCATEGORIES", mEquipmentCategoryEntities);
             request.setAttribute("EQUIPMENTS", tblEquipmentEntities);
@@ -134,10 +116,12 @@ public class EquipmentController {
                 if(timeRemain>0 && usingTime>0){
                     tblEquipmentEntity.setStatus(true);
                     equipmentDAO.merge(tblEquipmentEntity);
-                    TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
-                    classroomEntity.setDamagedLevel(checkDamageService.checkDamagedLevelForEquipmentResolve(classroomEntity));
-                    classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
-                    classroomDAO.merge(classroomEntity);
+                    if(classroomId!=0){
+                        TblClassroomEntity classroomEntity = classroomDAO.find(classroomId);
+                        classroomEntity.setDamagedLevel(checkDamageService.checkDamagedLevelForEquipmentResolve(classroomEntity));
+                        classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
+                        classroomDAO.merge(classroomEntity);
+                    }
                 }
                 tblEquipmentEntity.setIsDelete(false);
                 tblEquipmentEntity.setUsingTime(usingTime);

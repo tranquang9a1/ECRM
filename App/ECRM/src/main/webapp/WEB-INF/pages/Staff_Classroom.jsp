@@ -733,31 +733,57 @@
                 $("#datepickeTo").datepicker({dateFormat: "dd-mm-yy"});
             });
 
+            function checkDate(){
+                re = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
+                var timeFrom = document.forms['form-getChangeRoom']['timeFrom'].value;
+                var timeTo = document.forms['form-getChangeRoom']['timeTo'].value;
+                if(timeFrom == '' || !timeFrom.match(re)) {
+                    conformData(1, {message: 'Sai kiểu ngày tháng dd-mm-yyyy!'});
+                    return false;
+                }
+                if(timeFrom == ''){
+                    if(timeTo == '' || !timeTo.match(re)) {
+                        conformData(1, {message: 'Sai kiểu ngày tháng dd-mm-yyyy!'});
+                        return false;
+                    }
+                }
+
+                var d1 = Date.parse(timeFrom);
+                var d2 = Date.parse(timeTo);
+                if(d1>d2){
+                    conformData(1, {message: 'Ngày bắt đầu không được nhỏ hơn ngày kết thúc!'});
+                    return false;
+                }
+                return true;
+            }
             function getChangeRoom() {
-                $(".loading-page").addClass("active");
                 var classroomId = document.forms['form-getChangeRoom']['changeRoom-id'].value;
                 var timeFrom = document.forms['form-getChangeRoom']['timeFrom'].value;
                 var timeTo = document.forms['form-getChangeRoom']['timeTo'].value;
-                showModal(0,'modal-changeRoom');
-                $.ajax({
-                    type: "get",
-                    url: "/ajax/getChangeRoom",
-                    cache: false,
-                    data: 'classroomId=' + classroomId + '&timeFrom=' + timeFrom + '&timeTo=' + timeTo,
-                    success: function (data) {
-                        $(".loading-page").removeClass("active");
-                        $('#result-changeRoom-id').val(classroomId);
-                        $('#result-timeFrom').val(timeFrom);
-                        $('#result-timeTo').val(timeTo);
-                        $('#changeRoomField').html(data);
-                        showModal(1, 'modal-room');
-                    },
-                    error: function () {
-                        conformData(1, {message: 'Sai kiểu ngày tháng yyyy-mm-dd!'});
-                        $(".loading-page").removeClass("active");
-                        showModal(1,'modal-changeRoom');
-                    }
-                })
+                if(checkDate()){
+                    showModal(0,'modal-changeRoom');
+                    $(".loading-page").addClass("active");
+                    $.ajax({
+                        type: "get",
+                        url: "/ajax/getChangeRoom",
+                        cache: false,
+                        data: 'classroomId=' + classroomId + '&timeFrom=' + timeFrom + '&timeTo=' + timeTo,
+                        success: function (data) {
+                            $(".loading-page").removeClass("active");
+                            $('#result-changeRoom-id').val(classroomId);
+                            $('#result-timeFrom').val(timeFrom);
+                            $('#result-timeTo').val(timeTo);
+                            $('#changeRoomField').html(data);
+                            showModal(1, 'modal-room');
+                        },
+                        error: function () {
+                            conformData(1, {message: 'Sai kiểu ngày tháng dd-mm-yyyy!'});
+                            $(".loading-page").removeClass("active");
+                            showModal(1,'modal-changeRoom');
+                        }
+                    })
+                }
+
             }
 
             function changeRoomDate(){

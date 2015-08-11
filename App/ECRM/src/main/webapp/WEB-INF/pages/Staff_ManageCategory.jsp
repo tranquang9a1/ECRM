@@ -52,7 +52,9 @@
                                      onclick="showModal(1,'modal-edit-category');
                                              document.getElementById('edit-categoryName').value = '${c.name}';
                                              document.getElementById('edit-categoryId').value  = ${c.id};
-                                             document.getElementById('edit-expiredTime').value=${c.expiredTime}"><i
+                                             document.getElementById('edit-expiredTime').value=${c.expiredTime};
+                                             var c = ${c.isManaged};
+                                             disableExpiredTime(c)"><i
                                         class="fa fa-pencil"></i>
                                 </div>
                                 <div class="btn btn-remove" title="Xóa"
@@ -71,4 +73,14 @@
 </div>
 
 <div id="pagination2" style="padding-left: 150px;"></div>
+<script>
+    function disableExpiredTime(c){
+        if(c==true){
+            document.getElementById('edit-expiredTime').disabled = false;
+        };
+        if(c == false){
+            document.getElementById('edit-expiredTime').disabled = true;
+        };
+    }
+</script>
 

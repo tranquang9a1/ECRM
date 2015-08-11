@@ -237,4 +237,11 @@ public class EquipmentDAOImpl extends BaseDAO<TblEquipmentEntity, Integer> imple
         List<TblEquipmentEntity> tblEquipmentEntities = query.getResultList();
         return tblEquipmentEntities;
     }
+
+    public List<TblEquipmentEntity> getAllEquipmentOrderByClassroom(){
+        Query query = entityManager.createQuery("select e from TblEquipmentEntity e, TblEquipmentCategoryEntity ec where " +
+                "e.categoryId = ec.id and ec.isManaged = true and e.name !=null and e.serialNumber != null order by e.classroomId");
+        List<TblEquipmentEntity> tblEquipmentEntities = query.getResultList();
+        return tblEquipmentEntities;
+    }
 }

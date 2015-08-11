@@ -813,4 +813,26 @@ public class APIService {
 
         return result;
     }
+
+    public List<EquipmentQuantityDTO> getQuantity(int classId) {
+        List<EquipmentQuantityDTO> result = new ArrayList<>();
+        try {
+            TblClassroomEntity classroomEntity = classroomDAO.find(classId);
+            List<TblEquipmentQuantityEntity> quantities = classroomEntity.getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
+            for (TblEquipmentQuantityEntity entity : quantities) {
+                EquipmentQuantityDTO dto = new EquipmentQuantityDTO();
+                dto.setClassId(classId);
+                dto.setEquipmentName(entity.getTblEquipmentCategoryEntityByEquipmentCategoryId().getName());
+                dto.setIsDeleted(entity.getIsDelete());
+                dto.setPriority(entity.getPriority());
+                dto.setQuantity(entity.getQuantity());
+                result.add(dto);
+            }
+
+            return result;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
 }

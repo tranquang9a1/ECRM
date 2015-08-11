@@ -3,6 +3,7 @@ package com.ecrm.Controller;
 import com.ecrm.DTO.*;
 import com.ecrm.Entity.*;
 import com.ecrm.Service.*;
+import com.ecrm.Utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -224,6 +225,11 @@ public class APIController {
         } else {
             return new ResultDTO(400, "Tài khoản này đã bị khóa");
         }
+    }
+
+    @RequestMapping(value = "getQuantity", method = RequestMethod.GET)
+    public @ResponseBody List<EquipmentQuantityDTO> getQuantity(@RequestParam("classId") int classId) {
+        return apiService.getQuantity(classId);
     }
 
 

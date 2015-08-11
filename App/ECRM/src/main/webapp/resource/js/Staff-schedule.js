@@ -4,10 +4,10 @@
 
 
 $(function () {
-    $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
-    $("#datepickeTo").datepicker({dateFormat: "yy-mm-dd"});
-    $("#datefrom").datepicker({dateFormat: "yy-mm-dd"});
-    $("#dateto").datepicker({dateFormat: "yy-mm-dd"});
+    $("#datepickerFrom").datepicker({dateFormat: "dd-mm-yy"});
+    $("#datepickeTo").datepicker({dateFormat: "dd-mm-yy"});
+    $("#datefrom").datepicker({dateFormat: "dd-mm-yy"});
+    $("#dateto").datepicker({dateFormat: "dd-mm-yy"});
 });
 
 

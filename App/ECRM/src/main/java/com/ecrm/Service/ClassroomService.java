@@ -40,6 +40,8 @@ public class ClassroomService {
     private UserNotificationDAOImpl userNotificationDAO;
     @Autowired
     private RoomTypeDAOImpl roomType2DAO;
+    @Autowired
+    ChangeRoomService changeRoomService;
 
     public ClassDTO getClassroom(int classId) {
         TblClassroomEntity entity = classroomDAO.getClassroomById(classId);
@@ -211,7 +213,7 @@ public class ClassroomService {
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classroomId);
         for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
-            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity,classroomEntity, tblClassroomEntities);
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity, tblClassroomEntities);
             if (!classroom.isEmpty()) {
                 if (availableClassroom.isEmpty()) {
                     availableClassroom = classroom;
@@ -231,6 +233,7 @@ public class ClassroomService {
 
             availableClassroom = Utils.sortClassroom(availableClassroom, classroomEntity.getName());
             availableClassroom.remove(classroomEntity.getName());
+            availableClassroom = changeRoomService.sortByRoomType(availableClassroom, classroomEntity.getName());
         }
         return availableClassroom;
     }

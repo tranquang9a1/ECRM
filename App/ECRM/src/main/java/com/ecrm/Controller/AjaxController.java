@@ -2,10 +2,7 @@ package com.ecrm.Controller;
 
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.Entity.*;
-import com.ecrm.Service.ClassroomService;
-import com.ecrm.Service.ScheduleConfigService;
-import com.ecrm.Service.ScheduleService;
-import com.ecrm.Service.UserService;
+import com.ecrm.Service.*;
 import com.ecrm.Utils.Utils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -42,6 +39,8 @@ public class AjaxController {
     EquipmentDAOImpl equipmentDAO;
     @Autowired
     CategoryDAOImpl categoryDAO;
+    @Autowired
+    ChangeRoomService changeRoomService;
 
     @RequestMapping(value = "findClassroom")
     public
@@ -60,7 +59,10 @@ public class AjaxController {
                     listSlot.add(slot);
                 }
             }
-            String date = request.getParameter("date");
+            String date = request.getParameter("dateT");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+            String dateString2 = new SimpleDateFormat("yyyy-MM-dd").format(dateT);
             //Tìm những phòng có chỗ ngồi phù hợp
             List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
@@ -81,7 +83,7 @@ public class AjaxController {
                 if (tblScheduleEntities != null) {
                     for (TblScheduleEntity tblScheduleEntity1 : tblScheduleEntities) {
                         //So sanh ngay
-                        if (tblScheduleEntity1.getDate().getTime() == format.parse(date).getTime() && tblScheduleEntity1.getIsActive()) {
+                        if (tblScheduleEntity1.getDate().getTime() == format.parse(dateString2).getTime() && tblScheduleEntity1.getIsActive()) {
                             //So sanh gio
                             int targetSlot = tblScheduleEntity1.getTblScheduleConfigByScheduleConfigId().getSlot();
                             for (int i = 0; i < listSlot.size(); i++) {
@@ -449,7 +451,7 @@ public class AjaxController {
     @RequestMapping(value = "searchSchedule")
     public
     @ResponseBody
-    void searchSchedule(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    void searchSchedule(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
         String datefrom = request.getParameter("dateFrom");
         String target = request.getParameter("tags");
         String action = request.getParameter("action");
@@ -470,15 +472,23 @@ public class AjaxController {
             dateTo = dateFrom.plusDays(5);
         }
         if (datefrom.trim().length() > 0 && dateto.trim().length() > 0) {
-            dateFrom = new LocalDate(datefrom);
-            dateTo = new LocalDate(dateto);
+            Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(datefrom);
+            Date dateF = new SimpleDateFormat("dd-MM-yyyy").parse(dateto);
+            String dateString1 = new SimpleDateFormat("yyyy-MM-dd").format(dateT);
+            String dateString2 = new SimpleDateFormat("yyyy-MM-dd").format(dateF);
+            dateFrom = new LocalDate(dateString1);
+            dateTo = new LocalDate(dateString2);
         }
         if (datefrom.trim().length() > 0 && dateto.trim().length() == 0) {
-            dateFrom = new LocalDate(datefrom);
-            dateTo = new LocalDate(datefrom);
+            Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(datefrom);
+            String dateString1 = new SimpleDateFormat("yyyy-MM-dd").format(dateT);
+            dateFrom = new LocalDate(dateString1);
+            dateTo = new LocalDate(dateString1);
         }
         if (datefrom.trim().length() == 0 && dateto.trim().length() > 0) {
-            dateTo = new LocalDate(dateTo);
+            Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(dateto);
+            String dateString1 = new SimpleDateFormat("yyyy-MM-dd").format(dateT);
+            dateTo = new LocalDate(dateString1);
             dateFrom = dateTo.minusDays(5);
         }
         for (LocalDate date = dateFrom; date.isBefore(dateTo.plusDays(1)); date = date.plusDays(1)) {
@@ -580,13 +590,15 @@ public class AjaxController {
         String tt = request.getParameter("timeTo");
         String tf = request.getParameter("timeFrom");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        LocalDate timeFrom = new LocalDate(tf);
+        Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(tf);
+        String dateString2 = new SimpleDateFormat("yyyy-MM-dd").format(dateT);
+        LocalDate timeFrom = new LocalDate(dateString2);
         LocalDate timeTo = timeFrom;
         if (tt.trim().length() == 0) {
             tt = tf;
             timeTo = timeFrom;
         } else {
-            timeTo = new LocalDate(tt);
+            timeTo = new LocalDate(dateString2);
         }
         boolean tempMorning = true;
         boolean tempNoon = true;
@@ -602,7 +614,7 @@ public class AjaxController {
                     break;
                 }
                 for (TblScheduleEntity currentSchedule : morningSchedule) {
-                    List<String> classroom = Utils.getAvailableRoom(currentSchedule,classroomEntity, validClassrooms);
+                    List<String> classroom = Utils.getAvailableRoom(currentSchedule, validClassrooms);
                     if (!classroom.isEmpty()) {
                         if (availableClassroom1.isEmpty()) {
                             availableClassroom1 = classroom;
@@ -630,7 +642,7 @@ public class AjaxController {
                     break;
                 }
                 for (TblScheduleEntity currentSchedule : noonSchedule) {
-                    List<String> classroom = Utils.getAvailableRoom(currentSchedule,classroomEntity, validClassrooms);
+                    List<String> classroom = Utils.getAvailableRoom(currentSchedule, validClassrooms);
                     if (!classroom.isEmpty()) {
                         if (availableClassroom2.isEmpty()) {
                             availableClassroom2 = classroom;
@@ -657,6 +669,7 @@ public class AjaxController {
         if (!availableClassroom1.isEmpty() && tempMorning) {
             availableClassroom1 = Utils.sortClassroom(availableClassroom1, classroomEntity.getName());
             availableClassroom1.remove(classroomEntity.getName());
+            availableClassroom1 = changeRoomService.sortByRoomType(availableClassroom1, classroomEntity.getName());
             response.getWriter().write("<select id='morning' name='morning'>");
             for(String room: availableClassroom1){
                 response.getWriter().write("<option value='"+room+"'>"+room+"</option>");
@@ -675,7 +688,8 @@ public class AjaxController {
         response.getWriter().write("<div class='control'>");
         if (!availableClassroom2.isEmpty() && tempNoon) {
             availableClassroom2 = Utils.sortClassroom(availableClassroom2, classroomEntity.getName());
-            availableClassroom1.remove(classroomEntity.getName());
+            availableClassroom2.remove(classroomEntity.getName());
+            availableClassroom2 = changeRoomService.sortByRoomType(availableClassroom2, classroomEntity.getName());
             response.getWriter().write("<select id='noon' name='noon'>");
             for(String room: availableClassroom2){
                 response.getWriter().write("<option value='"+room+"'>"+room+"</option>");

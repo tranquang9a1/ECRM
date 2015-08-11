@@ -598,7 +598,7 @@ public class APIService {
     }
 
     public List<String> getAvailableRoom(int roomId) {
-        List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.find(roomId),classroomDAO.getValidClassroom());
+        List<String> availableRooms = Utils.getAvailableRoom(scheduleDAO.getScheduleInTime(null, roomId), classroomDAO.getValidClassroom());
         return availableRooms;
     }
 
@@ -696,7 +696,7 @@ public class APIService {
         List<TblScheduleEntity> tblScheduleEntityList = scheduleDAO.findAllScheduleInClassroom(classId);
         List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
         for (TblScheduleEntity tblScheduleEntity : tblScheduleEntityList) {
-            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity,classroomDAO.find(classId) ,tblClassroomEntities);
+            List<String> classroom = Utils.getAvailableRoom(tblScheduleEntity ,tblClassroomEntities);
             if (!classroom.isEmpty()) {
                 TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(classroom.get(0));
                 tblScheduleEntity.setIsActive(false);

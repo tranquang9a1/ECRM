@@ -23,6 +23,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -189,11 +190,15 @@ public class ScheduleService {
                                   int numberOfStudent, String dateFrom, String dateTo, String sms, int classroom) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            LocalDate dateF = new LocalDate(dateFrom);
+            Date d = new SimpleDateFormat("dd-MM-yyyy").parse(dateFrom);
+            String dateString1 = new SimpleDateFormat("yyyy-MM-dd").format(d);
+            LocalDate dateF = new LocalDate(dateString1);
             if (dateTo.trim().length() == 0) {
                 dateTo = dateFrom;
             }
-            LocalDate dateT = new LocalDate(dateTo);
+            Date d2 = new SimpleDateFormat("dd-MM-yyyy").parse(dateTo);
+            String dateString2 = new SimpleDateFormat("yyyy-MM-dd").format(d2);
+            LocalDate dateT = new LocalDate(dateString2);
 
             for (int i = 0; i < numberOfSlots; i++) {
                 List<TblScheduleConfigEntity> tblScheduleConfigEntities = scheduleConfigDAO.findScheduleConfigBySlot(slot + i);

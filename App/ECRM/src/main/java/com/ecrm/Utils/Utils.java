@@ -120,51 +120,14 @@ public class Utils {
     }
 
     //Tìm phòng trống
-    public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, TblClassroomEntity currentClassroom, List<TblClassroomEntity> tblClassroomEntities) {
-        List<TblEquipmentQuantityEntity> currentEquipment = currentClassroom.getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
+    public static List<String> getAvailableRoom(TblScheduleEntity tblScheduleEntity, List<TblClassroomEntity> tblClassroomEntities) {
         //lay so cho ngoi
         int currentSlots = tblScheduleEntity.getNumberOfStudents();
         //lay so tiet hoc
         int currentSlot = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId().getSlot();
-        //Tìm những phòng có chỗ ngồi phù hợp
-        List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
-        for (int i = 0; i < tblClassroomEntities.size(); i++) {
-            boolean isOk = false;
-            int numberOfStudent = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getSlots();
-            if (numberOfStudent >= currentSlots * 20 / 100) {
-                List<TblEquipmentQuantityEntity> changeEquipment = tblClassroomEntities.get(i).getTblRoomTypeByRoomTypeId().getTblEquipmentQuantityById();
-                if (!changeEquipment.isEmpty()) {
-                    for (int j = 0; j < currentEquipment.size(); j++) {
-                        if(!currentEquipment.get(j).getIsDelete()){
-                            int temp = 0;
-                            int categoryId = currentEquipment.get(j).getEquipmentCategoryId();
-                            for (int k = 0; k < changeEquipment.size(); k++) {
-                                if(!changeEquipment.get(k).getIsDelete()){
-                                    if (categoryId == changeEquipment.get(k).getEquipmentCategoryId()) {
-                                        temp += 1;
-                                    }
-                                }
-                            }
-                            if (temp > 0) {
-                                isOk = true;
-                            } else {
-                                isOk = false;
-                                break;
-                            }
-                        }
-
-                    }
-                } else {
-                    isOk = false;
-                }
-                if (isOk) {
-                    fitClassroom.add(tblClassroomEntities.get(i));
-                }
-            }
-        }
 
         //So sánh ngày giờ với những schedule khác
-        Iterator<TblClassroomEntity> iterator = fitClassroom.iterator();
+        Iterator<TblClassroomEntity> iterator = tblClassroomEntities.iterator();
         while (iterator.hasNext()) {
             TblClassroomEntity classroomEntity = iterator.next();
             Collection<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
@@ -182,12 +145,9 @@ public class Utils {
                 }
             }
         }
-        for (int i = 0; i < fitClassroom.size(); i++) {
-
-        }
 
         List<String> classroom = new ArrayList<String>();
-        for (TblClassroomEntity classroomEntity : fitClassroom) {
+        for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
             classroom.add(classroomEntity.getName());
         }
 
@@ -270,6 +230,30 @@ public class Utils {
 
         }
         return lstRoom;
+    }
+
+    public static int markPriority(List<TblEquipmentQuantityEntity> e1, List<TblEquipmentQuantityEntity> e2){
+        int mark = 0;
+        for(int i = 0; i < e1.size(); i++){
+            TblEquipmentQuantityEntity o1 = e1.get(i);
+            if(!o1.getIsDelete()){
+                for(int j = 0; j< e2.size(); j++){
+                    TblEquipmentQuantityEntity o2 = e2.get(j);
+                    if(!o2.getIsDelete() && o1.getEquipmentCategoryId() == o2.getEquipmentCategoryId()){
+                        if(o1.getQuantity() == o2.getQuantity()){
+                            mark+=o1.getQuantity();
+                        }
+                        if(o1.getQuantity()> o2.getQuantity()){
+                            mark+=o2.getQuantity();
+                        }
+                        if(o1.getQuantity()<o2.getQuantity()){
+                            mark+=o1.getQuantity();
+                        }
+                    }
+                }
+            }
+        }
+        return mark;
     }
 
     public static boolean isNumeric(String str) {

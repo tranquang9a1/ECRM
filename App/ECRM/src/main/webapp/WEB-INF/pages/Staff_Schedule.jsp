@@ -92,7 +92,8 @@
                             url: "/ajax/findClassroom",
                             cache: false,
                             data: 'slot=' + $("#slot").val() + "&numberOfSlots=" + $("#numberOfSlots").val() +
-                            "&numberOfStudent=" + $("#numberOfStudent").val() + "&date=" + $("#datepickerFrom").val(),
+                            "&numberOfStudent=" + $("#numberOfStudent").val() + "&dateT=" + $("#datepickerFrom").val()+
+                            "&dateF="+$("#datepickeTo").val(),
                             success: function (responseText) {
                                 $('#avai').html(responseText);
                             },

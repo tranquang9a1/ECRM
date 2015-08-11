@@ -39,7 +39,7 @@ public class CheckDamageService {
         if (!damagedEquipment.isEmpty()) {
             for (TblEquipmentEntity tblEquipmentEntity : damagedEquipment) {
                 List<TblReportDetailEntity> equipments = reportDetailDAO.getUnresolveReportDetail(tblEquipmentEntity.getId());
-                for (TblReportDetailEntity equipment : equipments) {
+                        for (TblReportDetailEntity equipment : equipments) {
                     String categoryName = tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getName();
                     if (!categoryName.equals("Bàn") ||
                             !categoryName.equals("Ghế")) {
@@ -52,7 +52,7 @@ public class CheckDamageService {
                                         if (equipment.getDamagedLevel().equals(Enumerable.DamagedLevel.LOW.getValue())) {
                                             damagedLevel += 20;
                                         } else if (equipment.getDamagedLevel().equals(Enumerable.DamagedLevel.MEDIUM.getValue())) {
-                                            damagedLevel += 30;
+                                                                    damagedLevel += 30;
                                         } else if (equipment.getDamagedLevel().equals(Enumerable.DamagedLevel.HIGH.getValue())) {
                                             damagedLevel += 50;
                                         } else {

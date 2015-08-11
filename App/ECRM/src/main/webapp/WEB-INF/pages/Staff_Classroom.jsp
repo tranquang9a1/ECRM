@@ -399,9 +399,7 @@
                         </div>
                         <div class="body-modal">
                             <div id="changeRoomField">
-
                             </div>
-
                         </div>
                         <div class="footer-modal">
                             <input type="button" class="btn btn-normal"
@@ -731,8 +729,8 @@
             }
 
             $(function () {
-                $("#datepickerFrom").datepicker({dateFormat: "yy-mm-dd"});
-                $("#datepickeTo").datepicker({dateFormat: "yy-mm-dd"});
+                $("#datepickerFrom").datepicker({dateFormat: "dd-mm-yy"});
+                $("#datepickeTo").datepicker({dateFormat: "dd-mm-yy"});
             });
 
             function getChangeRoom() {

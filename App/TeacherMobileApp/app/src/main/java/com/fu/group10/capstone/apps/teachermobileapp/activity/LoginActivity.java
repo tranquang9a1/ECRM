@@ -187,6 +187,7 @@ public class LoginActivity  extends ActionBarActivity {
 
 
                             importUser();
+                            deleteCategory();
                             syncData(user.getUsername());
                             // Check role
                             if (user.getRole().equalsIgnoreCase("Teacher") &&
@@ -407,7 +408,13 @@ public class LoginActivity  extends ActionBarActivity {
 
     public void syncData(String username) {
         syncCategory(username);
+
         startService(new Intent(this, SynchronizeService.class));
+    }
+
+    public void deleteCategory() {
+        db = new DatabaseHelper(getApplicationContext());
+        db.deleteEquipment();
     }
 
     public void syncCategory(String username) {

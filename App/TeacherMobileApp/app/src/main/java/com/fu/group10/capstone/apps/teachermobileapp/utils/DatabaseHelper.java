@@ -16,6 +16,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.UserDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ClassroomInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentQuantity;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.User;
@@ -37,14 +38,14 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private static final String DATABASE_NAME = "ECRM_DATA";
 
     private static final String TABLE_REPORT = "tblReport";
     private static final String TABLE_REPORT_DETAIL = "tblReportDetail";
     private static final String TABLE_CLASSROOM = "tblClassroom";
-    private static final String TABLE_ROOMTYPE = "tblRoomType";
+    private static final String TABLE_EQUIPMENT_QUANTITY = "tblEquipmentQuantity";
     private static final String TABLE_SCHEDULE = "tblSchedule";
     private static final String TABLE_USER = "tblUser";
     private static final String TABLE_USER_INFO = "tblUserInfo";
@@ -52,6 +53,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_EQUIPMENT = "tblEquipment";
     private static final String TABLE_EQUIPMENT_CLASSROOM = "tblEquipmentClassroom";
 
+
+    public static final String EQ_ID = "id";
+    public static final String EQ_CLASSID = "classId";
+    public static final String EQ_EQUIPMENT_NAME = "equipmentName";
+    public static final String EQ_QUANTITY = "quantity";
+    public static final String EQ_PRIORITY = "priority";
+    public static final String EQ_IS_DELETED = "isDeleted";
 
     private static final String EC_CLASSID = "classId";
     private static final String EC_EQUIPMENT_NAME = "equipmentName";
@@ -158,6 +166,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " INTEGER PRIMARY KEY," + CLASSROOM_NAME + " TEXT," + CLASSROOM_TYPE + " INTEGER," + CLASSROOM_DAMAGE_LEVEL
             + " INTEGER" + ")";
 
+    private static final String CREATE_TABLE_EQUIPMENT_QUANTITY = "CREATE TABLE " + TABLE_EQUIPMENT_QUANTITY + "("
+            + EQ_ID + " INTEGER PRIMARY KEY, " + EQ_CLASSID + " TEXT," + EQ_EQUIPMENT_NAME + " TEXT,"
+            + EQ_QUANTITY + " INTEGER," + EQ_PRIORITY + " INTEGER," + EQ_IS_DELETED + " TEXT" + ")";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -173,6 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_EQUIPMENT_CLASSROOM);
         sqLiteDatabase.execSQL(CREATE_TABLE_SCHEDULE);
         sqLiteDatabase.execSQL(CREATE_TABLE_EQUIPMENT_CATEGORY);
+        sqLiteDatabase.execSQL(CREATE_TABLE_EQUIPMENT_QUANTITY);
 
     }
 
@@ -186,6 +199,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CLASSROOM);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHEDULE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CATEGORY);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_QUANTITY);
+
 
         onCreate(sqLiteDatabase);
     }
@@ -367,6 +382,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public List<EquipmentQuantity> getQuantity(int classId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<EquipmentQuantity> result = new ArrayList<EquipmentQuantity>();
+        String query = "SELECT * FROM " + TABLE_EQUIPMENT_QUANTITY + " WHERE " + EQ_CLASSID + " = " + classId ;
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                EquipmentQuantity equipment = new EquipmentQuantity();
+                equipment.setQuantity(c.getInt(c.getColumnIndex(EQ_QUANTITY)));
+                equipment.setIsDeleted(c.getInt(c.getColumnIndex(EQ_IS_DELETED)) != 0);
+                equipment.setEquipmentName(c.getString(c.getColumnIndex(EQ_EQUIPMENT_NAME)));
+                equipment.setPriority(c.getInt(c.getColumnIndex(EQ_PRIORITY)));
+                equipment.setClassId(c.getInt(c.getColumnIndex(EQ_CLASSID)));
+
+                result.add(equipment);
+            } while (c.moveToNext());
+        }
+
+        return result;
+    }
+
     public void syncEquipment(String classId, Equipment equipment) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -491,9 +527,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_CLASSROOM, null, null);
         db.delete(TABLE_EQUIPMENT, null, null);
         db.delete(TABLE_EQUIPMENT_CLASSROOM, null, null);
+        db.delete(TABLE_EQUIPMENT_CATEGORY, null, null);
         db.delete(TABLE_REPORT, null, null);
         db.delete(TABLE_REPORT_DETAIL, null, null);
+        db.delete(TABLE_EQUIPMENT_QUANTITY, null, null);
 
+    }
+
+    public void addEquipmentQuantity(EquipmentQuantity eq){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(EQ_CLASSID, eq.getClassId());
+        values.put(EQ_EQUIPMENT_NAME, eq.getEquipmentName());
+        values.put(EQ_IS_DELETED, eq.isDeleted());
+        values.put(EQ_PRIORITY,eq.getPriority());
+        values.put(EQ_QUANTITY, eq.getQuantity());
+
+
+        db.insert(TABLE_EQUIPMENT_QUANTITY, null, values);
+        db.close();
     }
 
     public void deleteUser() {

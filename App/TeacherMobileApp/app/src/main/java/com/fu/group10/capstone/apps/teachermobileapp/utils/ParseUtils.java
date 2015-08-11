@@ -8,6 +8,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.ClassroomDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ClassroomInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentCategory;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentQuantity;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Result;
@@ -116,6 +117,31 @@ public class ParseUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static List<EquipmentQuantity> parseEquipmentQuantity(String json) {
+        List<EquipmentQuantity> result = new ArrayList<>();
+        try {
+            if (json == null) {
+                return result;
+            }
+
+            JSONArray listEq = new JSONArray(json);
+            for (int i = 0; i< listEq.length(); i++) {
+                EquipmentQuantity eq = new EquipmentQuantity();
+                JSONObject object = listEq.getJSONObject(i);
+                eq.setClassId(object.getInt("classId"));
+                eq.setEquipmentName(object.getString("equipmentName"));
+                eq.setPriority(object.getInt("priority"));
+                eq.setQuantity(object.getInt("quantity"));
+                eq.setIsDeleted(object.getBoolean("deleted"));
+                result.add(eq);
+            }
+            return result;
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public static Result parseResult(String json) {

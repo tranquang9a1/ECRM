@@ -13,6 +13,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.ScheduleDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.UserDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ClassroomInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentQuantity;
 import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.ReportInfo;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Result;
@@ -218,9 +219,24 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                     syncClassroom(result);
                 }
             });
+
+            String url2 = Constants.API_GET_EQUIPMENT_QUANTITY + id;
+            RequestSender sender2 = new RequestSender();
+            sender2.start(url2, new RequestSender.IRequestSenderComplete() {
+                @Override
+                public void onRequestComplete(String result) {
+                    List<EquipmentQuantity> eq = ParseUtils.parseEquipmentQuantity(result);
+                    syncQuantity(eq);
+                }
+            });
         }
     }
 
+    public void syncQuantity(List<EquipmentQuantity> listEquipments) {
+        for (int i = 0; i < listEquipments.size(); i++) {
+            db.addEquipmentQuantity(listEquipments.get(i));
+        }
+    }
 
     public void syncClassroom(String result ) {
         ClassroomDAO dao = ParseUtils.parseClassroomDAO(result);

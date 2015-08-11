@@ -17,6 +17,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Equipment;
+import com.fu.group10.capstone.apps.teachermobileapp.model.EquipmentQuantity;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DBUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.DatabaseHelper;
@@ -139,92 +140,73 @@ public class CreateReportDialogOffline extends DialogFragment {
         smsManager.sendTextMessage(Constants.STAFF_PHONE, null, messsage, null, null);
     }
 
+    public EquipmentQuantity getQuantity(List<EquipmentQuantity> quantities, Equipment equipment) {
+        for (EquipmentQuantity entity : quantities) {
+            if (entity.getEquipmentName().equalsIgnoreCase(equipment.getEquipmentName())) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     public int checkDamageLevel() {
         int damageLevel = db.getDamageLevel(classId);
+        List<EquipmentQuantity> quantities = db.getQuantity(classId);
         for (int i = 0; i <listDamaged.size(); i++) {
             Equipment equipment = listDamaged.get(i);
-            equipment.setPosition(DBUtils.getPosition(activity, equipment.getEquipmentName()));
 
-            if (equipment.getPosition().equals(Constants.PROJECTOR)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 20;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
-                    damageLevel += 30;
+            if (!equipment.getEquipmentName().equalsIgnoreCase("Bàn")
+                    && !equipment.getEquipmentName().equalsIgnoreCase("Ghế")) {
+                EquipmentQuantity equipmentQuantity = getQuantity(quantities, equipment);
+                if (!equipmentQuantity.isDeleted() && equipmentQuantity.getPriority() == 3) {
+                    if (Integer.parseInt(equipment.getDamageLevel()) == 3) {
+                        damageLevel += 20;
+                    } else if (Integer.parseInt(equipment.getDamageLevel()) == 2){
+                        damageLevel += 30;
+                    } else {
+                        damageLevel += 50;
+                    }
+                } else if (!equipmentQuantity.isDeleted() && equipmentQuantity.getPriority() == 2) {
+                    if (Integer.parseInt(equipment.getDamageLevel()) == 3) {
+                        damageLevel += 10;
+                    } else if (Integer.parseInt(equipment.getDamageLevel()) == 2){
+                        damageLevel += 20;
+                    } else {
+                        damageLevel += 30;
+                    }
                 } else {
-                    damageLevel += 50;
+                    if (Integer.parseInt(equipment.getDamageLevel()) == 3) {
+                        damageLevel += 5;
+                    } else if (Integer.parseInt(equipment.getDamageLevel()) == 2){
+                        damageLevel += 10;
+                    } else {
+                        damageLevel += 15;
+                    }
                 }
             }
 
-            if (equipment.getPosition().equals(Constants.AIR)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 10;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
-                    damageLevel += 15;
-                } else {
-                    damageLevel += 25;
-                }
-            }
-
-            if (equipment.getPosition().equals(Constants.BULB)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 10;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
-                    damageLevel += 20;
-                } else {
-                    damageLevel += 50;
-                }
-            }
-
-
-            if (equipment.getPosition().equals(Constants.FAN)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 1;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
+            if (equipment.getEquipmentName().equalsIgnoreCase("Bàn")) {
+                if (Integer.parseInt(equipment.getDamageLevel()) == 3) {
+                    damageLevel += 2;
+                } else if (Integer.parseInt(equipment.getDamageLevel()) == 2){
                     damageLevel += 3;
                 } else {
                     damageLevel += 5;
                 }
             }
 
-            if (equipment.getPosition().equals(Constants.SPEAKER)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
+            if (equipment.getEquipmentName().equalsIgnoreCase("Bàn")) {
+                if (Integer.parseInt(equipment.getDamageLevel()) == 3) {
                     damageLevel += 1;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
+                } else if (Integer.parseInt(equipment.getDamageLevel()) == 2){
+                    damageLevel += 2;
+                } else {
                     damageLevel += 3;
-                } else {
-                    damageLevel += 5;
                 }
             }
 
-            if (equipment.getPosition().equals(Constants.TABLE)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 5;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
-                    damageLevel += 10;
-                } else {
-                    damageLevel += 20;
-                }
-            }
 
-            if (equipment.getPosition().equals(Constants.CHAIR)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 5;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
-                    damageLevel += 10;
-                } else {
-                    damageLevel += 20;
-                }
-            }
 
-            if (equipment.getPosition().equals(Constants.TELEVISION)) {
-                if (equipment.getDamageLevel().equalsIgnoreCase("3")) {
-                    damageLevel += 20;
-                } else if (equipment.getDamageLevel().equalsIgnoreCase("2")) {
-                    damageLevel += 30;
-                } else {
-                    damageLevel += 50;
-                }
-            }
 
         }
         return damageLevel > 100 ? 100 : damageLevel;

@@ -6,7 +6,7 @@ package com.fu.group10.capstone.apps.teachermobileapp.utils;
 public class Constants {
     //public static final String SOURCE = "http://192.168.43.80:8080";
     public static final int TIMEOUT = 10000;
-    private static final String SOURCE = "http://128.199.208.93";
+   private static final String SOURCE = "http://128.199.208.93";
     public static final String API_SOURCE = SOURCE + "/api/";
     public static final String API_LOGIN = API_SOURCE + "login";
     public static final String API_SCHEDULE = API_SOURCE + "schedule?username=";
@@ -22,6 +22,7 @@ public class Constants {
     public static final String API_GET_CLASSROOM = API_SOURCE + "getClassroom?classId=";
     public static final String API_GET_CATEGORY = API_SOURCE + "getCategory?username=";
     public static final String API_CHANGE_PASSWORD = API_SOURCE + "changePass?username=";
+    public static final String API_GET_EQUIPMENT_QUANTITY = API_SOURCE + "getQuantity?classId=";
     public static final String PROJECTOR = "1";
     public static final String TELEVISION = "2";
     public static final String AIR = "3";

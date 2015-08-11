@@ -404,6 +404,22 @@ public class AjaxController {
             }
         }
 
+        String expiredTime = request.getParameter("expiredTime");
+        if (expiredTime != null) {
+            if (expiredTime.equals("")) {
+                alert = "Thời gian báo hư không được bỏ trống!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+            if (!Utils.isDouble(expiredTime)) {
+                alert = "Thời báo hư không được là chữ!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+
+        }
         return validateEntity;
     }
 
@@ -435,6 +451,22 @@ public class AjaxController {
                     return validateEntity;
                 }
             }
+        }
+        String expiredTime = request.getParameter("expiredTime");
+        if (expiredTime != null) {
+            if (expiredTime.equals("")) {
+                alert = "Thời gian báo hư không được bỏ trống!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+            if (!Utils.isDouble(expiredTime)) {
+                alert = "Thời báo hư không được là chữ!";
+                status = false;
+                validateEntity = new ValidateEntity(alert, status);
+                return validateEntity;
+            }
+
         }
         return validateEntity;
     }

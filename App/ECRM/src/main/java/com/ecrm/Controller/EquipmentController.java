@@ -83,6 +83,12 @@ public class EquipmentController {
                     iterator2.remove();
                 }
             }
+            Collections.sort(tblEquipmentEntities, new Comparator<TblEquipmentEntity>() {
+                @Override
+                public int compare(TblEquipmentEntity o1, TblEquipmentEntity o2) {
+                    return o1.getTblClassroomByClassroomId().getName().compareTo(o2.getTblClassroomByClassroomId().getName());
+                }
+            });
             request.setAttribute("CATEGORIES", tblEquipmentCategoryEntities);
             request.setAttribute("MANAGEDCATEGORIES", mEquipmentCategoryEntities);
             request.setAttribute("EQUIPMENTS", tblEquipmentEntities);
@@ -216,12 +222,13 @@ public class EquipmentController {
                 }
                 String name = params.get("name");
                 String isManaged = params.get("isManaged");
+                double expiredTime = Double.parseDouble(params.get("expiredTime"));
                 boolean managed = false;
                 if (isManaged.equals("1")) {
                     managed = true;
                 }
-                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = new TblEquipmentCategoryEntity(name, 0, managed, fileName, false);
-                tblEquipmentCategoryEntity.setUpdateTime(new Date().getTime());
+                TblEquipmentCategoryEntity tblEquipmentCategoryEntity = new TblEquipmentCategoryEntity(name, managed, fileName, false,
+                        new Date().getTime(), expiredTime);
                 categoryDAO.persist(tblEquipmentCategoryEntity);
                 return "redirect:/staff/equipment?ACTIVETAB=tab2";
             } catch (Exception ex) {
@@ -281,10 +288,12 @@ public class EquipmentController {
                 }
                 String categoryId = params.get("categoryId");
                 String categoryName = params.get("name");
+                double expiredTime = Double.parseDouble(params.get("expiredTime"));
                 TblEquipmentCategoryEntity tblEquipmentCategoryEntity = categoryDAO.find(Integer.parseInt(categoryId));
                 tblEquipmentCategoryEntity.setImageUrl(fileName);
                 tblEquipmentCategoryEntity.setName(categoryName.trim());
                 tblEquipmentCategoryEntity.setUpdateTime(new Date().getTime());
+                tblEquipmentCategoryEntity.setExpiredTime(expiredTime);
                 categoryDAO.merge(tblEquipmentCategoryEntity);
                 return "redirect:/staff/equipment?ACTIVETAB=tab2";
             } catch (Exception ex) {

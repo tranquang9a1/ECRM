@@ -14,11 +14,11 @@ import java.util.Collection;
 public class TblEquipmentCategoryEntity {
     private int id;
     private String name;
-    private Integer usingTime;
     private Boolean isManaged;
     private String imageUrl;
     private Boolean isDelete;
     private Long updateTime;
+    private double expiredTime;
     private Collection<TblEquipmentEntity> tblEquipmentsById;
     private Collection<TblEquipmentQuantityEntity> tblEquipmentQuantityById;
 
@@ -77,15 +77,6 @@ public class TblEquipmentCategoryEntity {
     public void setName(String name) {
         this.name = name;
     }
-    @Basic
-    @Column(name = "UsingTime")
-    public Integer getUsingTime() {
-        return usingTime;
-    }
-
-    public void setUsingTime(Integer usingTime) {
-        this.usingTime = usingTime;
-    }
 
     @Basic
     @Column(name = "UpdateTime")
@@ -96,6 +87,17 @@ public class TblEquipmentCategoryEntity {
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Basic
+    @Column(name = "ExpiredTime")
+    public double getExpiredTime() {
+        return expiredTime;
+    }
+
+    public void setExpiredTime(double expiredTime) {
+        this.expiredTime = expiredTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,7 +106,6 @@ public class TblEquipmentCategoryEntity {
         TblEquipmentCategoryEntity that = (TblEquipmentCategoryEntity) o;
 
         if (id != that.id) return false;
-        if (usingTime != that.usingTime) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -114,7 +115,6 @@ public class TblEquipmentCategoryEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (usingTime != null ? usingTime.hashCode() : 0);
         return result;
     }
 
@@ -141,11 +141,19 @@ public class TblEquipmentCategoryEntity {
     public TblEquipmentCategoryEntity() {
     }
 
-    public TblEquipmentCategoryEntity(String name, Integer usingTime, Boolean isManaged, String imageUrl, Boolean isDelete) {
+    public TblEquipmentCategoryEntity(String name, Boolean isManaged, String imageUrl, Boolean isDelete) {
         this.name = name;
-        this.usingTime = usingTime;
         this.isManaged = isManaged;
         this.imageUrl = imageUrl;
         this.isDelete = isDelete;
+    }
+
+    public TblEquipmentCategoryEntity(String name, Boolean isManaged, String imageUrl, Boolean isDelete, Long updateTime, double expiredTime) {
+        this.name = name;
+        this.isManaged = isManaged;
+        this.imageUrl = imageUrl;
+        this.isDelete = isDelete;
+        this.updateTime = updateTime;
+        this.expiredTime = expiredTime;
     }
 }

@@ -37,7 +37,7 @@
                        name="classroomName"/>
                 <c:forEach items="${equipments}" var="e">
                     <c:choose>
-                        <c:when test="${e.timeRemain <=50 and e.usingTime>0}">
+                        <c:when test="${e.timeRemain <=e.tblEquipmentCategoryByCategoryId.expiredTime and e.usingTime>0}">
                             <div class="row" style="background-color: #D28787">
                                 <div class="width-15">
                                     <div class="equip"

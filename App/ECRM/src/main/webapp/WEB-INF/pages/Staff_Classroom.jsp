@@ -401,7 +401,7 @@
                             <div id="changeRoomField">
                             </div>
                         </div>
-                        <div class="footer-modal">
+                        <div class="footer-modal" style="border-top:0px">
                             <input type="button" class="btn btn-normal"
                                    onclick="showModal(2,'modal-room', 'modal-changeRoom');"
                                    value="Quay lại"/>

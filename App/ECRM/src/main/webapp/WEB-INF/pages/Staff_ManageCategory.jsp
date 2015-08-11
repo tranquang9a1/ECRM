@@ -51,7 +51,8 @@
                                 <div class="btn btn-detail" title="Chỉnh sửa"
                                      onclick="showModal(1,'modal-edit-category');
                                              document.getElementById('edit-categoryName').value = '${c.name}';
-                                             document.getElementById('edit-categoryId').value  = ${c.id}; "><i
+                                             document.getElementById('edit-categoryId').value  = ${c.id};
+                                             document.getElementById('edit-expiredTime').value=${c.expiredTime}"><i
                                         class="fa fa-pencil"></i>
                                 </div>
                                 <div class="btn btn-remove" title="Xóa"

@@ -114,40 +114,40 @@ public class CheckDamagedClassroomSchedule {
             }
             if (hour == 7 && localTime.getMinuteOfHour() == 0 && localTime.getSecondOfMinute() == 0 && Utils.checkCronJob()) {
                 System.out.println("Task 1: Task check time using run!!! Current time is: " + new Date());
-                List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findAllScheduleToday();
-                for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
-                    TblScheduleConfigEntity scheduleConfigEntity = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId();
-                    Time timeFrom = scheduleConfigEntity.getTimeFrom();
-                    Time timeTo = scheduleConfigEntity.getTimeTo();
-                    double time = timeTo.getTime() - timeFrom.getTime();
-                    double rs = time / (1000 * 60 * 60);
-                    TblClassroomEntity classroomEntity = tblScheduleEntity.getTblClassroomByClassroomId();
-                    List<TblEquipmentEntity> tblEquipmentEntities = equipmentDAO.getProjector(classroomEntity.getId());
-                    if (!tblEquipmentEntities.isEmpty()) {
-                        for (TblEquipmentEntity equipmentEntity : tblEquipmentEntities) {
-                            if(equipmentEntity.getUsingTime()>0){
-                                double timeRemain = equipmentEntity.getTimeRemain() - rs;
-                                equipmentEntity.setTimeRemain(timeRemain);
-                                equipmentDAO.merge(equipmentEntity);
-                                if (equipmentEntity.getTimeRemain() <= 50) {
-                                    String message = "Thiết bị: "+equipmentEntity.getTblEquipmentCategoryByCategoryId().getName()+" " + equipmentEntity.getName() + " số serial: " + equipmentEntity.getSerialNumber() +
-                                            " của phòng: " + equipmentEntity.getTblClassroomByClassroomId().getName() + " sắp hết thời gian sử dụng!";
-                                    gcmService.sendNotification(message, userDAO.getAllStaff().get(0).getTblUserInfoByUsername().getDeviceId());
-                                }
-                                if(equipmentEntity.getTimeRemain()<=0){
-                                    equipmentEntity.setStatus(false);
-                                    List<TblEquipmentEntity> tblEquipmentEntities1 = new ArrayList<>();
-                                    tblEquipmentEntities1.add(equipmentEntity);
-                                    classroomEntity.setDamagedLevel(checkDamageService.checkDamagedLevelForEquipment(tblEquipmentEntities1, classroomEntity));
-                                    classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
-                                    classroomDAO.merge(classroomEntity);
-                                }
-                                equipmentDAO.merge(equipmentEntity);
-                            }
-                        }
-
+                List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
+                for (TblClassroomEntity classroomEntity : tblClassroomEntities) {
+                    double time = 0;
+                    List<TblScheduleEntity> tblScheduleEntities = classroomEntity.getTblSchedulesById();
+                    for (TblScheduleEntity tblScheduleEntity : tblScheduleEntities) {
+                        Time timeFrom = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeFrom();
+                        Time timeTo = tblScheduleEntity.getTblScheduleConfigByScheduleConfigId().getTimeTo();
+                        time = timeTo.getTime() - timeFrom.getTime();
                     }
+                    List<TblEquipmentEntity> tblEquipmentEntities = classroomEntity.getTblEquipmentsById();
+                    for (TblEquipmentEntity tblEquipmentEntity : tblEquipmentEntities) {
+                        if (tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getIsManaged() && tblEquipmentEntity.getUsingTime() > 0) {
+                            double timeRemain = tblEquipmentEntity.getTimeRemain() - time/(60*1000*60);
+                            if (timeRemain <= tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getExpiredTime()
+                                    && timeRemain > 0) {
+                                String message = "Thiết bị: " + tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getName() + " " + tblEquipmentEntity.getName() + " số serial: " + tblEquipmentEntity.getSerialNumber() +
+                                        " của phòng: " + classroomEntity.getName() + " chỉ còn: " + timeRemain + " giờ!";
+                                gcmService.sendNotification(message, userDAO.getAllStaff().get(0).getTblUserInfoByUsername().getDeviceId());
+                            }
+                            tblEquipmentEntity.setTimeRemain(timeRemain);
+                            equipmentDAO.merge(tblEquipmentEntity);
+                            if (timeRemain <= 0) {
+                                String message = "Thiết bị: " + tblEquipmentEntity.getTblEquipmentCategoryByCategoryId().getName() + " " + tblEquipmentEntity.getName() + " số serial: " + tblEquipmentEntity.getSerialNumber() +
+                                        " của phòng: " + classroomEntity.getName() + " hết hạn sử dụng";
+                                gcmService.sendNotification(message, userDAO.getAllStaff().get(0).getTblUserInfoByUsername().getDeviceId());
+                                tblEquipmentEntity.setStatus(false);
+                                equipmentDAO.merge(tblEquipmentEntity);
+                                classroomEntity.setDamagedLevel(checkDamageService.checkDamagedLevelForEquipmentResolve(classroomEntity));
+                                classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));
+                                classroomDAO.merge(classroomEntity);
+                            }
 
+                        }
+                    }
                 }
                 System.out.println("Task 1: Kết thúc cronjob check equipment vào lúc:" + new Date());
                 System.out.println("");
@@ -165,13 +165,13 @@ public class CheckDamagedClassroomSchedule {
                     Date maxDate = scheduleDAO.getMaxDate();
                     Date currentDate = new Date();
                     long period = maxDate.getTime() - currentDate.getTime();
-                    if(period>=0 && period<=604800000){
-                        int day = (int) ((period / (1000*60*60*24)) % 7)+1;
-                        String message = "Lịch trong hệ thống chỉ còn "+ day+" ngày! Hãy nhập thêm lịch?";
+                    if (period >= 0 && period <= 604800000) {
+                        int day = (int) ((period / (1000 * 60 * 60 * 24)) % 7) + 1;
+                        String message = "Lịch trong hệ thống chỉ còn " + day + " ngày! Hãy nhập thêm lịch?";
                         List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
                         gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());
                     }
-                    if(period<0){
+                    if (period < 0) {
                         String message = "Đã hết lịch trong hệ thống! Hãy nhập thêm lịch?";
                         List<TblUserEntity> tblUserEntity = userDAO.getAllStaff();
                         gcmService.sendNotification(message, tblUserEntity.get(0).getTblUserInfoByUsername().getDeviceId());

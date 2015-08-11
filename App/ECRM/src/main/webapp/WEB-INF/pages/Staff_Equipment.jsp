@@ -54,19 +54,27 @@
                         <div class="page active" id="equipment">
                             <div class="title" style="padding: 0; height: 70px">
                                 <p>Quản lý thiết bị</p>
-                                <input type="button" class="btn btn-orange" style="display: none" id="createEquipmentBtn" value="Tạo thiết bị"
+                                <input type="button" class="btn btn-orange" style="display: none"
+                                       id="createEquipmentBtn" value="Tạo thiết bị"
                                        onclick="showModal(1, 'modal-1'); document.getElementById('equipment-action').value = 'insert';
                                                             document.getElementById('equipment-classroomId').value = '0';
                                                             document.getElementById('time-remain').style.display = 'none';
                                                             $('#modal-1 > div.content-modal').css('height','307px');
                                                             document.getElementById('equipment-category-select').disabled = false;
                                                             "/>
-                                <input type="button" class="btn btn-orange" id="createEquipCategoryBtn" style="display: none; margin: 0" value="Tạo loại thiết bị" onclick="showModal(1, 'modal-category')"/>
+                                <input type="button" class="btn btn-orange" id="createEquipCategoryBtn"
+                                       style="display: none; margin: 0" value="Tạo loại thiết bị"
+                                       onclick="showModal(1, 'modal-category')"/>
+
                                 <div class="clear"></div>
                                 <div class="title-category">
                                     <ul>
-                                        <li id="head-tab1" onclick="changeManage('tab1', this)" data-tab="equipment-tab" class="active">Thiết bị</li>
-                                        <li id="head-tab2" onclick="changeManage('tab2', this)" data-tab="equipment-tab">Loại thiết bị</li>
+                                        <li id="head-tab1" onclick="changeManage('tab1', this)" data-tab="equipment-tab"
+                                            class="active">Thiết bị
+                                        </li>
+                                        <li id="head-tab2" onclick="changeManage('tab2', this)"
+                                            data-tab="equipment-tab">Loại thiết bị
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -160,7 +168,7 @@
             <form action="/staff/createCategory" id="createCategory" name="createCategory" enctype="multipart/form-data"
                   method="post">
                 <div class="modal modal-medium" id="modal-category">
-                    <div class="content-modal" style="height: 266px">
+                    <div class="content-modal" style="height: 300px">
                         <div class="header-modal title">
                             <p>Tạo loại thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-category'); clearCategory();"></i>
@@ -179,8 +187,18 @@
 
                                     <p id="lblError" style="color: red;"></p>
                                 </div>
-
-
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Giờ báo hư</div>
+                                <div class="control">
+                                    <input name="expiredTime" type="text" id="expiredTime"
+                                           onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )" maxlength="3" value="0">
+                                </div>
                             </div>
                             <div class="group-control">
                                 <div class="name">Quản lý</div>
@@ -203,12 +221,13 @@
             <form action="/staff/editCategory" id="editCategory" name="editCategory" enctype="multipart/form-data"
                   method="post">
                 <div class="modal modal-medium" id="modal-edit-category">
-                    <div class="content-modal" style="height: 215px">
+                    <div class="content-modal" style="height: 265px">
                         <div class="header-modal title">
                             <p>Cập nhật loại thiết bị</p>
                             <i class="fa fa-times" onclick="showModal(0,'modal-category'); clearEditCategory();"></i>
                         </div>
                         <input type="hidden" id="edit-categoryId" name="categoryId">
+
                         <div class="body-modal">
                             <div class="group-control">
                                 <div class="name">Tên loại thiết bị</div>
@@ -222,6 +241,18 @@
                                                             size="50" accept="image/*"/>
 
                                     <p id="edit-lblError" style="color: red;"></p>
+                                </div>
+                            </div>
+                            <div class="group-control">
+                                <div class="name">Giờ báo hư</div>
+                                <div class="control">
+                                    <input name="expiredTime" type="text"
+                                           onkeydown="return ( event.ctrlKey || event.altKey
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false)
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9)
+                    || (event.keyCode>34 && event.keyCode<40)
+                    || (event.keyCode==46) )" maxlength="3" id="edit-expiredTime">
                                 </div>
                             </div>
                         </div>
@@ -255,7 +286,7 @@
                     type: "get",
                     url: "/ajax/checkEquipment",
                     cache: false,
-                    data: 'name=' + name + '&serialNumber=' + serialNumber + '&usingTime=' + usingTime+ '&timeRemain=' + timeRemain
+                    data: 'name=' + name + '&serialNumber=' + serialNumber + '&usingTime=' + usingTime + '&timeRemain=' + timeRemain
                     + '&action=' + action,
                     success: function (data) {
                         if (data.status == true) {
@@ -277,28 +308,30 @@
                 var lblError = document.getElementById("lblError");
                 var regex = /^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpg|.jpeg|.png|.gif)$/;
                 if (!regex.test(fileUpload.value.toLowerCase())) {
-                    lblError.innerHTML = "Hãy chọn tập tin có đuôi là: <b>" + " .jpg, .jpeg,.png, .gif" + "</b>";
+                    conformData(1, {message: 'Hãy chọn tập tin có đuôi là: .jpg, .jpeg,.png, .gif'});
                     return false;
                 }
                 lblError.innerHTML = "";
                 return true;
             }
-            function clearCategory(){
+            function clearCategory() {
                 document.getElementById('categoryName').value = '';
                 document.getElementById('fileUpload').value = '';
+                document.getElementById('expiredTime').value = '0';
                 document.getElementById('checkManage').checked = false;
             }
             function validateCreateCategory() {
                 if (ValidateExtension()) {
                     var name = document.forms["createCategory"]["name"].value;
+                    var expiredTime = document.forms["createCategory"]["expiredTime"].value;
                     $.ajax({
                         type: "get",
                         url: "/ajax/checkCategory",
                         cache: false,
-                        data: 'name=' + name,
+                        data: 'name=' + name+'&expiredTime=' + expiredTime,
                         success: function (data) {
                             if (data.status == true) {
-                                showModal(0, 'modal-1');
+                                showModal(0, 'modal-category');
                                 document.getElementById('createCategory').submit();
                                 $(".loading-page").addClass("active");
                                 $(".page").removeClass("active");
@@ -322,7 +355,7 @@
                 }
             }
 
-            function editCategory(categoryId, categoryName){
+            function editCategory(categoryId, categoryName) {
 
             }
             function ValidateExtension2() {
@@ -330,7 +363,7 @@
                 var lblError = document.getElementById("edit-lblError");
                 var regex = /^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpg|.jpeg|.png|.gif)$/;
                 if (!regex.test(fileUpload.value.toLowerCase())) {
-                    lblError.innerHTML = "Hãy chọn tập tin có đuôi là: <b>" + " .jpg, .jpeg,.png, .gif" + "</b>";
+                    conformData(1, {message: 'Hãy chọn tập tin có đuôi là: .jpg, .jpeg,.png, .gif'});
                     return false;
                 }
                 lblError.innerHTML = "";
@@ -340,14 +373,15 @@
                 if (ValidateExtension2()) {
                     var name = document.forms["editCategory"]["name"].value;
                     var categoryId = document.forms["editCategory"]["categoryId"].value;
+                    var expiredTime = document.forms["editCategory"]["expiredTime"].value;
                     $.ajax({
                         type: "get",
                         url: "/ajax/checkEditCategory",
                         cache: false,
-                        data: 'name=' + name+'&categoryId='+categoryId,
+                        data: 'name=' + name + '&categoryId=' + categoryId+'&expiredTime='+expiredTime,
                         success: function (data) {
                             if (data.status == true) {
-                                showModal(0, 'modal-1');
+                                showModal(0, 'modal-edit-category');
                                 document.getElementById('editCategory').submit();
                                 $(".loading-page").addClass("active");
                                 $(".page").removeClass("active");
@@ -362,10 +396,10 @@
                 }
             }
 
-            function clearEditCategory(){
+            function clearEditCategory() {
                 document.getElementById('edit-categoryName').value = '';
-                document.getElementById('edit-categoryId').value  = '';
-                document.getElementById('edit-fileUpload').value  = '';
+                document.getElementById('edit-categoryId').value = '';
+                document.getElementById('edit-fileUpload').value = '';
             }
 
             //phan trang
@@ -435,7 +469,7 @@
             function changeManage(tab, thisE) {
                 changeTabInTitle(tab, thisE);
 
-                if(tab == 'tab1') {
+                if (tab == 'tab1') {
                     document.getElementById("createEquipmentBtn").style.display = "block";
                     document.getElementById("createEquipCategoryBtn").style.display = "none";
                 } else {
@@ -443,7 +477,10 @@
                     document.getElementById("createEquipCategoryBtn").style.display = "block";
                 }
 
-                window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/staff/equipment?ACTIVETAB=" + tab);
+                window.history.pushState({
+                    "html": '',
+                    "pageTitle": 'Hệ thống quản lý thiết bị phòng học'
+                }, "", "/staff/equipment?ACTIVETAB=" + tab);
             }
             connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
         </script>

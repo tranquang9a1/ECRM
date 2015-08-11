@@ -68,7 +68,7 @@ public class StaffController {
             Collections.sort(tblClassroomEntities, new Comparator<ClassroomMapDTO>() {
                 @Override
                 public int compare(ClassroomMapDTO o1, ClassroomMapDTO o2) {
-                    return o2.getClassroom().getUpdateTime().compareTo(o1.getClassroom().getUpdateTime());
+                    return o1.getClassroom().getName().compareTo(o2.getClassroom().getName());
                 }
             });
             request.setAttribute("ALLCLASSROOM", tblClassroomEntities);

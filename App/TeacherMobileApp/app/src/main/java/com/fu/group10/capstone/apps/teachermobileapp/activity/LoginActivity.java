@@ -176,30 +176,33 @@ public class LoginActivity  extends ActionBarActivity {
                         progress.dismiss();
                         if (user != null && !user.getUsername().equalsIgnoreCase("null")) {
                             //Luu data local
+                            showProgressSync();
+                            if (TextUtils.isEmpty(regId)) {
+                                regId = registerGCM();
+                                Log.d("RegisterActivity", "GCM RegId: " + regId);
+                            } else {
+                                Log.d("RegisterActivity", "Already Registered with GCM Server!");
+                            }
+                            registerWithServer(user.getUsername());
                             SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putBoolean("LoginState", true);
                             editor.putString("username", user.getUsername());
                             editor.putString("password", user.getPassword());
                             editor.commit();
-                            showProgressSync();
-                            registerWithServer(user.getUsername());
+
+
 
 
                             importUser();
-                            deleteCategory();
+                            //deleteCategory();
                             syncData(user.getUsername());
                             // Check role
                             if (user.getRole().equalsIgnoreCase("Teacher") &&
                                     user.getPassword().equalsIgnoreCase(Constants.DEFAULT_PASSWORD)) {
                                 firstLogin();
                             } else {
-                                if (TextUtils.isEmpty(regId)) {
-                                    regId = registerGCM();
-                                    Log.d("RegisterActivity", "GCM RegId: " + regId);
-                                } else {
-                                    Log.d("RegisterActivity", "Already Registered with GCM Server!");
-                                }
+
 
                                 openMainActivity(user.getUsername());
 

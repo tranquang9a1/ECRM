@@ -527,7 +527,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_CLASSROOM, null, null);
         db.delete(TABLE_EQUIPMENT, null, null);
         db.delete(TABLE_EQUIPMENT_CLASSROOM, null, null);
-        db.delete(TABLE_EQUIPMENT_CATEGORY, null, null);
         db.delete(TABLE_REPORT, null, null);
         db.delete(TABLE_REPORT_DETAIL, null, null);
         db.delete(TABLE_EQUIPMENT_QUANTITY, null, null);

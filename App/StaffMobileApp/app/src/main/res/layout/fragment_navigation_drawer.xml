@@ -15,7 +15,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                android:hint="@string/search_movie_hint"
+                android:hint="@string/search"
                 android:textColor="#000"
                 android:dropDownWidth="match_parent"
                 android:paddingRight="50dp"

@@ -263,7 +263,7 @@ public class ResolveReportActivity extends Activity {
 
     public void setSuggest(ReportInfo report) {
         if (type.equalsIgnoreCase("new") || type.equalsIgnoreCase("going")) {
-            txtStatus.setVisibility(View.GONE);
+            //txtStatus.setVisibility(View.GONE);
             txtStatus.setText("Đổi phòng sang " + report.getChangedRoom());
             txtStatus.setVisibility(View.VISIBLE);
             txtStatusDes.setVisibility(View.VISIBLE);
@@ -271,8 +271,6 @@ public class ResolveReportActivity extends Activity {
             txtStatus.setText("Phòng đã được sửa");
             txtStatus.setVisibility(View.VISIBLE);
             txtStatusDes.setVisibility(View.VISIBLE);
-        } else if (type.equalsIgnoreCase("going")) {
-
         } else {
             txtStatus.setText("Báo cáo đã bị xóa");
             txtStatus.setVisibility(View.VISIBLE);

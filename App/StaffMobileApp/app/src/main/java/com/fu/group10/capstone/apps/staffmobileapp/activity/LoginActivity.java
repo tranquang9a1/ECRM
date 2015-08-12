@@ -146,7 +146,7 @@ public class LoginActivity extends Activity{
                 public void onRequestComplete(String result) {
                     user = ParseUtils.parseUserJson(result);
                     progress.dismiss();
-                    if (user != null) {
+                    if (user != null && !user.getUsername().equalsIgnoreCase("null")) {
                         SharedPreferences sp = getSharedPreferences("LoginState", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putBoolean("LoginState", true);

@@ -13,7 +13,7 @@
     <string name="checkingConnection">Đang kiểm tra kết nối…</string>
     <string name="noConnection">Không thể kết nối đến máy chủ!</string>
     <string name="tryAgain">Thử lại</string>
-    <string name="search_movie_hint">Search!</string>
+    <string name="search">Tìm phòng học</string>
     <string name="tabAccount">ACCOUNT</string>
     <string name="no_network_connection_toast">Can not connect to network!</string>
     <string name="current_password">Current Password</string>

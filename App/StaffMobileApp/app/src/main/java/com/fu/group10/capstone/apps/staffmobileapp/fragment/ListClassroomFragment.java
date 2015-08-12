@@ -18,6 +18,7 @@ import com.fu.group10.capstone.apps.staffmobileapp.Utils.ParseUtils;
 import com.fu.group10.capstone.apps.staffmobileapp.Utils.RequestSender;
 import com.fu.group10.capstone.apps.staffmobileapp.adapter.GridViewAdapter;
 import com.fu.group10.capstone.apps.staffmobileapp.model.ClassInfo;
+import com.fu.group10.capstone.apps.staffmobileapp.model.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,15 +64,52 @@ public class ListClassroomFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showProgress();
+
                 currentClass = items.get(i);
-                getAvailableRoom(currentClass.getId()+"");
+                if (currentClass.getDamageLevel() >= Constants.DAMAGE_TO_CHANGE) {
+                    showProgress("Đang tải dữ liệu");
+                    resolve(currentClass.getId() +"");
+                } else {
+                    showProgress(Constants.FIND_ROOM);
+                    getAvailableRoom(currentClass.getId()+"");
+                }
             }
         });
     }
 
-    public void showProgress(){
-        progressDialog = ProgressDialog.show(getActivity(), "", Constants.FIND_ROOM, true);
+    public void showProgress(String msg){
+        progressDialog = ProgressDialog.show(getActivity(), "", msg, true);
+    }
+
+    public void resolve(final String roomId) {
+        DialogUtils.showAlert(getActivity(), "Bạn muốn khắc phục hư hại phòng này ?", new DialogUtils.IOnOkClicked() {
+            @Override
+            public void onClick() {
+                String url = Constants.API_RESOLVE_REPORT + roomId;
+
+                RequestSender sender = new RequestSender();
+                sender.start(url, new RequestSender.IRequestSenderComplete() {
+                    @Override
+                    public void onRequestComplete(String result) {
+                        Result res = ParseUtils.parseResult(result);
+                        progressDialog.dismiss();
+                        if (res.getError_code() == 100) {
+                            currentClass.setDamageLevel(Constants.DAMAGE_TO_ZERO);
+                            mAdapter.notifyDataSetChanged();
+                            DialogUtils.showAlert(getActivity(), "Khắc phục phòng thành công");
+                        } else {
+                            DialogUtils.showAlert(getActivity(), "Có lỗi xảy ra " + res.getError());
+                        }
+                    }
+                });
+            }
+        }, new DialogUtils.IOnCancelClicked() {
+            @Override
+            public void onClick() {
+
+            }
+        });
+
     }
 
     public void getAvailableRoom(String roomId) {
@@ -88,7 +126,7 @@ public class ListClassroomFragment extends Fragment {
                         @Override
                         public void onRequestComplete(boolean result) {
                             if (result) {
-                                currentClass.setDamageLevel(50);
+                                currentClass.setDamageLevel(Constants.DAMAGE_TO_CHANGE);
                                 mAdapter.notifyDataSetChanged();
                             }
                         }

@@ -22,10 +22,10 @@ public class Constants {
     public static final String APP_SERVER_URL = SOURCE + "/notification/register";
     public static final String API_GET_ROOM_IN_FLOOR = API_SOURCE + "getClassInFloor";
     public static final String API_GET_TOTAL_FLOOR = API_SOURCE + "getFloor";
-
     public static final String NO_ROOM_MESSAGE = "Hiện tại không còn phòng trống";
     public static final String FIND_ROOM = "Đang tìm phòng học trống";
-
+    public static final int DAMAGE_TO_CHANGE = 50;
+    public static final int DAMAGE_TO_ZERO = 0;
     // GCM server using java
     // static final String APP_SERVER_URL =
     // "http://192.168.1.17:8080/GCM-App-Server/GCMNotification?shareRegId=1";

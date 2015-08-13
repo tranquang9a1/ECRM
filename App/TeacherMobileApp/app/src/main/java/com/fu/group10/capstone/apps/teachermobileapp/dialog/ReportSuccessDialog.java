@@ -50,9 +50,6 @@ public class ReportSuccessDialog extends DialogFragment {
     }
 
     public void startMain() {
-        Intent intent = new Intent(activity, ListRoomActivity.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
-        activity.finish();
+
     }
 }

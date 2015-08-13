@@ -3,6 +3,7 @@ package com.fu.group10.capstone.apps.teachermobileapp.dialog;
 import android.app.*;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
+import com.fu.group10.capstone.apps.teachermobileapp.activity.ListRoomActivity;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.EquipmentDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDAO;
 import com.fu.group10.capstone.apps.teachermobileapp.dao.ReportDetailDAO;
@@ -122,6 +124,8 @@ public class CreateReportDialogOffline extends DialogFragment {
                     openMain();
                 }
             });
+        } else  {
+            openMain();
         }
 
 
@@ -129,10 +133,16 @@ public class CreateReportDialogOffline extends DialogFragment {
     }
 
     public void openMain() {
-        reportSuccessDialog = new ReportSuccessDialog();
-        reportSuccessDialog.setParams(activity, username);
-        reportSuccessDialog.show(activity.getFragmentManager(), "Show Success");
-        activity.setResult(Activity.RESULT_OK);
+        DialogUtils.showAlert(activity, "Gửi báo cáo thành công! Báo cáo của bạn đã được lưu vào hệ thống", new DialogUtils.IOnOkClicked() {
+            @Override
+            public void onClick() {
+                Intent intent = new Intent(activity, ListRoomActivity.class);
+                intent.putExtra("username", username);
+                activity.setResult(Activity.RESULT_OK);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        });
     }
 
     public void sendSMSOffline(String messsage) {

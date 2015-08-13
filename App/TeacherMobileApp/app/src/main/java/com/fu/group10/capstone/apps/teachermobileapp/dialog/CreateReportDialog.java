@@ -3,6 +3,7 @@ package com.fu.group10.capstone.apps.teachermobileapp.dialog;
 import android.app.*;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +12,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.fu.group10.capstone.apps.teachermobileapp.R;
+import com.fu.group10.capstone.apps.teachermobileapp.activity.ListRoomActivity;
 import com.fu.group10.capstone.apps.teachermobileapp.model.Result;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.DialogUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.ParseUtils;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.RequestSender;
 
@@ -170,7 +173,7 @@ public class CreateReportDialog extends DialogFragment {
                 Result result1 = ParseUtils.parseResult(result);
                 progress.dismiss();
                 if(result1.getError_code() == 100) {
-                    String msg = username + " vừa báo cáo hư hại phòng học "+ classId ;
+                    String msg = "Giáo viên" + username + " vừa báo cáo hư hại phòng học "+ classId ;
                     if (evaluate.equalsIgnoreCase("Phải đổi phòng")) {
                         sendSMS(msg);
                     }
@@ -212,10 +215,18 @@ public class CreateReportDialog extends DialogFragment {
     }
 
     public void openMain() {
-        reportSuccessDialog = new ReportSuccessDialog();
-        reportSuccessDialog.setParams(activity, username);
-        reportSuccessDialog.show(activity.getFragmentManager(), "Show Success");
-        activity.setResult(Activity.RESULT_OK);
+        DialogUtils.showAlert(activity, "Gửi báo cáo thành công! Báo cáo của bạn đã được lưu vào hệ thống", new DialogUtils.IOnOkClicked() {
+            @Override
+            public void onClick() {
+                Intent intent = new Intent(activity, ListRoomActivity.class);
+                intent.putExtra("username", username);
+                activity.setResult(Activity.RESULT_OK);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        });
+
+
     }
 
 

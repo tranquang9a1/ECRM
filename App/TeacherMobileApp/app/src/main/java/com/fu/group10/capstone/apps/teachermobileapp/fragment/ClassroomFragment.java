@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.fu.group10.capstone.apps.teachermobileapp.activity.CreateReportActivi
 import com.fu.group10.capstone.apps.teachermobileapp.model.DamagedEquipment;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.Constants;
 import com.fu.group10.capstone.apps.teachermobileapp.utils.JsInterface;
+import com.fu.group10.capstone.apps.teachermobileapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,32 +48,42 @@ public class ClassroomFragment extends Fragment {
     @SuppressLint("SetJavaScriptEnabled")
     private void initView(final View rootView) {
         classmap = (WebView) rootView.findViewById(R.id.classmap);
-        final JsInterface jsInterface = new JsInterface(getActivity());
-        classmap.getSettings().setJavaScriptEnabled(true);
-        classmap.setWebViewClient(new WebViewClient());
-        classmap.addJavascriptInterface(jsInterface, "Android");
-        classmap.setBackgroundColor(0);
-        classmap.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        classId = getActivity().getIntent().getExtras().getInt("classId");
-        username = getActivity().getIntent().getExtras().getString("username");
-        refreshMap(classId);
+        if (Utils.isOnline()) {
 
-        createReport = (Button) rootView.findViewById(R.id.create_report_button);
-        createReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<DamagedEquipment> equipmentList = jsInterface.getListDamaged();
-                if (equipmentList.size() > 0) {
-                    ArrayList<DamagedEquipment> listEquipment = new ArrayList<DamagedEquipment>();
-                    for (int i = 0; i < equipmentList.size(); i++) {
-                        listEquipment.add(equipmentList.get(i));
+            final JsInterface jsInterface = new JsInterface(getActivity());
+            classmap.getSettings().setJavaScriptEnabled(true);
+            classmap.setWebViewClient(new WebViewClient());
+            classmap.addJavascriptInterface(jsInterface, "Android");
+            classmap.setBackgroundColor(0);
+            classmap.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            classId = getActivity().getIntent().getExtras().getInt("classId");
+            username = getActivity().getIntent().getExtras().getString("username");
+            refreshMap(classId);
+
+            createReport = (Button) rootView.findViewById(R.id.create_report_button);
+            createReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<DamagedEquipment> equipmentList = jsInterface.getListDamaged();
+                    if (equipmentList.size() > 0) {
+                        ArrayList<DamagedEquipment> listEquipment = new ArrayList<DamagedEquipment>();
+                        for (int i = 0; i < equipmentList.size(); i++) {
+                            listEquipment.add(equipmentList.get(i));
+                        }
+                        openCreateReport(listEquipment);
+                    } else {
+                        Toast.makeText(DummyApplication.getAppContext(), "Bạn phải chọn ít nhất 1 thiết bị!", Toast.LENGTH_SHORT).show();
                     }
-                    openCreateReport(listEquipment);
-                } else {
-                    Toast.makeText(DummyApplication.getAppContext(), "Bạn phải chọn ít nhất 1 thiết bị!", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
+        } else {
+
+            classmap.loadDataWithBaseURL("file:///android_asset/", "<img src='nointernet.png'/>", "text/html", "urf-8", null);
+            classmap.getSettings().setLoadWithOverviewMode(true);
+            classmap.getSettings().setUseWideViewPort(true);
+            //classmap.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        }
+
 
     }
 

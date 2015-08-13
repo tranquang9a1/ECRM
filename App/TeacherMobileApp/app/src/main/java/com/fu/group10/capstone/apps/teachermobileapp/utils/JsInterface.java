@@ -78,14 +78,14 @@ public class JsInterface {
     @JavascriptInterface
     public static void removeEquipment(String name, String position) {
         DamagedEquipment damagedEquipment = new DamagedEquipment(name, position);
-        Iterator<DamagedEquipment> iter = result.iterator();
+        Iterator<Equipment> iter = listEquipments.iterator();
 
         while (iter.hasNext()) {
-            if(iter.next().position.equalsIgnoreCase(position)) {
+            if(iter.next().getPosition().equalsIgnoreCase(position)) {
                 iter.remove();
             }
         }
-        selected.put(name, false);
+        //selected.put(name, false);
     }
 
     public static void removeEquipment(String name) {

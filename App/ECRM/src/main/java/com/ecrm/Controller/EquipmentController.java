@@ -140,10 +140,12 @@ public class EquipmentController {
             if (isRemove) {
                 TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
                 tblEquipmentEntity.setIsDelete(true);
+                equipmentDAO.merge(tblEquipmentEntity);
             } else {
                 TblEquipmentEntity tblEquipmentEntity = equipmentDAO.find(equipmentId);
                 tblEquipmentEntity.setClassroomId(null);
                 equipmentDAO.merge(tblEquipmentEntity);
+
                 TblClassroomEntity classroomEntity = tblEquipmentEntity.getTblClassroomByClassroomId();
                 classroomEntity.setIsAllInformation(false);
                 classroomEntity.setUpdateTime(new Timestamp(new Date().getTime()));

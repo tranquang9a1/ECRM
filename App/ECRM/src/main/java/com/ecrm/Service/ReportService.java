@@ -8,6 +8,7 @@ import com.ecrm.DTO.StatisticDTO;
 import com.ecrm.Entity.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Utils;
+import org.joda.time.LocalTime;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class ReportService {
     private EquipmentCategoryDAOImpl equipmentCategoryDAO;
     @Autowired
     private UserNotificationDAOImpl userNotificationDAO;
+    @Autowired
+    private ScheduleDAOImpl scheduleDAO;
 
     @Autowired
     private ClassroomService classroomService;
@@ -137,8 +140,17 @@ public class ReportService {
         resultObject.setRoomtype(roomTypeService.getRoomTypeOfRoom(classroom));
         resultObject.setDamagedLevel(classroom.getDamagedLevel());
 
-        List<String> availableRooms = classroomService.getAvailableRoom(roomId);
-        if (availableRooms.size() > 0) {
+        LocalTime localTime = new LocalTime();
+        LocalTime noon = new LocalTime("12:00:00");
+        List<TblScheduleEntity> currentSchedule;
+        if (localTime.isBefore(noon)) {
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(roomId, "Morning");
+        } else {
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(roomId, "Noon");
+        }
+
+        if (currentSchedule.size() > 0) {
+            List<String> availableRooms = classroomService.getAvailableRoom(roomId);
             resultObject.setSuggestRooms(availableRooms);
         } else {
             resultObject.setFree(true);

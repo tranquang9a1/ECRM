@@ -13,7 +13,6 @@
 <c:set var="allSchedule" value="${requestScope.ALLSCHEDULE}"/>
 <c:set var="finishSchedule" value="${requestScope.FINISHSCHEDULE}"/>
 
-<c:set var="notifies" value="${requestScope.LISTNOTIFY}"/>
 <c:set var="numberOfNotifies" value="${requestScope.NUMBEROFNOTIFY}"/>
 
 <c:set var="page" value="${requestScope.CURRENTPAGE}"/>
@@ -75,9 +74,9 @@
       <div class="content-body">
         <div class="left-control">
           <div class="list-notification">
-            <div class="title" style="cursor: pointer" onclick="showListNotify()">Thông báo gần đây</div>
+            <div class="title" style="cursor: pointer" onclick="showListNotify()">Thông báo gần đây <p id="numberOfnotify" class="${numberOfNotifies>0?"":"hidden"}" data-value="${numberOfNotifies}">${numberOfNotifies>0?numberOfNotifies:""}</p></div>
             <div class="notifications" id="notifications">
-              <c:import url="/bao-cao/danh-sach-thong-bao?little=true" />
+              <c:import url="/bao-cao/thong-bao?little=true" />
             </div>
           </div>
           <div class="user-schedule">
@@ -102,10 +101,10 @@
           <div class="page active" id="list-report">
             <div class="title">
               <p>Danh sách báo cáo đã gửi</p>
-              <c:if test="${allSchedule != null && allSchedule.size() > 0}">
+              <c:if test="${finishSchedule != null && finishSchedule.size() > 0}">
                 <input type="button" class="btn btn-primary" value="Gửi báo cáo" onclick="changePage('list-room')"/>
               </c:if>
-              <c:if test="${allSchedule == null || allSchedule.size() <= 0}">
+              <c:if test="${finishSchedule == null || finishSchedule.size() <= 0}">
                 <input type="button" class="btn btn-normal" value="Gửi báo cáo" onclick="conformData(1,{message: 'Không thể tạo báo cáo, vì bạn chưa dạy tiết nào trong hôm nay!'})"/>
               </c:if>
             </div>

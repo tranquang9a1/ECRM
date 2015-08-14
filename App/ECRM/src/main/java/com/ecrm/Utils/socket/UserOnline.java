@@ -7,14 +7,14 @@ import java.util.List;
  * Created by ChiDNMSE60717 on 6/16/2015.
  */
 public class UserOnline {
-    private String socketId;
+    private List<String> socketId;
     private String username;
     private int deviceType;
     private int role;
 
     public UserOnline(){}
 
-    public UserOnline(String socketId, String username, int deviceType, int role) {
+    public UserOnline(List<String> socketId, String username, int deviceType, int role) {
         super();
         this.socketId = socketId;
         this.username = username;
@@ -30,11 +30,11 @@ public class UserOnline {
         this.deviceType = deviceType;
     }
 
-    public String getSocketId() {
+    public List<String> getSocketId() {
         return socketId;
     }
 
-    public void setSocketId(String socketId) {
+    public void setSocketId(List<String> socketId) {
         this.socketId = socketId;
     }
 
@@ -59,15 +59,15 @@ public class UserOnline {
 
         if(username == null) {
             for (UserOnline item: list) {
-                if(item.getSocketId().equals(socketId)) {
+                if(item.getSocketId().contains(socketId)) {
                     return item;
                 }
             }
-        }
-
-        for (UserOnline item: list) {
-            if(item.getUsername().equals(username) && item.getDeviceType() == deviceType) {
-                return item;
+        } else {
+            for (UserOnline item : list) {
+                if (item.getUsername().equals(username) && item.getDeviceType() == deviceType) {
+                    return item;
+                }
             }
         }
 

@@ -6,10 +6,7 @@ import com.ecrm.DTO.ReportResponseObject;
 import com.ecrm.DTO.RoomTypeDTO;
 import com.ecrm.DTO.ScheduleDTO;
 import com.ecrm.Entity.*;
-import com.ecrm.Service.CheckDamageService;
-import com.ecrm.Service.ClassroomService;
-import com.ecrm.Service.GCMService;
-import com.ecrm.Service.RoomTypeService;
+import com.ecrm.Service.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Enumerable.MessageType;
 import com.ecrm.Utils.Enumerable.NotifyType;
@@ -63,6 +60,8 @@ public class UserController {
     GCMService gcmService;
     @Autowired
     RoomTypeService roomTypeService;
+    @Autowired
+    NotificationService notificationService;
 
     @RequestMapping(value = "")
     public String homePage(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
@@ -74,10 +73,10 @@ public class UserController {
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
 
         //Get notifications
-        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), 1, 5);
+//        List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), 1, 5);
         int numberUnreadNotify = userNotificationDAO.getNumberUnreadNotifyOfUser(user.getUsername());
         request.setAttribute("NUMBEROFNOTIFY", numberUnreadNotify);
-        request.setAttribute("LISTNOTIFY", listNotify);
+//        request.setAttribute("LISTNOTIFY", listNotify);
 
         //Get all schedule in day
         List<TblScheduleEntity> allSchedules = scheduleDAO.getSchedulesOfUser(user.getUsername());
@@ -142,67 +141,6 @@ public class UserController {
         request.setAttribute("DAMAGEDEQUIPMENTS", listEquipment);
         return "user/ReportRoomNew";
     }
-
-//    @RequestMapping(value = "thong-bao")
-//    public String notifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
-//        HttpSession session = request.getSession();
-//        if (session.getAttribute("USER") == null) {
-//            return "redirect:/";
-//        }
-//
-//        TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
-//        int pageNumber = Integer.parseInt(page);
-//        int size = 5;
-//        int numberOfReport = reportDAO.getNumberOfUserReport(user.getUsername());
-//        int numberOfPage = numberOfReport/size + (numberOfReport%size>0?1:0);
-//
-//        if(pageNumber > numberOfPage && pageNumber > 0) {
-//            return "Error";
-//        }
-//
-//        if(numberOfReport == 0) {
-//            request.setAttribute("NOTIFICATIONS", new ArrayList<ReportResponseObject>());
-//        } else {
-//            if(pageNumber == 0) {
-//                pageNumber = 1;
-//            }
-//
-//            List<TblReportEntity> list = reportDAO.getPagingReportByUser(user.getUsername(), pageNumber, size);
-//            List<ReportResponseObject> listReport = new ArrayList<ReportResponseObject>();
-//            for (int i = 0; i < list.size(); i++) {
-//                ReportResponseObject report = new ReportResponseObject(list.get(i));
-//                report.setListEquipment(equipmentDAO.getDamagedEquipmentNames(report.getReportId()));
-//
-//                listReport.add(report);
-//            }
-//
-//            request.setAttribute("PAGE", pageNumber);
-//            request.setAttribute("MAX", numberOfPage);
-//            request.setAttribute("NOTIFICATIONS", listReport);
-//        }
-//
-//        List<TblScheduleEntity> schedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
-//        if (schedules.size() > 0) {
-//            TblClassroomEntity classroom = classroomDAO.find(schedules.get(0).getClassroomId());
-//            TblRoomTypeEntity2 roomType = roomTypeDAO2.find(classroom.getRoomTypeId2());
-//            List<TblEquipmentEntity> listEquipment = equipmentDAO.getEquipmentsInClassroom(schedules.get(0).getClassroomId());
-//
-//            List<ScheduleDTO> listSchedule = new ArrayList<ScheduleDTO>();
-//            for (TblScheduleEntity schedule : schedules) {
-//                listSchedule.add(new ScheduleDTO(schedule.getClassroomId(), schedule.getTblClassroomByClassroomId().getName(), null, null, null));
-//            }
-//
-//            request.setAttribute("LISTSCHEDULE", listSchedule);
-//            request.setAttribute("ROOM", classroom);
-//            request.setAttribute("EQUIPMENTS", listEquipment);
-//            request.setAttribute("ROOMTYPE", roomType);
-//        } else {
-//            request.setAttribute("ROOM", new TblClassroomEntity());
-//        }
-//
-//        request.setAttribute("ACTIVELEFTTAB", "USER_NOTIFY");
-//        return "user/Notifications";
-//    }
 
     @RequestMapping(value = "sentReport", method = RequestMethod.POST)
     @ResponseBody
@@ -303,18 +241,6 @@ public class UserController {
         return "true";
     }
 
-//    @RequestMapping(value = "mau-phong")
-//    public String getReportRoom(HttpServletRequest request, @RequestParam("RoomId") int roomId) {
-//        TblClassroomEntity classroom = classroomDAO.find(roomId);
-//        RoomTypeDTO roomTypeDTO = roomTypeService.getRoomTypeOfRoom(classroom);
-//        List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipments(roomId);
-//
-//        request.setAttribute("ROOM", classroom);
-//        request.setAttribute("ROOMTYPE", roomTypeDTO);
-//        request.setAttribute("DAMAGEDEQUIPMENTS", listEquipment);
-//        return "user/ReportRoom";
-//    }
-
     @RequestMapping(value = "chi-tiet")
     public String viewReportByUser(HttpServletRequest request, @RequestParam("bao-cao") int reportId) {
         TblReportEntity report = reportDAO.find(reportId);
@@ -344,6 +270,12 @@ public class UserController {
         request.setAttribute("SCHEDULE", list);
         request.setAttribute("ACTIVELEFTTAB", "USER_SCHEDULE");
         return "user/Schedule";
+    }
+
+    @RequestMapping(value = "xem-thong-bao")
+    public String viewNotify(HttpServletRequest request, @RequestParam(value = "id") int notifyId) {
+        notificationService.viewNotify(notifyId);
+        return "";
     }
 
     //  PRIVATE METHOD
@@ -404,6 +336,4 @@ public class UserController {
 
         return equip;
     }
-
-
 }

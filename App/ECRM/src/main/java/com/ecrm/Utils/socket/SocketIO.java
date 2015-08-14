@@ -28,10 +28,9 @@ public class SocketIO{
         Configuration config = new Configuration();
 //        config.setHostname("128.199.208.93");
 //        config.setHostname("10.82.134.241");
-        config.setHostname("192.168.1.151");
+        config.setHostname("192.168.1.139");
         config.setPort(3000);
         config.setOrigin("http://localhost:8080");
-//        config.setOrigin("http://128.199.208.93");
 
         server = new SocketIOServer(config);
 
@@ -46,12 +45,14 @@ public class SocketIO{
             @Override
             public void onData(SocketIOClient client, UserOnline user, AckRequest ackRequest) throws Exception {
                 UserOnline checkUser = UserOnline.checkContainIn(onlineUser, user.getUsername(), null, user.getDeviceType());
-                if(checkUser == null) {
-                    checkUser = new UserOnline(client.getSessionId().toString(), user.getUsername(), user.getDeviceType(), user.getRole());
+                if (checkUser == null) {
+                    List<String> listConnect = new ArrayList<String>();
+                    listConnect.add(client.getSessionId().toString());
+                    checkUser = new UserOnline(listConnect, user.getUsername(), user.getDeviceType(), user.getRole());
                     onlineUser.add(checkUser);
-                    System.out.println(user.getUsername() + " connect by " + user.getDeviceType() + "! " + onlineUser.size());
+                    System.out.println(checkUser.getUsername() + " connect by web! " + onlineUser.size());
                 } else {
-                    checkUser.setSocketId(client.getSessionId().toString());
+                    checkUser.getSocketId().add(client.getSessionId().toString());
                 }
 
             }
@@ -63,9 +64,24 @@ public class SocketIO{
                 String id = client.getSessionId().toString();
                 UserOnline user = UserOnline.checkContainIn(onlineUser, null, id, 0);
                 if (user != null) {
-                    onlineUser.remove(user);
-                    System.out.println(user.getUsername() + " disconnect!");
-                }
+                    List<String> listConnect = user.getSocketId();
+                    boolean flag = false;
+
+                    for(int i = 0; i < listConnect.size(); i++) {
+                        if(listConnect.get(i).equals(id)) {
+                            flag = true;
+                        }
+                    }
+
+                    if(flag == true) {
+                        user.getSocketId().remove(id);
+
+                        if (user.getSocketId().size() <= 0) {
+                            onlineUser.remove(user);
+                            System.out.println(user.getUsername() + " disconnect!");
+                        }
+                    }
+                 }
             }
         });
 
@@ -83,12 +99,13 @@ public class SocketIO{
 
     public boolean sendNotifyObjectToStaff(String username, String eventType, JSONObject jsonObject){
         List<UserOnline> users = UserOnline.getUserByUsername(onlineUser, username);
-
+        SocketIOClient receiver;
         if(users.size() > 0) {
             for (UserOnline user: users) {
-                SocketIOClient receiver = server.getClient(UUID.fromString(user.getSocketId()));
-
-                receiver.sendEvent(eventType, jsonObject);
+                for (String item: user.getSocketId()) {
+                    receiver = server.getClient(UUID.fromString(item));
+                    receiver.sendEvent(eventType, jsonObject);
+                }
                 System.out.println("Sent message to " + user.getUsername());
             }
             return true;
@@ -102,14 +119,15 @@ public class SocketIO{
 
         if(users.size() > 0) {
             for (UserOnline user: users) {
-                SocketIOClient receiver = server.getClient(UUID.fromString(user.getSocketId()));
+                for (String item: user.getSocketId()) {
+                    SocketIOClient receiver = server.getClient(UUID.fromString(item));
 
-                JSONObject returnObject = new JSONObject();
-                returnObject.put("message", message);
-                returnObject.put("redirectLink", redirectLink);
+                    JSONObject returnObject = new JSONObject();
+                    returnObject.put("message", message);
+                    returnObject.put("redirectLink", redirectLink);
 
-                receiver.sendEvent(eventType, returnObject);
-
+                    receiver.sendEvent(eventType, returnObject);
+                }
                 System.out.println("Sent message to " + user.getUsername());
             }
             return true;

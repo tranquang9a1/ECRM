@@ -31,7 +31,7 @@ public class Enumerable {
     }
 
     public enum NotifyType {
-        ADMIN(""), STAFFNOTIFYREPORT("NewReport"), TEACHERCHANGEROOM("ChangeRoom");
+        ADMIN(""), STAFFNOTIFYREPORT("NewReport"), STAFFSYSTEMNOTIFY("SystemNotify"), TEACHERCHANGEROOM("ChangeRoom");
 
         private String value;
         private NotifyType(String value){
@@ -44,7 +44,7 @@ public class Enumerable {
     }
 
     public enum MessageType {
-        NEWREPORT(1), CHANGEROOM(2);
+        NEWREPORT(1), CHANGEROOM(2), SYSTEM(3);
 
         private int value;
         private MessageType(int value){

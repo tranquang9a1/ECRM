@@ -524,3 +524,28 @@ function loadReportHistory(reportId, roomId){
         changePage('history-report');
     }
 }
+
+function viewNotify(notifyId, message){
+    conformData(1, {message: message});
+
+    $("#notify-" + notifyId).css({
+        fontStyle: "normal",
+        fontWeight: 100
+    });
+    $("#notify-" + notifyId).attr("onclick", "conformData(1, {message: '" + message + "'});");
+
+    var number = $("#numberOfnotify").attr("data-value");
+    number--;
+    $("#numberOfnotify").attr("data-value", number);
+    $("#numberOfnotify").html(number);
+    if(number == 0) {
+        $("#numberOfnotify").addClass("hidden");
+    }
+
+    $.ajax({
+        method: "GET",
+        url: "/giang-vien/xem-thong-bao",
+        data: {id: notifyId},
+        success: function(data) {}
+    });
+}

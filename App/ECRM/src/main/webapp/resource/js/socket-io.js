@@ -1,46 +1,63 @@
 /**
  * Created by ChiDNMSE60717 on 6/16/2015.
  */
-var socket = io.connect('http://192.168.1.151:3000');
+var socket = io.connect('http://192.168.1.139:3000');
 //var socket = io.connect('http://10.82.134.241:3000');
 function connectToSocket(username, role) {
-    var jsonObject = {socketId: "", username: username, role: role, deviceType: 1};
+    var jsonObject = {socketId: [], username: username, role: role, deviceType: 1};
     socket.emit('connectServer', jsonObject);
 }
 
 socket.on('ChangeRoom', function(data) {
-    setDefaultDiv();
-
-    var result = "Các tiết: <b>";
+    var htmlText = "Đổi từ phòng " + data.currentRoom + " sang phòng <b>" + data.changeRoom + "</b> vào các tiết: <b>";
+    var titleText = "Đổi từ phòng " + data.currentRoom + " sang phòng " + data.changeRoom + " vào các tiết: ";
     var listTime = data.listTime;
     for (var i = 0; i < listTime.length; i++){
-        result += listTime[i] + ", ";
+        htmlText += listTime[i] + ", ";
+        titleText += listTime[i] + ", ";
     }
-    result = result.substring(0, result.length-2);
-    result += "</b>. Được đổi sang phòng " + data.changeRoom;
+    htmlText = htmlText.substring(0, htmlText.length-2);
+    htmlText += "</b>";
+    titleText = titleText.substring(0, titleText.length-2);
 
-    var img = document.createElement("img");
-    img.setAttribute("src", "/resource/img/user.png");
-    var aDiv = document.createElement("a");
-    aDiv.setAttribute("href", data.redirectLink);
-    aDiv.innerHTML = result;
+    var itemDiv = document.createElement("div");
+    itemDiv.style.fontWeight = "bold";
+    itemDiv.style.fontStyle = "italic";
+    itemDiv.className = "item";
+    itemDiv.setAttribute("id", data.notifyId);
+    itemDiv.setAttribute("title", titleText);
+    itemDiv.innerHTML = htmlText;
+    itemDiv.setAttribute("onclick", "viewNotify(" + data.notifyId + ", '" + htmlText + "')");
 
-    var liDiv = document.createElement("li");
-    liDiv.appendChild(img);
-    liDiv.appendChild(aDiv);
-    $(".list-notify ul").append(liDiv);
+    document.getElementById("notifications").innerHTML = itemDiv.outerHTML + document.getElementById("notifications").innerHTML;
+    var number = $("#numberOfnotify").attr("data-value");
+    number++;
+    $("#numberOfnotify").attr("data-value", number);
+    $("#numberOfnotify").html(number);
+    if(number > 0) {
+        $("#numberOfnotify").removeClass("hidden");
+    }
 
     var listRoom = document.getElementById("list-active-room");
     if(listRoom != undefined) {
-        var rooms = listRoom.getElementsByTagName("option");
-        for(var i = 0; i < rooms.length; i++) {
-            if(rooms.item(i).getAttribute("value") == data.currentRoomId) {
-                rooms.item(i).setAttribute("value", data.changeRoomId);
-                rooms.item(i).innerHTML = data.changeRoom;
-                rooms.item(i).setAttribute("checked", "checked");
-                document.getElementById("roomId").value = data.changeRoomId;
-                getRoom(listRoom);
+        listRoom.innerHTML = "";
+        var listNewRoom = data.listRoom;
+
+        if(listNewRoom.length > 0) {
+            for(var i = 0; i < listNewRoom.length; i++) {
+                var room = document.createElement("option");
+                room.setAttribute("value", listNewRoom[i].roomId);
+                room.innerHTML = listNewRoom[i].roomName;
+
+                listRoom.appendChild(room);
+                if(i == (listNewRoom.length - 1)) {
+                    room.setAttribute("checked", "checked");
+                }
             }
+
+            getRoomReport();
+        } else {
+
         }
     }
 });
@@ -69,8 +86,13 @@ socket.on('NewReport', function(data) {
     rowDiv.className = "row";
     rowDiv.appendChild(aDiv);
 
-    var content = $(".unread-notify")[0];
+    var content = document.getElementById("unread-notify");
     content.innerHTML = rowDiv.outerHTML + content.innerHTML;
+
+    var removeMessage = content.getElementsByClassName("none-message")[0];
+    if(removeMessage != undefined) {
+        removeMessage.parentNode.removeChild(removeMessage);
+    }
 });
 
 socket.on('disconnect', function() {});

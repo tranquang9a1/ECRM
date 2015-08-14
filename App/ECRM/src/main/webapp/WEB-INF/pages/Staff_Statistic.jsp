@@ -45,7 +45,7 @@
                 <div class="content-body">
                     <c:import url="/bao-cao/danh-muc"/>
                     <div class="right-content">
-                        <div class="page active">
+                        <div class="page active" id="statistic">
                             <div class="title"><p>Thống Kê</p>
 
                                 <form action="/staff/statistic" id="searchStatistic">

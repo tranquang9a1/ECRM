@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,11 +47,24 @@ public class NotificationService {
 
             List<TblUserNotificationEntity> listNotify = userNotificationDAO.getNotificationByUser(user.getUsername(), pageNumber, size);
             request.setAttribute("LISTNOTIFY", listNotify);
+            request.setAttribute("USERPAGE", true);
         } else {
             pageNumber = (pageNumber == 0 ? 1 : pageNumber);
 
             List<TblUserNotificationEntity> listUnread = userNotificationDAO.getUnreadNotifyOfUser(user.getUsername());
-            request.setAttribute("UNREADNOTIFYS", listUnread);
+            List<TblUserNotificationEntity> systemUnreads = new ArrayList<TblUserNotificationEntity>();
+            List<TblUserNotificationEntity> newReportUnreads = new ArrayList<TblUserNotificationEntity>();
+            if(listUnread != null) {
+                for (TblUserNotificationEntity item : listUnread) {
+                    if (item.getTblNotificationById().getMessageType() == Enumerable.MessageType.SYSTEM.getValue()) {
+                        systemUnreads.add(item);
+                    } else {
+                        newReportUnreads.add(item);
+                    }
+                }
+            }
+            request.setAttribute("SYSTEMUNREADS", systemUnreads);
+            request.setAttribute("NEWREPORTUNREADS", newReportUnreads);
 
             List<TblUserNotificationEntity> listRead = userNotificationDAO.getReadNotifyOfUser(user.getUsername(), pageNumber, size);
             request.setAttribute("READNOTIFYS", listRead);
@@ -84,6 +98,19 @@ public class NotificationService {
         } else {
             return "redirect:/admin/account";
         }
+    }
+
+    public Boolean viewNotify(int notifyId) {
+        TblUserNotificationEntity userNotification = userNotificationDAO.find(notifyId);
+        if(userNotification != null) {
+            if(!userNotification.isStatus()) {
+                userNotification.setStatus(true);
+                userNotificationDAO.merge(userNotification);
+            }
+            return true;
+        }
+
+        return false;
     }
 
     public void changeNotificationStatus(int roomId) {

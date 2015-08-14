@@ -117,8 +117,26 @@ body {
     border: 0;
     border-left: 5px solid orangered;
     text-transform: uppercase;
-    background: none;
     background-color: #f1f1f1;
+}
+
+.left-control .title p{
+    background-color: #FC571B;
+    font-weight: bold;
+    margin: 5px 5px 5px 0;
+    float: right;
+    padding: 0 3px;
+    border-radius: 3px;
+    height: 20px;
+    line-height: 20px;
+    color: white;
+    text-align: center;
+}
+
+.left-control .title p.hidden{
+    padding: 0;
+    width: 0;
+    margin: 0;
 }
 
 .list-notification .notifications{
@@ -136,14 +154,16 @@ body {
     height: 35px;
     line-height: 35px;
     width: 245px;
+    border-bottom: 1px solid #f1f1f1;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     cursor: pointer;
 }
 
-.list-notification .notifications .item:first-child{
-    margin: 5px 0 0;
+.list-notification .notifications .item:last-child{
+    margin: 0 0 5px;
+    border: 0;
 }
 
 .left-control .user-schedule {

@@ -248,7 +248,7 @@ public class ClassroomService {
         if (localTime.isBefore(noon)) {
             currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Morning");
         } else {
-            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(changeClassroom.getId(), "Noon");
+            currentSchedule = scheduleDAO.findAllScheduleMoreThan15MLeft(currentClassroom.getId(), "Noon");
         }
 
         if (currentSchedule != null && currentSchedule.size() > 0) {
@@ -283,16 +283,28 @@ public class ClassroomService {
 
             SocketIO socket = new SocketIO();
             for (GroupUser user : groupUsers) {
+                //Create notification for user
                 TblUserNotificationEntity userNotification = new TblUserNotificationEntity(user.getUsername(), notify.getId(), false);
                 userNotificationDAO.persist(userNotification);
+
+                //Get list room can report
+                List<JSONObject> listRoom = new ArrayList<JSONObject>();
+                List<TblScheduleEntity> finishSchedules = scheduleDAO.getSchedulesFinishOfUser(user.getUsername());
+                for (TblScheduleEntity item: finishSchedules){
+                    JSONObject room = new JSONObject();
+                    room.put("roomId", item.getClassroomId());
+                    room.put("roomName", item.getTblClassroomByClassroomId().getName());
+
+                    listRoom.add(room);
+                }
 
                 //Message object for socket
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("currentRoom", currentRoom);
-                jsonObject.put("currentRoomId", currentClassroom.getId());
                 jsonObject.put("changeRoom", changeRoom);
-                jsonObject.put("changeRoomId", changeClassroom.getId());
+                jsonObject.put("notifyId", notify.getId());
                 jsonObject.put("listTime", user.getListTime());
+                jsonObject.put("listRoom", listRoom);
                 jsonObject.put("redirectLink", "/giang-vien/notify?link=" + userNotification.getId());
 
                 //Sent notifies to user
@@ -304,7 +316,7 @@ public class ClassroomService {
             List<TblReportEntity> tblReportEntities = reportDAO.getLiveReportsInRoom(currentClassroom.getId());
             for (TblReportEntity tblReportEntity : tblReportEntities) {
                 tblReportEntity.setChangedRoom(changeRoom);
-                tblReportEntity.setStatus(2);
+                tblReportEntity.setStatus(Enumerable.ReportStatus.GOING.getValue());
                 reportDAO.merge(tblReportEntity);
             }
             return "Đổi phòng thành công!";
@@ -422,5 +434,4 @@ public class ClassroomService {
 
         return "redirect:/staff/classroom?ACTIVETAB=tab1&MESSAGE=" + URLEncoder.encode(message, "UTF-8");
     }
-
 }

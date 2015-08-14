@@ -18,7 +18,8 @@ body{
     width: 100%;
     height: 80px;
     overflow: hidden;
-    background-image: url("/resource/img/header_right.png");
+    /* background-image: url("/resource/img/header_right.png"); */
+    background-color: rgba(255, 69, 0, 0.85);
     border-bottom: 1px solid #999;
     box-shadow: 4px 4px #888;
     display: inline-block;
@@ -28,10 +29,10 @@ body{
     float: left;
     width: 50px;
     height: 50px;
-    border-radius: 25px;
-    margin: 10px 20px;
-    background-color: wheat;
-    border: 4px solid white;
+    /*border-radius: 25px;*/
+    margin: 15px 10px 0 20px;
+    /*background-color: wheat;*/
+    /*border: 4px solid white;*/
 }
 
 .top p{
@@ -52,53 +53,50 @@ body{
 
 .mid img{
     width: 100%;
-    height: 600px;
+    height: 100%;
     /*padding: 50px 0 0 650px;*/
 }
 
 .bottom{
+    z-index: 2;
+    color: #666;
     position: fixed;
-    width: 100%;
-    height: 65px;
-    padding: 15px 0 0;
     bottom: 0;
-    left: 0;
-    background-image: url("/resource/img/sidebar.png");
-    border-top: 2px solid #CBCBCB;
-}
-
-.bottom p{
-    margin: 5px 0 0 30px;
-    color: #444;
+    right: 0;
+    padding: 0 15px;
+    background-color: white;
 }
 
 .login-form{
-    width: 280px;
-    height: 360px;
+    width: 320px;
+    height: 584px;
     position: fixed;
-    top: 50%;
-    left: 40%;
-    margin: -175px 0 0 ;
+    left: 5%;
+    margin: 0;
     padding: 10px;
-    border-radius:10px ;
+    background-color: white;
+    top: 80px;
+    z-index: 2;
 }
 
 .login-form p{
     width: 270px;
     margin: 10px auto 25px;
-    color: #555;
+    color: #666;
 }
 
 .login-form p.old{
     margin: 0 auto;
-    color: black;
+    /* color: black; */
 }
 
 .login-form p:first-child{
     font-size: 25px;
     font-weight: bold;
-    color: #083357;
+    color: orangered;
 /*    padding: 0 0 30px;;*/
+    text-transform: uppercase;
+    margin: 100px auto 60px;
 }
 
 .login-form p input[type='text'], .login-form p input[type='password']{
@@ -117,13 +115,48 @@ body{
 .login-form button{
     width: 150px;
     height: 35px;
-    margin: 0 65px;
+    margin: 5px 0 0;
     border: 0;
     outline: none;
-    background-color: #083357;
+    background-color: orangered;
     color: white;
     font-size: 15px;
     font-family: Cambria;
     cursor: pointer;
 }
 
+.introduction {
+    position: absolute;
+    z-index: 2;
+    color: white;
+    width: 450px;
+    top: 45%;
+    left: 50%;
+    text-align: center;
+    margin: -100px 0 0;
+}
+.introduction div{
+    margin: 30px auto;
+    background-color: white;
+    height: 5px;
+    width: 100px;
+}
+.introduction p{
+    margin: 0;
+    font-size: 18px;
+}
+.introduction p:first-child{
+    text-transform: uppercase;
+    font-size: 25px;
+}
+
+.content-bg div {
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    z-index: 1;
+    opacity: 0.55;
+}

@@ -74,9 +74,20 @@ public class ClassroomService {
         return tblClassroomEntities;
     }
 
-    public List<ClassroomMapDTO> getAllClassroomMap() {
+    public List<ClassroomMapDTO> getAllClassroomMap(int page, int size, String sort) {
         List<ClassroomMapDTO> classroomMapDTOs = new ArrayList<ClassroomMapDTO>();
         List<TblClassroomEntity> lstClassRoom = classroomDAO.findAll();
+        Collections.sort(lstClassRoom, new Comparator<TblClassroomEntity>() {
+            @Override
+            public int compare(TblClassroomEntity o1, TblClassroomEntity o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        if(!sort.equals("ASC")) {
+            Collections.reverse(lstClassRoom);
+        }
+
         for (TblClassroomEntity classroomEntity : lstClassRoom) {
             if (!classroomEntity.getIsDelete()) {
                 JSONArray jsonArray = new JSONArray();
@@ -99,6 +110,14 @@ public class ClassroomService {
                 classroomMapDTOs.add(classroomMapDTO);
             }
         }
+
+        page--;
+        if(((page+1)*size) > classroomMapDTOs.size() - 1){
+            classroomMapDTOs = classroomMapDTOs.subList((page * size), classroomMapDTOs.size()-1);
+        } else {
+            classroomMapDTOs = classroomMapDTOs.subList((page * size), ((page + 1) * size));
+        }
+
         return classroomMapDTOs;
     }
 

@@ -1,5 +1,6 @@
 package com.ecrm.Controller;
 
+import com.ecrm.DAO.ClassroomDAO;
 import com.ecrm.DAO.EquipmentDAO;
 import com.ecrm.DAO.Impl.*;
 import com.ecrm.DAO.ScheduleDAO;
@@ -40,11 +41,16 @@ public class StaffController {
     RoomTypeService roomTypeService;
     @Autowired
     CategoryDAOImpl categoryDAO;
+    @Autowired
+    ClassroomDAOImpl classroomDAO;
 
     @RequestMapping(value = "classroom")
-    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab, @RequestParam("MESSAGE") String message) throws JSONException, UnsupportedEncodingException {
+    public String init(HttpServletRequest request, @RequestParam("ACTIVETAB") String activeTab, @RequestParam("MESSAGE") String message,
+                       @RequestParam(value = "Page", required = false, defaultValue = "0") String page,
+                       @RequestParam(value = "SORT", defaultValue = "ASC") String sort) throws JSONException, UnsupportedEncodingException {
         HttpSession session  =  request.getSession();
         if(session!=null) {
+            //Get list all room type
             List<RoomTypeDTO> tblRoomTypeEntities = roomTypeService.getAllRoomType();
             Collections.sort(tblRoomTypeEntities, new Comparator<RoomTypeDTO>() {
                 @Override
@@ -53,7 +59,30 @@ public class StaffController {
                 }
             });
             request.setAttribute("ALLROOMTYPE", tblRoomTypeEntities);
-            List<ClassroomMapDTO> tblClassroomEntities = classroomService.getAllClassroomMap();
+
+            //Get list classroom by page
+            int size = 9;
+            int pageNumber = 0;
+            try {
+                pageNumber = Integer.parseInt(page);
+            } catch (NumberFormatException ex) {
+                return "Error";
+            }
+
+            int numberOfRoom = classroomDAO.getAllClassroom().size();
+            int maxPage = (numberOfRoom/size) + (numberOfRoom%size==0?0:1);
+            if(pageNumber > maxPage) {
+                return "Error";
+            } else if(pageNumber == 0) {
+                pageNumber = 1;
+            }
+
+            List<ClassroomMapDTO> tblClassroomEntities = new ArrayList<ClassroomMapDTO>();
+            if(maxPage > 0) {
+                tblClassroomEntities = classroomService.getAllClassroomMap(pageNumber, size, sort);
+            }
+
+            //Get equipment category
             List<TblEquipmentCategoryEntity> tblEquipmentCategoryEntities = categoryDAO.findAll();
             Iterator<TblEquipmentCategoryEntity> iterator = tblEquipmentCategoryEntities.iterator();
             while (iterator.hasNext()){
@@ -65,13 +94,15 @@ public class StaffController {
             }
             request.setCharacterEncoding("UTF-8");
 
-            Collections.sort(tblClassroomEntities, new Comparator<ClassroomMapDTO>() {
-                @Override
-                public int compare(ClassroomMapDTO o1, ClassroomMapDTO o2) {
-                    return o1.getClassroom().getName().compareTo(o2.getClassroom().getName());
-                }
-            });
+            if(sort.equals("ASC")) {
+                request.setAttribute("SORT", "DESC");
+            } else {
+                request.setAttribute("SORT", "ASC");
+            }
+
             request.setAttribute("ALLCLASSROOM", tblClassroomEntities);
+            request.setAttribute("MAXPAGE", maxPage);
+            request.setAttribute("PAGE", pageNumber);
             request.setAttribute("ACTIVETAB", activeTab);
             request.setAttribute("ACTIVELEFTTAB", "STAFF_CLASSROOM");
             request.setAttribute("TABCONTROL", "STAFF_CLASSROOM");

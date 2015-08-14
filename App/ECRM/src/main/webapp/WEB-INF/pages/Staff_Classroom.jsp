@@ -654,29 +654,29 @@
                 document.getElementById('equip').value = "";
             }
             //phan trang
-            jQuery(function ($) {
-                var items = $("#removeClassroom > div");
-
-                var numItems = items.length;
-                var perPage = 9;
-
-                // only show the first 2 (or "first per_page") items initially
-                items.slice(perPage).hide();
-                // now setup pagination
-                $("#pagination").pagination({
-                    items: numItems,
-                    itemsOnPage: perPage,
-                    cssStyle: "compact-theme",
-                    onPageClick: function (pageNumber) { // this is where the magic happens
-                        // someone changed page, lets hide/show trs appropriately
-                        var showFrom = perPage * (pageNumber - 1);
-                        var showTo = showFrom + perPage;
-
-                        items.hide() // first hide everything, then show for the new page
-                                .slice(showFrom, showTo).show();
-                    }
-                });
-            });
+//            jQuery(function ($) {
+//                var items = $("#removeClassroom > div");
+//
+//                var numItems = items.length;
+//                var perPage = 9;
+//
+//                // only show the first 2 (or "first per_page") items initially
+//                items.slice(perPage).hide();
+//                // now setup pagination
+//                $("#pagination").pagination({
+//                    items: numItems,
+//                    itemsOnPage: perPage,
+//                    cssStyle: "compact-theme",
+//                    onPageClick: function (pageNumber) { // this is where the magic happens
+//                        // someone changed page, lets hide/show trs appropriately
+//                        var showFrom = perPage * (pageNumber - 1);
+//                        var showTo = showFrom + perPage;
+//
+//                        items.hide() // first hide everything, then show for the new page
+//                                .slice(showFrom, showTo).show();
+//                    }
+//                });
+//            });
 
             //phan trang
             jQuery(function ($) {

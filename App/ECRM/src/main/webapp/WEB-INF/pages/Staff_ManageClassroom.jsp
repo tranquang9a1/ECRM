@@ -8,10 +8,20 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="classrooms" value="${requestScope.ALLCLASSROOM}"/>
+<c:set var="maxPage" value="${requestScope.MAXPAGE}"/>
+<c:set var="page" value="${requestScope.PAGE}"/>
+<c:set var="sort" value="${requestScope.SORT}"/>
+
 <div class="table small-table" style="height: 360px;">
         <div class="header-table">
-            <div class="width-15">
-                <div>Số phòng</div>
+            <div class="width-20">
+                <div style="cursor: pointer"><a style="text-decoration: none; color: #555" href="/staff/classroom?ACTIVETAB=tab1&MESSAGE=0&SORT=${sort}">Số phòng</a></div>
+                <c:if test="${sort.equals('ASC')}">
+                    <i class="fa fa-sort-desc" style="margin: 8px 0 13px"></i>
+                </c:if>
+                <c:if test="${!sort.equals('ASC')}">
+                    <i class="fa fa-sort-asc" style="margin: 14px 0 7px;"></i>
+                </c:if>
             </div>
             <div class="width-25">
                 <div>Loại phòng</div>
@@ -19,7 +29,7 @@
             <div class="width-30">
                 <div>Trạng thái</div>
             </div>
-            <div class="width-30">
+            <div class="width-25">
                 <div>Quản lý</div>
             </div>
             <p class="clear"></p>
@@ -29,7 +39,7 @@
                 <input type="hidden" value="" id="removeClassroomName" name="classroomName"/>
                 <c:forEach items="${classrooms}" var="cl">
                     <div class="row">
-                        <div class="width-15">
+                        <div class="width-20">
                             <div>${cl.classroom.name}</div>
                         </div>
                         <div class="width-25">
@@ -47,7 +57,7 @@
                                 <div>Bình thường</div>
                             </c:if>
                         </div>
-                        <div class="width-30">
+                        <div class="width-25">
                             <div class="group-button">
                                 <div class="btn btn-detail"
                                      title="Đổi phòng" onclick="showModal(1,'modal-changeRoom');
@@ -80,7 +90,26 @@
             </form>
         </div>
     </div>
-<div id="pagination" style="padding-left: 150px;"></div>
+<div id="pagination" style="width: 550px">
+    <c:set var="partLink" value=""/>
+    <c:if test="${sort.equals('ASC')}">
+        <c:set var="partLink" value="&SORT=DESC"/>
+    </c:if>
+
+    <c:if test="${maxPage > 1}">
+        <div class="paging" style="margin: 0">
+            <c:if test="${page + 1 <= maxPage}">
+                <div class="pagen" style="width: auto; padding: 0 5px"><a href="/staff/classroom?ACTIVETAB=tab1&MESSAGE=0&Page=${page+1}${partLink}">Sau</a></div>
+                <div class="pagen"><a href="/staff/classroom?ACTIVETAB=tab1&MESSAGE=0&Page=${page+1}${partLink}">${page+1}</a></div>
+            </c:if>
+            <div class="pagen current">${page}</div>
+            <c:if test="${page - 1 > 0}">
+                <div class="pagen"><a href="/staff/classroom?ACTIVETAB=tab1&MESSAGE=0&Page=${page-1}${partLink}">${page-1}</a></div>
+                <div class="pagen" style="width: auto; padding: 0 5px"><a href="/staff/classroom?ACTIVETAB=tab1&MESSAGE=0&Page=${page-1}${partLink}">Trước</a></div>
+            </c:if>
+        </div>
+    </c:if>
+</div>
 <script>
     function editClassroom(id, classroomId) {
         $('#selectBox option[value="' + id + '"]').prop('selected', true);

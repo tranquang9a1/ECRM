@@ -5427,8 +5427,8 @@
 <XPD:REF name="Head">Y7Ldik7G6U64LVTk79dqQwAA</XPD:REF>
 <XPD:REF name="Tail">/ptOvuYZS0ej1+P7cXZDYgAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="xWjc5ZTJeU2n8l0yFIocVwAA">
-<XPD:ATTR name="Alpha" type="real">0.6350264840439</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">23.6008474424119</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">0.4636474551547</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">29.0688837074973</XPD:ATTR>
 <XPD:ATTR name="Text" type="string">1: choose room and send command()</XPD:ATTR>
 <XPD:REF name="Model">WfaI8ylKaU6R6HSZIVXwHAAA</XPD:REF>
 <XPD:REF name="HostEdge">sAJo3N7woEySd9bBathSGwAA</XPD:REF>
@@ -5506,9 +5506,9 @@
 <XPD:REF name="HostEdge">zEKt37iNp0yTx0rShAZ29gAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="EdgeLabelView" guid="kgTEPmusIUyt8dXEaTzgCgAA">
-<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
-<XPD:ATTR name="Alpha" type="real">1.5707963267949</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">25</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">-0.494213606855848</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">248.766959220874</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">&lt;&lt;destroy&gt;&gt;</XPD:ATTR>
 <XPD:REF name="Model">kei0zAhkSkyWS+EuBPtudAAA</XPD:REF>
 <XPD:REF name="HostEdge">zEKt37iNp0yTx0rShAZ29gAA</XPD:REF>
 </XPD:OBJ>
@@ -5928,9 +5928,9 @@
 <XPD:REF name="HostEdge">r+edntmZI0mnV12CMDg/YAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="EdgeLabelView" guid="46XCkdoTh0mfbs2Yu42tjQAA">
-<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
-<XPD:ATTR name="Alpha" type="real">1.5707963267949</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">25</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">1.45635596480297</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">175.145653671451</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">&lt;&lt;destroy&gt;&gt;</XPD:ATTR>
 <XPD:REF name="Model">/l/3UfgS3kmmcf1KT+NCxQAA</XPD:REF>
 <XPD:REF name="HostEdge">r+edntmZI0mnV12CMDg/YAAA</XPD:REF>
 </XPD:OBJ>
@@ -6074,9 +6074,9 @@
 <XPD:REF name="HostEdge">VQwwK9IcLEm6RZUoNADcQQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="EdgeLabelView" guid="zRVaIQj2Z028QDKkfP3XaAAA">
-<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
-<XPD:ATTR name="Alpha" type="real">1.5707963267949</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">25</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">-4.44454648882508</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">275.835095664058</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">&lt;&lt;destroy&gt;&gt;</XPD:ATTR>
 <XPD:REF name="Model">kUGeQWpCMkaopnOxOGopNAAA</XPD:REF>
 <XPD:REF name="HostEdge">VQwwK9IcLEm6RZUoNADcQQAA</XPD:REF>
 </XPD:OBJ>
@@ -6313,7 +6313,7 @@
 <XPD:ATTR name="Name" type="string">3: changeRoom</XPD:ATTR>
 <XPD:REF name="Sender">Cl4CJ1NqQEuA2jL6Bgd2QAAA</XPD:REF>
 <XPD:REF name="Receiver">M28syjR8uE2qXrIg/DjVpwAA</XPD:REF>
-<XPD:OBJ name="Action" type="UMLCallAction" guid="SZ1IcNLfLU2yHdeyKSIIZAAA">
+<XPD:OBJ name="Action" type="UMLDestroyAction" guid="sngZ3G3K0U2fnk8SQbZbLQAA">
 <XPD:REF name="Stimulus">kei0zAhkSkyWS+EuBPtudAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:REF name="InteractionInstanceSet">rAtQMYELnUy1DVE1De5QqgAA</XPD:REF>
@@ -6467,7 +6467,7 @@
 <XPD:ATTR name="Name" type="string">12: createSchedule</XPD:ATTR>
 <XPD:REF name="Sender">M28syjR8uE2qXrIg/DjVpwAA</XPD:REF>
 <XPD:REF name="Receiver">bsj+0CWgpU+Q8sObZ2RsmAAA</XPD:REF>
-<XPD:OBJ name="Action" type="UMLCallAction" guid="52axp5C2iEWHGLgwaGRSLwAA">
+<XPD:OBJ name="Action" type="UMLDestroyAction" guid="i0Ns27L/E0e4vq+g2TIfAQAA">
 <XPD:REF name="Stimulus">/l/3UfgS3kmmcf1KT+NCxQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:REF name="InteractionInstanceSet">rAtQMYELnUy1DVE1De5QqgAA</XPD:REF>
@@ -6523,7 +6523,7 @@
 <XPD:ATTR name="Name" type="string">16: createNotification</XPD:ATTR>
 <XPD:REF name="Sender">M28syjR8uE2qXrIg/DjVpwAA</XPD:REF>
 <XPD:REF name="Receiver">HPpLr9ndZU2b2f+J6hgOLAAA</XPD:REF>
-<XPD:OBJ name="Action" type="UMLCallAction" guid="lZGbHHXn+UWLRDjE4qj2owAA">
+<XPD:OBJ name="Action" type="UMLDestroyAction" guid="LDm9fvzZ3US7xCUtFGJ0WAAA">
 <XPD:REF name="Stimulus">kUGeQWpCMkaopnOxOGopNAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:REF name="InteractionInstanceSet">rAtQMYELnUy1DVE1De5QqgAA</XPD:REF>

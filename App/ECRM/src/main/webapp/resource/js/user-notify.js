@@ -389,14 +389,14 @@ function createSelect(id, contentDiv){
     select.setAttribute("id","category-"+id);
     select.setAttribute("onchange", "changeEvaluate(" + id + ")");
 
-    var listEvaluate = ["Hư hại nặng", "Hư hại trung bình", "Hư hại nhẹ", "Không biết"];
-    for(var i = 0; i < 4; i++){
+    var listEvaluate = ["Không thể sử dụng", "Có thể sử dụng"];
+    for(var i = 0; i < 2; i++){
         var option = document.createElement("option");
         option.setAttribute("value", (i+1));
         option.innerHTML = listEvaluate[i];
         select.appendChild(option);
 
-        if(i == 3) {
+        if(i == 1) {
             option.setAttribute("selected", "selected");
         }
     }

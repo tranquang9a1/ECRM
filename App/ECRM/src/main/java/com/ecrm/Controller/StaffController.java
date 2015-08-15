@@ -110,7 +110,7 @@ public class StaffController {
             request.setAttribute("MESSAGE", message);
             return "Staff_Classroom";
         }else {
-            return "Login";
+            return "redirect:/";
         }
     }
 

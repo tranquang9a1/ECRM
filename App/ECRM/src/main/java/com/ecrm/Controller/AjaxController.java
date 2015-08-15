@@ -62,7 +62,7 @@ public class AjaxController {
             String date = request.getParameter("dateT");
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-            String dateString2 = new SimpleDateFormat("yyyy-MM-dd").format(dateT);
+            String dateString2 = formatter.format(dateT);
             //Tìm những phòng có chỗ ngồi phù hợp
             List<TblClassroomEntity> fitClassroom = new ArrayList<TblClassroomEntity>();
             List<TblClassroomEntity> tblClassroomEntities = classroomDAO.getValidClassroom();
@@ -130,7 +130,7 @@ public class AjaxController {
     @RequestMapping(value = "checkClassroom")
     public
     @ResponseBody
-    ValidateEntity checkClassroom(HttpServletRequest request, HttpServletResponse response) {
+    ValidateEntity checkClassroom(HttpServletRequest request, HttpServletResponse response) throws ParseException {
         String alert = "";
         boolean status = true;
         ValidateEntity validateEntity = new ValidateEntity();
@@ -167,6 +167,12 @@ public class AjaxController {
             return validateEntity;
         }
         if (dateFrom != null && dateFrom.trim().length() != 0 && dateTo != null && dateTo.trim().length() != 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateF = new SimpleDateFormat("dd-MM-yyyy").parse(dateFrom);
+            dateFrom = formatter.format(dateF);
+            Date dateT = new SimpleDateFormat("dd-MM-yyyy").parse(dateTo);
+            dateTo = formatter.format(dateT);
+
             LocalDate date1 = new LocalDate(dateFrom);
             LocalDate date2 = new LocalDate(dateTo);
             if (date2.isBefore(date1)) {

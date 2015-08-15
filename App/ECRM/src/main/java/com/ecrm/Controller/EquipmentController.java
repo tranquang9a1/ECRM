@@ -80,7 +80,7 @@ public class EquipmentController {
 
             return "Staff_Equipment";
         } else {
-            return "Login";
+            return "redirect:/";
         }
     }
 

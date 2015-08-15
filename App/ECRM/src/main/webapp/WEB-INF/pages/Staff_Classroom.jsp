@@ -542,11 +542,11 @@
             }
             function checkNumber() {
                 var quantity = document.getElementsByClassName("quantity");
-
                 for (var i = 0; i < quantity.length; i++) {
+
                     var number = quantity[i].value;
                     var y = i + 1;
-                    var idEquip = "thiet-bi" + y;
+                    var idEquip = "thiet-bi" + quantity[i].id.substr(8, quantity[i].id.length);
                     var checkBox = document.getElementById(idEquip);
                     if (checkBox.checked) {
                         if (isNaN(number)) {

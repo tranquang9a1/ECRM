@@ -581,15 +581,15 @@
 <XPD:REF name="Model">iixpli9r4kqV401bqsovygAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="HeadMultiplicityLabel" type="EdgeLabelView" guid="hcif+lEfo0Gs81NA2BH3cgAA">
-<XPD:ATTR name="Alpha" type="real">0.523598775598299</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">25</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">0.704493817507892</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">26.2488094968134</XPD:ATTR>
 <XPD:ATTR name="EdgePosition" type="EdgePositionKind">epHead</XPD:ATTR>
 <XPD:ATTR name="Text" type="string">0..*</XPD:ATTR>
 <XPD:REF name="Model">Aj+9BFIhDkq3UGkRG5/JtwAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="TailMultiplicityLabel" type="EdgeLabelView" guid="d25EE8jzHk+VKzxbXoFqJAAA">
-<XPD:ATTR name="Alpha" type="real">-0.523598775598299</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">25</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">-0.748378403688038</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">19.1049731745428</XPD:ATTR>
 <XPD:ATTR name="EdgePosition" type="EdgePositionKind">epTail</XPD:ATTR>
 <XPD:ATTR name="Text" type="string">1</XPD:ATTR>
 <XPD:REF name="Model">iixpli9r4kqV401bqsovygAA</XPD:REF>
@@ -2440,7 +2440,7 @@
 <XPD:OBJ name="Attributes[5]" type="UMLAttribute" guid="r4Jncc4EYUuKitvBZ+nM8gAA">
 <XPD:ATTR name="Name" type="string">downloadTime</XPD:ATTR>
 <XPD:ATTR name="Visibility" type="UMLVisibilityKind">vkPrivate</XPD:ATTR>
-<XPD:ATTR name="TypeExpression" type="string">Datetime</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">long</XPD:ATTR>
 <XPD:REF name="Owner">sFnuvQMKjkioSABZY3wK2gAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>

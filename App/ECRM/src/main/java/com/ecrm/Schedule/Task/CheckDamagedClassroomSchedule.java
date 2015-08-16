@@ -65,7 +65,7 @@ public class CheckDamagedClassroomSchedule {
     @Autowired
     CheckDamageService checkDamageService;
 
-    /*@Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000)
     public void checkChangeClassroom() throws Exception {
         LocalTime localTime = new LocalTime();
         LocalDate localDate = new LocalDate();
@@ -269,6 +269,6 @@ public class CheckDamagedClassroomSchedule {
             }
         }
 
-    }*/
+    }
 
 }

@@ -213,8 +213,8 @@ public class ScheduleService {
                             TblClassroomEntity classroomEntity = classroomDAO.getClassroomByName(all);
                             classroom = classroomEntity.getId();
                         }
-                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(dateFrom, scheduleConfigId, classroom);
-                        List<TblScheduleEntity> tblScheduleEntities2 = scheduleDAO.findScheduleWithDate(username, dateFrom, scheduleConfigId);
+                        List<TblScheduleEntity> tblScheduleEntities = scheduleDAO.findSpecificSchedule(date.toString(), scheduleConfigId, classroom);
+                        List<TblScheduleEntity> tblScheduleEntities2 = scheduleDAO.findScheduleWithDate(username, date.toString(), scheduleConfigId);
                         if (!tblScheduleEntities.isEmpty()) {
                             tblScheduleEntities.get(0).setIsActive(false);
                             tblScheduleEntities.get(0).setNote("Đã thay đổi");
@@ -231,7 +231,7 @@ public class ScheduleService {
                         scheduleDAO.persist(tblScheduleEntity);
                     }
                 } else {
-                    java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateFrom).getTime());
+                    java.sql.Date teachingDate = new java.sql.Date(formatter.parse(dateString1).getTime());
                     if (all.equals("")) {
                         classroom = Integer.parseInt(avai);
                     } else {

@@ -1,0 +1,12 @@
+key,value,Description
+CHAIRHIGH,3,"Người dùng đánh giá cho ghế ""Không thể sử dụng được"""
+CHAIRLOW,1,"Người dùng đánh giá cho Ghế ""Có thể sử dụng được"""
+SERIOUSLYDAMGED,50,"Tổng bàn hoặc ghế bị hư quá 50% tổng số."
+TABLEHIGH,5,"Người dùng đánh giá cho bàn ""Không thể sử dụng được"""
+TABLELOW,2,"Người dùng đánh giá cho bàn ""Có thể sử dụng được"""
+USERHIGH_PRIORITYHIGH,50,"Người dùng đánh giá ""Không sử dụng được"" và độ ưu tiên là ""Cao"""
+USERHIGH_PRIORITYLOW,15,"Người dùng đánh giá ""Không thể sử dụng được"" và độ ưu tiên là ""Thấp"""
+USERHIGH_PRIORITYMEDIUM,30,"Người dùng đánh giá ""Không thể sử dụng được"" và độ ưu tiên là ""Trung bình"""
+USERLOW_PRIORITYHIGH,20,"Người dùng đánh giá ""Có thể sử dụng được"" và độ ưu tiên là ""Cao"""
+USERLOW_PRIORITYLOW,10,"Người dùng đánh giá ""Có thể sử dụng được"" và độ ưu tiên là ""Thấp"""
+USERLOW_PRIORITYMEDIUM,10,"Người dùng đánh giá ""Có thể sử dụng được"" và độ ưu tiên là """"Trung bình"""

@@ -105,7 +105,18 @@ public class ReportDetailActivity extends FragmentActivity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edit(report);
+                DialogUtils.showAlert(ReportDetailActivity.this, "Bạn muốn sửa báo cáo này", new DialogUtils.IOnOkClicked() {
+                    @Override
+                    public void onClick() {
+                        edit(report);
+                    }
+                }, new DialogUtils.IOnCancelClicked() {
+                    @Override
+                    public void onClick() {
+
+                    }
+                });
+
             }
         });
 

@@ -216,38 +216,41 @@ public class Utils {
             if (i + 1 < lstRoom.size()) {
                 int currentFloor = Integer.parseInt(lstRoom.get(i)) / 100;
                 int nextFloor = Integer.parseInt(lstRoom.get(i + 1)) / 100;
-                if (nextFloor - currentFloor == 0) {
-                    for (int j = i; j >= 0; j--) {
-                        String s1 = lstRoom.get(j);
-                        String s2 = lstRoom.get(j + 1);
-                        if (Integer.parseInt(s1) > Integer.parseInt(s2) && Integer.parseInt(s1) / 100 == currentFloor) {
-                            lstRoom.set(j, s2);
-                            lstRoom.set(j + 1, s1);
+                if (currentFloor != Integer.parseInt(room)  / 100) {
+                    if (nextFloor - currentFloor == 0) {
+                        for (int j = i; j >= 0; j--) {
+                            String s1 = lstRoom.get(j);
+                            String s2 = lstRoom.get(j + 1);
+                            if (Integer.parseInt(s1) > Integer.parseInt(s2) && Integer.parseInt(s1) / 100 == currentFloor) {
+                                lstRoom.set(j, s2);
+                                lstRoom.set(j + 1, s1);
+                            }
                         }
                     }
                 }
+
             }
 
         }
         return lstRoom;
     }
 
-    public static int markPriority(List<TblEquipmentQuantityEntity> e1, List<TblEquipmentQuantityEntity> e2){
+    public static int markPriority(List<TblEquipmentQuantityEntity> e1, List<TblEquipmentQuantityEntity> e2) {
         int mark = 0;
-        for(int i = 0; i < e1.size(); i++){
+        for (int i = 0; i < e1.size(); i++) {
             TblEquipmentQuantityEntity o1 = e1.get(i);
-            if(!o1.getIsDelete()){
-                for(int j = 0; j< e2.size(); j++){
+            if (!o1.getIsDelete()) {
+                for (int j = 0; j < e2.size(); j++) {
                     TblEquipmentQuantityEntity o2 = e2.get(j);
-                    if(!o2.getIsDelete() && o1.getEquipmentCategoryId() == o2.getEquipmentCategoryId()){
-                        if(o1.getQuantity() == o2.getQuantity()){
-                            mark+=o1.getQuantity();
+                    if (!o2.getIsDelete() && o1.getEquipmentCategoryId() == o2.getEquipmentCategoryId()) {
+                        if (o1.getQuantity() == o2.getQuantity()) {
+                            mark += o1.getQuantity();
                         }
-                        if(o1.getQuantity()> o2.getQuantity()){
-                            mark+=o2.getQuantity();
+                        if (o1.getQuantity() > o2.getQuantity()) {
+                            mark += o2.getQuantity();
                         }
-                        if(o1.getQuantity()<o2.getQuantity()){
-                            mark+=o1.getQuantity();
+                        if (o1.getQuantity() < o2.getQuantity()) {
+                            mark += o1.getQuantity();
                         }
                     }
                 }

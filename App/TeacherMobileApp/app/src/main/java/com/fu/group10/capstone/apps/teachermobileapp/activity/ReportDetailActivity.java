@@ -79,7 +79,7 @@ public class ReportDetailActivity extends FragmentActivity {
         txtClassroom.setText(report.getClassName());
         txtTime.setText(dateFormater.format(Long.parseLong(report.getCreateTime())));
         txtDamageLevel.setText(report.getDamageLevel() + "");
-
+        setButton(report);
 
 
 
@@ -124,6 +124,13 @@ public class ReportDetailActivity extends FragmentActivity {
 
             }
         });
+    }
+
+    private void setButton(ReportInfo report) {
+        if (report.getStatus() == 3 || report.getStatus() == 4) {
+            btnRemove.setVisibility(View.GONE);
+            btnEdit.setVisibility(View.GONE);
+        }
     }
 
     private void edit(ReportInfo report) {

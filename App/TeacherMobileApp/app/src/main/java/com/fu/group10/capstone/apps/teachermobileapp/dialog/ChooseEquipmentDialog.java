@@ -45,14 +45,14 @@ public class ChooseEquipmentDialog extends DialogFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (spinner.getSelectedItemPosition() == 2) {
+                if (spinner.getSelectedItemPosition() == 1) {
                     txtDetail.setVisibility(View.VISIBLE);
                     txtResolve.setVisibility(View.VISIBLE);
                 } else {
                     txtDetail.setVisibility(View.GONE);
                     txtResolve.setVisibility(View.GONE);
                 }
-                equipment.setDamageLevel(3 - spinner.getSelectedItemPosition() + "");
+                equipment.setDamageLevel(2 - spinner.getSelectedItemPosition() + "");
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.fu.group10.capstone.apps.teachermobileapp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -56,7 +57,10 @@ public class ScheduleFragment extends Fragment {
     public void initListView(View rootView) {
         emptyMessage = (TextView) rootView.findViewById(R.id.emptyMessage);
         progressBar = (ProgressBar) rootView.findViewById(R.id.loadingImg);
-        username = getActivity().getIntent().getExtras().getString("username");
+        SharedPreferences sp = getActivity().getSharedPreferences("LoginState", getActivity().MODE_PRIVATE);
+        boolean stateLogin = sp.getBoolean("LoginState", false);
+        username = sp.getString("username", null);
+
         this.mListView = (ListView) rootView.findViewById(R.id.lv_sample_list);
         getDummyData();
     }

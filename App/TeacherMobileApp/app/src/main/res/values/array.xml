@@ -6,9 +6,8 @@
     </string-array>
 
     <string-array name="levelItems">
-        <item>Nhẹ</item>
-        <item>Trung Bình</item>
-        <item>Nặng</item>
+        <item>Có thể sử dụng</item>
+        <item>Không thể sử dụng</item>
     </string-array>
 
     <array name="indicator_colors">

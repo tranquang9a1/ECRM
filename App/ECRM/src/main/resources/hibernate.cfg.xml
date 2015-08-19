@@ -9,6 +9,7 @@
     <!-- SQL dialect -->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+
     <mapping class="com.ecrm.Entity.TblClassroomEntity"/>
     <mapping class="com.ecrm.Entity.TblEquipmentEntity"/>
     <mapping class="com.ecrm.Entity.TblEquipmentCategoryEntity"/>
@@ -27,6 +28,7 @@
     <mapping class="com.ecrm.Entity.TblScheduleConfigEntity"/>
     <mapping class="com.ecrm.Entity.TblMessageEntity"/>
     <mapping class="com.ecrm.Entity.TblEquipmentQuantityEntity"/>
+    <mapping class="com.ecrm.Entity.TblSystemConfiguration"/>
 
 
     <!-- DB schema will be updated if needed -->

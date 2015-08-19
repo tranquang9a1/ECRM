@@ -30,7 +30,7 @@
             <c:set var="scheduleConfig" value="${requestScope.SCHEDULECONFIG}"/>
             <c:set var="tab" value="${requestScope.TABCONTROL}"/>
             <meta charset="UTF-8"/>
-            <title>ECRM - Equipment Classroom Management</title>
+            <title>Hệ thống quản lý thiết bị phòng học</title>
             <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
             <link rel="stylesheet" href="/resource/css/general.css"/>
             <link rel="stylesheet" href="/resource/css/newTemplate.css"/>

@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>ECRM - Equipment Classroom Management</title>
+    <title>Hệ thống quản lý thiết bị phòng học</title>
     <c:set var="list" value="${requestScope.LIST}"/>
     <c:set var="counter" value="${requestScope.SIZE}"/>
     <c:set var="tab" value="${requestScope.TABCONTROL}"/>

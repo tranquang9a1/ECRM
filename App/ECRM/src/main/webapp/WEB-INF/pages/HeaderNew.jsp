@@ -18,7 +18,7 @@
       <img src="../../resource/img/pointer.png"/>
       <ul>
         <li onclick="showModal(1, 'modal-updatePass')">Thay đổi mật khẩu</li>
-        <li>Thông tin tài khoản</li>
+        <li><a href="/bao-cao/danh-sanh-cau-hinh">Cấu hình hệ thống</a></li>
         <li><a href="/dang-xuat"> Đăng xuất</a></li>
       </ul>
     </div>

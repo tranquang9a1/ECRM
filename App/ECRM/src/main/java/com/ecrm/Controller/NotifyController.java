@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,6 +42,8 @@ public class NotifyController {
     private EquipmentDAOImpl equipmentDAO;
     @Autowired
     private UserNotificationDAOImpl userNotificationDAO;
+    @Autowired
+    private SystemConfigurationDAOImpl configurationDAO;
 
     @Autowired
     private ReportService reportService;
@@ -135,5 +138,36 @@ public class NotifyController {
     @RequestMapping(value = "notify")
     public String redirectNotify(HttpServletRequest request, @RequestParam(value = "link") int notifyId){
         return notificationService.redirectNotify(request, notifyId);
+    }
+
+    @RequestMapping(value = "danh-sanh-cau-hinh", method = RequestMethod.GET)
+    public String systemConfiguration(HttpServletRequest request) {
+        List<TblSystemConfiguration> listConfig = configurationDAO.findAll();
+        if(listConfig == null) {
+            listConfig = new ArrayList<TblSystemConfiguration>();
+        }
+
+        request.setAttribute("LISTCONFIG", listConfig);
+        return "staff/SystemConfiguration";
+    }
+
+    @RequestMapping(value = "cau-hinh", method = RequestMethod.POST)
+    @ResponseBody
+    public String systemConfiguration(HttpServletRequest request, @RequestParam(value = "key") String key, @RequestParam(value = "value") String value) {
+        if(key != null) {
+            TblSystemConfiguration config = configurationDAO.find(key);
+            if (config != null) {
+                if (value != null && config.getValue().equals(value)) {
+                    return "Giá trị cập nhật không thay đổi!";
+                }
+
+                config.setValue(value);
+                configurationDAO.merge(config);
+
+                return "Cập nhật thành công!";
+            }
+        }
+
+        return "Có lổi trong quá trình xử lý!";
     }
 }

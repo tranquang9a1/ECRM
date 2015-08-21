@@ -181,7 +181,7 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
 
     @Override
     public List<TblReportEntity> getFinishReport(int limit, int offset) {
-        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.status = :status");
+        Query query = entityManager.createQuery("SELECT r FROM TblReportEntity r WHERE r.status = :status ORDER BY r.id DESC");
         query.setParameter("status", ReportStatus.FINISH.getValue());
         query.setMaxResults(limit);
         query.setFirstResult(offset);

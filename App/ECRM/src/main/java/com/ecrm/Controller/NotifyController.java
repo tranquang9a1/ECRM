@@ -67,6 +67,22 @@ public class NotifyController {
         return "staff/ListDamagedRoom";
     }
 
+    @RequestMapping(value = "lich-su")
+    public String lisHitoryNotifications(HttpServletRequest request, @RequestParam(value = "trang", defaultValue = "0", required = false) String page) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("USER") == null) {
+            return "redirect:/";
+        }
+
+        if(!reportService.getListReport(request, page)) {
+            return "Error";
+        }
+
+        request.setAttribute("ACTIVETAB", "tab2");
+
+        return "staff/ListDamagedRoom";
+    }
+
     @RequestMapping(value = "chi-tiet")
     public String viewReportDetail(HttpServletRequest request, @RequestParam(value = "roomId") int roomId) {
         DamagedRoomDTO resultObject = reportService.getReportDetail(roomId);
@@ -154,6 +170,9 @@ public class NotifyController {
     @RequestMapping(value = "cau-hinh", method = RequestMethod.POST)
     @ResponseBody
     public String systemConfiguration(HttpServletRequest request, @RequestParam(value = "key") String key, @RequestParam(value = "value") String value) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (Exception e) {}
         if(key != null) {
             TblSystemConfiguration config = configurationDAO.find(key);
             if (config != null) {

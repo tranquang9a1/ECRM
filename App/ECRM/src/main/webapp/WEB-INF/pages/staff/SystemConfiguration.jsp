@@ -101,7 +101,7 @@
                         </div>
                     </div>
                 </div>
-                    <c:import url="/bao-cao/thong-bao?little=false&quay-lai=list-report"/>
+                    <c:import url="/bao-cao/thong-bao?little=false&quay-lai=system-configuration"/>
                     <div class="loading-page">
                         <img src="/resource/img/500.GIF">
 

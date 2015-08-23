@@ -170,9 +170,7 @@ public class NotifyController {
     @RequestMapping(value = "cau-hinh", method = RequestMethod.POST)
     @ResponseBody
     public String systemConfiguration(HttpServletRequest request, @RequestParam(value = "key") String key, @RequestParam(value = "value") String value) {
-        try {
-            request.setCharacterEncoding("UTF-8");
-        } catch (Exception e) {}
+
         if(key != null) {
             TblSystemConfiguration config = configurationDAO.find(key);
             if (config != null) {

@@ -7,15 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <c:set var="user" value="${sessionScope.USER}"/>
 <c:choose>
   <c:when test="${empty user}">
     <jsp:forward page="Login.jsp"/>
   </c:when>
   <c:otherwise>
-    <c:set value="${requestScope.LISTSTATISTIC}" var="list"/>
     <c:set value="${requestScope.TABCONTROL}" var="tab"/>
+    <c:set value="${requestScope.LISTYEAR}" var="listYear"/>
     <html>
     <head>
       <title>ECRM - Equipment Classroom Management</title>
@@ -34,10 +33,23 @@
           <div class="right-content">
             <div class="page active" id="statistic">
               <div class="title">
-                <p>Thống Kê</p>
+                <p>Thống kê</p>
+                <c:if test="${listYear != null && listYear.size() > 0}">
+                <div class="changeRoomChart">
+                  <select onchange="loadDataStatistic(this)">
+                    <c:forEach var="item" items="${listYear}">
+                      <option value="${item}">${item}</option>
+                    </c:forEach>
+                  </select>
+                  <p style="margin: 0 10px 0 0; float: right; text-transform: capitalize">Năm</p>
+                </div>
+                </c:if>
               </div>
-              <c:if test="${list == null}">Không có dữ liệu thống kê</c:if>
-              <div id="chartContainer" style="width: 100%; height: 400px; margin: 35px 0 0 0;"></div>
+              <div id="viewChart">
+                <c:if test="${listYear != null && listYear.size() > 0}">
+                  <c:import url="/staff/getDataStatistic?year=${listYear.get(0)}"/>
+                </c:if>
+              </div>
             </div>
             <c:import url="/bao-cao/thong-bao?little=false&quay-lai=statistic"/>
             <div class="loading-page">
@@ -49,54 +61,25 @@
       </div>
     </div>
     </body>
-    <c:if test="${list != null}">
-    <script type="text/javascript">
-      theme = 'sand-signika';
-      $(function () {
-        $('#chartContainer').highcharts({
-          chart: {
-            type: 'line'
-          },
-          title: {
-            text: 'Số lượt đổi phòng các tháng trong năm 2015'
-          },
-          xAxis: {
-            categories: [<c:forEach items="${list.listMonth}" var="item">'${item}'<c:if test="${item != list.listMonth[list.listMonth.size()-1]}">,</c:if></c:forEach>]
-          },
-          yAxis: {
-            title: {
-              text: ''
-            }
-          },
-          plotOptions: {
-            line: {
-              dataLabels: {
-                enabled: true
-              },
-              enableMouseTracking: false
-            }
-          },tooltip: {
-            valueSuffix: 'lượt'
-          },
-          legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-          },
-          series: [{
-            name: 'Số lượt đổi',
-            data: ${list.listNumber}
-          }]
-        });
-      });
-    </script>
-    </c:if>
+
     <script>
       document.getElementById("${tab}").className += " active";
       document.getElementById("${tab}").setAttribute("data-main", "1");
 
       connectToSocket('${sessionScope.USER.username}', ${sessionScope.USER.roleId});
+
+      function loadDataStatistic(thisE) {
+        $(".loading-page").addClass("active");
+        $.ajax({
+          method: "GET",
+          url: "/staff/getDataStatistic",
+          data: {year: $(thisE).val()},
+          success: function(data) {
+            $("#viewChart").html(data);
+            $(".loading-page").removeClass("active");
+          }
+        });
+      }
     </script>
     </html>
   </c:otherwise>

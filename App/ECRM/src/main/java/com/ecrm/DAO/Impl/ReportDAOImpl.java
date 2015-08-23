@@ -312,4 +312,18 @@ public class ReportDAOImpl extends BaseDAO<TblReportEntity, Integer> implements 
         }
         return new ArrayList<StatisticDTO.StatisticRow>();
     }
+
+    public List<Integer> getListYearForChangeRoomStatistic() {
+        Query query = entityManager.createQuery("SELECT YEAR(r.createTime) " +
+                "FROM TblReportEntity r " +
+                "WHERE r.changedRoom IS NOT NULL " +
+                "GROUP BY YEAR(r.createTime)ORDER BY YEAR(r.createTime) DESC");
+
+        List queryResult = query.getResultList();
+        if(!queryResult.isEmpty()) {
+            return queryResult;
+        }
+
+        return new ArrayList<Integer>();
+    }
 }

@@ -5,10 +5,7 @@ import com.ecrm.DAO.Impl.ClassroomDAOImpl;
 import com.ecrm.DAO.Impl.ReportDAOImpl;
 import com.ecrm.DAO.Impl.ReportDetailDAOImpl;
 import com.ecrm.DTO.StatisticDTO;
-import com.ecrm.Entity.*;
 import com.ecrm.Service.ReportService;
-import com.google.gson.Gson;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -46,18 +41,34 @@ public class StatisticController {
             return "redirect:/";
         }
 
-        StatisticDTO list = reportService.getNumberOfChangeRoomByMonth(2015);
-
-        if(list != null) {
-            request.setAttribute("LISTSTATISTIC", list);
-        } else {
-            request.setAttribute("NODATA", true);
-        }
+        List<Integer> listYear = reportService.getListYearForChangeRoomStatistic();
+        request.setAttribute("LISTYEAR", listYear);
 
         request.setAttribute("TABCONTROL", "STAFF_STATISTIC");
         return "staff/Statistic";
     }
 
+    @RequestMapping(value = "getDataStatistic")
+    public String getDataByAjax(HttpServletRequest request, @RequestParam(value = "year") String year) {
+        if(year == null || "".equals(year)) {
+            request.setAttribute("NODATA", true);
+        } else {
+            int yearTmp = 2015;
+            try {
+                yearTmp = Integer.parseInt(year);
+            } catch (Exception e) {
+                return "staff/DataStatistic";
+            }
+
+            StatisticDTO list = reportService.getNumberOfChangeRoomByMonth(yearTmp);
+            if(list != null) {
+                request.setAttribute("LISTSTATISTIC", list);
+                request.setAttribute("YEAR", yearTmp);
+            }
+        }
+
+        return "staff/DataStatistic";
+    }
 
 //    public String statistic(HttpServletRequest request, @RequestParam( value = "time") int time,@RequestParam(value = "category") int category ){
 //        LocalDate localDate = new LocalDate();

@@ -245,6 +245,24 @@ public class ReportService {
         return null;
     }
 
+    public List<Integer> getListYearForChangeRoomStatistic(){
+        List list = reportDAO.getListYearForChangeRoomStatistic();
+
+        List<Integer> result = new ArrayList<Integer>();
+        if (list.size() > 0) {
+            try {
+                for (int i = 0; i < list.size(); i++) {
+                    Object item = (Object) list.get(i);
+                    result.add(Integer.parseInt(item.toString()));
+                }
+            } catch (Exception e){
+                return new ArrayList<Integer>();
+            }
+        }
+
+        return result;
+    }
+
     // PRIVATE METHOD
     private boolean resolveEquipment(int room, int category, String[] listEquipment) {
         //Change Equipment status and ReportDetail status

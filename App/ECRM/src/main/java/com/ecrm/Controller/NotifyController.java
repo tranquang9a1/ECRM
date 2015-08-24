@@ -4,11 +4,9 @@ import com.ecrm.DAO.Impl.*;
 import com.ecrm.DTO.DamagedRoomDTO;
 import com.ecrm.DTO.GroupReportsDTO;
 import com.ecrm.DTO.ReportResponseObject;
+import com.ecrm.DTO.RoomTypeDTO;
 import com.ecrm.Entity.*;
-import com.ecrm.Service.ClassroomService;
-import com.ecrm.Service.GroupUser;
-import com.ecrm.Service.NotificationService;
-import com.ecrm.Service.ReportService;
+import com.ecrm.Service.*;
 import com.ecrm.Utils.Enumerable;
 import com.ecrm.Utils.Enumerable.MessageType;
 import com.ecrm.Utils.Enumerable.NotifyType;
@@ -39,6 +37,8 @@ import java.util.*;
 @RequestMapping("/bao-cao")
 public class NotifyController {
     @Autowired
+    ReportDAOImpl reportDAO;
+    @Autowired
     private EquipmentDAOImpl equipmentDAO;
     @Autowired
     private UserNotificationDAOImpl userNotificationDAO;
@@ -49,6 +49,8 @@ public class NotifyController {
     private ReportService reportService;
     @Autowired
     private ClassroomService classroomService;
+    @Autowired
+    RoomTypeService roomTypeService;
     @Autowired
     private NotificationService notificationService;
 
@@ -110,6 +112,23 @@ public class NotifyController {
         }
 
         return "redirect:/bao-cao";
+    }
+
+    @RequestMapping(value = "historyReport")
+    public String historyReport(HttpServletRequest request, @RequestParam("reportId") int reportId) {
+        TblReportEntity report = reportDAO.find(reportId);
+        TblClassroomEntity classroom = report.getTblClassroomByClassRoomId();
+        RoomTypeDTO roomTypeDTO = roomTypeService.getRoomTypeOfRoom(classroom);
+        List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipmentsInReport(reportId);
+        String listEquipmentName = equipmentDAO.getDamagedEquipmentNames(reportId);
+
+        request.setAttribute("ROOM", classroom);
+        request.setAttribute("REPORT", report);
+        request.setAttribute("EQUIPMENTS", listEquipment);
+        request.setAttribute("EQUIPMENTNAME", listEquipmentName);
+        request.setAttribute("ROOMTYPE", roomTypeDTO);
+
+        return "staff/ReportHistory";
     }
 
     @RequestMapping(value = "sua-chua")

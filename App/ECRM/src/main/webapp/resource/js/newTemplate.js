@@ -327,6 +327,20 @@ function showDetailReport(roomId){
     }
 }
 
+function showHistoryReport(reportId){
+    $(".loading-page").addClass("active");
+    $.ajax({
+        method: "GET",
+        url: "/bao-cao/historyReport",
+        data: {reportId: reportId},
+        success: function(result) {
+            $("#history-report .page-content").html(result);
+            $("#history-report script").remove();
+            changePage('history-report');
+        }
+    });
+}
+
 function resetURL() {
     window.history.pushState({"html":'',"pageTitle":'Hệ thống quản lý thiết bị phòng học'},"", "/bao-cao");
 }

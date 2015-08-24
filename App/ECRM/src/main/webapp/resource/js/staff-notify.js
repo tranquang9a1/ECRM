@@ -26,6 +26,20 @@ function showReportDetail(roomId){
     }
 }
 
+function showHistoryReport(reportId){
+    $(".loading-page").addClass("active");
+    $.ajax({
+        method: "GET",
+        url: "/bao-cao/historyReport",
+        data: {reportId: reportId},
+        success: function(result) {
+            $("#history-report .page-content").html(result);
+            $("#history-report script").remove();
+            changePage('history-report');
+        }
+    });
+}
+
 function sendResolve() {
     var listCate = "";
     var listEquip = "";

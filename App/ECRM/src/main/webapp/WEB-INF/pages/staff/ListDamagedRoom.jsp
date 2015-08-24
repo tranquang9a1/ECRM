@@ -165,6 +165,20 @@
               </div>
             </div>
           </div>
+          <div class="page" id="history-report">
+            <div class="title" style="padding: 0; height: 70px;">
+              <p>Chi tiết báo cáo phòng <span></span></p>
+              <input type="button" class="btn btn-normal" value="Quay lại" onclick="changePage('list-report');"/>
+              <div class="clear"></div>
+              <div class="title-category">
+                <ul>
+                  <li class="active" onclick="changeTabInfo(1, this, 'history-report')">Thông tin báo cáo</li>
+                  <li onclick="changeTabInfo(2, this, 'history-report')">Sơ đồ phòng</li>
+                </ul>
+              </div>
+            </div>
+            <div class="page-content"></div>
+          </div>
           <div class="page" id="report-details" data-room="0">
             <div class="title">
               <p>Chi tiết báo cáo phòng <span></span></p>

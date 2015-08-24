@@ -145,7 +145,7 @@ public class UserController {
     @RequestMapping(value = "sentReport", method = RequestMethod.POST)
     @ResponseBody
     public String createReport(HttpServletRequest request, @RequestBody ReportRequestDTO reportRequest) {
-        GCMController gcm = new GCMController();
+//        GCMController gcm = new GCMController();
         HttpSession session = request.getSession();
         TblUserEntity user = (TblUserEntity) session.getAttribute("USER");
         TblClassroomEntity room = classroomDAO.find(reportRequest.getRoomId());
@@ -247,10 +247,12 @@ public class UserController {
         TblClassroomEntity classroom = report.getTblClassroomByClassRoomId();
         RoomTypeDTO roomTypeDTO = roomTypeService.getRoomTypeOfRoom(classroom);
         List<TblEquipmentEntity> listEquipment = equipmentDAO.getDamagedEquipmentsInReport(reportId);
+        String listEquipmentName = equipmentDAO.getDamagedEquipmentNames(reportId);
 
         request.setAttribute("ROOM", classroom);
         request.setAttribute("REPORT", report);
         request.setAttribute("EQUIPMENTS", listEquipment);
+        request.setAttribute("EQUIPMENTNAME", listEquipmentName);
         request.setAttribute("ROOMTYPE", roomTypeDTO);
 
         return "user/ReportHistory";

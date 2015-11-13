@@ -1,2 +1,2 @@
 # ECRM
-Equipment Classroom Management System (ECMS) - Capstone Project Summer 2015
+Equipment Classroom Management (ECRM) - Capstone Project Summer 2015 - FPT University
